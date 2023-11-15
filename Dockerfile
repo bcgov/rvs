@@ -79,8 +79,8 @@ RUN apt-get install -y libaio1 wget unzip \
   && docker-php-ext-configure oci8 --with-oci8=instantclient,$ORACLE_HOME && docker-php-ext-install oci8 \
   && docker-php-ext-configure pdo_oci --with-pdo-oci=instantclient,$ORACLE_HOME && docker-php-ext-install pdo_oci \
   && echo /opt/oracle/instantclient > /etc/ld.so.conf.d/oracle-instantclient.conf \
-  && ldconfig \
-    && pear download pecl/oci8-3.2.1 && tar xvzf oci8-3.2.1.tgz && cd oci8-3.2.1  \
+  && ldconfig
+RUN pear download pecl/oci8-3.2.1 && tar xvzf oci8-3.2.1.tgz && cd oci8-3.2.1  \
     && phpize && ./configure --with-oci8=instantclient,$ORACLE_HOME/ && make install \
     && printf "instantclient,$ORACLE_HOME" | pecl install oci8-3.2.1 \
 # Apache - disable Etag
