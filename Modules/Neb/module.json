@@ -1,0 +1,13 @@
+{
+    "name": "Neb",
+    "alias": "neb",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Neb\\Providers\\NebServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

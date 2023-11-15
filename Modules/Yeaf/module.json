@@ -1,0 +1,13 @@
+{
+    "name": "Yeaf",
+    "alias": "yeaf",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Yeaf\\Providers\\YeafServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

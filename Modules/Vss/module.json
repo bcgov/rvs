@@ -1,0 +1,13 @@
+{
+    "name": "Vss",
+    "alias": "vss",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Vss\\Providers\\VssServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

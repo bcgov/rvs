@@ -1,0 +1,13 @@
+{
+    "name": "Twp",
+    "alias": "twp",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Twp\\Providers\\TwpServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}
