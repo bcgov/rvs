@@ -82,9 +82,10 @@ RUN apt-get install -y libaio1 wget unzip \
   && ldconfig
 RUN pear download pecl/oci8-3.2.1 && tar xvzf oci8-3.2.1.tgz && cd oci8-3.2.1  \
     && phpize && ./configure --with-oci8=instantclient,$ORACLE_HOME/ && make install \
-    && printf "instantclient,$ORACLE_HOME" | pecl install oci8-3.2.1 \
+    && printf "instantclient,$ORACLE_HOME" | pecl install oci8-3.2.1
+
 # Apache - disable Etag
-    && a2enmod remoteip \
+RUN a2enmod remoteip \
     && a2enmod rewrite \
     && a2enmod auth_basic \
     && a2enmod authn_file \
