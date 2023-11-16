@@ -4,8 +4,8 @@ import { usePage } from '@inertiajs/vue3';
 
 const errors = computed(() => usePage().props.errors);
 
-const hasErrors = computed(() => 
-    errors.value != undefined ?? (Object.keys(errors.value).length > 0)
+const hasErrors = computed(() =>
+    _.isEmpty(errors) ?? (Object.keys(errors.value).length > 0)
 );
 </script>
 

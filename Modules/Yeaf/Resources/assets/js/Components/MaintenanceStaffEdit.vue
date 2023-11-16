@@ -57,7 +57,15 @@
 
             </div>
             <div class="card-footer">
-                <BreezeValidationErrors class="p-3" />
+                <div v-if="form.errors != undefined" class="row">
+                    <div class="col-12">
+                        <div v-if="form.hasErrors == true" class="alert alert-danger mt-3">
+                            <ul>
+                                <li v-for="err in form.errors">{{ err }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="mt-4">
                     <button type="submit" class="btn btn-outline-success" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
@@ -89,7 +97,7 @@ import { Link, useForm } from '@inertiajs/vue3';
 import FormSubmitAlert from "@/Components/FormSubmitAlert";
 
 export default {
-    name: 'MaintenanceStaff',
+    name: 'MaintenanceStaffEdit',
     components: {
         BreezeInput, BreezeLabel, BreezeButton, BreezeSelect, BreezeValidationErrors, Link, useForm, FormSubmitAlert
     },
@@ -113,11 +121,11 @@ export default {
                 onSuccess: () => {
                     this.form.formState = true;
                 },
-                onFailure: () => {
-                },
                 onError: () => {
                     this.form.formState = false;
-                }
+                },
+                preserveState: true,
+
             });
         },
 
@@ -125,6 +133,8 @@ export default {
     mounted() {
         let tmpObj = this.results;
         this.form = useForm(tmpObj);
+        this.form.formState = null;
+
     }
 }
 
