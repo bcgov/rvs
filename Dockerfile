@@ -183,6 +183,5 @@ RUN mkdir -p storage && mkdir -p bootstrap/cache && chmod -R ug+rwx storage boot
 USER ${USER_ID}
 
 ENTRYPOINT ["/sbin/entrypoint.sh"]
-#CMD /usr/sbin/apache2ctl start && /usr/sbin/apache2ctl restart
 # Start!
 CMD ["apache2-foreground"]
