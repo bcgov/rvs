@@ -295,7 +295,7 @@ RUN apt-get install -y libaio1 wget unzip \
   && echo /opt/oracle/instantclient > /etc/ld.so.conf.d/oracle-instantclient.conf \
   && ldconfig
 RUN pear download pecl/oci8-3.2.1 && tar xvzf oci8-3.2.1.tgz && cd oci8-3.2.1  \
-    && phpize && ./configure --with-oci8=instantclient,$ORACLE_HOME/ && make install \
+    && phpize && ./configure --with-oci8=instantclient,$ORACLE_HOME/ && make install
 
 RUN printf "instantclient,$ORACLE_HOME" | pecl install oci8-3.2.1 \
 # Apache - disable Etag
