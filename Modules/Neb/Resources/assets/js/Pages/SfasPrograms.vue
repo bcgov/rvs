@@ -300,7 +300,7 @@ export default {
         fetchSfasPrograms: function () {
             let vm = this;
             // Make a request for a user with a given ID
-            axios.get('/sfas-programs/fetch')
+            axios.get('/neb/sfas-programs/fetch')
                 .then(function (response) {
                     // handle success
                     vm.sfasPrograms = response.data.sfas_programs;
@@ -315,7 +315,7 @@ export default {
         newSfasProgram: function () {
             let vm = this;
             this.newSfasProgramForm.formState = '';
-            this.newSfasProgramForm.post('/sfas-programs/store', {
+            this.newSfasProgramForm.post('/neb/sfas-programs/store', {
                 onSuccess: () => {
                     $("#newSfasProgramModal").modal('hide')
                         .on('hidden.bs.modal', function () {
@@ -347,7 +347,7 @@ export default {
         },
         editSfasProgram: function () {
             let vm = this;
-            this.editSfasProgramForm.put('/sfas-programs/update', {
+            this.editSfasProgramForm.put('/neb/sfas-programs/update', {
                 onSuccess: () => {
                     $("#editSfasProgramModal").modal('hide');
                 },

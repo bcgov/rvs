@@ -195,7 +195,7 @@ export default {
         fetchRestrictions: function () {
             let vm = this;
             // Make a request for a user with a given ID
-            axios.get('/restrictions/fetch')
+            axios.get('/neb/restrictions/fetch')
                 .then(function (response) {
                     // handle success
                     vm.restrictions = response.data.restrictions;
@@ -209,7 +209,7 @@ export default {
         newRestriction: function () {
             let vm = this;
             this.newRestrictionForm.formState = '';
-            this.newRestrictionForm.post('/restrictions/store', {
+            this.newRestrictionForm.post('/neb/restrictions/store', {
                 onSuccess: () => {
                     $("#newRestrictionModal").modal('hide')
                         .on('hidden.bs.modal', function () {
@@ -241,7 +241,7 @@ export default {
         },
         editRestriction: function () {
             let vm = this;
-            this.editRestrictionForm.put('/restrictions/update', {
+            this.editRestrictionForm.put('/neb/restrictions/update', {
                 onSuccess: () => {
                     $("#editRestrictionModal").modal('hide');
                 },

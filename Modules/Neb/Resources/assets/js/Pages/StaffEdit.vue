@@ -116,7 +116,7 @@ export default {
         },
         submitStaffForm: function () {
             this.form.formState = '';
-            this.form.post('/staff/' + this.results.id, {
+            this.form.post('/neb/staff/' + this.results.id, {
                 onSuccess: () => {
                     this.form.formState = true;
                 },
