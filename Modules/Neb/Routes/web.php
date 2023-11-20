@@ -18,7 +18,6 @@ Route::prefix('neb')->group(function () {
             'middleware' => ['auth', 'neb_active'],
             'as' => 'neb.',
         ], function () {
-            //        Route::resource('students', 'StudentController');
             Route::get('/dashboard', 'BursaryPeriodController@index')->name('dashboard');
             Route::group(['middleware' => 'neb_admin'], function () {
 
@@ -29,14 +28,8 @@ Route::prefix('neb')->group(function () {
                 Route::get('/process-neb', function () {
                     return redirect('neb.dashboard');
                 });
-                //    Route::get('/process-neb', async ({ response }) => {
-                //                response.redirect('/dashboard')
-                //    });
 
                 Route::post('/bursary-periods/fetch-neb', 'NebController@fetchNeb')->name('fetch-neb');
-                //    Route::get('/bursary-periods/fetch-neb', async ({ response }) => {
-                //                response.redirect('/dashboard')
-                //    });
                 Route::get('/bursary-periods/fetch-neb', function () {
                     return redirect('neb.dashboard');
                 });
@@ -63,8 +56,8 @@ Route::prefix('neb')->group(function () {
                 Route::post('/sfas-programs/store', 'SfasProgramController@store')->name('sfas-programs.store');
 
                 Route::get('/staff', 'MaintenanceController@staffList')->name('staff.list');
-                Route::get('/staff/id', 'MaintenanceController@staffShow')->name('staff.show');
-                Route::post('/staff/id', 'MaintenanceController@staffEdit')->name('staff.edit');
+                Route::get('/staff/{id}', 'MaintenanceController@staffShow')->name('staff.show');
+                Route::post('/staff/{id}', 'MaintenanceController@staffEdit')->name('staff.edit');
             });
         });
 });
