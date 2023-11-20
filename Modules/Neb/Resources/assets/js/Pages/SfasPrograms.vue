@@ -1,5 +1,4 @@
 <template>
-        <Head title="SFAS Programs" />
 
 <AuthenticatedLayout v-bind="$attrs">
     <div class="card">

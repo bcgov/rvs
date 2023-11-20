@@ -1,5 +1,4 @@
 <template>
-    <Head title="Staff" />
 
     <AuthenticatedLayout v-bind="$attrs">
 

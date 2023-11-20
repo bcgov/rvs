@@ -1,5 +1,4 @@
 <template>
-        <Head title="Restrictions" />
 
 <AuthenticatedLayout v-bind="$attrs">
 

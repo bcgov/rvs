@@ -1,5 +1,4 @@
 <template>
-    <Head title="Bursary Period" />
 
     <AuthenticatedLayout v-bind="$attrs">
 

@@ -56,8 +56,8 @@ Route::prefix('neb')->group(function () {
                 Route::post('/sfas-programs/store', 'SfasProgramController@store')->name('sfas-programs.store');
 
                 Route::get('/staff', 'MaintenanceController@staffList')->name('staff.list');
-                Route::get('/staff/{id}', 'MaintenanceController@staffShow')->name('staff.show');
-                Route::post('/staff/{id}', 'MaintenanceController@staffEdit')->name('staff.edit');
+                Route::get('/staff/{user}', 'MaintenanceController@staffShow')->name('staff.show');
+                Route::post('/staff/{user}', 'MaintenanceController@staffEdit')->name('staff.edit');
             });
         });
 });

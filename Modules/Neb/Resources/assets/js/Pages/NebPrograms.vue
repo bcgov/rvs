@@ -1,5 +1,4 @@
 <template>
-            <Head title="Neb Programs" />
 
 <AuthenticatedLayout v-bind="$attrs">
 

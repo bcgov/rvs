@@ -43,7 +43,7 @@ nav.navbar {
                         </NavLink>
                     </li>
                     <li class="nav-item">
-                        <NavLink class="nav-link" href="/sfas-programs"
+                        <NavLink class="nav-link" href="/neb/sfas-programs"
                                  :class="{ 'active': $page.url.indexOf('/sfas-programs') > -1 }">
                             SFAS Programs
                         </NavLink>

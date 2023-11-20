@@ -1,5 +1,4 @@
 <template>
-    <Head title="Staff Edit" />
 
     <AuthenticatedLayout v-bind="$attrs">
         <div class="card mb-3">
@@ -71,7 +70,7 @@
                             :disabled="form.processing">
                             Save
                         </button>
-                        <Link @click="back" href="#" class="btn btn-outline-primary float-right"
+                        <Link @click="back" href="#" class="btn btn-outline-primary float-end"
                             :class="{ 'opacity-50': form.processing }" :disabled="form.processing">
                         Cancel
                         </Link>
