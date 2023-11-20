@@ -41,7 +41,7 @@
                                         </thead>
                                         <tbody>
                                         <tr v-for="(row, i) in results.data">
-                                            <td scope="row"><Link :href="'/yeaf/institutions/' + [row.id]">{{ row.name }}</Link></td>
+                                            <td scope="row"><Link :href="'/yeaf/institutions/' + [row.id]">{{ schoolName(row.name) }}</Link></td>
                                             <td>{{ row.city }}</td>
                                             <td></td>
                                         </tr>
@@ -135,7 +135,7 @@
 import BreezeAuthenticatedLayout from '../Layouts/Authenticated.vue';
 import SchoolSearchBox from '../Components/SchoolSearch.vue';
 import SchoolsHeader from '../Components/SchoolsHeader.vue';
-import {Head, Link, useForm} from '@inertiajs/vue3';
+import {Head, Link, useForm, computed} from '@inertiajs/vue3';
 import BreezeInput from "../Components/Input";
 import BreezeSelect from "../Components/Select";
 import BreezeLabel from "../Components/Label";
@@ -185,7 +185,10 @@ export default {
                 preserveScroll: true,
             });
         },
-
+        schoolName: function (name)
+        {
+            return name == null ? "BLANK" : name;
+        }
     },
     mounted() {
         this.newSchoolForm = useForm(this.newSchoolFormData);

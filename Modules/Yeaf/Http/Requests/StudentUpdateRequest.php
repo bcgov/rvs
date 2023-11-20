@@ -40,7 +40,7 @@ class StudentUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'sin' => 'required|digits:9',
+            'sin' => 'required|digits:9|unique:'.env('DB_DATABASE_YEAF').'.students,sin,'.$this->id.',id',
             'last_name' => 'required|string',
             'first_name' => 'required|string',
             'address' => 'required|string',

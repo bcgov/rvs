@@ -34,6 +34,10 @@ class IsActive
 
         //active user must have at least a TWP User role
         if (! $user->hasRole(Role::SUPER_ADMIN) && ! $user->hasRole(Role::NEB_ADMIN) && ! $user->hasRole(Role::NEB_USER)) {
+            if (! $user->hasRole(Role::NEB_GUEST)) {
+                $role = Role::where('name', Role::NEB_GUEST)->first();
+                $user->roles()->attach($role);
+            }
             return Inertia::render('Home', [
                 'loginAttempt' => true,
                 'hasAccess' => false,

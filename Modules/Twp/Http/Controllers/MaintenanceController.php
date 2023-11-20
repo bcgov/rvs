@@ -63,7 +63,7 @@ class MaintenanceController extends Controller
     public function staffList(Request $request): \Inertia\Response
     {
         $staff = User::whereHas('roles', function ($q) {
-            return $q->whereIn('name', [Role::TWP_ADMIN, Role::TWP_USER]);
+            return $q->whereIn('name', [Role::TWP_ADMIN, Role::TWP_USER, Role::TWP_GUEST]);
         })->orderBy('created_at', 'desc')->get();
 
         foreach ($staff as $user) {
@@ -108,7 +108,7 @@ class MaintenanceController extends Controller
         $user->save();
 
         //reset roles
-        $roles = Role::whereIn('name', [Role::TWP_ADMIN, Role::TWP_USER])->get();
+        $roles = Role::whereIn('name', [Role::TWP_ADMIN, Role::TWP_USER, Role::TWP_GUEST])->get();
         foreach ($roles as $role) {
             $user->roles()->detach($role);
         }

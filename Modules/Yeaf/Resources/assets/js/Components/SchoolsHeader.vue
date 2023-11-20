@@ -32,7 +32,7 @@ export default {
             sortClmn: 'name',
             sortType: 'asc',
             url: '',
-            path: '/neb/institutions',
+            path: '/yeaf/institutions',
         }
     },
     mounted() {

@@ -25,7 +25,9 @@ class InstitutionUpdateRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.*' => 'Institution Name field is not valid.',
+            'name.required' => 'School Name field is required.',
+            'name.string' => 'School Name field is invalid.',
+            'name.unique' => 'School Name with the same name already exists.',
             'city.*' => 'City field is not valid.',
             'address.*' => 'Address field is not valid.',
         ];
@@ -39,7 +41,7 @@ class InstitutionUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string',
+            'name' => 'required|string|unique:'.env('DB_DATABASE_YEAF').'.institutions,name,'.$this->id.',id',
             'address' => 'required|string',
             'city' => 'required|string',
 

@@ -26,9 +26,9 @@ class InstitutionStoreRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => 'Institution Name field is required.',
-            'name.string' => 'Institution Name field is not valid.',
-            'name.unique' => 'Institution with the same name already exists.',
+            'name.required' => 'School Name field is required.',
+            'name.string' => 'School Name field is not valid.',
+            'name.unique' => 'School Name with the same name already exists.',
             'city.*' => 'City field is not valid.',
             'address.*' => 'Address field is not valid.',
             'institution_id.*' => 'Institution ID is missing.',

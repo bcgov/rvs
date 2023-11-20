@@ -176,7 +176,5 @@ class UserController extends Controller
         $user->password = Hash::make($idir_user['idir_username']);
         $user->save();
 
-        //        $role = Role::where('name', Role::TWP_USER)->first();
-        //        $user->roles()->attach($role);
     }
 }

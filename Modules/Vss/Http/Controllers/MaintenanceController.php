@@ -19,7 +19,7 @@ class MaintenanceController extends Controller
     public function staffList(Request $request): \Inertia\Response
     {
         $staff = User::whereHas('roles', function ($q) {
-            return $q->whereIn('name', [Role::VSS_ADMIN, Role::VSS_USER]);
+            return $q->whereIn('name', [Role::VSS_ADMIN, Role::VSS_USER, Role::VSS_GUEST]);
         })->orderBy('created_at', 'desc')->get();
 
         return Inertia::render('Vss::Maintenance', ['status' => true, 'results' => $staff, 'page' => 'staff']);
@@ -47,7 +47,7 @@ class MaintenanceController extends Controller
         $user->save();
 
         //reset roles
-        $roles = Role::whereIn('name', [Role::VSS_ADMIN, Role::VSS_USER])->get();
+        $roles = Role::whereIn('name', [Role::VSS_ADMIN, Role::VSS_USER, Role::VSS_GUEST])->get();
         foreach ($roles as $role) {
             $user->roles()->detach($role);
         }

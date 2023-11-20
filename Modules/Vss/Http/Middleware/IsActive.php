@@ -34,6 +34,11 @@ class IsActive
 
         //active user must have at least a VSS User role
         if (! $user->hasRole(Role::SUPER_ADMIN) && ! $user->hasRole(Role::VSS_ADMIN) && ! $user->hasRole(Role::VSS_USER)) {
+            if (! $user->hasRole(Role::VSS_GUEST)) {
+                $role = Role::where('name', Role::VSS_GUEST)->first();
+                $user->roles()->attach($role);
+            }
+
             return Inertia::render('Home', [
                 'loginAttempt' => true,
                 'hasAccess' => false,

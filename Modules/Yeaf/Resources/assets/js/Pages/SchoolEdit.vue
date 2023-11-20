@@ -30,7 +30,7 @@
 
                                             <div class="col-md-4">
                                                 <BreezeLabel for="inputInstitutionName" class="form-label" value="Institution Name" />
-                                                <BreezeInput aria-readonly="true" type="text" class="form-control" id="inputInstitutionName" :value="editForm.name" />
+                                                <BreezeInput aria-readonly="true" type="text" class="form-control" id="inputInstitutionName" v-model="editForm.name" />
                                             </div>
 
                                             <div class="col-md-8">

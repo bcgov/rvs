@@ -33,8 +33,8 @@
         <th scope="col" style="min-width: 130px;">
             <a href="#" @click="switchSort('investigate')">
                 <span>Under Investigation</span>
-                <em v-if="sortClmn === 'investigate' && sortType === 'desc'" class="bi bi-sort-numeric-up"></em>
-                <em v-else class="bi bi-sort-numeric-down"></em>
+                <em v-if="sortClmn === 'investigate' && sortType === 'desc'" class="bi bi-sort-alpha-up"></em>
+                <em v-else class="bi bi-sort-alpha-down"></em>
             </a>
         </th>
 

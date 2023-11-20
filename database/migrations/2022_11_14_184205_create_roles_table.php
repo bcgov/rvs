@@ -32,6 +32,11 @@ return new class extends Migration
         DB::table('roles')->insert(['name' => 'TWP User']);
         DB::table('roles')->insert(['name' => 'NEB User']);
 
+        DB::table('roles')->insert(['name' => 'VSS Guest']);
+        DB::table('roles')->insert(['name' => 'YEAF Guest']);
+        DB::table('roles')->insert(['name' => 'TWP Guest']);
+        DB::table('roles')->insert(['name' => 'NEB Guest']);
+
     }
 
     /**
