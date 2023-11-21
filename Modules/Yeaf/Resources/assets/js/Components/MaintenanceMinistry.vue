@@ -129,7 +129,7 @@
                                 <div class="col-lg-6">
                                     <BreezeLabel for="ministry_location_fax" value="Fax"/>
                                     <BreezeInput id="ministry_location_fax" class="form-control" type="text"
-                                                 v-model="editForm.ministry_location_fax"
+                                                 v-model="editForm.ministry_fax"
                                                  :disabled="editForm.processing"/>
                                 </div>
                                 <div class="col-lg-6">

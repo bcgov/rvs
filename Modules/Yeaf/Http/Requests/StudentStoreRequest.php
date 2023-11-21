@@ -103,7 +103,7 @@ class StudentStoreRequest extends FormRequest
             $this->merge(['tele' => preg_replace('/\D/', '', $this->tele)]);
         }
 
-        $last_student = Student::orderByDesc('id')->first();
+        $last_student = Student::orderByDesc('student_id')->first();
         $this->merge(['student_id' => $last_student->id + 1]);
     }
 }
