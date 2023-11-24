@@ -204,7 +204,7 @@ export default {
                 email: this.editForm.email,
                 gender: this.editForm.gender,
                 overaward_flag: this.editForm.overaward_flag,
-                investigate: this.editForm.area_of_audit_code,
+                investigate: this.editForm.investigate,
                 pen: this.editForm.pen,
                 pd: this.editForm.pd,
                 institution_student_number: this.editForm.institution_student_number,

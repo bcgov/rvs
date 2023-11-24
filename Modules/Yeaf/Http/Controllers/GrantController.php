@@ -320,7 +320,7 @@ class GrantController extends Controller
     {
         //update existing records
         if (isset($request->appeals)) {
-            foreach ($request->appeals as $appeal) {
+            foreach ($request->input('appeals') as $appeal) {
                 $grant_appeal = Appeal::find($appeal->id);
                 $grant_appeal->adjudicated_by_user_id = $appeal->adjudicated_by_user_id;
                 $grant_appeal->updated_by_user_id = Str::upper(Auth::user()->user_id);
@@ -328,14 +328,14 @@ class GrantController extends Controller
                 $grant_appeal->appeal_date = $appeal->appeal_date;
                 $grant_appeal->status_code = $appeal->status_code;
                 $grant_appeal->status_affective_date = $appeal->status_affective_date;
-                $grant_appeal->other_appeal_explain = $appeal->input('other_appeal_explain');
+                $grant_appeal->other_appeal_explain = $appeal->other_appeal_explain;
                 $grant_appeal->save();
             }
         }
 
         //add new records
         if (isset($request->new_appeals)) {
-            foreach ($request->new_appeals as $appeal) {
+            foreach ($request->input('new_appeals') as $appeal) {
                 if ($appeal->appeal_code != 0) {
                     $last_appeal_id = Appeal::orderByDesc('appeal_id')->first();
                     $grant_appeal = new Appeal();
@@ -349,7 +349,7 @@ class GrantController extends Controller
                     $grant_appeal->appeal_date = $appeal->appeal_date;
                     $grant_appeal->status_code = $appeal->status_code;
                     $grant_appeal->status_affective_date = $appeal->status_affective_date;
-                    $grant_appeal->other_appeal_explain = $appeal->input('other_appeal_explain');
+                    $grant_appeal->other_appeal_explain = $appeal->other_appeal_explain;
                     $grant_appeal->save();
                 }
             }
