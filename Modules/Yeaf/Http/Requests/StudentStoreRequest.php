@@ -29,6 +29,7 @@ class StudentStoreRequest extends FormRequest
             'sin.required' => 'The SIN field is required.',
             'sin.digits' => 'The SIN length must be exactly 9 with no spaces.',
             'sin.unique' => 'The SIN provided is already in use.',
+            'sin.numeric' => 'The SIN provided is invalid.',
             'student_id.*' => 'Student ID is missing.',
             'tele.*' => 'Telephone number field is not valid.',
             'pen.*' => 'PEN field is not valid.',
@@ -53,7 +54,7 @@ class StudentStoreRequest extends FormRequest
     {
         return [
             'student_id' => 'required',
-            'sin' => 'required|digits:9|unique:'.env('DB_DATABASE_YEAF').'.students,sin',
+            'sin' => 'required|numeric|digits:9|unique:'.env('DB_DATABASE_YEAF').'.students,sin',
             'last_name' => 'required|string',
             'first_name' => 'required|string',
             'address' => 'required|string',

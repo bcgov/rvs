@@ -36,7 +36,7 @@ tr {
 
             <div class="col-md-4">
                 <BreezeLabel for="inputSin" class="form-label" value="SIN"/>
-                <BreezeInput aria-readonly="true" type="text" class="form-control" id="inputSin" :value="editForm.sin"/>
+                <BreezeInput aria-readonly="true" type="text" class="form-control" id="inputSin" v-model="editForm.sin"/>
             </div>
             <div class="col-md-4">
                 <BreezeLabel for="inputLastName" class="form-label" value="Last Name"/>
@@ -189,7 +189,7 @@ export default {
     methods: {
         updateStudent: function () {
             this.editForm = useForm({
-
+                id: this.result.id,
                 student_id: this.editForm.student_id,
                 last_name: this.editForm.last_name,
                 first_name: this.editForm.first_name,

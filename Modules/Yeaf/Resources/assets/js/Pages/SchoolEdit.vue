@@ -144,6 +144,7 @@ export default {
         updateSchool: function ()
         {
             this.editForm = useForm({
+                id: this.result.id,
 
                 institution_id: this.editForm.institution_id,
                 name: this.editForm.name,

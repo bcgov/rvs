@@ -25,6 +25,10 @@ class StudentUpdateRequest extends FormRequest
     public function messages()
     {
         return [
+            'sin.required' => 'The SIN field is required.',
+            'sin.digits' => 'The SIN length must be exactly 9 with no spaces.',
+            'sin.unique' => 'The SIN provided is already in use.',
+            'sin.numeric' => 'The SIN provided is invalid.',
             'tele.*' => 'Telephone number field is not valid.',
             'pd.*' => 'Permanent Disability field is not valid.',
             'investigate.*' => 'Freeze field is not valid.',
@@ -40,7 +44,7 @@ class StudentUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'sin' => 'required|digits:9|unique:'.env('DB_DATABASE_YEAF').'.students,sin,'.$this->id.',id',
+            'sin' => 'required|numeric|digits:9|unique:'.env('DB_DATABASE_YEAF').'.students,sin,'.$this->id.',id',
             'last_name' => 'required|string',
             'first_name' => 'required|string',
             'address' => 'required|string',
