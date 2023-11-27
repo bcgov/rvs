@@ -140,7 +140,6 @@ export default {
             },
             currentView: 'chart',
             showSuccessMsg: false,
-
         }
     },
     methods: {
@@ -164,7 +163,7 @@ export default {
             if(this.reportForm.inputEndDate === '' || this.reportForm.inputStartDate === '') return false;
 
             let activeUsersForm = useForm(this.reportForm);
-            activeUsersForm.post('/vss/reports-search', {
+            activeUsersForm.post('/vss/reports', {
                 onSuccess: (response) => {
 
                     //this.results = response.data.results;
@@ -209,11 +208,6 @@ export default {
             }
             return 'VSS ' + type + ' Report for Over Award from ' + this.start + ' to ' + this.end;
         }
-
-    },
-    watch: {
-    },
-    computed: {
 
     },
     mounted() {
