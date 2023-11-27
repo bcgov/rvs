@@ -210,7 +210,7 @@ export default {
         newStudent: function ()
         {
             this.newStudentForm.formState = '';
-            this.newStudentForm.post('/twp/students/store', {
+            this.newStudentForm.post('/twp/students', {
                 onSuccess: (response) => {
                     $("#newStudentModal").modal('hide');
                     this.newStudentForm.reset(this.newStudentFormData);

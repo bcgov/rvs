@@ -492,7 +492,7 @@ export default {
         {
             let vm = this;
             this.newTwpForm.formState = '';
-            this.newTwpForm.post('/twp/applications/store', {
+            this.newTwpForm.post('/twp/applications', {
                 onSuccess: () => {
                     $("#newTwpAppModal").modal('hide')
                         .on('hidden.bs.modal', function () {
@@ -514,7 +514,7 @@ export default {
         {
             let vm = this;
             this.newGrantForm.formState = '';
-            this.newGrantForm.post('/twp/grants/store', {
+            this.newGrantForm.post('/twp/grants', {
                 onSuccess: () => {
                     $("#newGrantAppModal").modal('hide')
                         .on('hidden.bs.modal', function () {
@@ -536,7 +536,7 @@ export default {
         {
             let vm = this;
             this.newPaymentForm.formState = '';
-            this.newPaymentForm.post('/twp/payments/store', {
+            this.newPaymentForm.post('/twp/payments', {
                 onSuccess: () => {
                     $("#newPaymentModal").modal('hide')
                         .on('hidden.bs.modal', function () {

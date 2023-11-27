@@ -25,9 +25,11 @@ class InstitutionEditRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.*' => 'Name field is not valid.',
-            'active_flag.required' => 'Status field is required.',
-            'active_flag.boolean' => 'Status field is invalid.',
+            'name.required' => 'Institution Name field is required.',
+            'name.string' => 'Institution Name field is not valid.',
+            'name.unique' => 'Institution Name with the same name already exists.',
+            'active_flag.required' => 'Institution Status field is required.',
+            'active_flag.boolean' => 'Institution Status field is invalid.',
         ];
     }
 
@@ -40,7 +42,7 @@ class InstitutionEditRequest extends FormRequest
     {
         return [
             'active_flag' => 'required|boolean',
-            'name' => 'string',
+            'name' => 'required|string|unique:'.env('DB_DATABASE_TWP').'.institutions,name,'.$this->id.',id',
             'contact_name' => 'string|nullable',
             'contact_email' => 'string|email|nullable',
         ];
