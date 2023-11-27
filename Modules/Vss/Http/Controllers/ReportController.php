@@ -19,7 +19,7 @@ class ReportController extends Controller
             'funds.fundingType', 'comments', 'institution', 'audits', 'offences.offence', 'sanctions')->first();
         $now_d = date('Y-m-d');
         $now_t = date('H:m:i');
-        $pdf = PDF::loadView('vss.pdf', compact('case', 'now_d', 'now_t'));
+        $pdf = PDF::loadView('vss::pdf', compact('case', 'now_d', 'now_t'));
 
         return $pdf->download(mt_rand().'-'.$case->incident_id.'-student_report.pdf');
     }

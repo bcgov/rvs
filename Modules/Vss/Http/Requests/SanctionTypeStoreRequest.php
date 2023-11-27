@@ -30,7 +30,8 @@ class SanctionTypeStoreRequest extends FormRequest
 
             'short_description.*' => 'Short Description field is required.',
             'description.*' => 'Description field is required.',
-            'disabled.*' => 'Status field is required.',
+            'disabled.required' => 'Status field is required.',
+            'disabled.boolean' => 'Status field is invalid.',
         ];
     }
 
@@ -67,5 +68,9 @@ class SanctionTypeStoreRequest extends FormRequest
             $last = SanctionType::select('sanction_code')->orderBy('sanction_code', 'desc')->first();
             $this->merge(['sanction_code' => $last->sanction_code + 1]);
         }
+
+        $this->merge([
+            'disabled' => $this->input('disabled') == 'true',
+        ]);
     }
 }

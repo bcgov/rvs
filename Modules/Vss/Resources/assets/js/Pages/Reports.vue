@@ -7,11 +7,6 @@
     <Head title="Reports" />
 
     <BreezeAuthenticatedLayout>
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                VSS - Verification Statistics System
-            </h2>
-        </template>
 
         <div class="mt-3">
             <div class="container-fluid">

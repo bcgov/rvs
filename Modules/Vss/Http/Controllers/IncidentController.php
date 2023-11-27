@@ -89,7 +89,7 @@ class IncidentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(CaseStoreRequest $request)
     {
@@ -105,7 +105,7 @@ class IncidentController extends Controller
      *
      * @return \Inertia\ResponseFactory|\Inertia\Response
      */
-    public function edit(Incident $case)
+    public function show(Incident $case)
     {
         $case = Incident::where('id', $case->id)->with('audits', 'offences.offence', 'sanctions.sanction', 'institution')->withTrashed()->first();
         $areaOfAudits = AreaOfAudit::get();
@@ -128,8 +128,8 @@ class IncidentController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Models\Incident  $incident
-     * @return \Illuminate\Http\Response
+     * @param  \Modules\Vss\Entities\Incident  $incident
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(CaseStoreRequest $request, Incident $case)
     {
@@ -137,7 +137,7 @@ class IncidentController extends Controller
 
         $this->addAttachedRecords($request, $case);
 
-        return Redirect::route('vss.cases.edit', [$case->id]);
+        return Redirect::route('vss.cases.show', [$case->id]);
     }
 
     private function addAttachedRecords($request, $case)
