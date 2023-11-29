@@ -100,17 +100,17 @@ class StudentUpdateRequest extends FormRequest
         if (! isset($this->overaward_flag)) {
             $this->merge(['overaward_flag' => false]);
         } else {
-            $this->merge(['overaward_flag' => true]);
+            $this->merge(['overaward_flag' => $this->input('overaward_flag') == 'true']);
         }
         if (! isset($this->investigate)) {
             $this->merge(['investigate' => false]);
         } else {
-            $this->merge(['investigate' => true]);
+            $this->merge(['investigate' => $this->input('investigate') == 'true']);
         }
         if (! isset($this->pd)) {
             $this->merge(['pd' => false]);
         } else {
-            $this->merge(['pd' => true]);
+            $this->merge(['pd' => $this->input('pd') == 'true']);
         }
     }
 }
