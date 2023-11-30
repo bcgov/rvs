@@ -199,12 +199,10 @@ export default {
 
         submitEditIneligible: function () {
             this.editIneligibleForm.formState = '';
-            this.editIneligibleForm.post('/yeaf/maintenance/ineligible/' + this.editIneligibleForm.id, {
+            this.editIneligibleForm.post('/yeaf/maintenance/ineligibles/' + this.editIneligibleForm.id, {
                 onSuccess: (response) => {
                     $("#editIneligibleModal").modal('hide');
                     this.editIneligibleForm.formState = true;
-                },
-                onFailure: () => {
                 },
                 onError: () => {
                     this.editIneligibleForm.formState = false;
@@ -217,12 +215,10 @@ export default {
         newIneligible: function ()
         {
             this.newIneligibleForm.formState = '';
-            this.newIneligibleForm.post('/yeaf/maintenance/ineligible', {
+            this.newIneligibleForm.post('/yeaf/maintenance/ineligibles', {
                 onSuccess: (response) => {
                     $("#newIneligibleModal").modal('hide');
                     this.newIneligibleForm.reset(this.newIneligibleFormData);
-                },
-                onFailure: () => {
                 },
                 onError: () => {
                     this.newIneligibleForm.formState = false;

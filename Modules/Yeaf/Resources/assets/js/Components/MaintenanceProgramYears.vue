@@ -183,7 +183,6 @@ export default {
                 year_start: 0, year_end: 0, grant_amount: 0, max_years_allowed: 0, min_age: 0, max_age: 100,
             },
             editProgramYearForm: null,
-
         }
     },
     methods: {
@@ -193,12 +192,10 @@ export default {
 
         submitEditProgramYear: function () {
             this.editProgramYearForm.formState = '';
-            this.editProgramYearForm.post('/yeaf/maintenance/program-year/' + this.editProgramYearForm.id, {
+            this.editProgramYearForm.post('/yeaf/maintenance/program-years/' + this.editProgramYearForm.id, {
                 onSuccess: (response) => {
                     $("#editProgramYearModal").modal('hide');
                     this.editProgramYearForm.formState = true;
-                },
-                onFailure: () => {
                 },
                 onError: () => {
                     this.editProgramYearForm.formState = false;
@@ -211,12 +208,10 @@ export default {
         newProgramYear: function ()
         {
             this.newProgramYearForm.formState = '';
-            this.newProgramYearForm.post('/yeaf/maintenance/program-year', {
+            this.newProgramYearForm.post('/yeaf/maintenance/program-years', {
                 onSuccess: (response) => {
                     $("#newProgramYearModal").modal('hide');
                     this.newProgramYearForm.reset(this.newProgramYearFormData);
-                },
-                onFailure: () => {
                 },
                 onError: () => {
                     this.newProgramYearForm.formState = false;
