@@ -214,7 +214,7 @@ export default {
                 onSuccess: (response) => {
                     $("#newStudentModal").modal('hide');
                     this.newStudentForm.reset(this.newStudentFormData);
-                    this.$inertia.visit('twp/students/' + response.props.student.id);
+                    this.$inertia.visit('/twp/students/' + response.props.student.id);
                 },
                 onFailure: () => {
                 },

@@ -34,7 +34,7 @@
                                         </thead>
                                         <tbody>
                                         <tr v-for="(row, i) in results.data">
-                                            <td><Link v-if="row.student != null" :href="'/twp/students/' + row.student.id">{{ row.student.last_name }}</Link></td>
+                                            <td><Link v-if="row.student != null" :href="'/twp/students/' + row.student.id">{{ studentLastName(row.student.last_name) }}</Link></td>
                                             <td><span v-if="row.student != null">{{ row.student.first_name}}</span></td>
                                             <td><span v-if="row.student != null">{{ row.student.birth_date}}</span></td>
                                             <td><span v-if="row.student != null">{{ row.student.pen}}</span></td>
@@ -93,7 +93,10 @@ export default {
         }
     },
     methods: {
-
+        studentLastName: function (name)
+        {
+            return name == null ? "BLANK" : name;
+        },
         updateStatus: function (application, e) {
             let new_status = e.target.value;
             let editForm = useForm({

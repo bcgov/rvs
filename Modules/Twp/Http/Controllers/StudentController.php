@@ -155,7 +155,10 @@ class StudentController extends Controller
         }
 
         if (request()->sort !== null && request()->sort !== 'app_status') {
-            $apps = $apps->orderBy(request()->sort, request()->direction);
+            $apps = $apps->leftJoin('students', 'applications.student_id', '=', 'students.id')
+                ->select('applications.*')
+                ->addSelect("students.".request()->sort." as student_".request()->sort)
+                ->orderBy("student_".request()->sort, request()->direction);
         } else {
             $apps = $apps->orderBy('created_at', 'desc');
         }

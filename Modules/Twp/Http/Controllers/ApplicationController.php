@@ -61,7 +61,7 @@ class ApplicationController extends Controller
             $application->save();
         }
 
-        return Redirect::route('twp.students.index');
+        return Redirect::route('twp.application-list');
     }
 
     public function downloadLetter(Request $request, $type, $extra)

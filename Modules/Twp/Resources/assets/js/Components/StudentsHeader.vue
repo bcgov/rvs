@@ -52,7 +52,7 @@ export default {
             sortClmn: 'last_name',
             sortType: 'asc',
             url: '',
-            path: 'twp.students.index',
+            path: '/twp/students',
             appStatusSort: 'ALL',
         }
     },

@@ -64,7 +64,7 @@ export default {
             sortClmn: 'last_name',
             sortType: 'asc',
             url: '',
-            path: 'twp.application-list',
+            path: '/twp/application-list',
             appStatusSort: 'ALL',
         }
     },
