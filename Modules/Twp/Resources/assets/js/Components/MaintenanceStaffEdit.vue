@@ -34,7 +34,7 @@
 
                     <div class="mt-4">
                         <BreezeLabel for="tele" value="Telephone #" />
-                        <BreezeInput id="tele" type="text" class="mt-1 block w-full" v-model="form.tele" required />
+                        <BreezeInput id="tele" type="number" class="mt-1 block w-full" v-model="form.tele" required />
                     </div>
 
                     <div class="mt-4">

@@ -2,7 +2,7 @@
     <div class="card">
         <div class="card-header">
             <div>Payment Types Maintenance
-                <button type="button" class="btn btn-success btn-sm float-end" data-bs-toggle="modal" data-bs-target="#newPaymentTypeModal">New PaymentType Type</button>
+                <button type="button" class="btn btn-success btn-sm float-end" data-bs-toggle="modal" data-bs-target="#newPaymentTypeModal">New Payment Type</button>
             </div>
         </div>
 
