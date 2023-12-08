@@ -21,11 +21,11 @@
                                     <div class="row mb-3">
                                         <div class="col-md-6">
                                             <BreezeLabel class="form-label" for="inputStartDate" value="Start Date" />
-                                            <BreezeInput type="date" id="inputStartDate" class="form-control" v-model="reportForm.inputStartDate" />
+                                            <BreezeInput type="date" id="inputStartDate" class="form-control" min="1990-01-01" max="2040-12-31" v-model="reportForm.inputStartDate" />
                                         </div>
                                         <div class="col-md-6">
                                             <BreezeLabel class="form-label" for="inputEndDate" value="End Date" />
-                                            <BreezeInput type="date" id="inputEndDate" class="form-control" v-model="reportForm.inputEndDate" />
+                                            <BreezeInput type="date" id="inputEndDate" class="form-control" min="1990-01-01" max="2040-12-31" v-model="reportForm.inputEndDate" />
                                         </div>
                                     </div>
 
