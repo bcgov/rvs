@@ -36,10 +36,10 @@
                                         <tbody>
                                             <tr v-for="(row, i) in results.data">
                                                 <td><Link :href="'/vss/case-funding/' + row.id" v-html="row.sin" /></td>
-                                                <td>{{ row.first_name }} {{ row.last_name}}</td>
+                                                <td>{{ row.first_name }}</td>
+                                                <td>{{ row.last_name}}</td>
                                                 <td>{{ row.institution_code }}<br/><small v-if="row.institution != null">{{ row.institution.institution_name }}</small></td>
                                                 <td>{{ row.open_date }}</td>
-                                                <td>{{ row.reactivate_date }}</td>
                                                 <td>{{ row.incident_status }}</td>
                                                 <td>{{ row.auditor_user_id }}</td>
                                                 <td><a :href="'/vss/reports/download/' + row.id" class="btn btn-sm btn-outline-secondary">

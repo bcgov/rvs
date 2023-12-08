@@ -9,8 +9,15 @@
         </th>
         <th scope="col">
             <a href="#" @click="switchSort('first_name')">
-                <span>Name</span>
+                <span>First Name</span>
                 <em v-if="sortClmn === 'first_name' && sortType === 'desc'" class="bi bi-sort-alpha-up"></em>
+                <em v-else class="bi bi-sort-alpha-down"></em>
+            </a>
+        </th>
+        <th scope="col">
+            <a href="#" @click="switchSort('last_name')">
+                <span>Last Name</span>
+                <em v-if="sortClmn === 'last_name' && sortType === 'desc'" class="bi bi-sort-alpha-up"></em>
                 <em v-else class="bi bi-sort-alpha-down"></em>
             </a>
         </th>
@@ -25,13 +32,6 @@
             <a href="#" @click="switchSort('open_date')">
                 <span>Date Open</span>
                 <em v-if="sortClmn === 'open_date' && sortType === 'desc'" class="bi bi-sort-numeric-up"></em>
-                <em v-else class="bi bi-sort-numeric-down"></em>
-            </a>
-        </th>
-        <th scope="col" style="min-width: 130px;">
-            <a href="#" @click="switchSort('reactivate_date')">
-                <span>Date Reactiv.</span>
-                <em v-if="sortClmn === 'reactivate_date' && sortType === 'desc'" class="bi bi-sort-numeric-up"></em>
                 <em v-else class="bi bi-sort-numeric-down"></em>
             </a>
         </th>
