@@ -32,6 +32,11 @@ class MaintenanceController extends Controller
      */
     public function staffShow(Request $request, User $user): \Inertia\Response
     {
+        if ($user->roles->contains('name', Role::VSS_ADMIN)) {
+            $user->access_type = 'A';
+        } else {
+            $user->access_type = 'U';
+        }
         return Inertia::render('Vss::Maintenance', ['status' => true, 'results' => $user, 'page' => 'staff-edit']);
     }
 

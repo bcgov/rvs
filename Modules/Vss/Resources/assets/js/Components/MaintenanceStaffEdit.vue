@@ -31,12 +31,12 @@
 
                 <div class="mt-4">
                     <BreezeLabel for="start_date" value="Start Date" />
-                    <BreezeInput id="start_date" type="date" class="mt-1 block w-full" placeholder="yyyy-mm-dd" aria-placeholder="yyyy-mm-dd" v-model="form.start_date" required />
+                    <BreezeInput id="start_date" type="date" class="mt-1 block w-full" min="1990-01-01" max="2040-12-31" placeholder="yyyy-mm-dd" aria-placeholder="yyyy-mm-dd" v-model="form.start_date" required />
                 </div>
 
                 <div class="mt-4">
                     <BreezeLabel for="access_type" value="Access Type" />
-                    <BreezeSelect id="access_type" type="text" class="mt-1 block w-full" v-model="form.access_type" required>
+                    <BreezeSelect id="access_type" class="mt-1 block w-full" v-model="form.access_type" required>
                         <option value="A">Admin</option>
                         <option value="U">User</option>
                     </BreezeSelect>
@@ -114,9 +114,9 @@ export default {
     },
     data() {
         return {
-            form: '',
             showSuccessMsg: false,
             showFailMsg: false,
+            form: '',
         }
     },
     methods: {
@@ -126,12 +126,9 @@ export default {
         },
         submitStaffForm: function ()
         {
-
             this.form.post('/vss/maintenance/staff/' + this.results.id, {
                 onSuccess: () => {
                     this.showSuccessAlert();
-                },
-                onFailure: () => {
                 },
                 onError: () => {
                     this.showFailAlert();
@@ -145,7 +142,6 @@ export default {
             let vm = this;
             setTimeout(function (){
                 vm.showSuccessMsg = false;
-                // vm.back();
             }, 5000);
         },
         showFailAlert: function ()
@@ -154,12 +150,9 @@ export default {
             let vm = this;
             setTimeout(function (){
                 vm.showFailMsg = false;
-                // vm.back();
             }, 5000);
         },
 
-    },
-    watch: {
     },
     mounted() {
         let tmpObj = this.results;
@@ -169,5 +162,4 @@ export default {
         this.form = useForm(tmpObj);
     }
 }
-
 </script>

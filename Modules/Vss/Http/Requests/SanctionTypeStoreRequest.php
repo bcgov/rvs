@@ -2,8 +2,9 @@
 
 namespace Modules\Vss\Http\Requests;
 
-use App\Models\SanctionType;
+
 use Illuminate\Foundation\Http\FormRequest;
+use Modules\Vss\Entities\SanctionType;
 
 class SanctionTypeStoreRequest extends FormRequest
 {
