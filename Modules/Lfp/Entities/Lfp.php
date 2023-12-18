@@ -2,7 +2,6 @@
 
 namespace Modules\Lfp\Entities;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Lfp extends ModuleModel
