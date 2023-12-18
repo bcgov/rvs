@@ -106,8 +106,8 @@
                                             <button type="submit" class="btn me-2" :class="noChanges ? 'btn-outline-success' : 'btn-success'" :disabled="noChanges">Save</button>
                                             <button @click="newComment" type="button" class="btn btn-outline-info">Add New Comment</button>
                                             <Link @click="back" class="btn btn-outline-primary float-end" href="#">Back</Link>
-                                            <Link :href="'/vss/case-funding.show' + result.id" class="btn btn-outline-dark float-end me-2">Funds</Link>
-                                            <Link :href="'/vss/cases.edit' + result.id" class="btn btn-outline-danger float-end me-2">Edit Case</Link>
+                                            <Link :href="'/vss/case-funding/' + result.id" class="btn btn-outline-dark float-end me-2">Funds</Link>
+                                            <Link :href="'/vss/cases/' + result.id" class="btn btn-outline-danger float-end me-2">Edit Case</Link>
                                         </div>
                                     </form>
                                 </template>
