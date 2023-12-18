@@ -17,18 +17,25 @@ class Role extends Model
     protected $fillable = ['name'];
 
     public const SUPER_ADMIN = 'Super Admin';
-    public const YEAF_USER = 'YEAF User';
+
     public const YEAF_ADMIN = 'YEAF Admin';
     public const TWP_ADMIN = 'TWP Admin';
-    public const TWP_USER = 'TWP User';
     public const VSS_ADMIN = 'VSS Admin';
-    public const VSS_USER = 'VSS User';
     public const NEB_ADMIN = 'NEB Admin';
+    public const LFP_ADMIN = 'LFP Admin';
+
+    public const YEAF_USER = 'YEAF User';
+    public const TWP_USER = 'TWP User';
+    public const VSS_USER = 'VSS User';
     public const NEB_USER = 'NEB User';
+    public const LFP_USER = 'LFP User';
+
     public const YEAF_GUEST = 'YEAF Guest';
     public const TWP_GUEST = 'TWP Guest';
     public const VSS_GUEST = 'VSS Guest';
     public const NEB_GUEST = 'NEB Guest';
+    public const LFP_GUEST = 'LFP Guest';
+
 
 
     /**

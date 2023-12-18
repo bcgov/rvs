@@ -1,0 +1,13 @@
+{
+    "name": "Lfp",
+    "alias": "lfp",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Lfp\\Providers\\LfpServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

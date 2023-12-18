@@ -52,7 +52,7 @@
                                     </div>
                                     <div class="col-md-8">
                                         <BreezeLabel for="newBatchDate" class="form-label" value="Batch Date" />
-                                        <BreezeInput type="date" max="2040-12-31" class="form-control" id="newBatchDate" v-model="newBatchForm.batch_date" />
+                                        <BreezeInput type="date" min="1990-01-01" max="2040-12-31" class="form-control" id="newBatchDate" v-model="newBatchForm.batch_date" />
                                     </div>
 
                                 </div>
@@ -95,7 +95,7 @@
                                     </div>
                                     <div class="col-md-8">
                                         <BreezeLabel for="editBatchDate" class="form-label" value="Batch Date" />
-                                        <BreezeInput type="date" max="2040-12-31" class="form-control" id="editBatchDate" v-model="editBatchForm.batch_date" />
+                                        <BreezeInput type="date" min="1990-01-01" max="2040-12-31" class="form-control" id="editBatchDate" v-model="editBatchForm.batch_date" />
                                     </div>
 
                                 </div>

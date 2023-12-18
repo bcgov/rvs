@@ -33,8 +33,11 @@ export default {
                 vm.showHide = true;
                 setTimeout(function () {
                     vm.showHide = false;
-                }, 2000);
+                }, 2500);
             }
+        },
+        failMsg: function (newVal, oldVal) {
+            this.failMessage = newVal == null ? 'There was an error submitting this form.' : newVal;
         }
     },
 

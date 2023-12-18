@@ -5,7 +5,7 @@
     <div class="card">
         <div class="card-header">
             <div>Bursary Periods<button class="btn btn-success btn-sm float-end" data-bs-toggle="modal"
-                    data-bs-target="#newBursayPeriodModal">Add New</button></div>
+                    data-bs-target="#newBursaryPeriodModal">Add New</button></div>
         </div>
 
         <div class="card-body">
@@ -50,43 +50,43 @@
             <h1 v-else class="lead">No results</h1>
         </div>
 
-        <div class="modal modal-lg fade" id="newBursayPeriodModal" tabindex="-1" aria-labelledby="newBursayPeriodModalLabel"
+        <div class="modal modal-lg fade" id="newBursaryPeriodModal" tabindex="-1" aria-labelledby="newBursaryPeriodModalLabel"
             aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="newBursayPeriodModalLabel">Add New Bursary Period</h5>
+                        <h5 class="modal-title" id="newBursaryPeriodModalLabel">Add New Bursary Period</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form @submit.prevent="newBursayPeriod">
+                    <form @submit.prevent="newBursaryPeriod">
                         <div class="modal-body">
                             <div class="card-body">
                                 <div class="row g-3">
 
                                     <div class="col-6">
-                                        <Label for="newBursayPeriodEndDate" class="form-label"
+                                        <Label for="newBursaryPeriodEndDate" class="form-label"
                                             value="Bursary Period Start Date" />
-                                        <Input type="date" class="form-control" id="newBursayPeriodStartDate"
+                                        <Input type="date" class="form-control" id="newBursaryPeriodStartDate"
                                             v-model="newBursaryPeriodForm.bursary_period_start_date" />
                                         <div v-if="errors.bursary_period_start_date" class="text-xs text-red-500">
                                             {{ errors.bursary_period_start_date.join(', ') }}
                                         </div>
                                     </div>
                                     <div class="col-6">
-                                        <Label for="newBursayPeriodEndDate" class="form-label"
+                                        <Label for="newBursaryPeriodEndDate" class="form-label"
                                             value="Bursary Period End Date" />
-                                        <Input type="date" class="form-control" id="newBursayPeriodEndDate"
+                                        <Input type="date" class="form-control" id="newBursaryPeriodEndDate"
                                             v-model="newBursaryPeriodForm.bursary_period_end_date" />
                                         <div v-if="errors.bursary_period_end_date" class="text-xs text-red-500">
                                             {{ errors.bursary_period_end_date.join(', ') }}
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <Label for="newBursayPeriodDefaultAwardAmount" class="form-label"
+                                        <Label for="newBursaryPeriodDefaultAwardAmount" class="form-label"
                                             value="Defautl Award Amount" />
                                         <div class="input-group">
                                             <span class="input-group-text">$</span>
-                                            <input type="number" class="form-control" id="newBursayPeriodDefaultAwardAmount"
+                                            <input type="number" class="form-control" id="newBursaryPeriodDefaultAwardAmount"
                                                 aria-label="Amount (to the nearest dollar)"
                                                 v-model="newBursaryPeriodForm.default_award">
                                         </div>
@@ -95,11 +95,11 @@
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <Label for="newBursayPeriodPeriodBudgetAmount" class="form-label"
+                                        <Label for="newBursaryPeriodPeriodBudgetAmount" class="form-label"
                                             value="Period Budget Amount" />
                                         <div class="input-group">
                                             <span class="input-group-text">$</span>
-                                            <input type="number" class="form-control" id="newBursayPeriodPeriodBudgetAmount"
+                                            <input type="number" class="form-control" id="newBursaryPeriodPeriodBudgetAmount"
                                                 aria-label="Amount (to the nearest dollar)"
                                                 v-model="newBursaryPeriodForm.period_budget">
                                         </div>
@@ -108,7 +108,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <Label for="newBursayPeriodBudgetAllocationType" class="form-label"
+                                        <Label for="newBursaryPeriodBudgetAllocationType" class="form-label"
                                             value="Budget Allocation Type" />
                                         <Select class="form-select" v-model="newBursaryPeriodForm.budget_allocation_type">
                                             <option value="None">None</option>
@@ -120,10 +120,10 @@
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <Label for="newBursayPeriodPublicPortion" class="form-label"
+                                        <Label for="newBursaryPeriodPublicPortion" class="form-label"
                                             value="Public Portion" />
                                         <div class="input-group">
-                                            <input type="number" class="form-control" id="newBursayPeriodPublicPortion"
+                                            <input type="number" class="form-control" id="newBursaryPeriodPublicPortion"
                                                 aria-label="percentage" v-model="newBursaryPeriodForm.public_sector_budget">
                                             <span class="input-group-text">%</span>
                                         </div>
@@ -145,44 +145,44 @@
             </div>
         </div>
 
-        <div v-if="editBursaryPeriodForm != null" class="modal modal-lg fade" id="editBursayPeriodModal" tabindex="-1"
-            aria-labelledby="editBursayPeriodModalLabel" aria-hidden="true">
+        <div v-if="editBursaryPeriodForm != null" class="modal modal-lg fade" id="editBursaryPeriodModal" tabindex="-1"
+            aria-labelledby="editBursaryPeriodModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="editBursayPeriodModalLabel">Edit Bursary Period</h5>
+                        <h5 class="modal-title" id="editBursaryPeriodModalLabel">Edit Bursary Period</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form @submit.prevent="editBursayPeriod">
+                    <form @submit.prevent="editBursaryPeriod">
                         <div class="modal-body">
                             <div class="card-body">
                                 <div class="row g-3">
 
                                     <div class="col-6">
-                                        <Label for="editBursayPeriodEndDate" class="form-label"
+                                        <Label for="editBursaryPeriodEndDate" class="form-label"
                                             value="Bursary Period Start Date" />
-                                        <Input type="date" class="form-control" id="editBursayPeriodEndDate"
+                                        <Input type="date" class="form-control" id="editBursaryPeriodEndDate"
                                             v-model="editBursaryPeriodForm.bursary_period_start_date" />
                                         <div v-if="errors.bursary_period_start_date" class="text-xs text-red-500">
                                             {{ errors.bursary_period_start_date.join(', ') }}
                                         </div>
                                     </div>
                                     <div class="col-6">
-                                        <Label for="editBursayPeriodEndDate" class="form-label"
+                                        <Label for="editBursaryPeriodEndDate" class="form-label"
                                             value="Bursary Period End Date" />
-                                        <Input type="date" class="form-control" id="editBursayPeriodEndDate"
+                                        <Input type="date" class="form-control" id="editBursaryPeriodEndDate"
                                             v-model="editBursaryPeriodForm.bursary_period_end_date" />
                                         <div v-if="errors.bursary_period_end_date" class="text-xs text-red-500">
                                             {{ errors.bursary_period_end_date.join(', ') }}
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <Label for="editBursayPeriodDefaultAwardAmount" class="form-label"
+                                        <Label for="editBursaryPeriodDefaultAwardAmount" class="form-label"
                                             value="Defautl Award Amount" />
                                         <div class="input-group">
                                             <span class="input-group-text">$</span>
                                             <input type="number" class="form-control"
-                                                id="editBursayPeriodDefaultAwardAmount"
+                                                id="editBursaryPeriodDefaultAwardAmount"
                                                 aria-label="Amount (to the nearest dollar)"
                                                 v-model="editBursaryPeriodForm.default_award">
                                         </div>
@@ -191,12 +191,12 @@
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <Label for="editBursayPeriodPeriodBudgetAmount" class="form-label"
+                                        <Label for="editBursaryPeriodPeriodBudgetAmount" class="form-label"
                                             value="Period Budget Amount" />
                                         <div class="input-group">
                                             <span class="input-group-text">$</span>
                                             <input type="number" class="form-control"
-                                                id="editBursayPeriodPeriodBudgetAmount"
+                                                id="editBursaryPeriodPeriodBudgetAmount"
                                                 aria-label="Amount (to the nearest dollar)"
                                                 v-model="editBursaryPeriodForm.period_budget">
                                         </div>
@@ -205,7 +205,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <Label for="editBursayPeriodBudgetAllocationType" class="form-label"
+                                        <Label for="editBursaryPeriodBudgetAllocationType" class="form-label"
                                             value="Budget Allocation Type" />
                                         <Select class="form-select" v-model="editBursaryPeriodForm.budget_allocation_type">
                                             <option value="None">None</option>
@@ -217,10 +217,10 @@
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <Label for="editBursayPeriodPublicPortion" class="form-label"
+                                        <Label for="editBursaryPeriodPublicPortion" class="form-label"
                                             value="Public Portion" />
                                         <div class="input-group">
-                                            <input type="number" class="form-control" id="editBursayPeriodPublicPortion"
+                                            <input type="number" class="form-control" id="editBursaryPeriodPublicPortion"
                                                 aria-label="percentage"
                                                 v-model="editBursaryPeriodForm.public_sector_budget">
                                             <span class="input-group-text">%</span>
@@ -310,12 +310,12 @@ export default {
                     console.log(error);
                 })
         },
-        newBursayPeriod: function () {
+        newBursaryPeriod: function () {
             let vm = this;
             this.newBursaryPeriodForm.formState = '';
             this.newBursaryPeriodForm.post('/neb/bursary-periods/store', {
                 onSuccess: () => {
-                    $("#newBursayPeriodModal").modal('hide')
+                    $("#newBursaryPeriodModal").modal('hide')
                         .on('hidden.bs.modal', function () {
                             vm.newBursaryPeriodForm.reset();
 
@@ -353,7 +353,7 @@ export default {
             // this.editBursaryPeriodForm.bursary_period_start_date = bp.bpsd;
             // this.editBursaryPeriodForm.bursary_period_end_date = bp.bped;
             this.editBursaryPeriodForm.formState = '';
-            $("#editBursayPeriodModal").modal('show')
+            $("#editBursaryPeriodModal").modal('show')
                 .on('hidden.bs.modal', function () {
                     vm.editBursaryPeriodForm.reset();
 
@@ -361,11 +361,11 @@ export default {
                     vm.fetchBursaryPeriods();
                 });
         },
-        editBursayPeriod: function () {
+        editBursaryPeriod: function () {
             let vm = this;
             this.editBursaryPeriodForm.put('/neb/bursary-periods/update', {
                 onSuccess: () => {
-                    $("#editBursayPeriodModal").modal('hide');
+                    $("#editBursaryPeriodModal").modal('hide');
                 },
                 onFailure: () => {
                 },

@@ -57,7 +57,7 @@ tr {
                                                         <tr>
                                                             <th scope="row">Date Opened:</th>
                                                             <td class="ps-1">
-                                                                <BreezeInput class="form-control" type="date" placeholder="YYYY-MM-DD" v-model="editForm.open_date" />
+                                                                <BreezeInput class="form-control" type="date" min="1019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" v-model="editForm.open_date" />
                                                             </td>
                                                         </tr>
                                                     </table>
@@ -80,7 +80,7 @@ tr {
                                                         <tr>
                                                             <th scope="row">Reactivate Date:</th>
                                                             <td class="ps-1">
-                                                                <BreezeInput class="form-control" type="date" placeholder="YYYY-MM-DD" v-model="editForm.reactivate_date" />
+                                                                <BreezeInput class="form-control" type="date" min="1019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" v-model="editForm.reactivate_date" />
                                                             </td>
                                                         </tr>
 
@@ -174,7 +174,7 @@ tr {
                                                         <tr>
                                                             <th scope="row">Aud. Date:</th>
                                                             <td class="ps-1">
-                                                                <BreezeInput class="form-control" type="date" placeholder="YYYY-MM-DD" v-model="editForm.audit_date" />
+                                                                <BreezeInput class="form-control" type="date" min="1019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" v-model="editForm.audit_date" />
                                                             </td>
                                                         </tr>
 
@@ -197,7 +197,7 @@ tr {
                                                         <tr>
                                                             <th scope="row">Inv. Date:</th>
                                                             <td class="ps-1">
-                                                                <BreezeInput class="form-control" type="date" placeholder="YYYY-MM-DD" v-model="editForm.investigation_date" />
+                                                                <BreezeInput class="form-control" type="date" min="1019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" v-model="editForm.investigation_date" />
                                                             </td>
                                                         </tr>
                                                     </table>
@@ -429,7 +429,7 @@ tr {
                                                         <tr>
                                                             <td class="ps-1">
                                                                 <BreezeLabel for="bring_forward_date">Date</BreezeLabel>
-                                                                <BreezeInput id="bring_forward_date" class="form-control" type="date" placeholder="YYYY-MM-DD" v-model="editForm.bring_forward_date" :disabled="!editForm.bring_forward" />
+                                                                <BreezeInput id="bring_forward_date" class="form-control" type="date" min="1019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" v-model="editForm.bring_forward_date" :disabled="!editForm.bring_forward" />
                                                             </td>
                                                         </tr>
                                                     </table>
@@ -470,7 +470,7 @@ tr {
                                                         <tr>
                                                             <td class="ps-1">
                                                                 <BreezeLabel for="case_date">Date</BreezeLabel>
-                                                                <BreezeInput id="case_date" class="form-control" type="date" placeholder="YYYY-MM-DD" v-model="editForm.close_date" :disabled="!editForm.case_close" />
+                                                                <BreezeInput id="case_date" class="form-control" type="date" min="1019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" v-model="editForm.close_date" :disabled="!editForm.case_close" />
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -511,13 +511,13 @@ tr {
                                                         <tr>
                                                             <td class="ps-1">
                                                                 <BreezeLabel for="date_referred_to_rcmp">Date referred to RCMP</BreezeLabel>
-                                                                <BreezeInput id="date_referred_to_rcmp" class="form-control" type="date" placeholder="YYYY-MM-DD" v-model="editForm.rcmp_referral_date" :disabled="!editForm.rcmp_referral_flag" />
+                                                                <BreezeInput id="date_referred_to_rcmp" class="form-control" type="date" min="1019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" v-model="editForm.rcmp_referral_date" :disabled="!editForm.rcmp_referral_flag" />
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td class="ps-1">
                                                                 <BreezeLabel for="date_closed_by_rcmp">Date closed by RCMP</BreezeLabel>
-                                                                <BreezeInput id="date_closed_by_rcmp" class="form-control" type="date" placeholder="YYYY-MM-DD" v-model="editForm.rcmp_closure_date" :disabled="!editForm.rcmp_referral_flag" />
+                                                                <BreezeInput id="date_closed_by_rcmp" class="form-control" type="date" min="1019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" v-model="editForm.rcmp_closure_date" :disabled="!editForm.rcmp_referral_flag" />
                                                             </td>
                                                         </tr>
                                                         <tr>

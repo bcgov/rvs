@@ -75,5 +75,7 @@ class Kernel extends HttpKernel
         'vss_active' => \Modules\Vss\Http\Middleware\IsActive::class,
         'neb_admin' => \Modules\Neb\Http\Middleware\IsAdmin::class,
         'neb_active' => \Modules\Neb\Http\Middleware\IsActive::class,
+        'lfp_admin' => \Modules\Lfp\Http\Middleware\IsAdmin::class,
+        'lfp_active' => \Modules\Lfp\Http\Middleware\IsActive::class,
     ];
 }
