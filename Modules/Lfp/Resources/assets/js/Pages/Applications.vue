@@ -19,6 +19,18 @@
                             Applications
                             <button class="btn btn-success btn-sm float-end" data-bs-toggle="modal"
                                     data-bs-target="#newApplicationModal">Add New</button>
+                            <div class="d-inline-flex dropdown">
+                                <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-calendar-date"></i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#" @click="filterRange('all')">All</a></li>
+                                    <li><a class="dropdown-item" href="#" @click="filterRange('current')">Current Month</a></li>
+                                    <li><a class="dropdown-item" href="#" @click="filterRange('3')">Last 3 Months</a></li>
+                                    <li><a class="dropdown-item" href="#" @click="filterRange('6')">Last 6 Months</a></li>
+                                    <li><a class="dropdown-item" href="#" @click="filterRange('12')">Last 12 Months</a></li>
+                                </ul>
+                            </div>
                         </div>
                         <div class="card-body">
                             <div v-if="results != null && results.data.length > 0" class="table-responsive pb-3">
@@ -33,6 +45,7 @@
                                         <td>{{ row.birth_date }}</td>
                                         <td>{{ row.receive_date }}</td>
                                         <td>{{ row.status }}</td>
+                                        <td v-html="calculatePayments(row.payments)"></td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -93,6 +106,7 @@ import FormSubmitAlert from "@/Components/FormSubmitAlert";
 import BreezePagination from "@/Components/Pagination";
 import ApplicationSearchBox from "../Components/ApplicationSearch";
 import ApplicationsHeader from "../Components/ApplicationsHeader";
+import {Inertia} from "@inertiajs/inertia";
 
 export default {
     name: 'Applications',
@@ -118,6 +132,22 @@ export default {
         }
     },
     methods: {
+        filterRange: function (range)
+        {
+
+            let data = {
+                'filter_period': range
+            };
+
+            Inertia.get('/lfp/dashboard', data, {
+                preserveState: true
+            });
+        },
+        calculatePayments: function (payments)
+        {
+            return payments == null || payments.length === 0 ? "<span>" + 0 + "</span>"
+                : "<span class='badge rounded-pill text-bg-primary'>" + payments.length + "</span>";
+        },
         studentLastName: function (name)
         {
             return name == null ? "BLANK" : name;
@@ -146,6 +176,7 @@ export default {
 
     },
     mounted() {
+
     }
 }
 

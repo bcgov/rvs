@@ -38,6 +38,10 @@
             </a>
         </th>
 
+        <th scope="col" style="min-width: 130px;">
+            <span>Payments</span>
+        </th>
+
     </tr>
 </template>
 <script>

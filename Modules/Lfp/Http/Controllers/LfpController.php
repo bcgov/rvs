@@ -2,6 +2,7 @@
 
 namespace Modules\Lfp\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
@@ -111,11 +112,38 @@ class LfpController extends Controller
 
     private function paginateLfps($lfps)
     {
+        $lfps = $lfps->with('payments');
         if (request()->filter_fname !== null) {
             $lfps = $lfps->where('first_name', 'ILIKE', '%'.request()->filter_fname.'%');
         }
         if (request()->filter_lname !== null) {
             $lfps = $lfps->where('last_name', 'ILIKE', '%'.request()->filter_lname.'%');
+        }
+        if (request()->filter_period !== null && request()->filter_period != 'all') {
+            switch (request()->filter_period){
+                case 'current':
+                    // Filter for the current month
+                    $lfps = $lfps->whereMonth('receive_date', now()->month);
+                    break;
+
+                case '3':
+                    // Filter for the last 3 months
+                    $lfps = $lfps->where('receive_date', '>=', Carbon::now()->subMonths(3));
+                    break;
+
+                case '6':
+                    // Filter for the last 6 months
+                    $lfps = $lfps->where('receive_date', '>=', Carbon::now()->subMonths(6));
+                    break;
+
+                case '12':
+                    // Filter for the last 12 months
+                    $lfps = $lfps->where('receive_date', '>=', Carbon::now()->subMonths(12));
+                    break;
+
+                default:
+                    break;
+            }
         }
 
         if (request()->sort !== null) {
