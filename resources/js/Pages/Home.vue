@@ -68,7 +68,7 @@ defineProps({
             </div>
             <div class="col-md-3">
                 <a href="/lfp/dashboard" class="card p-5" style="text-decoration:none;">
-                    <h1 class="display-3 font-sans font-light">LFP</h1>
+                    <h1 class="display-3 font-sans font-light">BCLFP</h1>
                     <span>Loan Forgiveness Program</span>
                 </a>
             </div>

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateApplicationsTable extends Migration
+class CreateUtilsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class CreateApplicationsTable extends Migration
      */
     public function up()
     {
-        Schema::connection(env('DB_DATABASE_LFP'))->create('applications', function (Blueprint $table) {
+        Schema::connection(env('DB_DATABASE_LFP'))->create('utils', function (Blueprint $table) {
             $table->id();
 
-            $table->bigInteger('lfp_id');
-            $table->foreign('lfp_id')->references('id')->on('lfps');
+            $table->string('field_name');
+            $table->string('field_type');
+            $table->boolean('active_flag')->default(true);
 
-            $table->string('application_number', 20)->nullable();
             $table->timestamps();
         });
     }
@@ -31,6 +31,6 @@ class CreateApplicationsTable extends Migration
      */
     public function down()
     {
-        Schema::connection(env('DB_DATABASE_LFP'))->dropIfExists('applications');
+        Schema::connection(env('DB_DATABASE_LFP'))->dropIfExists('utils');
     }
 }

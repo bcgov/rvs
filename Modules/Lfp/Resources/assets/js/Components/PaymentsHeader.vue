@@ -1,41 +1,21 @@
 <template>
     <tr>
         <th scope="col">
-            <a href="#" @click="switchSort('last_name')">
                 <span>Last Name</span>
-                <em v-if="sortClmn === 'last_name' && sortType === 'desc'" class="bi bi-sort-alpha-up"></em>
-                <em v-else class="bi bi-sort-alpha-down"></em>
-            </a>
         </th>
         <th scope="col">
-            <a href="#" @click="switchSort('first_name')">
                 <span>First Name</span>
-                <em v-if="sortClmn === 'first_name' && sortType === 'desc'" class="bi bi-sort-alpha-up"></em>
-                <em v-else class="bi bi-sort-alpha-down"></em>
-            </a>
         </th>
         <th scope="col" style="min-width: 130px;">
-            <a href="#" @click="switchSort('birth_date')">
-                <span>Date of Birth</span>
-                <em v-if="sortClmn === 'birth_date' && sortType === 'desc'" class="bi bi-sort-numeric-up"></em>
-                <em v-else class="bi bi-sort-numeric-down"></em>
-            </a>
+                <span>Employed at Anniv.</span>
         </th>
 
         <th scope="col" style="min-width: 130px;">
-            <a href="#" @click="switchSort('receive_date')">
-                <span>Receive Date</span>
-                <em v-if="sortClmn === 'receive_date' && sortType === 'desc'" class="bi bi-sort-numeric-up"></em>
-                <em v-else class="bi bi-sort-numeric-down"></em>
-            </a>
+                <span>Anniversary Date</span>
         </th>
 
         <th scope="col" style="min-width: 130px;">
-            <a href="#" @click="switchSort('status')">
                 <span>Status</span>
-                <em v-if="sortClmn === 'status' && sortType === 'desc'" class="bi bi-sort-alpha-up"></em>
-                <em v-else class="bi bi-sort-alpha-down"></em>
-            </a>
         </th>
 
     </tr>
@@ -46,7 +26,7 @@ import {Inertia} from "@inertiajs/inertia";
 import BreezeSelect from "@/Components/Select";
 
 export default {
-    name: 'ApplicationsHeader',
+    name: 'PaymentsHeader',
     components: {BreezeSelect},
     props: {},
     data() {
@@ -54,7 +34,7 @@ export default {
             sortClmn: 'receive_date',
             sortType: 'asc',
             url: '',
-            path: '/lfp/dashboard',
+            path: '/lfp/payments',
             appStatusSort: 'ALL',
         }
     },

@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Modules\Twp\Entities\Application;
 use Modules\Twp\Entities\Reason;
-use Modules\Twp\Http\Requests\ApplicationEditRequest;
-use Modules\Twp\Http\Requests\ApplicationStoreRequest;
+use Modules\Twp\Http\Requests\UtilEditRequest;
+use Modules\Twp\Http\Requests\UtilStoreRequest;
 use Modules\Yeaf\Entities\Admin;
 use PDF;
 
@@ -16,10 +16,10 @@ class ApplicationController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  ApplicationEditRequest  $request
+     * @param  UtilEditRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(ApplicationStoreRequest $request)
+    public function store(UtilStoreRequest $request)
     {
         $application = Application::create($request->validated());
 
@@ -31,7 +31,7 @@ class ApplicationController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(ApplicationEditRequest $request, Application $application)
+    public function update(UtilEditRequest $request, Application $application)
     {
         Application::where('id', $application->id)->update($request->validated());
         $application = Application::find($application->id);

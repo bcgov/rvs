@@ -11,7 +11,7 @@ nav.navbar {
         <div class="container-fluid">
             <Link class="navbar-brand" href="/lfp/dashboard">
                 <ApplicationLogo width="126" height="34" class="d-inline-block align-text-top me-3" />
-                <span class="d-none d-lg-inline">LFP - Loan Forgiveness Applications </span>
+                <span class="d-none d-lg-inline">BCLFP - BC Loan Forgiveness Applications </span>
             </Link>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
@@ -28,13 +28,21 @@ nav.navbar {
                             Applications
                         </NavLink>
                     </li>
-
-                    <li v-if="isAdmin" class="nav-item">
-                        <NavLink class="nav-link" href="/lfp/staff"
-                                 :class="{ 'active': $page.url.indexOf('/staff') > -1 }">
-                            Staff
+                    <li class="nav-item">
+                        <NavLink class="nav-link" href="/lfp/payments"
+                                 :class="{ 'active': $page.url.indexOf('/payments') > -1 ||
+                            $page.url.indexOf('/payments') > -1 }">
+                            Payments
                         </NavLink>
                     </li>
+
+                    <li v-if="isAdmin" class="nav-item">
+                        <NavLink class="nav-link" href="/lfp/maintenance/staff"
+                                 :class="{ 'active': $page.url.indexOf('maintenance') > -1 }">
+                            Maintenance
+                        </NavLink>
+                    </li>
+
                     <li class="nav-item dropdown">
                         <NavLink class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button"
                                  data-bs-toggle="dropdown" aria-expanded="false">

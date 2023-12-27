@@ -17,8 +17,7 @@
                     <div class="card mb-3">
                         <div class="card-header">
                             Applications
-                            <button class="btn btn-success btn-sm float-end" data-bs-toggle="modal"
-                                    data-bs-target="#newApplicationModal">Add New</button>
+                            <a href="/lfp/applications/sync" class="btn btn-success btn-sm float-end">Sync Apps</a>
                             <div class="d-inline-flex dropdown">
                                 <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="bi bi-calendar-date"></i>
@@ -40,12 +39,11 @@
                                     </thead>
                                     <tbody>
                                     <tr v-for="(row, i) in results.data">
-                                        <td><a :href="'/lfp/applications/show/' + row.id">{{ studentLastName(row.last_name) }}</a></td>
-                                        <td>{{ row.first_name }}</td>
-                                        <td>{{ row.birth_date }}</td>
-                                        <td>{{ row.receive_date }}</td>
-                                        <td>{{ row.status }}</td>
-                                        <td v-html="calculatePayments(row.payments)"></td>
+                                        <td><a :href="'/lfp/applications/show/' + row.id">{{ studentLastName(row.sfas_ind.last_name) }}</a></td>
+                                        <td>{{ row.sfas_ind.first_name }}</td>
+                                        <td>{{ cleanDate(row.sfas_ind.birth_dte) }}</td>
+                                        <td>{{ cleanDate(row.sfas_app.pl_app_received_dte) }}</td>
+                                        <td>{{ row.sfas_app.pl_app_status_code }}</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -132,6 +130,12 @@ export default {
         }
     },
     methods: {
+        cleanDate: function(d)
+        {
+            if(d == null) return d;
+            let date = d.split(" ");
+            return date[0]
+        },
         filterRange: function (range)
         {
 
@@ -142,11 +146,6 @@ export default {
             Inertia.get('/lfp/dashboard', data, {
                 preserveState: true
             });
-        },
-        calculatePayments: function (payments)
-        {
-            return payments == null || payments.length === 0 ? "<span>" + 0 + "</span>"
-                : "<span class='badge rounded-pill text-bg-primary'>" + payments.length + "</span>";
         },
         studentLastName: function (name)
         {
@@ -173,6 +172,7 @@ export default {
                 preserveState: true
             });
         },
+
 
     },
     mounted() {

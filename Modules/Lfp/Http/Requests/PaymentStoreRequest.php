@@ -27,15 +27,8 @@ class PaymentStoreRequest extends FormRequest
     {
         return [
             'lfp_id.*' => 'LFP ID field is not valid.',
-            'payment_date.*' => 'Payment Date field is not valid.',
-            'direct_lend_payment_amount.*' => 'Direct Lend Payment Amount field is not valid.',
-            'direct_lend_interest_payment_amount.*' => 'Direct Lend Interest Payment Amount field is not valid.',
-            'risk_sharing_payment_amount.*' => 'Risk Sharing Payment Amount field is not valid.',
-            'risk_sharing_interest_payment_amount.*' => 'Risk Sharing Interest Payment Amount field is not valid.',
-            'guaranteed_payment_amount.*' => 'Guaranteed Payment Amount field is not valid.',
-
-            'entered_in_sfas_date.*' => 'Entered in SFAS Date field is not valid.',
-            'entered_in_ici_date.*' => 'Entered in ICI Date field is not valid.',
+            'app_idx.*' => 'Missing connection to SFAS App.',
+            'pay_idx.*' => 'Missing connection to SFAS Payment.',
             'reconciled_with_payment_report_date.*' => 'Reconciled with Payment Report Date field is not valid.',
             'reconciled_with_galaxy_date.*' => 'Reconciled with Galaxy Date field is not valid.',
             'comment.*' => 'Comment field is not valid.'
@@ -51,33 +44,16 @@ class PaymentStoreRequest extends FormRequest
     {
         return [
             'lfp_id' => 'required|exists:Modules\Lfp\Entities\Lfp,id',
-            'payment_date' => 'required|date_format:Y-m-d',
-            'direct_lend_payment_amount' => 'nullable|numeric',
-            'direct_lend_interest_payment_amount' => 'nullable|numeric',
-            'risk_sharing_payment_amount' => 'nullable|numeric',
-            'risk_sharing_interest_payment_amount' => 'nullable|numeric',
-            'guaranteed_payment_amount' => 'nullable|numeric',
-            'entered_in_sfas_date' => 'nullable|date_format:Y-m-d',
-            'amount_issued' => 'nullable|numeric',
-            'reported_hours' => 'nullable|numeric',
-            'employment_letter_provided' => 'nullable|boolean',
+            'app_idx' => 'required|numeric',
+            'pay_idx' => 'required|numeric',
             'reconciled_with_payment_report_date' => 'nullable|date_format:Y-m-d',
             'reconciled_with_galaxy_date' => 'nullable|date_format:Y-m-d',
-            'anniversary_date' => 'nullable|date_format:Y-m-d',
             'comment' => 'nullable|string',
+            'profession' => 'nullable',
+            'employer' => 'nullable',
+            'employment_status' => 'nullable',
+            'community' => 'nullable',
         ];
     }
-//
-//    /**
-//     * Prepare the data for validation.
-//     *
-//     * @return void
-//     */
-//    protected function prepareForValidation()
-//    {
-//        $this->merge([
-//            'created_by' => Str::upper(Auth::user()->user_id),
-//            'updated_by' => Str::upper(Auth::user()->user_id),
-//        ]);
-//    }
+
 }

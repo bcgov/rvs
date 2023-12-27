@@ -8,6 +8,9 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use Modules\Lfp\Entities\Util;
+use Modules\Lfp\Http\Requests\UtilEditRequest;
+use Modules\Lfp\Http\Requests\UtilStoreRequest;
 
 class MaintenanceController extends Controller
 {
@@ -32,7 +35,7 @@ class MaintenanceController extends Controller
             }
         }
 
-        return Inertia::render('Lfp::Staff', ['status' => true, 'results' => $staff]);
+        return Inertia::render('Lfp::Maintenance', ['status' => true, 'results' => $staff, 'page' => 'staff']);
     }
 
     /**
@@ -50,7 +53,7 @@ class MaintenanceController extends Controller
             $user->access_type = 'G';
         }
 
-        return Inertia::render('Lfp::StaffEdit', ['status' => true, 'results' => $user]);
+        return Inertia::render('Lfp::Maintenance', ['status' => true, 'results' => $user, 'page' => 'staff-edit']);
     }
 
     /**
@@ -83,6 +86,55 @@ class MaintenanceController extends Controller
             $user->roles()->attach($role);
         }
 
-        return Redirect::route('lfp.staff.list');
+        return Redirect::route('lfp.maintenance.staff.list');
     }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Inertia\Response::render
+     */
+    public function utilList(Request $request): \Inertia\Response
+    {
+        $utils = Util::orderBy('field_type', 'asc')->get();
+
+        $cat_utils = [];
+        $cat_titles = [];
+        foreach ($utils as $util) {
+            $cat_utils[$util->field_type][] = $util;
+        }
+        foreach ($cat_utils as $k=>$v){
+            $cat_titles[] = $k;
+        }
+
+        return Inertia::render('Lfp::Maintenance', ['status' => true, 'results' => $cat_utils,
+            'categories' => $cat_titles, 'page' => 'utils']);
+    }
+
+
+    /**
+     * Update a utility resource.
+     *
+     * @return \Illuminate\Http\RedirectResponse::render
+     */
+    public function utilUpdate(UtilEditRequest $request, Util $util): \Illuminate\Http\RedirectResponse
+    {
+        $util->update($request->validated());
+
+        return Redirect::route('lfp.maintenance.utils.list');
+    }
+
+
+    /**
+     * Store a utility resource.
+     *
+     * @return \Illuminate\Http\RedirectResponse::render
+     */
+    public function utilStore(UtilStoreRequest $request): \Illuminate\Http\RedirectResponse
+    {
+        Util::create($request->validated());
+
+        return Redirect::route('lfp.maintenance.utils.list');
+    }
+
 }
