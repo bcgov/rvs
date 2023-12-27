@@ -16,7 +16,7 @@ class CreateLfpsTable extends Migration
         Schema::connection(env('DB_DATABASE_LFP'))->create('lfps', function (Blueprint $table) {
             $table->id();
 
-            $table->bigInteger('application_id');
+            $table->bigInteger('application_id')->nullable();
             $table->bigInteger('sin')->nullable()->comment('Social insurance number.');
             $table->string('profession', 50)->nullable()->comment('Occupation of applicant.');
             $table->string('employer', 30)->nullable()->comment('Employer of applicant.');
