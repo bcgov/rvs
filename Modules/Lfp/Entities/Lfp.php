@@ -19,28 +19,28 @@ class Lfp extends ModuleModel
         'app_idx',
     ];
 
-    public function payments()
+    public function payments(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany('Modules\Lfp\Entities\Payment', 'lfp_id', 'id');
     }
 
-    public function applications()
+    public function applications(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany('Modules\Lfp\Entities\Application', 'lfp_id', 'id');
     }
 
 
-    public function getSfasIndAttribute()
+    public function getSfasIndAttribute(): ?object
     {
         $sin = $this->attributes['sin'];
 
-        $awayPayment = DB::connection('oracle')
+        $awayInd = DB::connection('oracle')
             ->select(env("LFP_QUERY1") . $sin);
 
         // Convert the result to an object
-        return $awayPayment ? (object) $awayPayment[0] : null;
+        return $awayInd ? (object) $awayInd[0] : null;
     }
-    public function getSfasAppAttribute()
+    public function getSfasAppAttribute(): ?object
     {
         $appId = $this->attributes['app_idx'];
         if(is_null($appId)) return null;

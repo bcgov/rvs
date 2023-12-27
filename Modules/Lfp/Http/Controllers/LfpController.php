@@ -23,8 +23,12 @@ class LfpController extends Controller
     {
         $lfps = new Lfp();
         $lfps = $this->paginateLfps($lfps);
+        $last_sync = Lfp::select('id', 'sin', 'app_idx', 'created_at')->where('created_at', '!=', null)
+            ->orderBy('created_at', 'desc')->first();
+        $last_sync = Carbon::parse($last_sync->created_at)->format('Y-m-d H:i');
 
-        return Inertia::render('Lfp::Applications', ['page' => 'applications', 'status' => $status, 'results' => $lfps, 'app' => $newApp]);
+        return Inertia::render('Lfp::Applications', ['page' => 'applications', 'lastSync' => $last_sync,
+            'status' => $status, 'results' => $lfps, 'app' => $newApp]);
     }
 
     public function sync($status = true, $newApp = 0)
@@ -49,44 +53,6 @@ class LfpController extends Controller
 
         return Inertia::render('Lfp::Applications', ['page' => 'applications', 'status' => $status, 'results' => $lfps, 'app' => $newApp]);
     }
-//
-//    /**
-//     * Store a newly created resource in storage.
-//     * @param Request $request
-//     * @return \Inertia\Response
-//     */
-//    public function store(Request $request)
-//    {
-//        $sin = $request->input('sin');
-//        if(empty($sin)){
-//            return $this->index(false);
-//        }
-//
-//        //https://hive.aved.gov.bc.ca/jira/projects/SD/queues/custom/5/SD-52090
-//        //requires allowing multiple LFPs
-////        $lfp = Lfp::with('payments')->where('sin', $sin)->first();
-////        if(!is_null($lfp)){
-////            return $this->index(true, $lfp->id);
-////        }
-//
-//        $qry = env('LFP_QUERY1').$sin;
-//        $student = DB::connection('oracle')->select($qry);
-//
-//        $qry = env('LFP_QUERY2').$sin;
-//        $applications = DB::connection('oracle')->select($qry);
-//
-//        if(sizeof($student) > 0 && sizeof($applications) > 0){
-//            $lfp = new Lfp();
-//            $lfp->sin = $student->sin;
-//            $lfp->first_name = $student->first_name;
-//            $lfp->last_name = $student->last_name;
-//            $lfp->save();
-//
-//            return $this->index(true, $lfp->id);
-//        }
-//
-//        return $this->index(false, -1);
-//    }
 
     /**
      * Show the specified resource.
@@ -114,32 +80,6 @@ class LfpController extends Controller
         return Inertia::render('Lfp::Application', ['status' => true, 'result' => $lfp,
             'student' => $student, 'app' => $application, 'utils' => $utils_array]);
     }
-//
-//    /**
-//     * Connect an SABC app to LFP app.
-//     * @param Request $request
-//     * @return Response::json
-//     */
-//    public function connectApp(Request $request)
-//    {
-//        $app = new Application();
-//        $app->lfp_id = $request->input('lfp_id');
-//        $app->application_number = $request->input('application_number');
-//        $app->save();
-//        return Response::json(['status' => true]);
-//    }
-//
-//    /**
-//     * Remove an SABC app to LFP app.
-//     * @param Request $request
-//     * @return Response::json
-//     */
-//    public function removeApp(Request $request)
-//    {
-//        Application::where('lfp_id', $request->input('lfp_id'))
-//            ->where('application_number', $request->input('application_number'))->delete();
-//        return Response::json(['status' => true]);
-//    }
 
     private function paginateLfps($lfps)
     {
