@@ -43,6 +43,7 @@ class Lfp extends ModuleModel
     public function getSfasAppAttribute()
     {
         $appId = $this->attributes['app_idx'];
+        if(is_null($appId)) return null;
 
         $awayPayment = DB::connection('oracle')
             ->select(env("LFP_SFA_APP") . $appId);

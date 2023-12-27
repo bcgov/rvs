@@ -143,7 +143,7 @@ class LfpController extends Controller
 
     private function paginateLfps($lfps)
     {
-//        $lfps = $lfps->with('payments');
+        $lfps = $lfps->where('app_idx', '!=', null);
         if (request()->filter_fname !== null) {
             $lfps = $lfps->where('first_name', 'ILIKE', '%'.request()->filter_fname.'%');
         }
@@ -154,22 +154,22 @@ class LfpController extends Controller
             switch (request()->filter_period){
                 case 'current':
                     // Filter for the current month
-                    $lfps = $lfps->whereMonth('receive_date', now()->month);
+                    $lfps = $lfps->whereMonth('created_at', now()->month);
                     break;
 
                 case '3':
                     // Filter for the last 3 months
-                    $lfps = $lfps->where('receive_date', '>=', Carbon::now()->subMonths(3));
+                    $lfps = $lfps->where('created_at', '>=', Carbon::now()->subMonths(3));
                     break;
 
                 case '6':
                     // Filter for the last 6 months
-                    $lfps = $lfps->where('receive_date', '>=', Carbon::now()->subMonths(6));
+                    $lfps = $lfps->where('created_at', '>=', Carbon::now()->subMonths(6));
                     break;
 
                 case '12':
                     // Filter for the last 12 months
-                    $lfps = $lfps->where('receive_date', '>=', Carbon::now()->subMonths(12));
+                    $lfps = $lfps->where('created_at', '>=', Carbon::now()->subMonths(12));
                     break;
 
                 default:
@@ -180,7 +180,7 @@ class LfpController extends Controller
         if (request()->sort !== null) {
             $lfps = $lfps->orderBy(request()->sort, request()->direction);
         } else {
-            $lfps = $lfps->orderBy('receive_date', 'desc');
+            $lfps = $lfps->orderBy('created_at', 'desc');
         }
 
         return $lfps->paginate(25)->onEachSide(1)->appends(request()->query());

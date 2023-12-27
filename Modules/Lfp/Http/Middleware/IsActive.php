@@ -7,6 +7,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Modules\Lfp\Entities\Lfp;
 
 class IsActive
 {
@@ -24,6 +25,14 @@ class IsActive
         if (! Auth::check()) {
             return redirect()->route('login');
         }
+
+//        //check connection to remote db
+//        $lfp = Lfp::where('app_idx', '!=', null)->first();
+//        if(is_null($lfp->sfas_app)){
+//            \Session::flash('message', 'You are not an Admin');
+//            \Session::flash('alert-class', 'static-notification-red');
+//            return redirect('/lfp/404');
+//        }
 
         $user = Auth::user();
         if ($user->disabled || is_null($user->idir_user_guid)) {

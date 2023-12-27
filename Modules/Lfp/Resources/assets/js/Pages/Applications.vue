@@ -42,8 +42,8 @@
                                         <td><a :href="'/lfp/applications/show/' + row.id">{{ studentLastName(row.sfas_ind.last_name) }}</a></td>
                                         <td>{{ row.sfas_ind.first_name }}</td>
                                         <td>{{ cleanDate(row.sfas_ind.birth_dte) }}</td>
-                                        <td>{{ cleanDate(row.sfas_app.pl_app_received_dte) }}</td>
-                                        <td>{{ row.sfas_app.pl_app_status_code }}</td>
+                                        <td><span v-if="row.sfas_app != null">{{ cleanDate(row.sfas_app.pl_app_received_dte) }}</span></td>
+                                        <td><span v-if="row.sfas_app != null">{{ row.sfas_app.pl_app_status_code }}</span></td>
                                     </tr>
                                     </tbody>
                                 </table>
