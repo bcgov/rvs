@@ -51,7 +51,6 @@
                                         <ApplicationEditPaymentsTab v-if="activeTab==='payment'" :utils="utils" :payments="result.payments"></ApplicationEditPaymentsTab>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
