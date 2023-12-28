@@ -109,17 +109,14 @@ export default {
         submitStaffForm: function ()
         {
             this.form.formState = '';
-            this.form.post('/twp/maintenance/staff/' + this.results.id, {
+            this.form.post('/lfp/maintenance/staff/' + this.results.id, {
                 onSuccess: () => {
                     this.form.formState = true;
-                },
-                onFailure: () => {
                 },
                 onError: () => {
                     this.form.formState = false;
                 }
             });
-            // form.wasSuccessful();
         },
 
     },

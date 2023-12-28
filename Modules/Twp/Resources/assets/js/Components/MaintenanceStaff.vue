@@ -13,6 +13,7 @@
                             <th scope="col">First Name</th>
                             <th scope="col">Last Name</th>
                             <th scope="col">Email</th>
+                            <th scope="col">Type of Access</th>
                             <th scope="col">Status</th>
                         </tr>
                     </thead>
@@ -24,6 +25,9 @@
                             <td>{{ row.first_name }}</td>
                             <td>{{ row.last_name}}</td>
                             <td>{{ row.email }}</td>
+                            <td>
+                                <div v-for="role in row.roles">{{ role.name }}</div>
+                            </td>
                             <td>
                                 <span v-if="row.disabled" class="badge rounded-pill text-bg-danger">Disabled</span>
                                 <span v-else class="badge rounded-pill text-bg-success">Active</span>

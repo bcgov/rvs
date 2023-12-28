@@ -29,9 +29,7 @@
                             <td>{{ row.email }}</td>
                             <td>{{ row.start_date }}</td>
                             <td>
-                                <span v-if="row.access_type === 'A'">Admin</span>
-                                <span v-if="row.access_type === 'U'">User</span>
-                                <span v-if="row.access_type === 'S'">Tech Support</span>
+                                <div v-for="role in row.roles">{{ role.name }}</div>
                             </td>
                             <td>
                                 <span v-if="row.disabled" class="badge rounded-pill text-bg-danger">Disabled</span>
