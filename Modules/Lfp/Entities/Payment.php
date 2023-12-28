@@ -26,6 +26,7 @@ class Payment extends ModuleModel
     public function getSfasPaymentAttribute()
     {
         $payId = $this->attributes['pay_idx'];
+        if(is_null($payId)) return null;
 
         $awayPayment = DB::connection('oracle')
             ->select(env("LFP_SFA_PAY_TBL") . $payId);

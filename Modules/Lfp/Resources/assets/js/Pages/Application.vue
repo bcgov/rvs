@@ -32,7 +32,6 @@
                         <div class="card">
                             <div v-if="editForm != null" class="card-header">
                                 Edit Application
-<!--                                <button v-if="activeTab==='payment' && editForm.status === 'Approved'" type="button" class="btn btn-success btn-sm float-end" data-bs-toggle="modal" data-bs-target="#newPaymentModal">New Payment</button>-->
                             </div>
                             <div class="card-body">
 
@@ -43,17 +42,11 @@
                                     <li @click="switchActiveTab('payment')" class="nav-item" role="presentation">
                                         <button class="nav-link" :class="activeTab==='payment' ? 'active':''" id="payment-tab" data-bs-toggle="tab" data-bs-target="#payment-tab-pane" type="button" role="tab" aria-controls="payment-tab-pane" aria-selected="false">Payments</button>
                                     </li>
-<!--                                    <li @click="switchActiveTab('apps')" class="nav-item" role="presentation">-->
-<!--                                        <button class="nav-link" :class="activeTab==='apps' ? 'active':''" id="apps-tab" data-bs-toggle="tab" data-bs-target="#apps-tab-pane" type="button" role="tab" aria-controls="apps-tab-pane" aria-selected="false">SABC Apps</button>-->
-<!--                                    </li>-->
                                 </ul>
                                 <div class="tab-content" id="myStudentTabContent">
                                     <div class="tab-pane fade" :class="activeTab==='form' ? 'active show':''" id="form-tab-pane" role="tabpanel" aria-labelledby="form-tab" tabindex="2">
-                                        <ApplicationEditFormTab v-if="activeTab==='form'" :utils="utils" :result="result" :app="app"></ApplicationEditFormTab>
+                                        <ApplicationEditFormTab v-if="activeTab==='form'" :student="student[student.length - 1]" :utils="utils" :result="result" :app="app"></ApplicationEditFormTab>
                                     </div>
-<!--                                    <div class="tab-pane fade" :class="activeTab==='apps' ? 'active show':''" id="apps-tab-pane" role="tabpanel" aria-labelledby="apps-tab" tabindex="1">-->
-<!--                                        <ApplicationEditAppsTab v-if="activeTab==='apps'" :result="result" :apps="apps"></ApplicationEditAppsTab>-->
-<!--                                    </div>-->
                                     <div class="tab-pane fade" :class="activeTab==='payment' ? 'active show':''" id="payment-tab-pane" role="tabpanel" aria-labelledby="payment-tab" tabindex="4">
                                         <ApplicationEditPaymentsTab v-if="activeTab==='payment'" :utils="utils" :payments="result.payments"></ApplicationEditPaymentsTab>
                                     </div>
@@ -64,121 +57,6 @@
                     </div>
                 </div>
             </div>
-
-<!--        <div class="modal modal-lg fade" id="newPaymentModal" tabindex="-1" aria-labelledby="newPaymentModalLabel" aria-hidden="true">-->
-<!--            <div class="modal-dialog">-->
-<!--                <div class="modal-content">-->
-<!--                    <div class="modal-header">-->
-<!--                        <h5 class="modal-title" id="newPaymentModalLabel">New Payment</h5>-->
-<!--                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
-<!--                    </div>-->
-<!--                    <form @submit.prevent="newPayment">-->
-<!--                        <div class="modal-body">-->
-<!--                            <div class="card-body">-->
-<!--                                <div class="row g-3">-->
-
-<!--                                    <div class="col-md-4">-->
-<!--                                        <BreezeLabel for="inputPaymentDate" class="form-label" value="Payment Date" />-->
-<!--                                        <BreezeInput type="date" min="2019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" class="form-control" id="inputPaymentDate" v-model="newPaymentForm.payment_date" />-->
-<!--                                    </div>-->
-
-<!--                                    <div class="col-md-4">-->
-<!--                                        <BreezeLabel for="inputLend" class="form-label" value="Direct Lend Amount" />-->
-<!--                                        <div class="input-group">-->
-<!--                                            <div class="input-group-text">$</div>-->
-<!--                                            <input type="number" step="0.001" class="form-control" id="inputLend" v-model="newPaymentForm.direct_lend_payment_amount" />-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                    <div class="col-md-4">-->
-<!--                                        <BreezeLabel for="inputRisk" class="form-label" value="Risk Sharing Amount" />-->
-<!--                                        <div class="input-group">-->
-<!--                                            <div class="input-group-text">$</div>-->
-<!--                                            <input type="number" step="0.001" class="form-control" id="inputRisk" v-model="newPaymentForm.risk_sharing_payment_amount" />-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                    <div class="col-md-4">-->
-<!--                                        <BreezeLabel for="inputGur" class="form-label" value="Guaranteed Amount" />-->
-<!--                                        <div class="input-group">-->
-<!--                                            <div class="input-group-text">$</div>-->
-<!--                                            <input type="number" step="0.001" class="form-control" id="inputGur" v-model="newPaymentForm.guaranteed_payment_amount" />-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-
-<!--                                    <div class="col-md-4">-->
-<!--                                        <BreezeLabel for="inputLendInterest" class="form-label" value="Direct Lend Interest" />-->
-<!--                                        <div class="input-group">-->
-<!--                                            <div class="input-group-text">$</div>-->
-<!--                                            <input type="number" step="0.001" class="form-control" id="inputLendInterest" v-model="newPaymentForm.direct_lend_interest_payment_amount" />-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-
-<!--                                    <div class="col-md-4">-->
-<!--                                        <BreezeLabel for="inputRiskInterest" class="form-label" value="Risk Sharing Interest" />-->
-<!--                                        <div class="input-group">-->
-<!--                                            <div class="input-group-text">$</div>-->
-<!--                                            <input type="number" step="0.001" class="form-control" id="inputRiskInterest" v-model="newPaymentForm.risk_sharing_interest_payment_amount" />-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-
-
-<!--                                    <div class="col-md-4">-->
-<!--                                        <BreezeLabel for="inputInSfas" class="form-label" value="Entered in SFAS Date" />-->
-<!--                                        <BreezeInput type="date" min="1019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" class="form-control" id="inputInSfas" v-model="newPaymentForm.entered_in_sfas_date" />-->
-<!--                                    </div>-->
-<!--                                    <div class="col-md-2">-->
-<!--                                        <BreezeLabel for="inputAmountIssued" class="form-label" value="Amount Issued" />-->
-<!--                                        <BreezeInput type="text" step="0.001" class="form-control" id="inputAmountIssued" v-model="newPaymentForm.amount_issued" />-->
-<!--                                    </div>-->
-<!--                                    <div class="col-md-2">-->
-<!--                                        <BreezeLabel for="inputHours" class="form-label" value="Reported Hours" />-->
-<!--                                        <BreezeInput type="number" class="form-control" id="inputHours" v-model="newPaymentForm.reported_hours" />-->
-<!--                                    </div>-->
-<!--                                    <div class="col-md-4">-->
-<!--                                        <label for="checkboxEmploymentLetter" class="form-check-label">Employment Letter Provided?</label>-->
-<!--                                        <div class="form-check">-->
-<!--                                            <input type="checkbox" class="form-check-input" id="checkboxEmploymentLetter" v-model="newPaymentForm.employment_letter_provided" />-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                    <div class="col-md-4">-->
-<!--                                        <BreezeLabel for="inputeditAnniversaryDate" class="form-label" value="Anniversary Date" />-->
-<!--                                        <BreezeInput type="date" min="2019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" class="form-control" id="inputeditAnniversaryDate" v-model="newPaymentForm.anniversary_date" />-->
-<!--                                    </div>-->
-
-<!--                                    <div class="col-md-4">-->
-<!--                                        <BreezeLabel for="inputPaymentReport" class="form-label" value="Reconciled with Payment Report" />-->
-<!--                                        <BreezeInput type="date" min="2019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" class="form-control" id="inputPaymentReport" v-model="newPaymentForm.reconciled_with_payment_report_date" />-->
-<!--                                    </div>-->
-<!--                                    <div class="col-md-4">-->
-<!--                                        <BreezeLabel for="inputGalaxyReport" class="form-label" value="Reconciled with Galaxy Date" />-->
-<!--                                        <BreezeInput type="date" min="2019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" class="form-control" id="inputGalaxyReport" v-model="newPaymentForm.reconciled_with_galaxy_date" />-->
-<!--                                    </div>-->
-
-<!--                                    <div class="col-md-12">-->
-<!--                                        <BreezeLabel for="inputComments" class="form-label" value="Comments" />-->
-<!--                                        <textarea class="form-control" id="inputComments" v-model="newPaymentForm.comment" rows="3">{{ newPaymentForm.comment }}</textarea>-->
-<!--                                    </div>-->
-
-<!--                                </div>-->
-
-<!--                                <div v-if="newPaymentForm.errors != undefined" class="row">-->
-<!--                                    <div class="col-12">-->
-<!--                                        <div v-if="newPaymentForm.hasErrors == true" class="alert alert-danger mt-3">-->
-<!--                                            <ul>-->
-<!--                                                <li v-for="err in newPaymentForm.errors"><small>{{ err }}</small></li>-->
-<!--                                            </ul>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="modal-footer">-->
-<!--                            <button type="submit" class="btn me-2 btn-outline-success" :disabled="newPaymentForm.processing">Submit</button>-->
-<!--                        </div>-->
-<!--                    </form>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-
 
 
     </BreezeAuthenticatedLayout>

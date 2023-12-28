@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Modules\Lfp\Entities\Application;
 use Modules\Lfp\Entities\Lfp;
+use Modules\Lfp\Entities\Payment;
 use Modules\Lfp\Entities\Util;
 use Response;
 
@@ -34,17 +35,32 @@ class LfpController extends Controller
     public function sync($status = true, $newApp = 0)
     {
         //select last app entered
-        $lfp = Lfp::orderBy('created_at', 'desc')->first();
+        $lfp = Lfp::select('id', 'app_idx')->orderBy('created_at', 'desc')->first();
         $qry = env("LFP_APP_SYNC") . $lfp->app_idx;
         $sfas = DB::connection('oracle')->select($qry);
 
         foreach ($sfas as $app){
-            $check = Lfp::where('app_idx', $app->pl_loan_forgiveness_app_idx)->first();
+            $check = Lfp::select('id', 'app_idx')->where('app_idx', $app->pl_loan_forgiveness_app_idx)->first();
             if(is_null($check)){
                 Lfp::firstOrCreate([
                     'sin' => $app->sin,
                     'app_idx' => $app->pl_loan_forgiveness_app_idx,
                 ]);
+
+                $qry = env("LFP_SFA_APP_PAY") . $lfp->app_idx;
+                $sfas_payments = DB::connection('oracle')->select($qry);
+                foreach($sfas_payments as $spay){
+                    $checkPayment = Payment::where('app_idx', $spay->pl_loan_forgiveness_app_idx)
+                        ->where('pay_ids', $spay->pl_loan_forgiveness_pay_idx)->first();
+                    if(is_null($checkPayment)){
+                        $pay = Payment::firstOrNew(['lfp_id' => $app->id, 'pay_idx' => $spay->pl_loan_forgiveness_pay_idx]);
+                        $pay->lfp_id = $app->id;
+                        $pay->direct_lend_payment_amount = $spay->pl_dire_principal_pay_amt;
+                        $pay->app_idx = $spay->pl_loan_forgiveness_app_idx;
+                        $pay->pay_idx = $spay->pl_loan_forgiveness_pay_idx;
+                        $pay->save();
+                    }
+                }
             }
         }
 

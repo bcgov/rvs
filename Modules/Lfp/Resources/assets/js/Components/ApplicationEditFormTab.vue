@@ -13,15 +13,15 @@ tr {
 
             <div class="col-md-4">
                 <BreezeLabel for="inputFirstName" class="form-label" value="First Name" />
-                <BreezeInput type="text" class="form-control" id="inputFirstName" :value="editForm.first_name" disabled readonly />
+                <BreezeInput type="text" class="form-control" id="inputFirstName" :value="student.first_name" disabled readonly />
             </div>
             <div class="col-md-4">
                 <BreezeLabel for="inputLastName" class="form-label" value="Last Name" />
-                <BreezeInput type="text" class="form-control" id="inputLastName" :value="editForm.last_name" disabled readonly />
+                <BreezeInput type="text" class="form-control" id="inputLastName" :value="student.last_name" disabled readonly />
             </div>
             <div class="col-md-4">
                 <BreezeLabel for="inputSin" class="form-label" value="SIN" />
-                <BreezeInput type="text" class="form-control" id="inputSin" :value="editForm.sin" disabled readonly />
+                <BreezeInput type="text" class="form-control" id="inputSin" :value="student.sin" disabled readonly />
             </div>
 
             <div class="col-md-4">
@@ -104,52 +104,12 @@ tr {
                 </BreezeSelect>
             </div>
 
-<!--            <div class="col-md-12">-->
-<!--                <div class="card">-->
-<!--                <div class="card-header">Why did you choose to practice in an underserved community?</div>-->
-<!--                <div class="card-body">-->
-<!--                    <div class="form-check">-->
-<!--                        <label for="checkboxWhy1" class="form-check-label">Always lived in the community in which I am practising.</label>-->
-<!--                        <input type="checkbox" class="form-check-input" id="checkboxWhy1" v-model="editForm.why_choose1" />-->
-<!--                    </div>-->
-<!--                    <div class="form-check">-->
-<!--                        <label for="checkboxWhy2" class="form-check-label">Career opportunities/advancement.</label>-->
-<!--                        <input type="checkbox" class="form-check-input" id="checkboxWhy2" v-model="editForm.why_choose2" />-->
-<!--                    </div>-->
-<!--                    <div class="form-check">-->
-<!--                        <label for="checkboxWhy3" class="form-check-label">Felt I could make the greatest contribution in an underserved community.</label>-->
-<!--                        <input type="checkbox" class="form-check-input" id="checkboxWhy3" v-model="editForm.why_choose3" />-->
-<!--                    </div>-->
-<!--                    <div class="form-check">-->
-<!--                        <label for="checkboxWhy4" class="form-check-label">Other (please provide reason)</label>-->
-<!--                        <input type="checkbox" class="form-check-input" id="checkboxWhy4" v-model="editForm.why_choose4" />-->
-<!--                    </div>-->
-<!--                    <div v-if="editForm.why_choose4" class="">-->
-<!--                        <BreezeLabel for="inputOtherReason" class="form-label" value="Process Date" />-->
-<!--                        <BreezeInput type="text" class="form-control" id="inputOtherReason" v-model="editForm.other_reason" />-->
-<!--                    </div>-->
-<!--                    <div class="form-check">-->
-<!--                        <label for="checkboxWhy5" class="form-check-label">Incentive to have BC student loan forgiven under loan forgiveness program.</label>-->
-<!--                        <input type="checkbox" class="form-check-input" id="checkboxWhy5" v-model="editForm.why_choose5" />-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                    </div>-->
-<!--            </div>-->
-
             <div class="col-md-6">
                 <BreezeLabel for="selectCommunity" class="form-label" value="Community" />
                 <BreezeSelect class="form-select" id="selectCommunity" v-model="editForm.employment_status">
                     <option v-for="u in utils['Community']" :value="u">{{ u }}</option>
                 </BreezeSelect>
             </div>
-<!--            <div class="col-md-4">-->
-<!--                <BreezeLabel for="selectAwardStatus" class="form-label" value="Award Status" />-->
-<!--                <BreezeSelect class="form-select" id="selectAwardStatus" v-model="editForm.status">-->
-<!--                    <option value="Approved">Approved</option>-->
-<!--                    <option value="Denied">Denied</option>-->
-<!--                    <option value="Other">Other</option>-->
-<!--                </BreezeSelect>-->
-<!--            </div>-->
             <div class="col-md-6">
                 <BreezeLabel for="selectRemoveReason" class="form-label" value="Remove Reason" />
                 <BreezeSelect class="form-select" id="selectRemoveReason" v-model="editForm.declined_removed_reason">
@@ -195,8 +155,8 @@ export default {
     props: {
         result: Object,
         app: Object|null,
-        utils: Object
-
+        utils: Object,
+        student: Object
     },
     data() {
         return {
