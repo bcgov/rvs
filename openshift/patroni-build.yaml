@@ -51,33 +51,21 @@ objects:
           kind: ImageStreamTag
           name: "${PATRONI_NAME}:${TAG}"
       runPolicy: SerialLatestOnly
-      context: /openshift/patroni-postgres-container
       source:
+        contextDir: /openshift/patroni-postgres-container
         git:
           uri: "${SOURCE_REPOSITORY_URL}"
           ref: "${SOURCE_REPOSITORY_REF}"
         type: Git
       strategy:
         dockerStrategy:
-          pullSecret:
-            name: artifacts-pull-default-hkucak
           from:
             kind: ImageStreamTag
             name: ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
-          buildArgs:
-            - name: ${ARG_KEY_1}
-              value: ${ARG_VAL_1}
-            - name: ${ARG_KEY_2}
-              value: ${ARG_VAL_2}
-            - name: ${ARG_KEY_3}
-              value: ${ARG_VAL_3}
-            - name: ${ARG_KEY_4}
-              value: ${ARG_VAL_4}
         type: Docker
 parameters:
   - name: PATRONI_NAME
     required: true
-  - name: SUFFIX
   - name: SOURCE_REPOSITORY_URL
     required: true
     value: https://github.com/bcgov/rvs.git
