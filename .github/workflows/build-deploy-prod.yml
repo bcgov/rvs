@@ -1,4 +1,4 @@
-name: Build and Deploy YEAF in PROD
+name: Build and Deploy RVS in PROD
 
 on:
   pull_request:
@@ -62,7 +62,7 @@ jobs:
   deployProd:
     name: Deploy Project to PROD
     runs-on: ubuntu-latest
-    if: github.ref_name == 'master'
+    if: github.ref_name == 'main'
     needs:
       - build
     env:
