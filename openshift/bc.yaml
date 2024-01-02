@@ -38,18 +38,6 @@ objects:
               value: "hi there"
             - name: USER_ID
               value: ${OC_USER_ID}
-#            - name: ENV_ARG
-#              valueFrom:
-#                secretKeyRef:
-#                  name: ${NAME}-${REPO_BRANCH}
-#                  key: ".env"
-#            - name: V_ARG
-#              value: |
-#                {{- with secret "${LICENSE_PLATE}-nonprod/helloworld" }}
-#                export dev_database_host="{{ .Data.data.dev_database_host }}"
-#                export dev_database_name="{{ .Data.data.dev_database_name }}"
-#                {{- end }}
-
         type: Docker
       successfulBuildsHistoryLimit: 5
     metadata:
@@ -61,9 +49,9 @@ objects:
       namespace: ${BUILD_NAMESPACE}
       annotations:
         vault.hashicorp.com/agent-inject: 'true'
-        vault.hashicorp.com/agent-inject-secret-helloworld: ${LICENSE_PLATE}-nonprod/helloworld
+        vault.hashicorp.com/agent-inject-secret-helloworld: ${LICENSE_PLATE}-${LICENSE_BRANCH}/helloworld
         vault.hashicorp.com/agent-inject-template-helloworld: |
-          {{- with secret "${LICENSE_PLATE}-nonprod/helloworld" }}
+          {{- with secret "${LICENSE_PLATE}-${LICENSE_BRANCH}/helloworld" }}
           export dev_database_host="{{ .Data.data.dev_database_host }}"
           export dev_database_name="{{ .Data.data.dev_database_name }}"
           {{- end }}
@@ -106,6 +94,8 @@ parameters:
     required: true
     description: openshift env default user_id
   - name: LICENSE_PLATE
+    required: true
+  - name: LICENSE_BRANCH
     required: true
 
   - name: LABEL_NAME
