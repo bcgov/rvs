@@ -5,6 +5,7 @@ export APP_NAME := $(or $(PROJECT_NAME), rvs)
 export BUILD_ID := $(or $(BUILD_ID), 1)
 export BUILD_REF := $(or $(BUILD_REF), $(GIT_LOCAL_BRANCH))
 export LICENSE_PLATE := $(or $(LICENSE_PLATE), 06cb9b)
+export LICENSE_BRANCH := $(or $(LICENSE_BRANCH), nonprod)
 export BUILD_NAMESPACE := $(or $(BUILD_NAMESPACE), 06cb9b-tools)
 export DOMAIN := $(or $(DOMAIN), apps.silver.devops.gov.bc.ca)
 export HOST_PREFIX := $(or $(HOST_PREFIX), rvs)
@@ -104,7 +105,7 @@ deploy-web:
 	@echo "+\n++ FINISHED Deploying Web\n+"
 
 build-patroni:
-	@oc -n $(BUILD_NAMESPACE) process -f patroni-build.yaml -p NAME=rvs-patroni -p TAG="12-latest" -p BASE_IMAGE_NAME=postgres -p BASE_IMAGE_TAG="12" -p SOURCE_REPOSITORY_REF="master" -p SOURCE_CONTEXT_DIR="apps/pgsql/patroni/docker" | oc -n $(BUILD_NAMESPACE) apply -f -
+	@oc -n $(BUILD_NAMESPACE) process -f patroni-build.yaml -p NAME=rvs-patroni -p TAG="12.4-latest" -p BASE_IMAGE_NAME=postgres -p BASE_IMAGE_TAG="12.4" -p SOURCE_REPOSITORY_REF="main" -p SOURCE_CONTEXT_DIR="apps/pgsql/patroni/docker" | oc -n $(BUILD_NAMESPACE) apply -f -
 	@oc -n $(BUILD_NAMESPACE) start-build bc/rvs-patroni --wait
 
 deploy-patroni:
