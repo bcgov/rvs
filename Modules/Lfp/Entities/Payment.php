@@ -23,7 +23,7 @@ class Payment extends ModuleModel
         return $this->belongsTo('Modules\Lfp\Entities\Lfp', 'lfp_id', 'id');
     }
 
-    public function getSfasPaymentAttribute()
+    public function getSfasPaymentAttribute(): ?object
     {
         $payId = $this->attributes['pay_idx'];
         if(is_null($payId)) return null;
