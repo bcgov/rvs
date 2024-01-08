@@ -32,6 +32,11 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/* /root/.cache
 
+RUN pip3 install psycopg2-binary==2.8.6
+RUN pip3 install six
+RUN pip3 install psutil==2.0.0
+RUN pip3 install pyyaml==6.0.1
+
 COPY contrib/root /
 
 VOLUME /home/postgres/pgdata
