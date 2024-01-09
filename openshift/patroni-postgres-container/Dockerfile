@@ -39,6 +39,9 @@ RUN pip3 install pyyaml==6.0.1
 
 COPY contrib/root /
 
+# prevent "exec failed: unable to start container process: exec: \"/usr/share/scripts/patroni/health_check.sh\": permission denied"
+RUN chmod -R 755 /usr/share/scripts/patroni
+
 VOLUME /home/postgres/pgdata
 USER postgres
 WORKDIR /home/postgres
