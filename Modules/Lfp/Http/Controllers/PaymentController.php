@@ -54,9 +54,9 @@ class PaymentController extends Controller
 
     private function paginatePayments()
     {
-        $currentMonth = Carbon::now()->format('m');
-        $lastMonth = Carbon::now()->subMonth()->format('m');
-        $monthBeforeLast = Carbon::now()->subMonths(2)->format('m');
+        $currentMonth = Carbon::now()->format('Y-m');
+        $lastMonth = Carbon::now()->subMonth()->format('Y-m');
+        $monthBeforeLast = Carbon::now()->subMonths(2)->format('Y-m');
 
         $qry = sprintf(env("LFP_PAYMENTS_NO_FILTER"), $currentMonth, $lastMonth, $monthBeforeLast);
 
