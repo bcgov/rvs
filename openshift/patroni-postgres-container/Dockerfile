@@ -1,6 +1,6 @@
 FROM postgres:12.4
 
-LABEL Alexander Kukushkin <alexander.kukushkin@zalando.de>
+LABEL Kal Marsh <kal.marsh@gov.bc.ca>
 
 ENV PATRONI_VERSION=2.1.1
 ENV LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
