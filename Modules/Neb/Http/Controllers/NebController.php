@@ -150,10 +150,10 @@ class NebController extends Controller
         $this->formattedBpsd = $bursaryPeriod->bursary_period_start_date;
         $this->formattedBped = $bursaryPeriod->bursary_period_end_date;
 
-        $programCodes = SfasProgram::select('sfas_program_code')->where('eligible', true)->get();
-        $this->programCodesString = implode(', ', array_map(function ($row) {
-            return "'".$row['sfas_program_code']."'";
-        }, $programCodes));
+        $programCodes = SfasProgram::where('eligible', true)->pluck('sfas_program_code');
+        $this->programCodesString = $programCodes->map(function ($row) {
+            return '\''.$row.'\'';
+        })->join(', ');
 
         switch ($request->input('step')) {
             case 0:
@@ -183,7 +183,7 @@ class NebController extends Controller
                 'first_name' => $student->first_name,
                 'middle_name' => $student->middle_name,
                 'last_name' => $student->middle_name,
-                ' address1' => $student->street_address1,
+                'address1' => $student->street_address1,
                 'address2' => $student->street_address2,
                 'city' => $student->city,
                 'province' => $student->province,
@@ -202,10 +202,11 @@ class NebController extends Controller
 
         foreach ($potentials as $potential) {
             $app = Application::firstOrCreate([
+                'student_id' => $potential->student->id,
                 'sin' => $potential->sin,
                 'application_number' => $potential->application_number,
                 'bursary_period_id' => $potential->bursary_period_id,
-                'eligible' => $potential->eligibility === 'Eligible' ? true : false,
+                'eligible' => $potential->eligibility === 'Eligible',
                 'award_status' => $potential->award_or_deny === 'Award' ? 'Approved' : 'Denied',
                 'effective_date' => $now,
                 'receive_date' => $potential->receive_date,
