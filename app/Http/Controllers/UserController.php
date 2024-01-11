@@ -171,7 +171,7 @@ class UserController extends Controller
             $user->last_name = $idir_user['family_name'];
             $user->email = $idir_user['email'];
         }
-        $user->disabled = true;
+        $user->disabled = false;
         $user->idir_user_guid = $idir_user['idir_user_guid'];
         $user->password = Hash::make($idir_user['idir_username']);
         $user->save();

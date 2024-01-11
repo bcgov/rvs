@@ -29,7 +29,9 @@
                             <td>{{ row.email }}</td>
                             <td>{{ row.start_date }}</td>
                             <td>
-                                <div v-for="role in row.roles">{{ role.name }}</div>
+                                <template v-for="role in row.roles">
+                                    <div v-if="role.name.indexOf('VSS') === 0">{{ role.name }}</div>
+                                </template>
                             </td>
                             <td>
                                 <span v-if="row.disabled" class="badge rounded-pill text-bg-danger">Disabled</span>
