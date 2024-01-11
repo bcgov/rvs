@@ -14,7 +14,7 @@ class Application extends ModuleModel
      * @var array<int, string>
      */
     protected $fillable = [
-        'sin', 'application_number', 'complete', 'eligible', 'award_status', 'rank', 'total_score', 'receive_date',
+        'student_id', 'sin', 'application_number', 'complete', 'eligible', 'award_status', 'rank', 'total_score', 'receive_date',
         'effective_date', 'process_date', 'comment', 'program_code', 'bursary_period_id', ];
 
     public function student()
