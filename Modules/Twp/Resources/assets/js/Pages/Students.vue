@@ -228,8 +228,8 @@ export default {
     },
     mounted() {
         this.newStudentForm = useForm(this.newStudentFormData);
-        let vm = this;
-        setTimeout(function (){ vm.generateTestValues(); }, 3000);
+        //let vm = this;
+        //setTimeout(function (){ vm.generateTestValues(); }, 3000);
     }
 }
 </script>
