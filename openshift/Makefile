@@ -117,7 +117,7 @@ db-backup-build-postgresql:
 	test -n "$(BACKUP_POSTGRESQL_APP_NAME)"
 	@echo "+\n++ Creating build resources for database backups on $(BUILD_NAMESPACE)\n+"
 	oc -n $(BUILD_NAMESPACE) process -f backup-build.yaml \
-		-p NAME=$(BACKUP_POSTGRESQL_APP_NAME) OUTPUT_IMAGE_TAG=v1 \
+		-p BACKUP_POSTGRESQL_APP_NAME=$(BACKUP_POSTGRESQL_APP_NAME) OUTPUT_IMAGE_TAG=v1 \
 		-p BASE_IMAGE_FOR_BUILD=artifacts.developer.gov.bc.ca/docker-remote/centos/postgresql-12-centos7:20200917-804ef01 \
 		| oc -n $(BUILD_NAMESPACE) apply -f -
 	@oc -n $(BUILD_NAMESPACE) start-build bc/rvs-patroni-backup --wait
@@ -128,7 +128,7 @@ db-backup-deploy-postgresql:
 	test -n "$(BACKUP_POSTGRESQL_APP_NAME)"
 	@echo "+\n++ Creating deploy config resoures for database backups on $(NAMESPACE)\n+"
 	oc -n $(NAMESPACE) process -f backup-deploy.yaml \
-  	-p NAME=$(BACKUP_POSTGRESQL_APP_NAME) \
+  	-p BACKUP_POSTGRESQL_APP_NAME=$(BACKUP_POSTGRESQL_APP_NAME) \
   	-p IMAGE_NAMESPACE=$(BUILD_NAMESPACE) \
   	-p SOURCE_IMAGE_NAME=$(BACKUP_POSTGRESQL_APP_NAME) \
   	-p TAG_NAME=v1 \
