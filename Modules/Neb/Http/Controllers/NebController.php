@@ -150,12 +150,7 @@ class NebController extends Controller
         $this->formattedBpsd = $bursaryPeriod->bursary_period_start_date;
         $this->formattedBped = $bursaryPeriod->bursary_period_end_date;
 
-        //        $bpsd = $bursaryPeriod->bursary_period_start_date;
-        ////        this.formattedBpsd = bpsd.toISODate();
-        //        $bped = $bursaryPeriod->bursary_period_end_date;
-        //        this.formattedBped = bped.toFormat("yyyy-MM-dd");
-        $programCodes = SfasProgram::select('sfas_program_code')::where('eligible', true)->get();
-        //        $this->programCodesString = $programCodes.map((row) => '\'' + row.sfas_program_code + '\'').join(', ');
+        $programCodes = SfasProgram::select('sfas_program_code')->where('eligible', true)->get();
         $this->programCodesString = implode(', ', array_map(function ($row) {
             return "'".$row['sfas_program_code']."'";
         }, $programCodes));
