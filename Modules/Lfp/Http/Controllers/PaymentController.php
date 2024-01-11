@@ -57,13 +57,12 @@ class PaymentController extends Controller
         $currentMonth = Carbon::now()->format('Y-m');
         $lastMonth = Carbon::now()->subMonth()->format('Y-m');
         $monthBeforeLast = Carbon::now()->subMonths(2)->format('Y-m');
-
         $qry = sprintf(env("LFP_PAYMENTS_NO_FILTER"), $currentMonth, $lastMonth, $monthBeforeLast);
 
         if (request()->filter_status !== null && request()->filter_status != 'all') {
             $qry = sprintf(env("LFP_PAYMENTS_FILTER"), request()->filter_status, $currentMonth, $lastMonth, $monthBeforeLast);
         }
-        $sfas = DB::connection('oracle')->select($qry . " ORDER BY pl_anniversary_dte ASC");
+        $sfas = DB::connection('oracle')->select($qry . " ORDER BY pl_anniversary_dte DESC");
         $sfas = collect($sfas)->pluck('pl_loan_forgiveness_pay_idx');
 
         //start code to keep the order by the list as it came back from the external db
