@@ -80,4 +80,4 @@ parameters:
     displayName: FROM Image Tag
     description: Base image to build from.  Docker creds or Artificatory setup may be needed to alleviate docker rate-limiting
     required: true
-    value: artifacts.developer.gov.bc.ca/docker-remote/centos/postgresql-12-centos7:20200917-804ef01
+    value: artifacts.developer.gov.bc.ca/docker-remote/fedora/postgresql-14:14

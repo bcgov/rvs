@@ -20,15 +20,16 @@ Route::prefix('lfp')->group(function () {
         ], function () {
         Route::get('/dashboard', 'LfpController@index')->name('dashboard');
         Route::get('/applications', 'LfpController@index')->name('applications.index');
-//        Route::post('/applications', 'LfpController@store')->name('applications.store');
         Route::get('/applications/show/{lfp}', 'LfpController@show')->name('applications.show');
         Route::put('/applications/update/{lfp}', 'LfpController@update')->name('applications.update');
         Route::get('/applications/sync', 'LfpController@sync')->name('applications.sync');
+        Route::get('/intakes', 'IntakeController@index')->name('intakes.index');
+        Route::get('/intakes/create', 'IntakeController@create')->name('intakes.create');
+        Route::post('/intakes/store', 'IntakeController@store')->name('intakes.store');
+        Route::get('/intakes/show/{intake}', 'IntakeController@show')->name('intakes.show');
+        Route::put('/intakes/update/{intake}', 'IntakeController@update')->name('intakes.update');
         Route::get('/payments', 'PaymentController@index')->name('payments.index');
-//        Route::post('/payments', 'PaymentController@store')->name('payments.store');
         Route::put('/payments/{payment}', 'PaymentController@update')->name('payments.update');
-//        Route::post('/applications/connect-app', 'LfpController@connectApp')->name('applications.connect-app');
-//        Route::post('/applications/remove-app', 'LfpController@removeApp')->name('applications.remove-app');
         Route::group(['middleware' => 'lfp_admin'], function () {
             Route::group(
                 [
