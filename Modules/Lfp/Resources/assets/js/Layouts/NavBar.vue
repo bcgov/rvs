@@ -22,19 +22,21 @@ nav.navbar {
                 <ul class="navbar-nav flex-row flex-wrap ms-md-auto" style="--bs-scroll-height: 100px;">
 
                     <li class="nav-item">
-                        <NavLink class="nav-link" href="/lfp/intake"
-                                 :class="{ 'active': $page.url.indexOf('/intake') > -1 ||
-                            $page.url.indexOf('/intake') > -1 }">
-                            New Apps
-                        </NavLink>
-                    </li>
-                    <li class="nav-item">
                         <NavLink class="nav-link" href="/lfp/dashboard"
                                  :class="{ 'active': $page.url.indexOf('/dashboard') > -1 ||
                             $page.url.indexOf('/dashboard') > -1 }">
                             Applications
                         </NavLink>
                     </li>
+
+                    <li class="nav-item">
+                        <NavLink class="nav-link" href="/lfp/intakes"
+                                 :class="{ 'active': $page.url.indexOf('/intake') > -1 ||
+                            $page.url.indexOf('/intake') > -1 }">
+                            Intakes
+                        </NavLink>
+                    </li>
+
                     <li class="nav-item">
                         <NavLink class="nav-link" href="/lfp/payments"
                                  :class="{ 'active': $page.url.indexOf('/payments') > -1 ||

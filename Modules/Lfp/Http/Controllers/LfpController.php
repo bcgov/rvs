@@ -72,12 +72,12 @@ class LfpController extends Controller
 
     /**
      * Show the specified resource.
-     * @param int $id
+     * @param Lfp $lfp
      * @return \Inertia\Response
      */
     public function show(Lfp $lfp)
     {
-        $lfp = Lfp::with('payments', 'applications')->where('id', $lfp->id)->first();
+        $lfp = Lfp::with('payments')->where('id', $lfp->id)->first();
 
         $qry = env('LFP_QUERY1').$lfp->sin;
         $student = DB::connection('oracle')->select($qry);

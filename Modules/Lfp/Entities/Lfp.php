@@ -2,7 +2,6 @@
 
 namespace Modules\Lfp\Entities;
 
-
 use Illuminate\Support\Facades\DB;
 
 class Lfp extends ModuleModel
@@ -29,7 +28,6 @@ class Lfp extends ModuleModel
         return $this->hasMany('Modules\Lfp\Entities\Application', 'lfp_id', 'id');
     }
 
-
     public function getSfasIndAttribute(): ?object
     {
         $sin = $this->attributes['sin'];
@@ -40,6 +38,7 @@ class Lfp extends ModuleModel
         // Convert the result to an object
         return $awayInd ? (object) $awayInd[0] : null;
     }
+
     public function getSfasAppAttribute(): ?object
     {
         $appId = $this->attributes['app_idx'];
@@ -51,5 +50,4 @@ class Lfp extends ModuleModel
         // Convert the result to an object
         return $awayPayment ? (object) $awayPayment[0] : null;
     }
-
 }
