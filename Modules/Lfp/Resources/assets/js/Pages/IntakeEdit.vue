@@ -48,6 +48,26 @@
                                 </div>
 
 
+                                <div class="col-md-4">
+                                    <BreezeLabel for="inputRepaymentStartDate" class="form-label" value="Repayment Start Date" />
+                                    <BreezeInput type="date" min="2019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" class="form-control" id="inputRepaymentStartDate" v-model="intakeForm.repayment_start_date" />
+                                </div>
+                                <div class="col-md-4">
+                                    <BreezeLabel for="inputAmountOwing" class="form-label" value="Amount Owing" />
+                                    <div class="input-group">
+                                        <div class="input-group-text">$</div>
+                                        <BreezeInput type="number" step="0.001" class="form-control" id="inputAmountOwing" v-model="intakeForm.amount_owing" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <BreezeLabel for="selectInGoodStanding" class="form-label" value="In Good Standing" />
+                                    <BreezeSelect class="form-select" id="selectInGoodStanding" v-model="intakeForm.in_good_standing">
+                                        <option value="Yes">Yes</option>
+                                        <option value="Delinquent">Delinquent</option>
+                                        <option value="Bankruptcy">Bankruptcy</option>
+                                    </BreezeSelect>
+                                </div>
+
                                 <div class="col-md-3">
                                     <BreezeLabel for="selectProfession" class="form-label" value="Profession" />
                                     <BreezeSelect class="form-select" id="selectProfession" v-model="intakeForm.profession">
@@ -74,30 +94,6 @@
                                     </BreezeSelect>
                                 </div>
 
-
-                                <div class="col-md-3">
-                                    <BreezeLabel for="inputRepaymentStartDate" class="form-label" value="Repayment Start Date" />
-                                    <BreezeInput type="date" min="2019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" class="form-control" id="inputRepaymentStartDate" v-model="intakeForm.repayment_start_date" />
-                                </div>
-                                <div class="col-md-3">
-                                    <BreezeLabel for="inputAmountOwing" class="form-label" value="Amount Owing" />
-                                    <div class="input-group">
-                                        <div class="input-group-text">$</div>
-                                        <BreezeInput type="number" step="0.001" class="form-control" id="inputAmountOwing" v-model="intakeForm.amount_owing" />
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <BreezeLabel for="inputRepaymentStatus" class="form-label" value="Repayment Status" />
-                                    <BreezeInput type="text" class="form-control" id="inputRepaymentStatus" v-model="intakeForm.repayment_status" />
-                                </div>
-                                <div class="col-md-3">
-                                    <BreezeLabel for="selectInGoodStanding" class="form-label" value="In Good Standing" />
-                                    <BreezeSelect class="form-select" id="selectInGoodStanding" v-model="intakeForm.in_good_standing">
-                                        <option value="Yes">Yes</option>
-                                        <option value="Delinquent">Delinquent</option>
-                                        <option value="Bankruptcy">Bankruptcy</option>
-                                    </BreezeSelect>
-                                </div>
 
                                 <div class="col-md-12">
                                     <BreezeLabel for="inputComments" class="form-label" value="Comments" />

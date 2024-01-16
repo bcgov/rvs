@@ -16,7 +16,7 @@
                 <div class="col-md-9 mt-3">
                     <div class="card mb-3">
                         <div class="card-header">
-                            Applications
+                            Intake Applications
                             <div class="d-flex float-end">
                                 <a href="/lfp/intakes/create" class="btn btn-success btn-sm">New App</a>
                             </div>

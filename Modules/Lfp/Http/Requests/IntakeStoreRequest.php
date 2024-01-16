@@ -44,7 +44,6 @@ class IntakeStoreRequest extends FormRequest
             'employer' => 'nullable',
             'community' => 'nullable',
             'employment_status' => 'nullable',
-            'repayment_status' => 'nullable',
             'intake_status' => 'nullable',
             'in_good_standing' => 'nullable',
             'repayment_start_date' => 'nullable|date_format:Y-m-d',
