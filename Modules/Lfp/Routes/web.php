@@ -25,9 +25,9 @@ Route::prefix('lfp')->group(function () {
         Route::get('/applications/sync', 'LfpController@sync')->name('applications.sync');
         Route::get('/intakes', 'IntakeController@index')->name('intakes.index');
         Route::get('/intakes/create', 'IntakeController@create')->name('intakes.create');
-        Route::post('/intakes/store', 'IntakeController@store')->name('intakes.store');
-        Route::get('/intakes/show/{intake}', 'IntakeController@show')->name('intakes.show');
-        Route::put('/intakes/update/{intake}', 'IntakeController@update')->name('intakes.update');
+        Route::post('/intakes', 'IntakeController@store')->name('intakes.store');
+        Route::get('/intakes/{intake}', 'IntakeController@show')->name('intakes.show');
+        Route::put('/intakes/{intake}', 'IntakeController@update')->name('intakes.update');
         Route::get('/payments', 'PaymentController@index')->name('payments.index');
         Route::put('/payments/{payment}', 'PaymentController@update')->name('payments.update');
         Route::group(['middleware' => 'lfp_admin'], function () {

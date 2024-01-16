@@ -14,7 +14,7 @@ class Intake extends ModuleModel
      */
     protected $fillable = [
         'sin', 'first_name', 'last_name', 'profession', 'employer', 'employment_status', 'community', 'repayment_status',
-        'in_good_standing', 'repayment_start_date', 'amount_owing', 'intake_status', 'receive_date'
+        'in_good_standing', 'repayment_start_date', 'amount_owing', 'intake_status', 'receive_date', 'comment',
     ];
 
 }

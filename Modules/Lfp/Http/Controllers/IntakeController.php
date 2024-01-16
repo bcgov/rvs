@@ -33,7 +33,12 @@ class IntakeController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Lfp::IntakeNew', ['page' => 'intake-new']);
+        $utils_array = [];
+        foreach(Util::where('active_flag', true)->get() as $u){
+            $utils_array[$u->field_type][] = $u->field_name;
+        }
+
+        return Inertia::render('Lfp::IntakeNew', ['status' => true, 'utils' => $utils_array]);
     }
 
     /**
