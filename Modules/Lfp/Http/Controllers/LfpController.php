@@ -88,7 +88,7 @@ class LfpController extends Controller
             $application = DB::connection('oracle')->select($qry);
         }
         $utils_array = [];
-        foreach(Util::where('active_flag', true)->get() as $u){
+        foreach(Util::where('active_flag', true)->orderBy('field_name', 'asc')->get() as $u){
             $utils_array[$u->field_type][] = $u->field_name;
         }
 

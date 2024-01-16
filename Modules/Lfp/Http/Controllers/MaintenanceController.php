@@ -96,7 +96,7 @@ class MaintenanceController extends Controller
      */
     public function utilList(Request $request): \Inertia\Response
     {
-        $utils = Util::orderBy('field_type', 'asc')->get();
+        $utils = Util::orderBy('field_name', 'asc')->get();
 
         $cat_utils = [];
         $cat_titles = [];
