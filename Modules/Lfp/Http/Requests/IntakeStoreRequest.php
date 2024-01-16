@@ -26,12 +26,6 @@ class IntakeStoreRequest extends FormRequest
     public function messages()
     {
         return [
-            'lfp_id.*' => 'LFP ID field is not valid.',
-            'app_idx.*' => 'Missing connection to SFAS App.',
-            'pay_idx.*' => 'Missing connection to SFAS Payment.',
-            'reconciled_with_payment_report_date.*' => 'Reconciled with Payment Report Date field is not valid.',
-            'reconciled_with_galaxy_date.*' => 'Reconciled with Galaxy Date field is not valid.',
-            'comment.*' => 'Comment field is not valid.'
         ];
     }
 
@@ -43,16 +37,20 @@ class IntakeStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'lfp_id' => 'required|exists:Modules\Lfp\Entities\Lfp,id',
-            'app_idx' => 'required|numeric',
-            'pay_idx' => 'required|numeric',
-            'reconciled_with_payment_report_date' => 'nullable|date_format:Y-m-d',
-            'reconciled_with_galaxy_date' => 'nullable|date_format:Y-m-d',
-            'comment' => 'nullable|string',
+            'sin' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
             'profession' => 'nullable',
             'employer' => 'nullable',
-            'employment_status' => 'nullable',
             'community' => 'nullable',
+            'employment_status' => 'nullable',
+            'repayment_status' => 'nullable',
+            'intake_status' => 'nullable',
+            'in_good_standing' => 'nullable',
+            'repayment_start_date' => 'nullable|date_format:Y-m-d',
+            'receive_date' => 'nullable|date_format:Y-m-d',
+            'amount_owing' => 'nullable|numeric',
+            'comment' => 'nullable|string',
         ];
     }
 

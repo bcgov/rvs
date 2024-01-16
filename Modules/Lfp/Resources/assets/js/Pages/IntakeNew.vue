@@ -11,142 +11,131 @@ tr {
 
     <AuthenticatedLayout v-bind="$attrs">
 
-            <div class="mt-3">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-md-4 mt-3">
+                        <div class="col-md-4">
                             <div class="card">
                                 <div class="card-header">
-                                    VSS Case Search
+                                    LFP Intake Search
                                 </div>
                                 <div class="card-body">
-                                    <ApplicationSearchBox />
+                                    <IntakeSearchBox />
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-8 mt-3 mb-5">
+                        <div class="col-md-8">
                             <div class="card">
                                 <div class="card-header">
-                                    VSS Create New Case
+                                    LFP New Intake
+                                    <div class="float-end">
+                                        <span class="me-1">Status:</span>
+                                        <input @click="toggleStatus('Ready')" type="radio" class="btn-check" name="intake_status" id="intake_status_ready" autocomplete="off" :checked="intakeForm.intake_status === 'Ready'">
+                                        <label class="btn btn-outline-success btn-sm me-1" for="intake_status_ready">Ready</label>
+
+                                        <input @click="toggleStatus('Pending')" type="radio" class="btn-check" name="intake_status" id="intake_status_pending" autocomplete="off" :checked="intakeForm.intake_status === 'Pending'">
+                                        <label class="btn btn-outline-primary btn-sm" for="intake_status_pending">Pending</label>
+                                    </div>
                                 </div>
-                                <form @submit.prevent="storeCase">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-lg-4">
-                                                <table>
-                                                    <tr>
-                                                        <th scope="row">SIN:</th>
-                                                        <td class="ps-1">
-                                                            <BreezeInput class="form-control" type="number" oninput="javascript: if (this.value.length > this.maxLength) editForm.sin = this.value.slice(0, this.maxLength);" maxlength="9" v-model="editForm.sin" aria-required="true" />
-                                                        </td>
-                                                    </tr>
+                                <form class="card-body" v-if="intakeForm != null" @submit.prevent="storeIntake">
+                                    <div class="row g-3">
 
-                                                    <tr>
-                                                        <th scope="row">Year of Audit:</th>
-                                                        <td class="ps-1">
-                                                            <BreezeInput class="form-control" type="text" placeholder="i.e 21/22" maxlength="5" v-model="editForm.year_of_audit" aria-required="true" />
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row">Date Opened:</th>
-                                                        <td class="ps-1">
-                                                            <BreezeInput class="form-control" type="date" placeholder="YYYY-MM-DD" v-model="editForm.open_date" />
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                            </div>
-                                            <div class="col-lg-4">
-
-                                                <table>
-                                                    <tr>
-                                                        <th scope="row">Last Name:</th>
-                                                        <td class="ps-1">
-                                                            <BreezeInput class="form-control" type="text" v-model="editForm.last_name" />
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row">Application:</th>
-                                                        <td class="ps-1">
-                                                            <BreezeInput class="form-control" type="number" v-model="editForm.application_number" />
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row">Reactivate Date:</th>
-                                                        <td class="ps-1">
-                                                            <BreezeInput class="form-control" type="date" placeholder="YYYY-MM-DD" v-model="editForm.reactivate_date" />
-                                                        </td>
-                                                    </tr>
-
-                                                </table>
-
-                                            </div>
-                                            <div class="col-lg-4">
-
-                                                <table>
-                                                    <tr>
-                                                        <th scope="row">First Name:</th>
-                                                        <td class="ps-1">
-                                                            <BreezeInput class="form-control" type="text" v-model="editForm.first_name" />
-                                                        </td>
-                                                    </tr>
-
-                                                    <tr>
-                                                        <th scope="row">School:</th>
-                                                        <td class="ps-1">
-                                                            <BreezeSelect class="form-select" v-model="editForm.institution_code">
-                                                                <option v-for="(school,j) in schools" :value="school.institution_code">{{ school.institution_name }} | {{ school.institution_code }}</option>
-                                                            </BreezeSelect>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row">Status Code:</th>
-                                                        <td class="ps-1">
-                                                            <BreezeSelect class="form-select" v-model="editForm.incident_status">
-                                                                <option value="Active">Active</option>
-                                                                <option value="Re-activated">Re-activated</option>
-                                                                <option value="Inactive">Inactive</option>
-                                                            </BreezeSelect>
-                                                        </td>
-                                                    </tr>
-                                                </table>
-
-                                            </div>
+                                        <div class="col-md-3">
+                                            <BreezeLabel for="inputFirstName" class="form-label" value="First Name" />
+                                            <BreezeInput type="text" class="form-control" id="inputFirstName" v-model="intakeForm.first_name" />
+                                        </div>
+                                        <div class="col-md-3">
+                                            <BreezeLabel for="inputLastName" class="form-label" value="Last Name" />
+                                            <BreezeInput type="text" class="form-control" id="inputLastName" v-model="intakeForm.last_name" />
+                                        </div>
+                                        <div class="col-md-3">
+                                            <BreezeLabel for="inputSin" class="form-label" value="SIN" />
+                                            <BreezeInput type="text" class="form-control" id="inputSin" v-model="intakeForm.sin" />
+                                        </div>
+                                        <div class="col-md-3">
+                                            <BreezeLabel for="inputReceiveDate" class="form-label" value="Receive Date" />
+                                            <BreezeInput type="date" min="2019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" class="form-control" id="inputReceiveDate" v-model="intakeForm.receive_date" />
                                         </div>
 
-                                        <div v-if="newForm !== null" class="row">
+
+                                        <div class="col-md-3">
+                                            <BreezeLabel for="selectProfession" class="form-label" value="Profession" />
+                                            <BreezeSelect class="form-select" id="selectProfession" v-model="intakeForm.profession">
+                                                <option v-for="u in utils['Profession']" :value="u">{{ u }}</option>
+                                            </BreezeSelect>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <BreezeLabel for="selectEmployer" class="form-label" value="Employer" />
+                                            <BreezeSelect class="form-select" id="selectEmployer" v-model="intakeForm.employer">
+                                                <option v-for="u in utils['Employer']" :value="u">{{ u }}</option>
+                                            </BreezeSelect>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <BreezeLabel for="selectCommunity" class="form-label" value="Community" />
+                                            <BreezeSelect class="form-select" id="selectCommunity" v-model="intakeForm.community">
+                                                <option v-for="u in utils['Community']" :value="u">{{ u }}</option>
+                                            </BreezeSelect>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <BreezeLabel for="selectEmploymentStatus" class="form-label" value="Employment Status" />
+                                            <BreezeSelect class="form-select" id="selectEmploymentStatus" v-model="intakeForm.employment_status">
+                                                <option v-for="u in utils['Employment Status']" :value="u">{{ u }}</option>
+                                            </BreezeSelect>
+                                        </div>
+
+
+                                        <div class="col-md-3">
+                                            <BreezeLabel for="inputRepaymentStartDate" class="form-label" value="Repayment Start Date" />
+                                            <BreezeInput type="date" min="2019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" class="form-control" id="inputRepaymentStartDate" v-model="intakeForm.repayment_start_date" />
+                                        </div>
+                                        <div class="col-md-3">
+                                            <BreezeLabel for="inputAmountOwing" class="form-label" value="Amount Owing" />
+                                            <div class="input-group">
+                                                <div class="input-group-text">$</div>
+                                                <BreezeInput type="number" step="0.001" class="form-control" id="inputAmountOwing" v-model="intakeForm.amount_owing" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <BreezeLabel for="inputRepaymentStatus" class="form-label" value="Repayment Status" />
+                                            <BreezeInput type="text" class="form-control" id="inputRepaymentStatus" v-model="intakeForm.repayment_status" />
+                                        </div>
+                                        <div class="col-md-3">
+                                            <BreezeLabel for="selectInGoodStanding" class="form-label" value="In Good Standing" />
+                                            <BreezeSelect class="form-select" id="selectInGoodStanding" v-model="intakeForm.in_good_standing">
+                                                <option value="Yes">Yes</option>
+                                                <option value="Delinquent">Delinquent</option>
+                                                <option value="Bankruptcy">Bankruptcy</option>
+                                            </BreezeSelect>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <BreezeLabel for="inputComments" class="form-label" value="Comments" />
+                                            <textarea class="form-control" id="inputComments" v-model="intakeForm.comment" rows="3">{{ intakeForm.comment }}</textarea>
+                                        </div>
+
+                                        <div v-if="intakeForm.errors != undefined" class="row">
                                             <div class="col-12">
-                                                <div v-if="newForm.hasErrors === true" class="alert alert-danger mt-3">
+                                                <div v-if="intakeForm.hasErrors == true" class="alert alert-danger mt-3">
                                                     <ul>
-                                                        <li v-for="err in newForm.errors">{{ err }}</li>
+                                                        <li v-for="err in intakeForm.errors">{{ err }}</li>
                                                     </ul>
                                                 </div>
                                             </div>
                                         </div>
 
+                                    </div>
+                                    <div class="card-footer mt-3">
+                                        <button type="submit" class="btn me-2 btn-outline-success" :disabled="intakeForm.processing">Submit Application</button>
+                                    </div>
 
-                                    </div>
-                                    <div class="card-footer">
-                                        <button type="submit" class="btn me-2 btn-outline-success" :disabled="this.editForm.processing">Create Case</button>
-                                        <Link @click="back" class="btn btn-outline-primary float-end" href="#">Back</Link>
-                                    </div>
+                                    <FormSubmitAlert :form-state="intakeForm.formState"
+                                                     :success-msg="'Intake application record was submitted successfully.'"></FormSubmitAlert>
+
                                 </form>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div v-if="showSuccessMsg" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-                <div id="updateSuccessAlert" class="alert alert-success alert-dismissible fade show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="100">
-                    <div class="">
-                        <div class="toast-body">
-                            Case record was created successfully.
-                        </div>
-                        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                </div>
-            </div>
-
 
         </AuthenticatedLayout>
 
@@ -155,116 +144,61 @@ tr {
 
 import AuthenticatedLayout from '../Layouts/Authenticated.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
-import ApplicationSearchBox from '../Components/ApplicationSearch.vue';
+import IntakeSearchBox from '../Components/IntakeSearch.vue';
 import BreezeLabel from '@/Components/Label.vue';
 import BreezeInput from '@/Components/Input.vue';
 import BreezeSelect from '@/Components/Select.vue';
+import FormSubmitAlert from "@/Components/FormSubmitAlert";
 
 export default {
     name: 'IntakeNew',
     components: {
-        AuthenticatedLayout, ApplicationSearchBox, Head, Link, BreezeInput, BreezeSelect, BreezeLabel
+        AuthenticatedLayout, IntakeSearchBox, Head, Link, BreezeInput, BreezeSelect, BreezeLabel, FormSubmitAlert
     },
     props: {
-        funds: Object,
-        now: String,
-        schools: Object,
-        areaOfAudits: Object,
-        natureOffences: Object,
-        referrals: Object,
-        sanctions: Object,
-        staff: Object
+        utils: Object,
     },
     data() {
         return {
             noChanges: true,
-            newRows: [],
-            showSuccessMsg: false,
-
-            newAreaOfAuditRows: [],
-            newOffenceRows: [],
-            newSanctionRows: [],
-
-            editForm: {
-
+            intakeForm: useForm({
+                formState: null,
                 sin: '',
-                institution_code: '',
-                last_name: '',
                 first_name: '',
-                year_of_audit: '',
-                open_date: '',
-                application_number: '',
-                reactivate_date: '',
-                incident_status: '',
-                referral_source_id: '',
-                severity: '',
-                auditor_user_id: '',
-                audit_date: '',
-                investigator_user_id: '',
-                investigation_date: '',
-                area_of_audit_code: '',
-                audit_type: '',
-                bring_forward_date: '',
-                appeal_outcome: '',
-                close_date: '',
-                reason_for_closing: '',
-                case_outcome: '',
-                rcmp_referral_date: '',
-                rcmp_closure_date: '',
-                sentence_comment: '',
-
-                new_audit_codes: '',
-                new_offence_codes: '',
-                new_sanction_codes: '',
-
-                old_audit_codes: [],
-                old_offence_codes: [],
-                old_sanction_codes: [],
-
-                bring_forward: false,
-                rcmp_referral_flag: false,
-                conviction_flag: false,
-                charges_laid_flag: false,
-                appeal_flag: false,
-                case_close: false,
-            },
-            newForm: null,
+                last_name: '',
+                profession: '',
+                employer: '',
+                employment_status: '',
+                repayment_status: '',
+                in_good_standing: '',
+                community: '',
+                repayment_start_date: '',
+                amount_owing: '',
+                receive_date: '',
+                comment: '',
+                intake_status: 'Pending'
+            }),
         }
     },
     methods: {
-
-        storeCase: function ()
+        toggleStatus: function(status)
         {
-
-            this.editForm.new_audit_codes = this.newAreaOfAuditRows;
-            this.editForm.new_offence_codes = this.newOffenceRows;
-            this.editForm.new_sanction_codes = this.newSanctionRows;
-            this.newForm = useForm(this.editForm);
-
-            this.newForm.post('/lfp/intakes', {
+            this.intakeForm.intake_status = status;
+        },
+        storeIntake: function ()
+        {
+            this.intakeForm.formState = null;
+            this.intakeForm.post('/lfp/intakes', {
                 onSuccess: () => {
-                    this.showSuccessAlert();
+                    this.intakeForm.formState = true;
+                    this.noChanges = true;
+                },
+                onError: () => {
+                    this.intakeForm.formState = false;
                 },
             });
-            // form.wasSuccessful();
+
         },
-        showSuccessAlert: function ()
-        {
-            this.showSuccessMsg = true;
-            let vm = this;
-            setTimeout(function (){
-                vm.showSuccessMsg = false;
-                vm.noChanges = true;
-            }, 5000);
-        },
-
-
-        back: function()
-        {
-            window.history.back();
-        },
-
-
     },
 }
 </script>

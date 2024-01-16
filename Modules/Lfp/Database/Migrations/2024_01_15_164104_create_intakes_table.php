@@ -21,13 +21,14 @@ class CreateIntakesTable extends Migration
             $table->string('profession', 50)->nullable()->comment('Occupation of applicant.');
             $table->string('employer', 30)->nullable()->comment('Employer of applicant.');
             $table->string('community', 100)->nullable()->comment('Underserved community.');
-            $table->boolean('in_good_standing')->nullable()->default(false);
+            $table->string('in_good_standing')->nullable();
             $table->date('repayment_start_date')->nullable();
             $table->double('amount_owing', null, 2)->default(0)->nullable();
             $table->date('receive_date')->default(now());
             $table->string('employment_status', 30)->nullable()->comment('Casual/Part-time/Full-time.');
             $table->string('repayment_status', 30)->nullable();
             $table->string('intake_status', 30)->nullable()->comment('Ready/Pending.');
+            $table->text('comment')->nullable();
 
             $table->timestamps();
         });

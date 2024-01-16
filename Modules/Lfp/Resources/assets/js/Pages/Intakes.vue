@@ -29,7 +29,7 @@
                                     </thead>
                                     <tbody>
                                     <tr v-for="row in results.data">
-                                        <td><a :href="'/lfp/intakes/show/' + row.id">{{ studentLastName(row.last_name) }}</a></td>
+                                        <td><a :href="'/lfp/intakes/' + row.id">{{ studentLastName(row.last_name) }}</a></td>
                                         <td>{{ row.first_name }}</td>
                                         <td>{{ row.in_good_standing }}</td>
                                         <td>{{ row.intake_status }}</td>

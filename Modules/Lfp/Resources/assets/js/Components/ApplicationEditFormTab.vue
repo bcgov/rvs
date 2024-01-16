@@ -106,7 +106,7 @@ tr {
 
             <div class="col-md-6">
                 <BreezeLabel for="selectCommunity" class="form-label" value="Community" />
-                <BreezeSelect class="form-select" id="selectCommunity" v-model="editForm.employment_status">
+                <BreezeSelect class="form-select" id="selectCommunity" v-model="editForm.community">
                     <option v-for="u in utils['Community']" :value="u">{{ u }}</option>
                 </BreezeSelect>
             </div>
@@ -172,7 +172,7 @@ export default {
 
             this.editForm.formState = null;
 
-                this.editForm.put('/twp/applications/' + this.result.id, {
+                this.editForm.put('/lfp/applications/' + this.result.id, {
                     onSuccess: () => {
                         this.editForm.formState = true;
                         this.noChanges = true;
