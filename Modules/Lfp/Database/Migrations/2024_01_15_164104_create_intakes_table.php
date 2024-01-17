@@ -26,7 +26,6 @@ class CreateIntakesTable extends Migration
             $table->double('amount_owing', null, 2)->default(0)->nullable();
             $table->date('receive_date')->default(now());
             $table->string('employment_status', 30)->nullable()->comment('Casual/Part-time/Full-time.');
-            $table->string('repayment_status', 30)->nullable();
             $table->string('intake_status', 30)->nullable()->comment('Ready/Pending.');
             $table->text('comment')->nullable();
 
