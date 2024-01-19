@@ -8,7 +8,7 @@
 
             <div class="container-fluid">
                 <div class="row justify-content-center">
-                    <div class="col-md-3 mt-3">
+                    <div class="col-md-3">
                         <div class="card mb-2">
                             <div class="card-header">
                                 <Link @click="back" href="#" class="btn btn-link">
@@ -28,7 +28,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-9 mt-3 mb-5">
+                    <div class="col-md-9 mb-5">
                         <div class="card">
                             <div v-if="editForm != null" class="card-header">
                                 Edit Application
@@ -48,7 +48,7 @@
                                         <ApplicationEditFormTab v-if="activeTab==='form'" :student="student[student.length - 1]" :utils="utils" :result="result" :app="app"></ApplicationEditFormTab>
                                     </div>
                                     <div class="tab-pane fade" :class="activeTab==='payment' ? 'active show':''" id="payment-tab-pane" role="tabpanel" aria-labelledby="payment-tab" tabindex="4">
-                                        <ApplicationEditPaymentsTab v-if="activeTab==='payment'" :utils="utils" :payments="result.payments"></ApplicationEditPaymentsTab>
+                                        <ApplicationEditPaymentsTab v-if="activeTab==='payment'" :utils="utils" :payments="result.payments" :app="app"></ApplicationEditPaymentsTab>
                                     </div>
                                 </div>
                             </div>

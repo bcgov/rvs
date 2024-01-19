@@ -29,11 +29,17 @@ tr {
                                     LFP New Intake
                                     <div class="float-end">
                                         <span class="me-1">Status:</span>
+                                        <input @click="toggleStatus('Pending')" type="radio" class="btn-check" name="intake_status" id="intake_status_pending" autocomplete="off" :checked="intakeForm.intake_status === 'Pending'">
+                                        <label class="btn btn-outline-primary btn-sm me-1" for="intake_status_pending">Pending</label>
+
                                         <input @click="toggleStatus('Ready')" type="radio" class="btn-check" name="intake_status" id="intake_status_ready" autocomplete="off" :checked="intakeForm.intake_status === 'Ready'">
                                         <label class="btn btn-outline-success btn-sm me-1" for="intake_status_ready">Ready</label>
 
-                                        <input @click="toggleStatus('Pending')" type="radio" class="btn-check" name="intake_status" id="intake_status_pending" autocomplete="off" :checked="intakeForm.intake_status === 'Pending'">
-                                        <label class="btn btn-outline-primary btn-sm" for="intake_status_pending">Pending</label>
+                                        <input @click="toggleStatus('Registered')" type="radio" class="btn-check" name="intake_status" id="intake_status_registered" autocomplete="off" :checked="intakeForm.intake_status === 'Registered'">
+                                        <label class="btn btn-outline-success btn-sm me-1" for="intake_status_registered">Registered</label>
+
+                                        <input @click="toggleStatus('Denied')" type="radio" class="btn-check" name="intake_status" id="intake_status_denied" autocomplete="off" :checked="intakeForm.intake_status === 'Denied'">
+                                        <label class="btn btn-outline-warning btn-sm" for="intake_status_denied">Denied</label>
                                     </div>
                                 </div>
                                 <form class="card-body" v-if="intakeForm != null" @submit.prevent="storeIntake">
@@ -57,24 +63,28 @@ tr {
                                         </div>
 
 
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <BreezeLabel for="inputRepaymentStartDate" class="form-label" value="Repayment Start Date" />
                                             <BreezeInput type="date" min="2019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" class="form-control" id="inputRepaymentStartDate" v-model="intakeForm.repayment_start_date" />
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <BreezeLabel for="inputAmountOwing" class="form-label" value="Amount Owing" />
                                             <div class="input-group">
                                                 <div class="input-group-text">$</div>
                                                 <BreezeInput type="number" step="0.001" class="form-control" id="inputAmountOwing" v-model="intakeForm.amount_owing" />
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <BreezeLabel for="selectInGoodStanding" class="form-label" value="In Good Standing" />
                                             <BreezeSelect class="form-select" id="selectInGoodStanding" v-model="intakeForm.in_good_standing">
                                                 <option value="Yes">Yes</option>
                                                 <option value="Delinquent">Delinquent</option>
                                                 <option value="Bankruptcy">Bankruptcy</option>
                                             </BreezeSelect>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <BreezeLabel for="inputProposedRegistrationDate" class="form-label" value="Prop. Reg. Date" />
+                                            <BreezeInput type="date" min="2019-01-01" max="2040-12-31" placeholder="Proposed registration date YYYY-MM-DD" class="form-control" id="inputProposedRegistrationDate" v-model="intakeForm.proposed_registration_date" />
                                         </div>
 
                                         <div class="col-md-3">
@@ -171,6 +181,7 @@ export default {
                 repayment_start_date: '',
                 amount_owing: '',
                 receive_date: '',
+                proposed_registration_date: '',
                 comment: '',
                 intake_status: 'Pending'
             }),

@@ -89,43 +89,25 @@ class IntakeController extends Controller
     {
         $intakes = new Intake();
 
+        if (request()->filter_sin !== null) {
+            $intakes = $intakes->where('sin', request()->filter_sin);
+        }
+
         if (request()->filter_fname !== null) {
             $intakes = $intakes->where('first_name', 'ILIKE', '%'.request()->filter_fname.'%');
         }
         if (request()->filter_lname !== null) {
             $intakes = $intakes->where('last_name', 'ILIKE', '%'.request()->filter_lname.'%');
         }
-        if (request()->filter_period !== null && request()->filter_period != 'all') {
-            switch (request()->filter_period){
-                case 'current':
-                    // Filter for the current month
-                    $intakes = $intakes->whereMonth('created_at', now()->month);
-                    break;
 
-                case '3':
-                    // Filter for the last 3 months
-                    $intakes = $intakes->where('created_at', '>=', Carbon::now()->subMonths(3));
-                    break;
-
-                case '6':
-                    // Filter for the last 6 months
-                    $intakes = $intakes->where('created_at', '>=', Carbon::now()->subMonths(6));
-                    break;
-
-                case '12':
-                    // Filter for the last 12 months
-                    $intakes = $intakes->where('created_at', '>=', Carbon::now()->subMonths(12));
-                    break;
-
-                default:
-                    break;
-            }
+        if (request()->filter_status !== null && request()->filter_status !== 'all') {
+            $intakes = $intakes->where('intake_status', request()->filter_status);
         }
 
         if (request()->sort !== null) {
             $intakes = $intakes->orderBy(request()->sort, request()->direction);
         } else {
-            $intakes = $intakes->orderBy('created_at', 'desc');
+            $intakes = $intakes->orderBy('proposed_registration_date', 'desc');
         }
 
         return $intakes->paginate(25)->onEachSide(1)->appends(request()->query());
