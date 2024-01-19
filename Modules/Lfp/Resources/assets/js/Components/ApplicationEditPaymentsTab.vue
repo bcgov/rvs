@@ -6,6 +6,33 @@
 </style>
 <template>
 
+    <div class="row">
+        <div class="col-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Total BCSL to be paid</h5>
+                    <p class="card-text fs-2">${{app[0].pl_dire_forcalc_outstdg_amt}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Principal Paid</h5>
+                    <p class="card-text fs-2">${{principalPaid}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Principal Outstanding</h5>
+                    <p class="card-text fs-2">${{principalOutstanding}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr/>
     <div v-if="payments != null && payments.length > 0" class="table-responsive pb-3">
         <table class="table table-striped">
             <thead>
@@ -154,8 +181,8 @@ export default {
     },
     props: {
         payments: Object,
-        utils: Object
-
+        utils: Object,
+        app: Object
     },
     data() {
         return {
@@ -194,6 +221,19 @@ export default {
                 },
                 preserveState: true
             });
+        },
+    },
+    computed: {
+        principalPaid() {
+            let total = 0;
+            for(let i=0; i<this.payments.length; i++){
+                if(this.payments[i].sfas_payment.pl_payment_status_code === 'PAID')
+                    total += parseFloat(this.payments[i].sfas_payment.pl_dire_principal_pay_amt);
+            }
+            return total;
+        },
+        principalOutstanding() {
+            return parseFloat(this.app[0].pl_dire_forcalc_outstdg_amt) - this.principalPaid;
         },
     },
 }
