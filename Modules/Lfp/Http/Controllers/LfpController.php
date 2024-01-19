@@ -103,6 +103,11 @@ class LfpController extends Controller
         if (request()->filter_fname !== null) {
             $lfps = $lfps->where('first_name', 'ILIKE', '%'.request()->filter_fname.'%');
         }
+
+        if (request()->filter_sin !== null) {
+            $lfps = $lfps->where('sin', request()->filter_sin);
+        }
+
         if (request()->filter_lname !== null) {
             $lfps = $lfps->where('last_name', 'ILIKE', '%'.request()->filter_lname.'%');
         }

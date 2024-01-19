@@ -2,6 +2,7 @@
 
 namespace Modules\Yeaf\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Modules\Yeaf\Entities\Appeal;
@@ -97,8 +98,7 @@ class ReportController extends Controller
 
     public function staff(Request $request)
     {
-        $users = \App\Models\User::select('user_id', 'first_name', 'last_name', 'disabled',
-            'access_type', 'tele', 'email')->whereHas('roles', function ($q) {
+        $users = User::select('user_id', 'first_name', 'last_name', 'disabled', 'tele', 'email')->whereHas('roles', function ($q) {
                 $q->whereIn('name', ['YEAF Admin', 'YEAF User']);
             })->get();
 

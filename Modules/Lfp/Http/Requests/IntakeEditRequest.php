@@ -49,9 +49,21 @@ class IntakeEditRequest extends FormRequest
             'in_good_standing' => 'nullable',
             'repayment_start_date' => 'nullable|date_format:Y-m-d',
             'receive_date' => 'nullable|date_format:Y-m-d',
+            'proposed_registration_date' => 'nullable|date_format:Y-m-d',
+            'denial_reason' => 'nullable',
             'amount_owing' => 'nullable|numeric',
             'comment' => 'nullable|string',
 
         ];
+    }
+
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        $this->merge(['sin' => str_replace(' ', '', ($this->sin))]);
     }
 }
