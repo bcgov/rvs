@@ -1,7 +1,7 @@
 <script setup>
 
 import {Head} from '@inertiajs/vue3';
-import {defineComponent} from "vue";
+import {defineComponent, computed, useAttrs} from "vue";
 defineComponent( {
     Head
 });
@@ -10,6 +10,14 @@ defineProps({
     hasAccess: Boolean,
     status: String,
 });
+// Access roles from $attrs
+const userRoles = useAttrs().auth?.roles || [];
+
+// Define computed property
+const isSuper = computed(() => {
+    return userRoles.some(role => role.name === 'Super Admin');
+});
+
 </script>
 <style scoped>
 .bg-bc-gov{
@@ -30,8 +38,14 @@ defineProps({
         <Head title="Select Application" />
 
     <div class="min-h-screen text-center flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-bc-gov">
-
-        <h2 class="text-center text-white">Welcome <span v-if="$attrs['auth']['user']">{{ $attrs['auth']['user']['first_name'] }}</span></h2>
+        <div v-if="isSuper" class="row col-12">
+            <h2 class="">
+                <a href="/admin/users"><i class="bi bi-gear text-white float-end" title="Admin Settings"></i></a>
+            </h2>
+        </div>
+        <h2 class="text-center text-white">Welcome
+            <span v-if="$attrs['auth']['user']">{{ $attrs['auth']['user']['first_name'] }}</span>
+        </h2>
         <p class="text-center text-white">Please select an application to log into</p>
 
         <div v-if="status" class="alert mb-4 font-medium text-sm alert-danger">

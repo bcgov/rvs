@@ -48,6 +48,22 @@ class UserPolicy
     }
 
     /**
+     * Determine whether the user can update the model.
+     */
+    public function adminUpdate(User $user, User $model): bool
+    {
+        $is_admin = false;
+        foreach ($user->roles as $role) {
+            if (Str::contains($role->name, 'Super Admin')) {
+                $is_admin = true;
+                break;
+            }
+        }
+
+        return $is_admin && $user->disabled === false;
+    }
+
+    /**
      * Determine whether the user can delete the model.
      */
     public function delete(User $user, User $model): bool

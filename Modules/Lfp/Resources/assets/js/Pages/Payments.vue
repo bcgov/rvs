@@ -6,7 +6,7 @@
                 <div class="col-md-3 mt-3">
                     <div class="card">
                         <div class="card-header">
-                            LFP Search
+                            LFP Application Search
                         </div>
                         <div class="card-body">
                             <ApplicationSearchBox page="/lfp/applications/" />

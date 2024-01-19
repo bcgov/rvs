@@ -10,7 +10,7 @@
                             LFP Intake Search
                         </div>
                         <div class="card-body">
-                            <IntakeSearchBox />
+                            <IntakeSearchBox page="/lfp/intakes/" />
                         </div>
                     </div>
                 </div>

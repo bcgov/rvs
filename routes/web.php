@@ -21,3 +21,19 @@ Route::get('/', function () {
 Route::get('/login', [App\Http\Controllers\UserController::class, 'login'])->name('login');
 Route::get('/applogin', [App\Http\Controllers\UserController::class, 'appLogin'])->name('app-login');
 Route::middleware(['auth'])->get('/home', [App\Http\Controllers\UserController::class, 'home'])->name('home');
+
+
+
+Route::prefix('admin')->group(function () {
+    Route::group(
+        [
+            'middleware' => ['auth', 'super_admin'],
+            'as' => 'super-admin.',
+        ], function () {
+
+        Route::get('/users', [App\Http\Controllers\AdminController::class, 'users'])->name('users');
+        Route::get('/users/{user}', [App\Http\Controllers\AdminController::class, 'userEdit'])->name('user-edit');
+
+    });
+
+});
