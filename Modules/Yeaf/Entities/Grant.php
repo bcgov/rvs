@@ -2,6 +2,7 @@
 
 namespace Modules\Yeaf\Entities;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Grant extends ModuleModel
@@ -32,7 +33,9 @@ class Grant extends ModuleModel
 
     public function officer()
     {
-        return $this->belongsTo('App\Models\User', 'officer_user_id', 'user_id');
+        $userModel = new User;
+
+        return $this->belongsTo($userModel, 'officer_user_id', 'user_id');
     }
 
     public function py()

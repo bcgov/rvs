@@ -18,9 +18,10 @@ class MaintenanceController extends Controller
      */
     public function staffList(Request $request): \Inertia\Response
     {
-        $staff = User::whereHas('roles', function ($q) {
-            return $q->whereIn('name', [Role::VSS_ADMIN, Role::VSS_USER, Role::VSS_GUEST]);
-        })->orderBy('created_at', 'desc')->get();
+        $staff = User::with('roles')
+            ->whereHas('roles', function ($q) {
+                return $q->whereIn('name', [Role::VSS_ADMIN, Role::VSS_USER, Role::VSS_GUEST]);
+            })->orderBy('created_at', 'desc')->get();
 
         return Inertia::render('Vss::Maintenance', ['status' => true, 'results' => $staff, 'page' => 'staff']);
     }

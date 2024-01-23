@@ -62,9 +62,10 @@ class MaintenanceController extends Controller
      */
     public function staffList(Request $request): \Inertia\Response
     {
-        $staff = User::whereHas('roles', function ($q) {
-            return $q->whereIn('name', [Role::TWP_ADMIN, Role::TWP_USER, Role::TWP_GUEST]);
-        })->orderBy('created_at', 'desc')->get();
+        $staff = User::with('roles')
+            ->whereHas('roles', function ($q) {
+                return $q->whereIn('name', [Role::TWP_ADMIN, Role::TWP_USER, Role::TWP_GUEST]);
+            })->orderBy('created_at', 'desc')->get();
 
         foreach ($staff as $user) {
             if ($user->roles->contains('name', Role::TWP_ADMIN)) {

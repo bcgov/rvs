@@ -35,6 +35,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->connection = "pgsql";
+    }
+
     /**
      * The roles that belong to the user.
      */

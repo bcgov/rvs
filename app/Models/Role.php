@@ -38,6 +38,12 @@ class Role extends Model
 
 
 
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->connection = "pgsql";
+    }
+
     /**
      * The roles that belong to the user.
      */
