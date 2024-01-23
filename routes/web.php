@@ -32,7 +32,10 @@ Route::prefix('admin')->group(function () {
         ], function () {
 
         Route::get('/users', [App\Http\Controllers\AdminController::class, 'users'])->name('users');
-        Route::get('/users/{user}', [App\Http\Controllers\AdminController::class, 'userEdit'])->name('user-edit');
+        Route::put('/users/{user}', [App\Http\Controllers\AdminController::class, 'userEdit'])->name('user-edit');
+
+        Route::get('/ministry', [App\Http\Controllers\AdminController::class, 'ministry'])->name('ministry');
+        Route::put('/ministry', [App\Http\Controllers\AdminController::class, 'ministryEdit'])->name('ministry-edit');
 
     });
 

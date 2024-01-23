@@ -39,7 +39,7 @@
 
                     <div class="mt-4">
                         <BreezeLabel for="access_type" value="Access Type" />
-                        <BreezeSelect id="access_type" type="text" class="mt-1 block w-full" v-model="form.access_type" required>
+                        <BreezeSelect id="access_type" class="mt-1 block w-full" v-model="form.access_type" required>
                             <option value="A">Admin</option>
                             <option value="U">User</option>
                         </BreezeSelect>

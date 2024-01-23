@@ -6,7 +6,7 @@
         <div class="mt-3">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-md-4 mt-3">
+                    <div class="col-md-3 mt-3">
                         <div class="card">
                             <div class="card-header">
                                 Admin Menu
@@ -16,9 +16,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-8 mt-3">
-                        <AdminMinistry v-if="page === 'ministry'" :results="results"></AdminMinistry>
-                        <AdminUsers v-if="page === 'users'" :results="results"></AdminUsers>
+                    <div class="col-md-9 mt-3">
+                        <AdminMinistry v-if="page === 'ministry'" :ministry="ministry"></AdminMinistry>
+                        <AdminUsers v-if="page === 'users'" :users="users" :roles="roles"></AdminUsers>
                     </div>
                 </div>
             </div>
@@ -42,20 +42,14 @@ export default {
         AuthenticatedLayout, Head, Link
     },
     props: {
-        results: Object,
+        users: Object,
+        roles: Object,
+        ministry: Object,
         page: String,
     },
     data() {
         return {
         }
     },
-    methods: {
-    },
-    watch: {
-    },
-    computed: {
-    },
-    mounted() {
-    }
 }
 </script>

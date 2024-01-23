@@ -36,13 +36,13 @@ Route::prefix('vss')->group(function () {
 
             Route::resource('case-comment', Modules\Vss\Http\Controllers\CaseCommentController::class);
 
-            //authenticated admin routes
+            Route::get('/reports', 'AdminController@reports')->name('reports');
+            Route::get('/reports/download/{case}', 'ReportController@downloadSingleStudentReport')->name('download-single-student-report');
+
+            Route::post('/reports', 'ReportController@searchReports')->name('reports-search');
+
+        //authenticated admin routes
             Route::group(['middleware' => 'vss_admin'], function () {
-
-                Route::get('/reports', 'AdminController@reports')->name('reports');
-                Route::get('/reports/download/{case}', 'ReportController@downloadSingleStudentReport')->name('download-single-student-report');
-
-                Route::post('/reports', 'ReportController@searchReports')->name('reports-search');
 
                 Route::name('maintenance.')->group(function () {
                     Route::get('/maintenance/staff', 'MaintenanceController@staffList')->name('staff.list');

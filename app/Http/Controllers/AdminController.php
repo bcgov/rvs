@@ -2,27 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\AjaxRequest;
+use App\Http\Requests\MinistryEditRequest;
+use App\Models\Ministry;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Response;
-use Stevenmaguire\OAuth2\Client\Provider\Keycloak;
 
 class AdminController extends Controller
 {
-    /**
-     * Display first page after login (dashboard page)
-     */
-    public function home(Request $request)
-    {
-        return Inertia::render('Home');
-    }
 
     /**
      * Display first page after login (dashboard page)
@@ -40,8 +30,11 @@ class AdminController extends Controller
     {
         $this->authorize('adminUpdate', Auth::user());
 
-        $users = User::get();
-        return Inertia::render('Admin/Home', ['results' => $users, 'page' => 'users']);
+        $ministry = Ministry::first();
+        $users = User::with('roles')->get();
+        $roles = Role::orderBy('name')->get();
+        return Inertia::render('Admin/Home', ['users' => $users, 'roles' => $roles, 'ministry' => $ministry,
+            'page' => 'users']);
     }
 
     /**
@@ -51,37 +44,59 @@ class AdminController extends Controller
      */
     public function userEdit(Request $request, User $user): \Inertia\Response
     {
-        return Inertia::render('Admin/Home', ['results' => $user, 'page' => 'user-edit']);
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\RedirectResponse::render
-     */
-    public function staffEdit(StaffEditRequest $request, User $user): \Illuminate\Http\RedirectResponse
-    {
         $this->authorize('update', $user);
+        $user->first_name = $request->input('first_name');
+        $user->last_name = $request->input('last_name');
+        $user->email = $request->input('email');
         $user->tele = $request->input('tele');
         $user->disabled = $request->disabled;
         $user->save();
 
         //reset roles
-        $roles = Role::whereIn('name', [Role::YEAF_ADMIN, Role::YEAF_USER, Role::YEAF_GUEST])->get();
-        foreach ($roles as $role) {
-            $user->roles()->detach($role);
+        $user->roles()->detach();
+        foreach ($request->updatedRoles as $role){
+            $user->roles()->attach($role['id']);
         }
 
-        //if admin add admin role
-        if ($request->access_type == 'A') {
-            $role = Role::where('name', Role::YEAF_ADMIN)->first();
-            $user->roles()->attach($role);
-        } else {
-            $role = Role::where('name', Role::YEAF_USER)->first();
-            $user->roles()->attach($role);
-        }
+        $ministry = Ministry::first();
+        $users = User::with('roles')->get();
+        $roles = Role::orderBy('name')->get();
 
-        return Redirect::route('yeaf.maintenance.staff.list');
+        return Inertia::render('Admin/Home', ['users' => $users, 'roles' => $roles, 'ministry' => $ministry,
+            'page' => 'users']);
+    }
+
+
+    /**
+     * Display first page after login (dashboard page)
+     */
+    public function ministry(Request $request)
+    {
+        $this->authorize('adminUpdate', Ministry::class);
+
+        $ministry = Ministry::first();
+        $users = User::with('roles')->get();
+        $roles = Role::orderBy('name')->get();
+        return Inertia::render('Admin/Home', ['users' => $users, 'roles' => $roles, 'ministry' => $ministry,
+            'page' => 'ministry']);
+    }
+
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Inertia\Response::render
+     */
+    public function ministryEdit(MinistryEditRequest $request, User $user): \Inertia\Response
+    {
+        $this->authorize('update', Ministry::class);
+        Ministry::update($request->validated());
+
+        $ministry = Ministry::first();
+        $users = User::with('roles')->get();
+        $roles = Role::orderBy('name')->get();
+        return Inertia::render('Admin/Home', ['users' => $users, 'roles' => $roles, 'ministry' => $ministry,
+            'page' => 'ministry']);
     }
 
 }

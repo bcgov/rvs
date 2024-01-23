@@ -1,11 +1,11 @@
 <template>
     <div class="card">
         <div class="card-header">
-            <div>Staff Maintenance</div>
+            <div>Users</div>
         </div>
 
         <div class="card-body">
-            <div v-if="results != null" class="table-responsive pb-3">
+            <div v-if="users != null" class="table-responsive pb-3">
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -18,7 +18,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(row, i) in results">
+                        <tr v-for="(row, i) in users">
                             <th scope="row">
                                 <button type="button" class="btn btn-link" @click="edit(i)">{{ row.user_id }}</button>
                             </th>
@@ -43,51 +43,44 @@
 
     </div>
 
-    <div class="modal modal-lg fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+    <div v-if="editUser != ''" class="modal modal-lg fade" id="editUserModal" tabindex="-1"
+         aria-labelledby="editUserModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form v-if="editUserForm != null" @submit.prevent="editUser">
+                <form @submit.prevent="submitUser">
                     <div class="modal-body">
-                        <div class="card-body">
+                        <div class="card-body row">
 
-                            <div>
+                            <div class="col-md-6">
                                 <BreezeLabel for="user_id" value="User ID" />
                                 <BreezeInput id="user_id" type="text" class="mt-1 block w-full bg-indigo-50" v-model="editUser.user_id" disabled="disabled" />
                             </div>
 
-                            <div class="mt-4">
+                            <div class="col-md-6">
                                 <BreezeLabel for="first_name" value="First Name" />
-                                <BreezeInput id="first_name" type="text" class="mt-1 block w-full bg-indigo-50" v-model="editUser.first_name" disabled="disabled" />
+                                <BreezeInput id="first_name" type="text" class="mt-1 block w-full" v-model="editUser.first_name" />
                             </div>
 
-                            <div class="mt-4">
+                            <div class="mt-4 col-md-6">
                                 <BreezeLabel for="last_name" value="Last Name" />
-                                <BreezeInput id="last_name" type="text" class="mt-1 block w-full bg-indigo-50" v-model="editUser.last_name" disabled="disabled" />
+                                <BreezeInput id="last_name" type="text" class="mt-1 block w-full" v-model="editUser.last_name" />
                             </div>
 
-                            <div class="mt-4">
+                            <div class="mt-4 col-md-6">
                                 <BreezeLabel for="email" value="Email" />
-                                <BreezeInput id="email" type="email" class="mt-1 block w-full bg-indigo-50" v-model="editUser.email" disabled="disabled" />
+                                <BreezeInput id="email" type="email" class="mt-1 block w-full" v-model="editUser.email" />
                             </div>
 
-                            <div class="mt-4">
+                            <div class="mt-4 col-md-6">
                                 <BreezeLabel for="tele" value="Telephone #" />
                                 <BreezeInput id="tele" type="number" class="mt-1 block w-full" v-model="editUser.tele" required />
                             </div>
 
-                            <div class="mt-4">
-                                <BreezeLabel for="access_type" value="Access Type" />
-                                <BreezeSelect id="access_type" type="text" class="mt-1 block w-full" v-model="editUser.access_type" required>
-                                    <option value="A">Admin</option>
-                                    <option value="U">User</option>
-                                </BreezeSelect>
-                            </div>
-
-                            <div class="mt-4">
+                            <div class="mt-4 col-md-6">
                                 <BreezeLabel for="disabled" value="Status" />
                                 <BreezeSelect id="disabled" class="mt-1 block w-full" v-model="editUser.disabled" required>
                                     <option value="false">Active</option>
@@ -95,16 +88,45 @@
                                 </BreezeSelect>
                             </div>
 
+                            <div class="mt-4 col-md-4">
+                                <BreezeLabel for="access_type" value="Access Type" />
+                                    <ul class="list-group">
+                                        <template v-for="(role, i) in roles">
+                                            <li v-if="role.name.includes('Admin')" class="list-group-item">
+                                                <BreezeInput type="checkbox" :value="i" @click="roleUpdate($event, role.id)" :checked="hasRole(i)"/> {{role.name}}
+                                            </li>
+                                        </template>
+                                    </ul>
+                            </div>
+                            <div class="mt-4 col-md-4">
+                                <BreezeLabel for="access_type" value="Access Type" />
+                                    <ul class="list-group">
+                                        <template v-for="(role, i) in roles">
+                                            <li v-if="role.name.includes('User')" class="list-group-item">
+                                                <BreezeInput type="checkbox" :value="i" @click="roleUpdate($event, role.id)" :checked="hasRole(i)"/> {{role.name}}
+                                            </li>
+                                        </template>
+                                    </ul>
+                            </div>
+                            <div class="mt-4 col-md-4">
+                                <BreezeLabel for="access_type" value="Access Type" />
+                                    <ul class="list-group">
+                                        <template v-for="(role, i) in roles">
+                                            <li v-if="role.name.includes('Guest')" class="list-group-item">
+                                                <BreezeInput type="checkbox" :value="i" @click="roleUpdate($event, role.id)" :checked="hasRole(i)"/> {{role.name}}
+                                            </li>
+                                        </template>
+                                    </ul>
+                            </div>
 
-                            <div v-if="editUser.errors != undefined" class="row">
-                                <div class="col-12">
-                                    <div v-if="editUser.hasErrors == true" class="alert alert-danger mt-3">
-                                        <ul>
-                                            <li v-for="err in editUser.errors"><small>{{ err }}</small></li>
-                                        </ul>
-                                    </div>
+                            <div v-if="editUser.errors != undefined" class="col-12">
+                                <div v-if="editUser.hasErrors == true" class="alert alert-danger mt-3">
+                                    <ul>
+                                        <li v-for="err in editUser.errors"><small>{{ err }}</small></li>
+                                    </ul>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -129,19 +151,54 @@ export default {
         BreezeInput, Link, BreezeSelect, BreezeLabel, FormSubmitAlert
     },
     props: {
-        results: Object,
-        editUser: ''
+        users: Object,
+        roles: Object
     },
     data() {
         return {
+            editUser: ''
         }
     },
     methods: {
+        hasRole: function (index){
+            let hasIt = false;
+            let name = this.roles[index].name;
+            for(let i = 0; i<this.editUser.roles.length; i++){
+                if(this.editUser.roles[i].name === name){
+                    hasIt = true;
+                    break;
+                }
+            }
+            return hasIt;
+        },
+        roleUpdate: function (e, id) {
+            let role = this.roles.filter(role => role.id === id);
+            if(e.target.checked){
+                this.editUser.updatedRoles.push(role[0]);
+            }else{
+                // If the value is falsy, remove the role from the updatedRoles array
+                this.editUser.updatedRoles = this.editUser.updatedRoles.filter(role => role.id !== id);
+            }
+        },
         edit: function (i){
-            this.editUser = useForm(this.results[i]);
+            let frm = this.users[i];
+            frm.updatedRoles = this.editUser.roles;
+            this.editUser = useForm(frm);
             $("#editUserModal").modal('show');
-
-        }
+        },
+        submitUser: function ()
+        {
+            this.editUser.formState = '';
+            this.editUser.put('/admin/users/' + this.editUser.id, {
+                onSuccess: () => {
+                    this.editUser.formState = true;
+                    $("#editUserModal").modal('hide');
+                },
+                onError: () => {
+                    this.editUser.formState = false;
+                }
+            });
+        },
     }
 }
 

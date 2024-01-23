@@ -1,6 +1,6 @@
 <template>
     <div class="card mb-4">
-        <div class="card-header">Ministry Maintenance</div>
+        <div class="card-header">Ministry</div>
 
         <form v-if="results != null && editForm != null" @submit.prevent="editArea">
 
