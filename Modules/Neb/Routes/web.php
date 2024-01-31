@@ -26,7 +26,7 @@ Route::prefix('neb')->group(function () {
                 Route::get('/export-neb/{type}/{id}', 'NebController@exportNeb')->name('export-neb');
 
                 Route::get('/process-neb', function () {
-                    return redirect('neb.dashboard');
+                    return redirect('/neb/dashboard');
                 });
 
                 Route::post('/bursary-periods/fetch-neb', 'NebController@fetchNeb')->name('fetch-neb');

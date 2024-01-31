@@ -326,6 +326,8 @@ class NebController extends Controller
         if ($bP == null) {
             return null;
         }
+        \Log::info('Starting process for BP: ' . $this->formattedBpsd . ' - ' . $this->formattedBped);
+        \Log::info('processing: nebElPotentials');
 
         // Cleanup for new run
         DB::connection(env('DB_DATABASE_NEB'))->statement('TRUNCATE table el_sin_py_ssds RESTART IDENTITY');
@@ -410,6 +412,7 @@ class NebController extends Controller
 
     private function monthOverlap(BursaryPeriod $bP)
     {
+        \Log::info('processing: monthOverlap');
         $potentials = ElPotential::where('bursary_period_id', $bP->id)->get();
 
         if ($potentials->isEmpty()) {
@@ -450,17 +453,19 @@ class NebController extends Controller
 
     private function validInstitution(BursaryPeriod $bP)
     {
+        \Log::info('processing: validInstitution');
         $envQuery1 = env('VALIDATE_INSTITUTION_QUERY1');
         $strSQL3 = DB::connection('oracle')->select($envQuery1);
+        $instCodeArray = array_map(function ($row) {
+            return trim($row->institution_code);
+        }, $strSQL3);
 
-        foreach ($strSQL3 as $row) {
-            $check = ElPotential::where('bursary_period_id', $bP->id)
-                ->where('inst_code', trim($row->institution_code))->get();
+        $check = ElPotential::where('bursary_period_id', $bP->id)
+            ->whereIn('inst_code', $instCodeArray)->get();
 
-            foreach ($check as $entry) {
-                $entry->valid_institution = true;
-                $entry->save();
-            }
+        foreach ($check as $entry) {
+            $entry->valid_institution = true;
+            $entry->save();
         }
 
         return $strSQL3;
