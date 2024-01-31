@@ -277,7 +277,7 @@ class NebController extends Controller
                 $this->monthOverlap($bursaryPeriod);
                 break;
             case 2:
-                $this->validInstitution();
+                $this->validInstitution($bursaryPeriod);
                 break;
             case 3:
                 $this->restriction($bursaryPeriod);
@@ -286,16 +286,16 @@ class NebController extends Controller
                 $this->awardedInPriorYear($bursaryPeriod);
                 break;
             case 5:
-                $this->withdrawal();
+                $this->withdrawal($bursaryPeriod);
                 break;
             case 6:
-                $this->nurseType();
+                $this->nurseType($bursaryPeriod);
                 break;
             case 7:
-                $this->eligibility();
+                $this->eligibility($bursaryPeriod);
                 break;
             case 8:
-                $this->rank();
+                $this->rank($bursaryPeriod);
                 break;
             case 9:
                 $this->awardOrDeny($bursaryPeriod);
@@ -304,7 +304,7 @@ class NebController extends Controller
                 $this->awardAmount($bursaryPeriod);
                 break;
             case 11:
-                $this->sfasAwardId();
+                $this->sfasAwardId($bursaryPeriod);
                 \Log::info('Processing Complete!');
                 break;
             default:
@@ -410,7 +410,7 @@ class NebController extends Controller
 
     private function monthOverlap(BursaryPeriod $bP)
     {
-        $potentials = ElPotential::get();
+        $potentials = ElPotential::where('bursary_period_id', $bP->id)->get();
 
         if ($potentials->isEmpty()) {
             return [];
@@ -448,13 +448,14 @@ class NebController extends Controller
         return $potentials;
     }
 
-    private function validInstitution()
+    private function validInstitution(BursaryPeriod $bP)
     {
         $envQuery1 = env('VALIDATE_INSTITUTION_QUERY1');
         $strSQL3 = DB::connection('oracle')->select($envQuery1);
 
         foreach ($strSQL3 as $row) {
-            $check = ElPotential::where('inst_code', trim($row->institution_code))->get();
+            $check = ElPotential::where('bursary_period_id', $bP->id)
+                ->where('inst_code', trim($row->institution_code))->get();
 
             foreach ($check as $entry) {
                 $entry->valid_institution = true;
@@ -480,7 +481,8 @@ class NebController extends Controller
             return $row->sin;
         }, $strSQL);
 
-        $elPotSin = ElPotential::select('sin', 'bursary_period_id')->whereIn('sin', $restrictedSinArray)->get();
+        $elPotSin = ElPotential::select('sin', 'bursary_period_id')->where('bursary_period_id', $bP->id)
+            ->whereIn('sin', $restrictedSinArray)->get();
 
         foreach ($elPotSin as $row) {
             ElPotentialRestriction::create([
@@ -490,12 +492,13 @@ class NebController extends Controller
         }
         Log::info('Finished: ElPotentialRestriction.create');
 
-        $restrictionSinsList = ElPotentialRestriction::select('sin')->get();
+        $restrictionSinsList = ElPotentialRestriction::where('bursary_period_id', $bP->id)->select('sin')->get();
         //        $restrictionSinsArray = $restrictionSinsList->pluck('sin');
         Log::info('Restricted SINs: '.$restrictionSinsList->count());
 
         //        DB::table('el_potential')->whereIn('sin', $restrictionSinsArray)->update(['restriction' => true]);
-        ElPotential::whereIn('sin', $restrictionSinsList)->update(['restriction' => true]);
+        ElPotential::where('bursary_period_id', $bP->id)
+            ->whereIn('sin', $restrictionSinsList)->update(['restriction' => true]);
         $envQuery2 = env('RESTRICTIONS_QUERY2');
         $qry2 = sprintf($envQuery2, $restrictionSinsList->pluck('sin')->map(function ($row) {
             return "'".$row."'";
@@ -517,9 +520,9 @@ class NebController extends Controller
         return $strSQL2;
     }
 
-    private function awardedInPriorYear(BursaryPeriod $bursaryPeriod)
+    private function awardedInPriorYear(BursaryPeriod $bP)
     {
-        $bpLastTwo = BursaryPeriod::select('id')->whereNot('id', $bursaryPeriod->id)->orderBy('id', 'desc')->limit(2)->get();
+        $bpLastTwo = BursaryPeriod::select('id')->whereNot('id', $bP->id)->orderBy('id', 'desc')->limit(2)->get();
         $awardedApps = Application::distinct('applications.sin')
             ->join('nebs', 'nebs.application_id', '=', 'applications.id')
             ->where('award_status', 'Approved')
@@ -527,10 +530,10 @@ class NebController extends Controller
             ->get()
             ->pluck('sin');
 
-        return ElPotential::whereIn('sin', $awardedApps)->update(['awarded_in_prior_year' => true]);
+        return ElPotential::where('bursary_period_id', $bP->id)->whereIn('sin', $awardedApps)->update(['awarded_in_prior_year' => true]);
     }
 
-    private function withdrawal()
+    private function withdrawal(BursaryPeriod $bP)
     {
         $envQuery = env('WITHDRAWALS_QUERY1');
         $qry = sprintf($envQuery, $this->programCodesString, $this->formattedBpsd, $this->formattedBped, $this->formattedBpsd, $this->formattedBped, $this->formattedBpsd, $this->formattedBped);
@@ -538,12 +541,14 @@ class NebController extends Controller
         $strSQL = DB::connection('oracle')->select($qry);
         $restrictedSinArray = array_column($strSQL, 'sin');
 
-        return ElPotential::whereIn('sin', $restrictedSinArray)->update(['withdrawal' => true]);
+        return ElPotential::where('bursary_period_id', $bP->id)
+            ->whereIn('sin', $restrictedSinArray)->update(['withdrawal' => true]);
     }
 
-    private function nurseType()
+    private function nurseType(BursaryPeriod $bP)
     {
-        $elPot = ElPotential::select('el_potentials.id', 'sfas_programs.nurse_type')
+        $elPot = ElPotential::where('bursary_period_id', $bP->id)
+            ->select('el_potentials.id', 'sfas_programs.nurse_type')
             ->join('sfas_programs', 'sfas_programs.sfas_program_code', 'el_potentials.program_code')
             ->get();
 
@@ -554,9 +559,9 @@ class NebController extends Controller
         return $elPot;
     }
 
-    private function eligibility()
+    private function eligibility(BursaryPeriod $bP)
     {
-        $elPot = ElPotential::all();
+        $elPot = ElPotential::where('bursary_period_id', $bP->id)->get();
 
         foreach ($elPot as $item) {
             if ($item->valid_institution === false) {
@@ -589,17 +594,19 @@ class NebController extends Controller
         return $elPot;
     }
 
-    private function rank()
+    private function rank(BursaryPeriod $bP)
     {
         // RankByUnmetNeed
-        $elPot = ElPotential::where('eligibility', 'Eligible')->orderBy('weekly_unmet_need', 'desc')->get();
+        $elPot = ElPotential::where('bursary_period_id', $bP->id)
+            ->where('eligibility', 'Eligible')->orderBy('weekly_unmet_need', 'desc')->get();
         foreach ($elPot as $key => $item) {
             $item->rank_by_unmet_need = $key + 1;
             $item->save();
         }
 
         // RankByUnmetNeed("RN")
-        $elPot = ElPotential::where('eligibility', 'Eligible')
+        $elPot = ElPotential::where('bursary_period_id', $bP->id)
+            ->where('eligibility', 'Eligible')
             ->where('nurse_type', 'RN')
             ->orderBy('weekly_unmet_need', 'desc')
             ->get();
@@ -609,7 +616,8 @@ class NebController extends Controller
         }
 
         // RankByUnmetNeed("LPN")
-        $elPot = ElPotential::where('eligibility', 'Eligible')
+        $elPot = ElPotential::where('bursary_period_id', $bP->id)
+            ->where('eligibility', 'Eligible')
             ->where('nurse_type', 'LPN')
             ->orderBy('weekly_unmet_need', 'desc')
             ->get();
@@ -619,7 +627,8 @@ class NebController extends Controller
         }
 
         // RankBySector("Private")
-        $elPot = ElPotential::where('eligibility', 'Eligible')
+        $elPot = ElPotential::where('bursary_period_id', $bP->id)
+            ->where('eligibility', 'Eligible')
             ->where('sector', 'Private')
             ->orderBy('weekly_unmet_need', 'desc')
             ->get();
@@ -629,7 +638,8 @@ class NebController extends Controller
         }
 
         // RankBySector("Public")
-        $elPot = ElPotential::where('eligibility', 'Eligible')
+        $elPot = ElPotential::where('bursary_period_id', $bP->id)
+            ->where('eligibility', 'Eligible')
             ->where('sector', 'Public')
             ->orderBy('weekly_unmet_need', 'desc')
             ->get();
@@ -652,39 +662,39 @@ class NebController extends Controller
         if ($bP->budget_allocation_type == 'Nurse Type') {
             $numRNRecipient = round(($periodBudget * ($rNPortion / 100)) / $defaultAward);
             $numLPNRecipient = round(($periodBudget * ((100 - $rNPortion) / 100)) / $defaultAward);
-            ElPotential::where('nurse_type', 'RN')
+            ElPotential::where('bursary_period_id', $bP->id)->where('nurse_type', 'RN')
                 ->where('rank_by_nurse_type', '<=', $numRNRecipient)
                 ->update(['award_or_deny' => 'Award']);
-            ElPotential::where('nurse_type', 'LPN')
+            ElPotential::where('bursary_period_id', $bP->id)->where('nurse_type', 'LPN')
                 ->where('rank_by_nurse_type', '<=', $numLPNRecipient)
                 ->update(['award_or_deny' => 'Award']);
         } // AwardBySector
         elseif ($bP->budget_allocation_type == 'Sector') {
             $numPublicRecipient = round(($periodBudget * ($pubSecPortion / 100)) / $defaultAward);
             $numPrivateRecipient = round(($periodBudget * ((100 - $pubSecPortion) / 100)) / $defaultAward);
-            ElPotential::where('sector', 'Public')
+            ElPotential::where('bursary_period_id', $bP->id)->where('sector', 'Public')
                 ->where('rank_by_sector', '<=', $numPublicRecipient)
                 ->update(['award_or_deny' => 'Award']);
-            ElPotential::where('sector', 'Private')
+            ElPotential::where('bursary_period_id', $bP->id)->where('sector', 'Private')
                 ->where('rank_by_sector', '<=', $numPrivateRecipient)
                 ->update(['award_or_deny' => 'Award']);
         } // AwardByUnmetNeed
         else {
             $numRecipient = round($periodBudget / $defaultAward);
-            ElPotential::where('rank_by_unmet_need', '<=', $numRecipient)
+            ElPotential::where('bursary_period_id', $bP->id)->where('rank_by_unmet_need', '<=', $numRecipient)
                 ->update(['award_or_deny' => 'Award']);
         }
 
-        ElPotential::where('eligibility', 'Ineligible')
+        ElPotential::where('bursary_period_id', $bP->id)->where('eligibility', 'Ineligible')
             ->update([
                 'neb_deny_reason' => 'Ineligible',
                 'award_or_deny' => 'Deny',
             ]);
 
-        ElPotential::whereNull('award_or_deny')
+        ElPotential::where('bursary_period_id', $bP->id)->whereNull('award_or_deny')
             ->update(['award_or_deny' => 'Deny']);
 
-        ElPotential::where('eligibility', 'Eligible')
+        ElPotential::where('bursary_period_id', $bP->id)->where('eligibility', 'Eligible')
             ->where('award_or_deny', 'Deny')
             ->update(['neb_deny_reason' => 'Ministry budget for period surpassed']);
 
@@ -695,13 +705,13 @@ class NebController extends Controller
 
     public function awardAmount(BursaryPeriod $bP)
     {
-        ElPotential::where('award_or_deny', 'Award')
+        ElPotential::where('bursary_period_id', $bP->id)->where('award_or_deny', 'Award')
             ->update(['award_amount' => $bP->default_award]);
 
         return true;
     }
 
-    public function sfasAwardId()
+    public function sfasAwardId(BursaryPeriod $bP)
     {
         $strSQL = Neb::whereNotNull('sfas_award_id')
             ->select('sfas_award_id')
@@ -710,7 +720,8 @@ class NebController extends Controller
 
         if ($strSQL != null && $strSQL->sfas_award_id != null) {
             $nextSfasId = $strSQL->sfas_award_id + 1;
-            $elPot = ElPotential::where('award_or_deny', 'Award')
+            $elPot = ElPotential::where('bursary_period_id', $bP->id)
+                ->where('award_or_deny', 'Award')
                 ->orderBy('application_number', 'asc')
                 ->get();
 
