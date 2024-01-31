@@ -265,8 +265,9 @@ export default {
                 onError: () => {
                     this.showNebForm.formSubmitting = false;
                 },
-            }, {preserveState: true}
-            );
+                preserveState: true
+
+            });
         },
 
         //finalize functions
@@ -306,10 +307,10 @@ export default {
         startNeb: function () {
             let check = confirm("Are you sure you wish to create a NEB Eligibility List (existing list will be deleted)?")
             if (check) {
-                this.starStep(0);
+                this.startStep(0);
             }
         },
-        starStep: function (step) {
+        startStep: function (step) {
             if (step <= this.startNebForm.totalSteps) {
                 $(".card-body button").prop('disabled', true)
 
@@ -318,7 +319,7 @@ export default {
                 this.startNebForm.post('/neb/process-neb', {
                     onSuccess: () => {
                         this.startNebForm.formSubmitting = false;
-                        this.starStep(step + 1);
+                        this.startStep(step + 1);
                     },
                     onError: () => {
                         this.startNebForm.formSubmitting = false;
