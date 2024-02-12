@@ -125,7 +125,6 @@ export default {
         countries: Object,
         provinces: Object,
         indigeneity_types: Object
-
     },
     data() {
         return {

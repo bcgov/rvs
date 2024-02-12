@@ -2,8 +2,6 @@
 
 namespace Modules\Twp\Entities;
 
-use Illuminate\Database\Eloquent\Model;
-
 class IndigeneityType extends ModuleModel
 {
 
