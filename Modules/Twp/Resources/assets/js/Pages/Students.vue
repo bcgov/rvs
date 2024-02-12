@@ -108,29 +108,28 @@
                                         <BreezeLabel for="inputAddress" class="form-label" value="Address" />
                                         <BreezeInput type="text" class="form-control" id="inputAddress" v-model="newStudentForm.address" />
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <BreezeLabel for="inputBCResident" class="form-label" value="BC Resident" />
                                         <BreezeSelect class="form-select" id="inputBCResident" v-model="newStudentForm.bc_resident">
                                             <option value="true">Yes</option>
                                             <option value="false">No</option>
                                         </BreezeSelect>
                                     </div>
-                                    <div class="col-md-4">
-                                        <BreezeLabel for="inputIndigeneity" class="form-label" value="Indigeneity" />
-                                        <BreezeSelect class="form-select" id="inputIndigeneity" v-model="newStudentForm.indigeneity">
-                                            <option value="No">No</option>
-                                            <option value="First Nations">First Nations</option>
-                                            <option value="Metis">Metis</option>
-                                            <option value="Inuit">Inuit</option>
-                                        </BreezeSelect>
-                                    </div>
-                                    <div class="col-md-4">
+
+                                    <div class="col-md-6">
                                         <BreezeLabel for="inputGender" class="form-label" value="Gender" />
                                         <BreezeSelect class="form-select" id="inputGender" v-model="newStudentForm.gender">
                                             <option value="M">Male</option>
                                             <option value="F">Female</option>
                                             <option value="O">Other</option>
                                         </BreezeSelect>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <BreezeLabel for="indigeneity" class="form-label" value="Indigeneity" />
+                                        <div v-for="type in indigeneity_types" :key="type.id" class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" :id="type.id" :value="type.id" v-model="newStudentForm.indigeneity" />
+                                            <label class="form-check-label" :for="type.id">{{ type.title }}</label>
+                                        </div>
                                     </div>
                                     <div class="col-md-12">
                                         <BreezeLabel for="inputComment" class="form-label" value="Comment" />
@@ -181,6 +180,7 @@ export default {
         countries: Object,
         provinces: Object,
         schools: Object,
+        indigeneity_types: Object
     },
     data() {
         return {
@@ -200,7 +200,7 @@ export default {
                 institution_student_number: '',
                 citizenship: '',
                 bc_resident: '',
-                indigeneity: '',
+                indigeneity: [],
                 comment: '',
 
             },

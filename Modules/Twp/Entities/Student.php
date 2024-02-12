@@ -20,7 +20,7 @@ class Student extends ModuleModel
      */
     protected $fillable = [
         'last_name', 'first_name', 'birth_date', 'email', 'gender', 'pen', 'address', 'citizenship',
-        'bc_resident', 'indigeneity', 'address', 'comment', 'sin', ];
+        'bc_resident', 'address', 'comment', 'sin', ];
 
     public function applications()
     {
@@ -35,6 +35,13 @@ class Student extends ModuleModel
     public function application()
     {
         return $this->hasOne('Modules\Twp\Entities\Application', 'student_id', 'id');
+    }
+
+    public function indigeneity()
+    {
+        return $this->belongsToMany(
+            'Modules\Twp\Entities\IndigeneityType', 'indigeneity_student', 'student_id',
+            'indigeneity_id');
     }
 
     public function getAgeAttribute()

@@ -24,7 +24,7 @@
                                     </Link> Student Info
                                 </div>
                                 <div v-if="editForm != null" class="card-body">
-                                    <StudentEditStudentTab :result="editForm"></StudentEditStudentTab>
+                                    <StudentEditStudentTab :result="editForm" :indigeneity_types="indigeneity_types"></StudentEditStudentTab>
                                 </div>
                             </div>
                             <div class="card mb-2">
@@ -308,6 +308,7 @@ export default {
         reasons: Object,
         provinces: Object,
         p_types: Object,
+        indigeneity_types: Object,
 
         schools: Object,
         batches: Object,
