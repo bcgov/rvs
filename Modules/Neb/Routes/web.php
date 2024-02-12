@@ -34,7 +34,7 @@ Route::prefix('neb')->group(function () {
                     return redirect('neb.dashboard');
                 });
 
-                Route::get('/bursary-periods/show/{id}', 'BursaryPeriodController@show')->name('bursary-periods.show');
+                Route::get('/bursary-periods/show/{id}', 'NebController@fetchNeb')->name('bursary-periods.show');
                 Route::get('/bursary-periods/tobe-awarded', 'BursaryPeriodController@tobeAwarded')->name('bursary-periods.tobe-awarded');
                 Route::get('/bursary-periods', 'BursaryPeriodController@index')->name('bursary-periods.index');
                 Route::get('/bursary-periods/create', 'BursaryPeriodController@index')->name('bursary-periods.create');

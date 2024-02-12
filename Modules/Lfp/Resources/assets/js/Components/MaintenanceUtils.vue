@@ -47,7 +47,7 @@
 
                                 <div class="col-md-9">
                                     <BreezeLabel for="newUtilTitle" class="form-label" value="Title" />
-                                    <BreezeInput type="text" class="form-control" id="editUtilTitle" v-model="newUtilForm.field_name" />
+                                    <BreezeInput type="text" class="form-control" id="newUtilTitle" v-model="newUtilForm.field_name" />
                                 </div>
                                 <div class="col-md-3">
                                     <BreezeLabel for="newUtilActiveFlag" class="form-label" value="Active" />
