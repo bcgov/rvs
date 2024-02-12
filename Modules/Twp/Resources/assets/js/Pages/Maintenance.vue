@@ -30,6 +30,7 @@
                         <MaintenanceStaff v-if="page === 'staff'" :results="results"></MaintenanceStaff>
                         <MaintenanceStaffEdit v-if="page === 'staff-edit'" :results="results"></MaintenanceStaffEdit>
                         <MaintenanceReasons v-if="page === 'reasons'" :results="results"></MaintenanceReasons>
+                        <MaintenanceIndigeneityTypes v-if="page === 'indigeneity'" :results="results"></MaintenanceIndigeneityTypes>
                         <MaintenanceInstitutions v-if="page === 'institutions'" :results="results"></MaintenanceInstitutions>
                         <MaintenancePaymentTypes v-if="page === 'payments'" :results="results"></MaintenancePaymentTypes>
                         <MaintenanceReports v-if="page === 'reports'" :results="results"></MaintenanceReports>
@@ -48,6 +49,7 @@ import MaintenanceStaff from "../Components/MaintenanceStaff";
 import MaintenanceStaffEdit from "../Components/MaintenanceStaffEdit";
 import MaintenanceReasons from "../Components/MaintenanceReasons";
 import MaintenanceInstitutions from "../Components/MaintenanceInstitutions";
+import MaintenanceIndigeneityTypes from "../Components/MaintenanceIndigeneityTypes.vue";
 import MaintenancePaymentTypes from "../Components/MaintenancePaymentTypes";
 import MaintenanceReports from "../Components/MaintenanceReports";
 
@@ -57,6 +59,7 @@ export default {
         MaintenanceReports,
         MaintenancePaymentTypes,
         MaintenanceInstitutions,
+        MaintenanceIndigeneityTypes,
         MaintenanceReasons,
         MaintenanceMenu,
         BreezeAuthenticatedLayout, Head, Link, MaintenanceStaff, MaintenanceStaffEdit
