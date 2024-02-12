@@ -76,7 +76,7 @@ class NebController extends Controller
 
             }
 
-            $csvContent = "ApplicationNum,SIN,PostalCode,BirthDate,FirstName,MiddleName,LastName,AssessedNeedAmount,TotalUnmetNeed,WeeksOfStudy,WeeklyUnmetNeed,ProgramYear,StreetAddress1,StreetAddress2,City,Province,Gender,PhoneNumber,StudyStartDate,StudyEndDate,InstitutionName,ProgramCode,InstCode,AreaOfStudy,DegreeLevel,BursaryPeriodId,MonthOverlap,NumDayOverlap,ValidInstitution,Restriction,AwardedInPriorYear,Withdrawal,NurseType,Sector,Eligibility,NebIneligibleReason,RankByUnmetNeed,RankByNurseType,RankBySector,AwardOrDeny,NebDenyReason,AwardAmount,SfasAwardId\n"; // CSV header row
+            $csvContent = "ApplicationNum,SIN,PostalCode,BirthDate,FirstName,MiddleName,LastName,AssessedNeedAmount,TotalUnmetNeed,WeeksOfStudy,WeeklyUnmetNeed,ProgramYear,StreetAddress1,StreetAddress2,City,Province,Gender,PhoneNumber,StudyStartDate,StudyEndDate,InstitutionName,ProgramCode,InstCode,AreaOfStudy,DegreeLevel,BursaryPeriodId,MonthOverlap,NumDayOverlap,ValidInstitution,Restriction,AwardedInPriorYear,Withdrawal,NurseType,Sector,Eligibility,NebIneligibleReason,RankByUnmetNeed,RankByNurseType,RankBySector,AwardOrDeny,NebDenyReason,AwardAmount,SfasAwardId,SupplierNo\n"; // CSV header row
             // Prepare the CSV content
             foreach ($potentials as $potential) {
                 $csvContent .= $this->prepareCsvLine($potential)."\n";
@@ -102,35 +102,35 @@ class NebController extends Controller
 
     public function fetchNeb(Request $request)
     {
+        $bpId = $request->id ?? $request->input('id');
+        $sortBy = $request->input('sort_by') ?? 'id';
+        $sortDir = $request->input('sort_dir') ?? 'asc';
+
         $page = $request->input('page', 1);
-        $bursaryPeriod = BursaryPeriod::find($request->input('bursary_period_id'));
+        $bursaryPeriod = BursaryPeriod::find($bpId);
         if ($bursaryPeriod == null) {
             return null;
         }
 
-        $stats = [];
-
         //fetch stats only on the first page
-        if ($page === 1) {
-            $el = ElPotential::where('bursary_period_id', $bursaryPeriod->id)->where('eligibility', 'Eligible');
-            $inEl = ElPotential::where('bursary_period_id', $bursaryPeriod->id)->where('eligibility', 'Ineligible');
-            $award = ElPotential::where('bursary_period_id', $bursaryPeriod->id)->where('award_or_deny', 'Award');
-            $deny = ElPotential::where('bursary_period_id', $bursaryPeriod->id)->where('award_or_deny', 'Deny');
-            $secPub = ElPotential::where('bursary_period_id', $bursaryPeriod->id)->where('sector', 'Public');
-            $secPri = ElPotential::where('bursary_period_id', $bursaryPeriod->id)->where('sector', 'Private');
-            $stats = [
-                'eligible' => $el->count(),
-                'ineligible' => $inEl->count(),
-                'awarded' => $award->count(),
-                'denied' => $deny->count(),
-                'sectorPub' => $secPub->count(),
-                'sectorPri' => $secPri->count(),
-                'info' => $bursaryPeriod,
-            ];
-        }
+        $el = ElPotential::where('bursary_period_id', $bursaryPeriod->id)->where('eligibility', 'Eligible');
+        $inEl = ElPotential::where('bursary_period_id', $bursaryPeriod->id)->where('eligibility', 'Ineligible');
+        $award = ElPotential::where('bursary_period_id', $bursaryPeriod->id)->where('award_or_deny', 'Award');
+        $deny = ElPotential::where('bursary_period_id', $bursaryPeriod->id)->where('award_or_deny', 'Deny');
+        $secPub = ElPotential::where('bursary_period_id', $bursaryPeriod->id)->where('sector', 'Public');
+        $secPri = ElPotential::where('bursary_period_id', $bursaryPeriod->id)->where('sector', 'Private');
+        $stats = [
+            'eligible' => $el->count(),
+            'ineligible' => $inEl->count(),
+            'awarded' => $award->count(),
+            'denied' => $deny->count(),
+            'sectorPub' => $secPub->count(),
+            'sectorPri' => $secPri->count(),
+            'info' => $bursaryPeriod,
+        ];
 
-        $potentials = ElPotential::where('bursary_period_id', $bursaryPeriod->id)->orderBy($request->input('sort_by'),
-            $request->input('sort_dir'))->paginate(25);
+        $potentials = ElPotential::where('bursary_period_id', $bursaryPeriod->id)
+            ->orderBy($sortBy, $sortDir)->paginate(25);
 
         return Inertia::render('Neb::BursaryPeriod', ['results' => $potentials,
             'stats' => $stats, 'id' => $bursaryPeriod->id]);
@@ -829,6 +829,7 @@ class NebController extends Controller
             $record->neb_deny_reason,
             $record->award_amount,
             $record->sfas_award_id,
+            $record->supplier_no,
         ];
 
         return implode(',', $csvValues);

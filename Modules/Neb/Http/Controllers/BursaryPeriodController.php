@@ -60,11 +60,6 @@ class BursaryPeriodController extends Controller
         ]);
     }
 
-    public function show(Request $request)
-    {
-        return Inertia::render('Neb::BursaryPeriod', ['results' => null, 'stats' => null, 'id' => $request->id]);
-    }
-
     /**
      * Store a newly created resource in storage.
      *

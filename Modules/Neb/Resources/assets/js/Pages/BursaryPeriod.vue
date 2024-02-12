@@ -138,31 +138,7 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <nav aria-label="Eligibility List Pagination">
-                                    <ul class="pagination justify-content-center">
-                                        <li class="page-item"
-                                            :class="eligibilityList.current_page === 1 ?? 'disabled'">
-                                            <a class="page-link"
-                                                @click.prevent="jumpToPage(eligibilityList.first_page)">First</a>
-                                        </li>
-                                        <li class="page-item"
-                                            :class="eligibilityList.current_page === 1 ?? 'disabled'">
-                                            <a class="page-link"
-                                                @click.prevent="jumpToPage(eligibilityList.current_page - 1)">Previous</a>
-                                        </li>
-                                        <li class="page-item"><span class="page-link">{{ eligibilityList.current_page }}</span></li>
-                                        <li class="page-item"
-                                            :class="eligibilityList.current_page === eligibilityList.last_page ?? 'disabled'">
-                                            <a class="page-link"
-                                                @click.prevent="jumpToPage(eligibilityList.current_page + 1)">Next</a>
-                                        </li>
-                                        <li class="page-item"
-                                            :class="eligibilityList.current_page === eligibilityList.last_page ?? 'disabled'">
-                                            <a class="page-link"
-                                                @click.prevent="jumpToPage(eligibilityList.last_page)">Last</a>
-                                        </li>
-                                    </ul>
-                                </nav>
+                                <BreezePagination :links="results.links" :active-page="results.current_page" />
                             </div>
                         </div>
                     </div>
@@ -176,11 +152,12 @@
 <script>
 import { Link, useForm, Head } from '@inertiajs/vue3';
 import AuthenticatedLayout from '../Layouts/Authenticated.vue';
+import BreezePagination from "@/Components/Pagination";
 
 export default {
     name: 'BursaryPeriod',
     components: {
-        Link, AuthenticatedLayout, Head
+        Link, AuthenticatedLayout, Head, BreezePagination
     },
     props: {
         id: String | Number,
@@ -189,7 +166,7 @@ export default {
     },
     data() {
         return {
-            showNebForm: useForm({ bursary_period_id: '', page: 1, sort_by: 'id', sort_dir: 'asc' }),
+            showNebForm: useForm({ id: '', page: 1, sort_by: 'id', sort_dir: 'asc' }),
 
             sortedData: [],
             eligibilityList: null,
@@ -238,7 +215,7 @@ export default {
         },
 
         exportList: function (type) {
-            window.location.href = '/neb/export-neb/' + type + '/' + this.showNebForm.bursary_period_id;
+            window.location.href = '/neb/export-neb/' + type + '/' + this.showNebForm.id;
         },
 
         jumpToPage: function (page) {
@@ -258,8 +235,6 @@ export default {
                         this.periodStats = response.props.stats;
                     }
                     this.eligibilityList = response.props.results;
-                    this.startNebForm.bursary_period_id = this.id;
-                    this.endNebForm.bursary_period_id = this.id;
 
                 },
                 onError: () => {
@@ -298,7 +273,7 @@ export default {
             } else {
                 $(".card-body button").prop('disabled', false)
                 console.log("Process Completed.")
-                window.location.href = "/neb/bursary-periods/show/" + this.showNebForm.bursary_period_id;
+                window.location.href = "/neb/bursary-periods/show/" + this.showNebForm.id;
             }
         },
 
@@ -331,13 +306,17 @@ export default {
             } else {
                 $(".card-body button").prop('disabled', false)
                 console.log("Process Completed.")
-                window.location.href = "/neb/bursary-periods/show/" + this.showNebForm.bursary_period_id;
+                window.location.href = "/neb/bursary-periods/show/" + this.showNebForm.id;
             }
         },
     },
     mounted() {
-        this.showNebForm.bursary_period_id = this.id;
-        this.showNeb();
+        this.showNebForm.id = this.id;
+        this.startNebForm.bursary_period_id = this.id;
+        this.endNebForm.bursary_period_id = this.id;
+        this.showNebForm.page = this.results.current_page;
+        this.periodStats = this.stats;
+        this.eligibilityList = this.results;
     }
 }
 

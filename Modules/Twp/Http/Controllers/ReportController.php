@@ -11,6 +11,7 @@ use Modules\Twp\Entities\ApplicationReason;
 use Modules\Twp\Entities\Grant;
 use Modules\Twp\Entities\Institution;
 use Modules\Twp\Entities\Payment;
+use Modules\Twp\Entities\PaymentType;
 use Modules\Twp\Entities\Program;
 use Modules\Twp\Entities\Reason;
 use Modules\Twp\Entities\Student;
@@ -60,6 +61,8 @@ class ReportController extends Controller
                     return $this->institutions($request);
                 case 'payments':
                     return $this->payments($request);
+                case 'payment_types':
+                    return $this->payment_types($request);
                 case 'programs':
                     return $this->programs($request);
                 case 'reasons':
@@ -93,8 +96,13 @@ class ReportController extends Controller
 
     public function payments(Request $request)
     {
-        return response()->json(Payment::select('id', 'student_id', 'program_id', 'application_id',
+        return response()->json(Payment::select('id', 'student_id', 'program_id', 'application_id', 'payment_type_id',
             'payment_date', 'payment_amount', 'created_by', 'updated_by')->get(), 200);
+    }
+
+    public function payment_types(Request $request)
+    {
+        return response()->json(PaymentType::select('id', 'title')->get(), 200);
     }
 
     public function grants(Request $request)
