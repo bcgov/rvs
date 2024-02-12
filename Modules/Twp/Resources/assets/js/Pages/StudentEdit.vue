@@ -309,7 +309,6 @@ export default {
         provinces: Object,
         p_types: Object,
         indigeneity_types: Object,
-
         schools: Object,
         batches: Object,
         ineligibles: Object,

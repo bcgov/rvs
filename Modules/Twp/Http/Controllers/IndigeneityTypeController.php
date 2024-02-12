@@ -16,7 +16,7 @@ class IndigeneityTypeController extends Controller
      */
     public function index(): \Inertia\Response
     {
-        $this->authorize('create', IndigeneityType::class);
+        $this->authorize('viewAny', IndigeneityType::class);
         $indigeneityTypes = IndigeneityType::get();
         return Inertia::render('Twp::Maintenance', ['status' => true, 'results' => $indigeneityTypes, 'page' => 'indigeneity']);
     }

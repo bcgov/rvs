@@ -21,7 +21,7 @@ class IndigeneityTypePolicy
      */
     public function viewAny(User $user): bool
     {
-        //
+        return $user->hasRole(Role::TWP_ADMIN) && $user->disabled === false;
     }
 
     /**
