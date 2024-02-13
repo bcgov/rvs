@@ -6,7 +6,6 @@ class IndigeneityType extends ModuleModel
 {
 
     protected $fillable = ['title', 'is_active'];
-    protected $table = 'indigeneity_types';
 
     public function students()
     {

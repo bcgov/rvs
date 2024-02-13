@@ -14,11 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::connection(env('DB_DATABASE_TWP'))->create('indigeneity_student', function (Blueprint $table) {
-            $table->id();
-
             $table->foreignId('student_id')->constrained('students')->onDelete('cascade');
             $table->foreignId('indigeneity_id')->constrained('indigeneity_types')->onDelete('cascade');
-            $table->timestamps();
+            $table->primary(['student_id', 'indigeneity_id']);
         });
     }
 
