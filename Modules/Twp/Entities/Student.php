@@ -40,8 +40,7 @@ class Student extends ModuleModel
     public function indigeneity()
     {
         return $this->belongsToMany(
-            'Modules\Twp\Entities\IndigeneityType', 'indigeneity_student', 'student_id',
-            'indigeneity_id');
+            'Modules\Twp\Entities\IndigeneityType', 'indigeneity_type_student');
     }
 
     public function getAgeAttribute()

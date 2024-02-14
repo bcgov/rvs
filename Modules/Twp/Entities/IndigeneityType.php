@@ -10,8 +10,7 @@ class IndigeneityType extends ModuleModel
     public function students()
     {
         return $this->belongsToMany(
-            'Modules\Twp\Entities\Student', 'indigeneity_student','student_id',
-            'indigeneity_id');
+            'Modules\Twp\Entities\Student', 'indigeneity_type_student');
     }
 
 }
