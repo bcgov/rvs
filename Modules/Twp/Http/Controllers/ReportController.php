@@ -84,7 +84,9 @@ class ReportController extends Controller
     public function students(Request $request)
     {
         return response()->json(Student::select('id', 'first_name', 'last_name', 'sin', 'birth_date',
-            'address', 'pen', 'email', 'gender', 'citizenship', 'bc_resident', 'indigeneity', 'comment')->get(), 200);
+            'address', 'pen', 'email', 'gender', 'citizenship', 'bc_resident', 'comment')
+            ->with('indigeneity')
+            ->get(), 200);
     }
 
     public function applications(Request $request)

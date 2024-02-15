@@ -2,9 +2,11 @@
 
 namespace Modules\Twp\Http\Controllers;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Modules\Twp\Entities\Application;
+use Modules\Twp\Entities\IndigeneityType;
 use Modules\Twp\Entities\Institution;
 use Modules\Twp\Entities\PaymentType;
 use Modules\Twp\Entities\Reason;
@@ -27,8 +29,16 @@ class StudentController extends Controller
         $students = new Student();
         $students = $this->paginateStudents($students);
         [$countries, $provinces] = $this->getCountriesProvinces();
+        $indigeneity_types = IndigeneityType::where('active_flag', true)->get();
 
-        return Inertia::render('Twp::Students', ['status' => true, 'schools' => $schools, 'results' => $students, 'countries' => $countries, 'provinces' => $provinces]);
+        return Inertia::render('Twp::Students', [
+            'status' => true,
+            'schools' => $schools,
+            'results' => $students,
+            'countries' => $countries,
+            'provinces' => $provinces,
+            'indigeneity_types' => $indigeneity_types
+        ]);
     }
 
     /**
@@ -55,11 +65,21 @@ class StudentController extends Controller
     {
         $schools = Institution::orderBy('name', 'asc')->get();
         $student = Student::create($request->validated());
+        $student->indigeneity()->sync($request->safe()['indigeneity']);
         $students = new Student();
         $students = $this->paginateStudents($students);
         [$countries, $provinces] = $this->getCountriesProvinces();
+        $indigeneity_types = IndigeneityType::where('active_flag', true)->get();
 
-        return Inertia::render('Twp::Students', ['status' => true, 'schools' => $schools, 'student' => $student, 'results' => $students, 'countries' => $countries, 'provinces' => $provinces]);
+        return Inertia::render('Twp::Students', [
+            'status' => true,
+            'schools' => $schools,
+            'student' => $student,
+            'results' => $students,
+            'countries' => $countries,
+            'provinces' => $provinces,
+            'indigeneity_types' => $indigeneity_types
+        ]);
     }
 
     /**
@@ -70,15 +90,22 @@ class StudentController extends Controller
     public function show(Student $student)
     {
         $student = Student::where('id', $student->id)
-            ->with('applications.reasons', 'applications.program.versions', 'applications.program.institution', 'applications.payments', 'applications.grants')
+            ->with(
+                'applications.reasons',
+                'applications.program.versions',
+                'applications.program.institution',
+                'applications.payments',
+                'applications.grants',
+                'indigeneity')
             ->first();
         $reasons = Reason::orderBy('reason_status', 'asc')->get();
         $schools = Institution::orderBy('name', 'asc')->get();
         $provinces = Province::orderBy('province_code', 'asc')->get();
         $p_types = PaymentType::where('active_flag', true)->orderBy('title', 'asc')->get();
+        $indigeneity_types = IndigeneityType::where('active_flag', true)->get();
 
         return Inertia::render('Twp::StudentEdit', ['status' => true, 'schools' => $schools, 'p_types' => $p_types,
-            'result' => $student, 'reasons' => $reasons, 'provinces' => $provinces, ]);
+            'result' => $student, 'reasons' => $reasons, 'provinces' => $provinces, 'indigeneity_types' => $indigeneity_types]);
     }
 
     /**
@@ -89,8 +116,9 @@ class StudentController extends Controller
      */
     public function update(StudentUpdateRequest $request, Student $student)
     {
-        Student::where('id', $student->id)->update($request->validated());
-        $student = Student::find($student->id);
+        $studentRecord = Student::where('id', $student->id)->first();
+        $studentRecord->update($request->validated());
+        $studentRecord->indigeneity()->sync($request->safe()['indigeneity']);
 
         return Redirect::route('twp.students.show', [$student->id]);
     }
