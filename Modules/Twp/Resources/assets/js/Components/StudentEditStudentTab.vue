@@ -60,25 +60,25 @@ tr {
                 <BreezeLabel for="inputAddress" class="form-label" value="Address" />
                 <BreezeInput type="text" class="form-control" id="inputAddress" v-model="editForm.address" />
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <BreezeLabel for="inputBCResident" class="form-label" value="BC Resident" />
                 <BreezeSelect class="form-select" id="inputBCResident" v-model="editForm.bc_resident">
                     <option value="true">Yes</option>
                     <option value="false">No</option>
                 </BreezeSelect>
             </div>
-            <div class="col-md-4">
-                <BreezeLabel for="inputIndigeneity" class="form-label" value="Indigeneity" />
-                <BreezeSelect class="form-select" id="inputIndigeneity" v-model="editForm.indigeneity">
-                    <option value="No">No</option>
-                    <option value="First Nations">First Nations</option>
-                    <option value="Metis">Metis</option>
-                    <option value="Inuit">Inuit</option>
-                </BreezeSelect>
-            </div>
-            <div class="col-md-4">
+
+            <div class="col-md-6">
                 <BreezeLabel for="inputAge" class="form-label" value="Age" />
                 <BreezeInput type="number" class="form-control bg-light" id="inputAge" v-model="editForm.age" readonly="readonly" disabled />
+            </div>
+
+            <div class="col-md-12" v-if="editForm.citizenship === 'Canadian Citizen'">
+                <BreezeLabel for="indigeneity" class="form-label" value="Indigeneity" />
+                <div v-for="type in indigeneity_types" :key="type.id" class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" :id="type.id" :value="type.id" v-model="indigeneity_data" />
+                    <label class="form-check-label" :for="type.id">{{ type.title }}</label>
+                </div>
             </div>
 
             <div class="col-md-12">
@@ -94,7 +94,6 @@ tr {
                     </div>
                 </div>
             </div>
-
 
         </div>
         <div class="card-footer mt-3">
@@ -125,11 +124,13 @@ export default {
         now: String,
         countries: Object,
         provinces: Object,
+        indigeneity_types: Object
     },
     data() {
         return {
             noChanges: true,
             editForm: null,
+            indigeneity_data: []
         }
     },
     methods: {
@@ -148,7 +149,7 @@ export default {
                 address: this.editForm.address,
                 citizenship: this.editForm.citizenship,
                 bc_resident: this.editForm.bc_resident,
-                indigeneity: this.editForm.indigeneity,
+                indigeneity: this.indigeneity_data,
                 comment: this.editForm.comment,
             });
 
@@ -166,6 +167,7 @@ export default {
     },
     mounted() {
         this.editForm = this.result;
+        this.indigeneity_data = this.result.indigeneity.map((i) => i.id)
     }
 }
 

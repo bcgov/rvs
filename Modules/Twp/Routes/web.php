@@ -37,6 +37,11 @@ Route::prefix('twp')->group(function () {
                     Route::get('/staff', 'MaintenanceController@staffList')->name('staff.list');
                     Route::get('/staff/{user}', 'MaintenanceController@staffShow')->name('staff.show');
                     Route::post('/staff/{user}', 'MaintenanceController@staffEdit')->name('staff.edit');
+
+                    Route::get('/indigeneity', 'IndigeneityTypeController@index')->name('indigeneity.index');
+                    Route::post('/indigeneity', 'IndigeneityTypeController@store')->name('indigeneity.store');
+                    Route::put('/indigeneity/{indigeneity}', 'IndigeneityTypeController@update')->name('indigeneity.update');
+
                     Route::get('/institutions', 'MaintenanceController@institutionList')->name('institutions.list');
                     Route::post('/institutions', 'MaintenanceController@institutionStore')->name('institutions.store');
                     Route::put('/institutions/{institution}', 'MaintenanceController@institutionUpdate')->name('institutions.update');
