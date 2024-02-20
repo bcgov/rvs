@@ -13,7 +13,7 @@ class BatchPolicy
 
     public function before(User $user, $ability)
     {
-        return $user->hasRole(Role::SUPER_ADMIN);
+        return $user->hasRole(Role::SUPER_ADMIN) || $user->hasRole(Role::YEAF_ADMIN);
     }
 
     /**
