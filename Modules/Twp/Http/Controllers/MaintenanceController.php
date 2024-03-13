@@ -49,7 +49,7 @@ class MaintenanceController extends Controller
      */
     public function institutionUpdate(InstitutionEditRequest $request, Institution $institution): \Illuminate\Http\RedirectResponse
     {
-        $this->authorize('update', Institution::class);
+        $this->authorize('update', $institution);
         Institution::where('id', $institution->id)->update($request->validated());
 
         return Redirect::route('twp.maintenance.institutions.list');

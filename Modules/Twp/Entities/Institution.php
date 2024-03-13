@@ -2,11 +2,9 @@
 
 namespace Modules\Twp\Entities;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Institution extends ModuleModel
 {
-    use HasFactory;
 
     /**
      * The attributes that are mass assignable.
