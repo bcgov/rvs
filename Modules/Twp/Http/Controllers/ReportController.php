@@ -122,7 +122,7 @@ class ReportController extends Controller
     {
         return response()->json(Program::select('id', 'student_id', 'study_period_start_date', 'institution_name', 'credential',
             'program_length', 'program_length_type', 'total_estimated_cost', 'student_status', 'comments', 'credential_type',
-            'institution_twp_id', 'application_id')->get());
+            'institution_twp_id', 'application_id', 'study_field')->get());
     }
 
     public function reasons(Request $request)

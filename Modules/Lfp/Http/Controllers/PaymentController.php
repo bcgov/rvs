@@ -20,8 +20,7 @@ class PaymentController extends Controller
      */
     public function index($status = true, $newApp = 0)
     {
-        $payments = new Payment();
-        $payments = $this->paginatePayments($payments);
+        $payments = $this->paginatePayments();
 
         return Inertia::render('Lfp::Payments', ['page' => 'applications', 'status' => $status, 'results' => $payments, 'app' => $newApp]);
     }
