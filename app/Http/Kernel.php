@@ -78,5 +78,8 @@ class Kernel extends HttpKernel
         'lfp_admin' => \Modules\Lfp\Http\Middleware\IsAdmin::class,
         'lfp_active' => \Modules\Lfp\Http\Middleware\IsActive::class,
         'super_admin' => \App\Http\Middleware\SuperAdmin::class,
+
+        'apiauth' => \App\Http\Middleware\ApiAuth::class,
+
     ];
 }
