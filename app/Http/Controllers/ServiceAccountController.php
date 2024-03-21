@@ -17,7 +17,10 @@ class ServiceAccountController extends Controller
 
         $modelClass = "Modules\\" . $app . "\\Entities\\" . $modelName;
         if (class_exists($modelClass)) {
-            $find = $modelClass::whereRaw($query)->orderBy('id')->paginate(100)->onEachSide(1)->appends(request()->query());
+            $find = $modelClass::orderBy('id');
+            if(isset($query)) $find = $find->whereRaw($query);
+
+            $find = $find->paginate(100)->onEachSide(1)->appends(request()->query());
             return Response::json(['status' => true, 'body' => $find], 200);
         }
 
