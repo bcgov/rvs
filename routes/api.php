@@ -16,5 +16,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['middleware' => 'apiauth'], function () {
-    Route::post('/fetch', [ServiceAccountController::class, 'fetch']);
+    Route::post('/fetch', [ServiceAccountController::class, 'fetchData']);
+    Route::post('/models', [ServiceAccountController::class, 'fetchModels']);
+    Route::post('/columns', [ServiceAccountController::class, 'fetchColumns']);
 });

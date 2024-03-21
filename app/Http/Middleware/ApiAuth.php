@@ -25,10 +25,6 @@ class ApiAuth
     public function handle(Request $request, Closure $next, ...$roles)
     {
 
-        if (Auth::check()) {
-            return $next($request);
-        }
-
         $token = request()->bearerToken();
         if(is_null($token)){
             return Response::json(['status' => false, 'error' => 'Missing token.'], 401);
@@ -47,27 +43,27 @@ class ApiAuth
         $wrappedPk = wordwrap($matchingKey['x5c'][0], 64, "\n", true);
         $pk = "-----BEGIN CERTIFICATE-----\n" . $wrappedPk . "\n-----END CERTIFICATE-----";
 
-        $decoded = null;
         try {
             $decoded = JWT::decode($token, new Key($pk, 'RS256'));
         } catch (ExpiredException $e) {
-            return Response::json(['status' => false, 'error' => 'Token has expired.', 'auth' => Auth::check()], 401);
+            return Response::json(['status' => false, 'error' => 'Token has expired.'], 401);
         } catch (\Exception $e) {
-            return Response::json(['status' => false, 'error' => "An error occurred: " . $e->getMessage(), 'auth' => Auth::check()], 401);
+            return Response::json(['status' => false, 'error' => "An error occurred: " . $e->getMessage()], 401);
         }
 
         if(is_null($decoded)) {
-            return Response::json(['status' => false, 'error' => "Invalid token.", 'auth' => Auth::check()], 401);
+            return Response::json(['status' => false, 'error' => "Invalid token."], 401);
         }else{
             //only validate for accounts that we have registered
             if($decoded->clientId === env('SERVICE_ACCOUNT')){
                 $user = ServiceAccount::where('client_id', $decoded->clientId)->first();
                 if(!is_null($user)){
-                    return $next($request);
+                    if($user->active)
+                        return $next($request);
                 }
             }
         }
 
-        return Response::json(['status' => false, 'error' => "Generic error.", 'auth' => Auth::check()], 401);
+        return Response::json(['status' => false, 'error' => "Generic error."], 401);
     }
 }
