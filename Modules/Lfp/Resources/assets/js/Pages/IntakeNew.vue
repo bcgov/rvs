@@ -1,14 +1,4 @@
-<style scoped>
-tr {
-    padding-bottom: 7px;
-    display: block;
-}
-[type='checkbox']:checked, [type='radio']:checked {
-    background-size: initial;
-}
-</style>
 <template>
-
     <AuthenticatedLayout v-bind="$attrs">
 
                 <div class="container-fluid">
@@ -16,6 +6,17 @@ tr {
                         <div class="col-md-4">
                             <div class="card">
                                 <div class="card-header">
+                                    <Link @click="$back" href="#" class="btn btn-link">
+
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 200" width="25">
+                                            <g>
+                                                <path class="st0" d="M102.5,3.3c4.3,4.3,4.3,9,0,12.6l0,0L26.6,77.6L102.5,153.6c4.3,4.3,4.3,9,0,12.6s-9,4.3-12.6,0L11,89.2   c-4.3-4.3-4.3-9,0-12.6l0,0L89.9,3.3C93.5-1.4,98.2-1.4,102.5,3.3L102.5,3.3z"></path>
+                                                <path class="st0" d="M22.3,77.6c0-6.1,5-11.1,11.1-11.1h144.7c30.8,0,55.9,25.1,55.9,55.9v122.9c0,6.1-5,11.1-11.1,11.1   s-11.1-5-11.1-11.1V122.4c0-18.4-15-33.4-33.4-33.4H33.4C27.3,89.2,22.3,83.3,22.3,77.6z"></path>
+                                            </g>
+                                        </svg>
+
+                                    </Link>
+
                                     LFP Intake Search
                                 </div>
                                 <div class="card-body">
