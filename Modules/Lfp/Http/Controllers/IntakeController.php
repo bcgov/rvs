@@ -34,7 +34,9 @@ class IntakeController extends Controller
     public function create()
     {
         $utils_array = [];
-        foreach(Util::where('active_flag', true)->orderBy('field_name', 'asc')->get() as $u){
+        $utils = Util::whereIn('field_type', ['Profession', 'Employer', 'Community', 'Employment Status'])
+            ->where('active_flag', true)->orderBy('field_name', 'asc')->get();
+        foreach($utils as $u){
             $utils_array[$u->field_type][] = $u->field_name;
         }
 
@@ -61,9 +63,11 @@ class IntakeController extends Controller
      */
     public function show(Intake $intake)
     {
-        $intake = Intake::where('id', $intake->id)->first();
+        //$intake = Intake::where('id', $intake->id)->first();
         $utils_array = [];
-        foreach(Util::where('active_flag', true)->orderBy('field_name', 'asc')->get() as $u){
+        $utils = Util::whereIn('field_type', ['Profession', 'Employer', 'Community', 'Employment Status'])
+            ->where('active_flag', true)->orderBy('field_name', 'asc')->get();
+        foreach($utils as $u){
             $utils_array[$u->field_type][] = $u->field_name;
         }
 

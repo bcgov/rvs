@@ -11,7 +11,7 @@
                     <div class="col-md-3">
                         <div class="card mb-2">
                             <div class="card-header">
-                                <Link @click="back" href="#" class="btn btn-link">
+                                <Link @click="$back" href="#" class="btn btn-link">
 
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 200" width="25">
                                         <g>
@@ -136,11 +136,6 @@ export default {
         //         preserveState: true
         //     });
         // },
-
-        back: function()
-        {
-            window.history.back();
-        },
 
         switchActiveTab: function (tab)
         {
