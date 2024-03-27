@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Modules\Lfp\Entities\Application;
 use Modules\Lfp\Entities\Lfp;
@@ -51,9 +52,9 @@ class LfpController extends Controller
                 $sfas_payments = DB::connection('oracle')->select($qry);
                 foreach($sfas_payments as $spay){
                     $checkPayment = Payment::where('app_idx', $spay->pl_loan_forgiveness_app_idx)
-                        ->where('pay_ids', $spay->pl_loan_forgiveness_pay_idx)->first();
+                        ->where('pay_idx', $spay->pl_loan_forgiveness_pay_idx)->first();
                     if(is_null($checkPayment)){
-                        $pay = Payment::firstOrNew(['lfp_id' => $app->id, 'pay_idx' => $spay->pl_loan_forgiveness_pay_idx]);
+                        $pay = Payment::firstOrNew(['pay_idx' => $spay->pl_loan_forgiveness_pay_idx]);
                         $pay->lfp_id = $app->id;
                         $pay->direct_lend_payment_amount = $spay->pl_dire_principal_pay_amt;
                         $pay->app_idx = $spay->pl_loan_forgiveness_app_idx;
@@ -63,11 +64,13 @@ class LfpController extends Controller
                 }
             }
         }
+//
+//        $lfps = new Lfp();
+//        $lfps = $this->paginateLfps($lfps);
 
-        $lfps = new Lfp();
-        $lfps = $this->paginateLfps($lfps);
+        return Redirect::route('lfp.applications');
 
-        return Inertia::render('Lfp::Applications', ['page' => 'applications', 'status' => $status, 'results' => $lfps, 'app' => $newApp]);
+//        return Inertia::render('Lfp::Applications', ['page' => 'applications', 'status' => $status, 'results' => $lfps, 'app' => $newApp]);
     }
 
     /**
