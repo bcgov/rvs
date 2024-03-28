@@ -36,7 +36,7 @@ class LfpController extends Controller
     public function sync($status = true, $newApp = 0)
     {
         //select last app entered
-        $lfp = Lfp::select('id', 'app_idx', 'sin')->orderBy('app_idx', 'asc')->whereNotNull('app_idx')->first();
+        $lfp = Lfp::select('id', 'app_idx', 'sin')->whereNotNull('app_idx')->orderBy('created_at', 'desc')->first();
         $qry = env("LFP_APP_SYNC") . $lfp->app_idx;
         $sfas = DB::connection('oracle')->select($qry);
 
