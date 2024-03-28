@@ -16,7 +16,7 @@ class ServiceAccountController extends Controller
         $app = $request->input('app');
         $where = $request->input('q');
         $orderBy = $request->input('order');
-
+        $bindings = [];
         // Base query with parameter placeholders
         $query = "SELECT * FROM " . strtolower($tableName);
 
