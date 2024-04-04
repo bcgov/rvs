@@ -32,9 +32,9 @@
             </select>
         </th>
         <th scope="col">
-            <a href="#" @click="switchSort('prop_reg_date')">
+            <a href="#" @click="switchSort('proposed_registration_date')">
                 <span>Prop. Reg. Date</span>
-                <em v-if="sortClmn === 'prop_reg_date' && sortType === 'desc'" class="bi bi-sort-alpha-up"></em>
+                <em v-if="sortClmn === 'proposed_registration_date' && sortType === 'desc'" class="bi bi-sort-alpha-up"></em>
                 <em v-else class="bi bi-sort-alpha-down"></em>
             </a>
         </th>
