@@ -16,16 +16,22 @@ class ServiceAccountController extends Controller
         $app = $request->input('app');
         $where = $request->input('q');
         $orderBy = $request->input('order');
-        $bindings = [];
+        $perPage = $request->input('per_page') ?? 5000;
+        $connection = env('DB_DATABASE_' . strtoupper($app));
+
         // Base query with parameter placeholders
-        $query = "SELECT * FROM " . strtolower($tableName);
+        $query = DB::connection($connection)->table(strtolower($tableName));
 
         // Add WHERE clause if provided
         if(isset($where)) {
-            $q = explode("~", $where);
-            if(sizeof($q) === 3) {
-                $query .= " WHERE {$q[0]} {$q[1]} ?";
-                $bindings[] = $q[2];
+            foreach ($where as $condition) {
+                // Extract the column name, operator, and value from the condition
+                $columnName = $condition['column'];
+                $operator = $condition['operator'];
+                $value = $condition['value'];
+
+                // Add the where condition to the query
+                $query->where($columnName, $operator, $value);
             }
         }
 
@@ -33,32 +39,35 @@ class ServiceAccountController extends Controller
         if(isset($orderBy)) {
             $orderBy = explode("~", $orderBy);
             if(sizeof($orderBy) === 2) {
-                $query .= " ORDER BY {$orderBy[0]} {$orderBy[1]}";
+                $query->orderBy($orderBy[0], $orderBy[1]);
             }
         }
 
-        // Get database connection based on the app
-        $connection = env('DB_DATABASE_' . strtoupper($app));
+        // pagination parameters
+        $currentPage = $request->input('page', 1); // Current page, default is 1
+        $offset = ($currentPage - 1) * $perPage;
+
+        // append LIMIT and OFFSET to the query
+        $query->limit($perPage)->offset($offset);
 
         // Execute the query with parameter bindings
         try {
-            $data = DB::connection($connection)
-                ->select($query, $bindings);
+            $data = $query->get();
         } catch (\Exception $exception) {
-            return response()->json(['status' => false, 'body' => $exception->errorInfo[0]], 200);
+            return response()->json(['status' => false, 'body' => $exception->errorInfo[0]]);
         }
 
-        // Paginate the results
-        $perPage = 100; // Number of items per page
-        $currentPage = $request->input('page', 1); // Current page, default is 1
-        $pagedData = array_slice($data, ($currentPage - 1) * $perPage, $perPage);
+        // Fetch total count for pagination
+        $totalCountQuery = "SELECT COUNT(*) AS total FROM " . strtolower($tableName);
+        $totalCount = DB::connection($connection)->selectOne($totalCountQuery);
 
         // Create pagination object
         $paginatedData = new LengthAwarePaginator(
-            $pagedData, count($data), $perPage, $currentPage
+            $data, $totalCount->total, $perPage, $currentPage
         );
 
-        return response()->json(['status' => true, 'body' => $paginatedData], 200);
+
+        return response()->json(['status' => true, 'body' => $paginatedData]);
     }
 
     public function fetchTables(Request $request)
