@@ -17,9 +17,10 @@ class ServiceAccountController extends Controller
         $where = $request->input('q');
         $orderBy = $request->input('order');
         $perPage = $request->input('per_page') ?? 5000;
+        $connection = env('DB_DATABASE_' . strtoupper($app));
 
         // Base query with parameter placeholders
-        $query = DB::table(strtolower($tableName));
+        $query = DB::connection($connection)->table(strtolower($tableName));
 
         // Add WHERE clause if provided
         if(isset($where)) {
@@ -42,9 +43,6 @@ class ServiceAccountController extends Controller
             }
         }
 
-        // Get database connection based on the app
-        $connection = env('DB_DATABASE_' . strtoupper($app));
-
         // pagination parameters
         $currentPage = $request->input('page', 1); // Current page, default is 1
         $offset = ($currentPage - 1) * $perPage;
@@ -54,14 +52,14 @@ class ServiceAccountController extends Controller
 
         // Execute the query with parameter bindings
         try {
-            $data = $query->connection($connection)->get();
+            $data = $query->get();
         } catch (\Exception $exception) {
             return response()->json(['status' => false, 'body' => $exception->errorInfo[0]]);
         }
 
         // Fetch total count for pagination
         $totalCountQuery = "SELECT COUNT(*) AS total FROM " . strtolower($tableName);
-        $totalCount = DB::selectOne($totalCountQuery);
+        $totalCount = DB::connection($connection)->selectOne($totalCountQuery);
 
         // Create pagination object
         $paginatedData = new LengthAwarePaginator(
