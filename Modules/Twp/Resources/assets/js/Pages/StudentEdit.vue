@@ -61,7 +61,7 @@
                                         <ul class="dropdown-menu" style="">
                                             <li v-if="lettersEnabled==='denied'"><button class="dropdown-item" type="button" @click="downloadStudentLetter('student_denied')">Student Denied</button></li>
                                             <li v-if="lettersEnabled==='denied'"><button class="dropdown-item" type="button" @click="downloadSchool">School Denied</button></li>
-                                            <li v-if="lettersEnabled==='success' || lettersEnabled==='success_under_age'"><button class="dropdown-item" type="button" @click="downloadTransfer">Student Transfer</button></li>
+                                            <li v-if="lettersEnabled==='success' || lettersEnabled==='success_under_age' || lettersEnabled==='success_with_exception'"><button class="dropdown-item" type="button" @click="downloadTransfer">Student Transfer</button></li>
                                             <li v-if="lettersEnabled==='success' || lettersEnabled==='success_under_age'"><button class="dropdown-item" type="button" @click="downloadStudentLetter('student_success')">Student Successful</button></li>
                                             <li v-if="lettersEnabled==='success_under_age'"><a class="dropdown-item" :href="'/twp/students-letters/student_success_under_age/' + activeApp.id" target="_blank">Under Age Student Successful</a></li>
                                         </ul>
@@ -392,6 +392,9 @@ export default {
                         this.lettersEnabled = 'success_under_age';
                     }
                 }
+                if(this.activeApp.application_status === "APPROVED ON EXCEPTION"){
+                    this.lettersEnabled = 'success_with_exception';
+                }
                 if(this.activeApp.application_status === 'DENIED'){
                     this.lettersEnabled = 'denied';
                 }
@@ -399,7 +402,6 @@ export default {
                 this.lettersEnabled = false;
             }
         },
-
         downloadStudentLetter: async function (type)
         {
             let form = useForm({});
@@ -487,7 +489,6 @@ export default {
         {
             this.activeTab = tab;
         },
-
         newTwp: function ()
         {
             let vm = this;
@@ -500,8 +501,6 @@ export default {
                             vm.activeTab = 'twp-app';
                             vm.newTwpForm.formState = true;
                         });
-                },
-                onFailure: () => {
                 },
                 onError: () => {
                     this.newTwpForm.formState = false;
@@ -523,8 +522,6 @@ export default {
                             vm.newGrantForm.formState = true;
                         });
                 },
-                onFailure: () => {
-                },
                 onError: () => {
                     this.newGrantForm.formState = false;
                 },
@@ -545,8 +542,6 @@ export default {
                             vm.activeTab = 'twp-app';
                             vm.newPaymentForm.formState = true;
                         });
-                },
-                onFailure: () => {
                 },
                 onError: () => {
                     this.newGrantForm.formState = false;
@@ -578,6 +573,9 @@ export default {
                         if(this.editForm.age < 19){
                             this.lettersEnabled = 'success_under_age';
                         }
+                    }
+                    if(this.activeApp.application_status === "APPROVED ON EXCEPTION"){
+                        this.lettersEnabled = 'success_with_exception';
                     }
                     if(this.activeApp.application_status === 'DENIED'){
                         this.lettersEnabled = 'denied';
