@@ -27,6 +27,15 @@ class LfpController extends Controller
         $lfps = $this->paginateLfps($lfps);
         $last_sync = Lfp::select('id', 'sin', 'app_idx', 'created_at')->where('created_at', '!=', null)
             ->orderBy('created_at', 'desc')->first();
+
+        // Calculate the difference in hours
+        $hours_difference = Carbon::parse($last_sync->created_at)->diffInHours(Carbon::now());
+
+        // Check if the difference is greater than 1 hour
+        if ($hours_difference > 1) {
+            // Sync applications
+            $this->sync();
+        }
         $last_sync = Carbon::parse($last_sync->created_at)->format('Y-m-d H:i');
 
         return Inertia::render('Lfp::Applications', ['page' => 'applications', 'lastSync' => $last_sync,

@@ -18,7 +18,7 @@
                         <div class="card-header">
                             Intake Applications
                             <div class="d-flex float-end">
-                                <a href="/lfp/intakes/create" class="btn btn-success btn-sm">New App</a>
+                                <Link href="/lfp/intakes/create" class="btn btn-success btn-sm">New App</Link>
                             </div>
                         </div>
                         <div class="card-body">
@@ -29,7 +29,7 @@
                                     </thead>
                                     <tbody v-if="results != null && results.data.length > 0">
                                     <tr v-for="row in results.data">
-                                        <td><a :href="'/lfp/intakes/' + row.id">{{ studentLastName(row.last_name) }}</a></td>
+                                        <td><Link :href="'/lfp/intakes/' + row.id">{{ studentLastName(row.last_name) }}</Link></td>
                                         <td>{{ row.first_name }}</td>
                                         <td>{{ row.in_good_standing }}</td>
                                         <td>{{ row.intake_status }}</td>

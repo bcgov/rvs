@@ -42,7 +42,7 @@
                                     </thead>
                                     <tbody>
                                     <tr v-for="(row, i) in results.data">
-                                        <td><a :href="'/lfp/applications/show/' + row.id">{{ studentLastName(row.sfas_ind.last_name) }}</a></td>
+                                        <td><Link :href="'/lfp/applications/show/' + row.id">{{ studentLastName(row.sfas_ind.last_name) }}</Link></td>
                                         <td>{{ row.sfas_ind.first_name }}</td>
                                         <td>{{ cleanDate(row.sfas_ind.birth_dte) }}</td>
                                         <td><span v-if="row.sfas_app != null">{{ cleanDate(row.sfas_app.pl_app_received_dte) }}</span></td>

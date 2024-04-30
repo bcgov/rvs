@@ -230,10 +230,11 @@ export default {
                 if(this.payments[i].sfas_payment.pl_payment_status_code === 'PAID')
                     total += parseFloat(this.payments[i].sfas_payment.pl_dire_principal_pay_amt);
             }
-            return total;
+            return parseFloat(total.toFixed(3));
         },
         principalOutstanding() {
-            return parseFloat(this.app[0].pl_dire_forcalc_outstdg_amt) - this.principalPaid;
+            const result = parseFloat(this.app[0].pl_dire_forcalc_outstdg_amt) - this.principalPaid;
+            return parseFloat(result.toFixed(3));
         },
     },
 }
