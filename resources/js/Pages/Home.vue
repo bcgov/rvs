@@ -87,7 +87,7 @@ const isSuper = computed(() => {
                 </a>
             </div>
             <div class="col-md-3">
-                <a href="#" class="card p-5 box-disabled" style="text-decoration:none;">
+                <a href="/plsc/dashboard" class="card p-5" style="text-decoration:none;">
                     <h1 class="display-3 font-sans font-light">PLSCPS</h1>
                     <span>Pacific Leaders Scholarship for Children of Public Servants</span>
                 </a>

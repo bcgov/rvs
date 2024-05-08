@@ -23,18 +23,21 @@ class Role extends Model
     public const VSS_ADMIN = 'VSS Admin';
     public const NEB_ADMIN = 'NEB Admin';
     public const LFP_ADMIN = 'LFP Admin';
+    public const PLSC_ADMIN = 'PLSC Admin';
 
     public const YEAF_USER = 'YEAF User';
     public const TWP_USER = 'TWP User';
     public const VSS_USER = 'VSS User';
     public const NEB_USER = 'NEB User';
     public const LFP_USER = 'LFP User';
+    public const PLSC_USER = 'PLSC User';
 
     public const YEAF_GUEST = 'YEAF Guest';
     public const TWP_GUEST = 'TWP Guest';
     public const VSS_GUEST = 'VSS Guest';
     public const NEB_GUEST = 'NEB Guest';
     public const LFP_GUEST = 'LFP Guest';
+    public const PLSC_GUEST = 'PLSC Guest';
 
 
 

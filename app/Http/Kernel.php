@@ -77,6 +77,8 @@ class Kernel extends HttpKernel
         'neb_active' => \Modules\Neb\Http\Middleware\IsActive::class,
         'lfp_admin' => \Modules\Lfp\Http\Middleware\IsAdmin::class,
         'lfp_active' => \Modules\Lfp\Http\Middleware\IsActive::class,
+        'plsc_admin' => \Modules\Plsc\Http\Middleware\IsAdmin::class,
+        'plsc_active' => \Modules\Plsc\Http\Middleware\IsActive::class,
         'super_admin' => \App\Http\Middleware\SuperAdmin::class,
 
         'apiauth' => \App\Http\Middleware\ApiAuth::class,

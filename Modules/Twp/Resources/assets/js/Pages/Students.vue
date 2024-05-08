@@ -124,7 +124,7 @@
                                             <option value="O">Other</option>
                                         </BreezeSelect>
                                     </div>
-                                    <div class="col-md-12" v-if="newStudentForm.citizenship === 'Canadian Citizen'">
+                                    <div class="col-md-12">
                                         <BreezeLabel for="indigeneity" class="form-label" value="Indigeneity" />
                                         <div v-for="type in indigeneity_types" :key="type.id" class="form-check form-check-inline">
                                             <input class="form-check-input" type="checkbox" :id="type.id" :value="type.id" v-model="newStudentForm.indigeneity" />

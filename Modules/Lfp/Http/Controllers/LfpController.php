@@ -23,13 +23,15 @@ class LfpController extends Controller
      */
     public function index($status = true, $newApp = 0)
     {
-        $lfps = new Lfp();
-        $lfps = $this->paginateLfps($lfps);
+        $lfps = $this->paginateLfps();
         $last_sync = Lfp::select('id', 'sin', 'app_idx', 'created_at')->where('created_at', '!=', null)
             ->orderBy('created_at', 'desc')->first();
 
-        // Calculate the difference in hours
-        $hours_difference = Carbon::parse($last_sync->created_at)->diffInHours(Carbon::now());
+        $hours_difference = 2;
+        if(!is_null($last_sync)){
+            // Calculate the difference in hours
+            $hours_difference = Carbon::parse($last_sync->created_at)->diffInHours(Carbon::now());
+        }
 
         // Check if the difference is greater than 1 hour
         if ($hours_difference > 1) {
@@ -44,9 +46,12 @@ class LfpController extends Controller
 
     public function sync($status = true, $newApp = 0)
     {
+        $qry = env("LFP_APP_SYNC") . "0";
         //select last app entered
         $lfp = Lfp::select('id', 'app_idx', 'sin')->whereNotNull('app_idx')->orderBy('created_at', 'desc')->first();
-        $qry = env("LFP_APP_SYNC") . $lfp->app_idx;
+        if(!is_null($lfp)){
+            $qry = env("LFP_APP_SYNC") . $lfp->app_idx;
+        }
         $sfas = DB::connection('oracle')->select($qry);
 
         foreach ($sfas as $app){
@@ -103,9 +108,9 @@ class LfpController extends Controller
             'student' => $student, 'app' => $application, 'utils' => $utils_array]);
     }
 
-    private function paginateLfps($lfps)
+    private function paginateLfps()
     {
-        $lfps = $lfps->where('app_idx', '!=', null);
+        $lfps = Lfp::where('app_idx', '!=', null);
         if (request()->filter_fname !== null) {
             $lfps = $lfps->where('first_name', 'ILIKE', '%'.request()->filter_fname.'%');
         }

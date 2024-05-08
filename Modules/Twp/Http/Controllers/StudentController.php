@@ -26,8 +26,7 @@ class StudentController extends Controller
     public function index()
     {
         $schools = Institution::orderBy('name', 'asc')->get();
-        $students = new Student();
-        $students = $this->paginateStudents($students);
+        $students = $this->paginateStudents();
         [$countries, $provinces] = $this->getCountriesProvinces();
         $indigeneity_types = IndigeneityType::where('active_flag', true)->get();
 
@@ -66,8 +65,7 @@ class StudentController extends Controller
         $schools = Institution::orderBy('name', 'asc')->get();
         $student = Student::create($request->validated());
         $student->indigeneity()->sync($request->safe()['indigeneity']);
-        $students = new Student();
-        $students = $this->paginateStudents($students);
+        $students = $this->paginateStudents();
         [$countries, $provinces] = $this->getCountriesProvinces();
         $indigeneity_types = IndigeneityType::where('active_flag', true)->get();
 
@@ -123,9 +121,9 @@ class StudentController extends Controller
         return Redirect::route('twp.students.show', [$student->id]);
     }
 
-    private function paginateStudents($students)
+    private function paginateStudents()
     {
-        $students = $students->with('applications');
+        $students = Student::with('applications');
 
         if (request()->sort === 'app_status' && request()->direction !== 'ALL') {
             $students = $students->whereHas('applications', function ($q) {

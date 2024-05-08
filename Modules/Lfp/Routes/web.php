@@ -47,4 +47,3 @@ Route::prefix('lfp')->group(function () {
         });
     });
 });
-

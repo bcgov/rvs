@@ -11,25 +11,16 @@ class IndigeneityTypePolicy
 {
     use HandlesAuthorization;
 
-    public function before(User $user, $ability)
-    {
-        return $user->hasRole(Role::SUPER_ADMIN);
-    }
-
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasRole(Role::TWP_ADMIN) && $user->disabled === false;
-    }
-
-    /**
-     * Determine whether the user can view the model.
-     */
-    public function view(User $user, IndigeneityType $model): bool
-    {
-        //
+        $ministryRolesToCheck = [Role::TWP_ADMIN, Role::SUPER_ADMIN];
+        if($user->roles()->pluck('name')->intersect($ministryRolesToCheck)->isNotEmpty() && $user->disabled === false){
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -37,7 +28,11 @@ class IndigeneityTypePolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasRole(Role::TWP_ADMIN) && $user->disabled === false;
+        $ministryRolesToCheck = [Role::TWP_ADMIN, Role::SUPER_ADMIN];
+        if($user->roles()->pluck('name')->intersect($ministryRolesToCheck)->isNotEmpty() && $user->disabled === false){
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -45,30 +40,11 @@ class IndigeneityTypePolicy
      */
     public function update(User $user, IndigeneityType $model): bool
     {
-        return $user->hasRole(Role::TWP_ADMIN) && $user->disabled === false;
+        $ministryRolesToCheck = [Role::TWP_ADMIN, Role::SUPER_ADMIN];
+        if($user->roles()->pluck('name')->intersect($ministryRolesToCheck)->isNotEmpty() && $user->disabled === false){
+            return true;
+        }
+        return false;
     }
 
-    /**
-     * Determine whether the user can delete the model.
-     */
-    public function delete(User $user, IndigeneityType $model): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, IndigeneityType $model): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, IndigeneityType $model): bool
-    {
-        //
-    }
 }
