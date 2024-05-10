@@ -1,6 +1,6 @@
 <template>
 
-<AuthenticatedLayout v-bind="$attrs">
+    <AuthenticatedLayout v-bind="$attrs">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-3 mt-3">
@@ -40,11 +40,13 @@
                                     </thead>
                                     <tbody>
                                     <tr v-for="(row, i) in results.data">
-                                        <td><Link :href="'/lfp/applications/show/' + row.lfp.id">{{ studentLastName(row.lfp.sfas_ind.last_name) }}</Link></td>
-                                        <td>{{ row.lfp.sfas_ind.first_name }}</td>
-                                        <td>{{ row.sfas_payment.pl_employed_at_anniver_flg }}</td>
+                                        <td><Link :href="'/lfp/applications/show/' + row.lfp.id"><span v-if="row.sfas_ind != null">{{ studentLastName(row.sfas_ind.last_name) }}</span></Link></td>
+                                        <td><span v-if="row.sfas_ind != null">{{ row.sfas_ind.first_name }}</span></td>
+                                        <td>{{ row.profession }}</td>
                                         <td>{{ cleanDate(row.sfas_payment.pl_anniversary_dte) }}</td>
                                         <td>{{ row.sfas_payment.pl_payment_status_code }}</td>
+                                        <td>{{ row.sfas_payment.pl_payment_status_dte }}</td>
+                                        <td>${{ row.sfas_payment.pl_dire_principal_pay_amt }}</td>
                                     </tr>
                                     </tbody>
                                 </table>

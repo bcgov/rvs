@@ -25,10 +25,8 @@ class CreateApplicationsTable extends Migration
             $table->bigInteger('app_idx')->nullable()->comment('SFAS ID.');
             $table->bigInteger('individual_idx')->nullable()->comment('SFAS ID.');
 
-//            $table->string('institution', 50)->nullable()->comment('Post secondary institution of applicant.');
             $table->integer('application_year')->nullable();
             $table->date('receive_date')->nullable()->comment('App receive date.');
-            $table->date('sfas_date')->nullable()->comment('App entered in SFAS date.');
             $table->date('ssd')->nullable()->comment('Study start date.')->index();
             $table->date('sed')->nullable()->comment('Study end date.')->index();
 

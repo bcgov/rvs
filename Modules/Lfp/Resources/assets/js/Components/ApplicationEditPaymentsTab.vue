@@ -47,13 +47,13 @@
             </thead>
             <tbody>
             <tr v-for="(row, i) in payments">
-                <template v-if="row.sfas_payment != null">
-                    <td><a href="#" @click="updatePayment(i)">${{ row.sfas_payment.pl_dire_bcsl_before_pay_amt }}</a></td>
-                    <td>${{ row.sfas_payment.pl_dire_principal_pay_amt }}</td>
-                    <td>${{ row.sfas_payment.pl_risk_principal_pay_amt }}</td>
-                    <td>${{ row.sfas_payment.pl_guar_principal_pay_amt }}</td>
-                    <td>{{ row.sfas_payment.pl_payment_status_code }}</td>
-                    <td>{{ cleanDate(row.sfas_payment.pl_anniversary_dte) }}</td>
+                <template v-if="row.sfas_payment_attr != null">
+                    <td><a href="#" @click="updatePayment(i)">${{ row.sfas_payment_attr.pl_dire_bcsl_before_pay_amt }}</a></td>
+                    <td>${{ row.sfas_payment_attr.pl_dire_principal_pay_amt }}</td>
+                    <td>${{ row.sfas_payment_attr.pl_risk_principal_pay_amt }}</td>
+                    <td>${{ row.sfas_payment_attr.pl_guar_principal_pay_amt }}</td>
+                    <td>{{ row.sfas_payment_attr.pl_payment_status_code }}</td>
+                    <td>{{ cleanDate(row.sfas_payment_attr.pl_anniversary_dte) }}</td>
                 </template>
             </tr>
             </tbody>
@@ -75,38 +75,38 @@
 
                                 <div class="col-md-4">
                                     <BreezeLabel for="inputeditPaymentDate" class="form-label" value="Payment Date" />
-                                    <BreezeInput type="text" class="form-control" id="inputeditPaymentDate" :value="editPaymentForm.sfas_payment.pl_payment_dte" readonly disabled />
+                                    <BreezeInput type="text" class="form-control" id="inputeditPaymentDate" :value="editPaymentForm.sfas_payment_attr.pl_payment_dte" readonly disabled />
                                 </div>
-
                                 <div class="col-md-4">
                                     <BreezeLabel for="inputeditRptIntfDate" class="form-label" value="Report Intf. Date" />
-                                    <BreezeInput type="text" class="form-control" id="inputeditRptIntfDate" v-model="editPaymentForm.sfas_payment.pl_rpt_intf_dte" readonly disabled />
+                                    <BreezeInput type="text" class="form-control" id="inputeditRptIntfDate" v-model="editPaymentForm.sfas_payment_attr.pl_rpt_intf_dte" readonly disabled />
                                 </div>
                                 <div class="col-md-4">
                                     <BreezeLabel for="inputeditRptPaidDate" class="form-label" value="Report Paid Date" />
-                                    <BreezeInput type="text" class="form-control" id="inputeditRptPaidDate" v-model="editPaymentForm.sfas_payment.pl_rpt_paid_dte" readonly disabled />
+                                    <BreezeInput type="text" class="form-control" id="inputeditRptPaidDate" v-model="editPaymentForm.sfas_payment_attr.pl_rpt_paid_dte" readonly disabled />
                                 </div>
+
                                 <div class="col-md-4">
                                     <BreezeLabel for="inputeditEmplDate" class="form-label" value="Empl. Verify Date" />
-                                    <BreezeInput v-if="editPaymentForm.sfas_payment != null" type="text" class="form-control" id="inputeditEmplDate" v-model="editPaymentForm.sfas_payment.pl_employment_verif_dte" readonly disabled />
-                                    <BreezeInput v-else type="text" class="form-control" id="inputeditEmplDate" v-model="editPaymentForm.sfas_payment.pl_employment_verif_dte" readonly disabled />
+                                    <BreezeInput v-if="editPaymentForm.sfas_payment_attr != null" type="text" class="form-control" id="inputeditEmplDate" v-model="editPaymentForm.sfas_payment_attr.pl_employment_verif_dte" readonly disabled />
+                                    <BreezeInput v-else type="text" class="form-control" id="inputeditEmplDate" v-model="editPaymentForm.sfas_payment_attr.pl_employment_verif_dte" readonly disabled />
                                 </div>
                                 <div class="col-md-4">
                                     <BreezeLabel for="inputeditEmplAtAnniver" class="form-label" value="Employed at Anniversary?" />
-                                    <BreezeInput v-if="editPaymentForm.sfas_payment != null" type="text" class="form-control" id="inputeditEmplAtAnniver" v-model="editPaymentForm.sfas_payment.pl_employed_at_anniver_flg" readonly disabled />
-                                    <BreezeInput v-else type="text" class="form-control" id="inputeditEmplAtAnniver" v-model="editPaymentForm.sfas_payment.pl_employed_at_anniver_flg" readonly disabled />
+                                    <BreezeInput v-if="editPaymentForm.sfas_payment_attr != null" type="text" class="form-control" id="inputeditEmplAtAnniver" v-model="editPaymentForm.sfas_payment_attr.pl_employed_at_anniver_flg" readonly disabled />
+                                    <BreezeInput v-else type="text" class="form-control" id="inputeditEmplAtAnniver" v-model="editPaymentForm.sfas_payment_attr.pl_employed_at_anniver_flg" readonly disabled />
                                 </div>
                                 <div class="col-md-4">
                                     <BreezeLabel for="inputeditHrsService" class="form-label" value="Hrs of Service" />
-                                    <BreezeInput v-if="editPaymentForm.sfas_payment != null" type="text" class="form-control" id="inputeditHrsService" v-model="editPaymentForm.sfas_payment.hrs_of_service" readonly disabled />
-                                    <BreezeInput v-else type="text" class="form-control" id="inputeditHrsService" v-model="editPaymentForm.sfas_payment.hrs_of_service" readonly disabled />
-                                </div>
-                                <div class="col-md-4">
-                                    <BreezeLabel for="inputeditStatusUpdateDte" class="form-label" value="Status Update Date" />
-                                    <BreezeInput v-if="editPaymentForm.sfas_payment != null" type="text" class="form-control" id="inputeditStatusUpdateDte" v-model="editPaymentForm.sfas_payment.pl_payment_status_dte" readonly disabled />
-                                    <BreezeInput v-else type="text" class="form-control" id="inputeditStatusUpdateDte" v-model="editPaymentForm.sfas_payment.pl_payment_status_dte" readonly disabled />
+                                    <BreezeInput v-if="editPaymentForm.sfas_payment_attr != null" type="text" class="form-control" id="inputeditHrsService" v-model="editPaymentForm.sfas_payment_attr.hrs_of_service" readonly disabled />
+                                    <BreezeInput v-else type="text" class="form-control" id="inputeditHrsService" v-model="editPaymentForm.sfas_payment_attr.hrs_of_service" readonly disabled />
                                 </div>
 
+                                <div class="col-md-4">
+                                    <BreezeLabel for="inputeditStatusUpdateDte" class="form-label" value="Status Update Date" />
+                                    <BreezeInput v-if="editPaymentForm.sfas_payment_attr != null" type="text" class="form-control" id="inputeditStatusUpdateDte" v-model="editPaymentForm.sfas_payment_attr.pl_payment_status_dte" readonly disabled />
+                                    <BreezeInput v-else type="text" class="form-control" id="inputeditStatusUpdateDte" v-model="editPaymentForm.sfas_payment_attr.pl_payment_status_dte" readonly disabled />
+                                </div>
                                 <div class="col-md-4">
                                     <BreezeLabel for="inputeditPaymentReport" class="form-label" value="Reconciled with Payment Report" />
                                     <BreezeInput type="date" min="2019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" class="form-control" id="inputeditPaymentReport" v-model="editPaymentForm.reconciled_with_payment_report_date" />
@@ -115,6 +115,45 @@
                                     <BreezeLabel for="inputeditGalaxyReport" class="form-label" value="Reconciled with Galaxy Date" />
                                     <BreezeInput type="date" min="2019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" class="form-control" id="inputeditGalaxyReport" v-model="editPaymentForm.reconciled_with_galaxy_date" />
                                 </div>
+
+                                <div class="col-md-4">
+                                    <BreezeLabel for="inputAnnivDate" class="form-label" value="Prop. Anniv. Date" />
+                                    <BreezeInput type="date" min="2000-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" class="form-control" id="inputAnnivDate" v-model="editPaymentForm.anniversary_date" />
+                                </div>
+                                <div class="col-md-4">
+                                    <BreezeLabel for="inputPropPayDate" class="form-label" value="Prop. Pay Date" />
+                                    <BreezeInput type="date" min="2000-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" class="form-control" id="inputPropPayDate" v-model="editPaymentForm.proposed_pay_date" />
+                                </div>
+                                <div class="col-md-4">
+                                    <BreezeLabel for="inputPropPayAmount" class="form-label" value="Prop. Pay Amount" />
+                                    <BreezeInput type="number" step="0.01" class="form-control" id="inputPropPayAmount" v-model="editPaymentForm.proposed_pay_amount" />
+                                </div>
+
+                                <div class="col-md-4">
+                                    <BreezeLabel for="inputPropHrs" class="form-label" value="Prop. Hrs. of Service" />
+                                    <BreezeInput type="number" class="form-control" id="inputPropHrs" v-model="editPaymentForm.proposed_hrs_of_service" />
+                                </div>
+                                <div class="col-md-4">
+                                    <BreezeLabel for="inputSfasPayStatus" class="form-label" value="SFAS Status" />
+                                    <BreezeInput type="text" class="form-control" id="inputSfasPayStatus" v-model="editPaymentForm.sfas_pay_status" readonly disabled />
+                                </div>
+                                <div class="col-md-4">
+                                    <BreezeLabel for="inputOcPayStatus" class="form-label" value="OpenShift Status" />
+                                    <BreezeSelect class="form-select" id="inputOcPayStatus" v-model="editPaymentForm.oc_pay_status">
+                                        <option></option>
+                                        <option value="Pending">Pending</option>
+                                        <option value="Ready">Ready</option>
+                                        <option value="Completed">Completed</option>
+                                    </BreezeSelect>
+                                </div>
+
+
+                                <!--                                'anniversary_date' => 'date_format:Y-m-d|nullable',
+'proposed_pay_date' => 'date_format:Y-m-d|nullable',-->
+                                <!--                                'proposed_pay_amount' => 'numeric|nullable',
+                                'proposed_hrs_of_service' => 'numeric|nullable',-->
+                                <!--                                'sfas_pay_status' => 'nullable',
+                                'oc_pay_status' => 'nullable',-->
 
                                 <div class="col-md-3">
                                     <BreezeLabel for="selectCommunity" class="form-label" value="Community" />
@@ -140,6 +179,7 @@
                                         <option v-for="u in utils['Employment Status']" :value="u">{{ u }}</option>
                                     </BreezeSelect>
                                 </div>
+
 
                                 <div class="col-md-12">
                                     <BreezeLabel for="inputeditComments" class="form-label" value="Comments" />
@@ -227,8 +267,8 @@ export default {
         principalPaid() {
             let total = 0;
             for(let i=0; i<this.payments.length; i++){
-                if(this.payments[i].sfas_payment.pl_payment_status_code === 'PAID')
-                    total += parseFloat(this.payments[i].sfas_payment.pl_dire_principal_pay_amt);
+                if(this.payments[i].sfas_payment_attr.pl_payment_status_code === 'PAID')
+                    total += parseFloat(this.payments[i].sfas_payment_attr.pl_dire_principal_pay_amt);
             }
             return parseFloat(total.toFixed(3));
         },

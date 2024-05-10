@@ -53,6 +53,11 @@ class PaymentStoreRequest extends FormRequest
             'employer' => 'nullable',
             'employment_status' => 'nullable',
             'community' => 'nullable',
+
+            'anniversary_date' => 'date_format:Y-m-d|nullable', 'proposed_pay_date' => 'date_format:Y-m-d|nullable',
+            'proposed_pay_amount' => 'numeric|nullable', 'proposed_hrs_of_service' => 'numeric|nullable',
+            'sfas_pay_status' => 'nullable', 'oc_pay_status' => 'nullable',
+
         ];
     }
 

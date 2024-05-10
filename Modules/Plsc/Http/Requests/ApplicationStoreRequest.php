@@ -27,7 +27,6 @@ class ApplicationStoreRequest extends FormRequest
             'student_id.*' => 'Student field is not valid.',
             'institution_id.*' => 'Institution field is not valid.',
             'receive_date.*' => 'Application Receive Date field is not valid.',
-            'sfas_date.*' => 'SFAS Entry Date field is not valid.',
             'ssd.*' => 'Study Start Date field is not valid.',
             'sed.*' => 'Study End Date field is not valid.',
             'application_status.*' => 'Application Status field is not valid.',
@@ -48,7 +47,6 @@ class ApplicationStoreRequest extends FormRequest
             'status_code' => 'in:DCLN,INTF,DONE|nullable',
 
             'receive_date' => 'date_format:Y-m-d|nullable',
-            'sfas_date' => 'date_format:Y-m-d|nullable',
             'ssd' => 'date_format:Y-m-d|nullable',
             'sed' => 'date_format:Y-m-d|nullable',
 

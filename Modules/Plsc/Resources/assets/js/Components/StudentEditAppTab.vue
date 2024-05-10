@@ -1,26 +1,21 @@
 <template>
     <form v-if="editForm != null" @submit.prevent="updateApplication">
         <div class="row g-3">
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <BreezeLabel for="inputReceiveDate" class="form-label" value="Receive Date" />
                 <BreezeInput type="date" max="2040-12-31" placeholder="YYYY-MM-DD" class="form-control" id="inputReceiveDate" v-model="editForm.receive_date" />
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <BreezeLabel for="inputSsd" class="form-label" value="Start Date" />
                 <BreezeInput type="date" max="2040-12-31" placeholder="YYYY-MM-DD" class="form-control" id="inputSsd" v-model="editForm.ssd" />
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <BreezeLabel for="inputSed" class="form-label" value="End Date" />
                 <BreezeInput type="date" max="2040-12-31" placeholder="YYYY-MM-DD" class="form-control" id="inputSed" v-model="editForm.sed" />
-            </div>
-            <div class="col-md-3">
-                <BreezeLabel for="inputSfasDate" class="form-label" value="SFAS Entry Date" />
-                <BreezeInput type="date" max="2040-12-31" placeholder="YYYY-MM-DD" class="form-control" id="inputSfasDate" v-model="editForm.sfas_date" />
             </div>
 
             <div class="col-md-3">
                 <BreezeLabel for="inputInstitution" class="form-label" value="Institution" />
-<!--                <BreezeInput type="text" class="form-control" id="inputInstitution" v-model="editForm.institution"/>-->
                 <BreezeInput @focusout="resetFilter" @keyup="filterActiveSchools($event)" type="text" class="form-control" id="newInstitution" v-model="editForm.school.name" />
                 <ul class="dropdown-menu" :class="editForm.schoolsListHidden === false ? 'show' : 'hidden'" data-popper-placement="top-start" style="
     position: absolute;
@@ -150,7 +145,7 @@
             </div>
             <div class="col-md-3">
                 <BreezeLabel for="input750" class="form-label" value="750 Word Essay?" />
-                <BreezeSelect class="form-select" id="input750" v-model="editForm.word_essay">
+                <BreezeSelect class="form-select" id="input750" v-model="editForm.seven_fifty_word_essay">
                     <option value="true">Yes</option>
                     <option value="false">No</option>
                 </BreezeSelect>
@@ -170,9 +165,7 @@
                 </BreezeSelect>
             </div>
 
-
             <hr/>
-
 
             <div class="col-md-3">
                 <BreezeLabel for="inputForwardToCommittee" class="form-label" value="Forward to Committee?" />
@@ -192,9 +185,10 @@
             <div class="col-md-3">
                 <BreezeLabel for="inputStatusCode" class="form-label" value="Status Code" />
                 <BreezeSelect class="form-select" id="inputStatusCode" v-model="editForm.status_code">
-                    <option value="DCLN">DCLN</option>
-                    <option value="DONE">DONE</option>
-                    <option value="INTF">INTF</option>
+                    <option></option>
+                    <option value="Approved">Approved</option>
+                    <option value="Denied">Denied</option>
+                    <option value="Other">Other</option>
                 </BreezeSelect>
             </div>
 

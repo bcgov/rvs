@@ -55,4 +55,13 @@ class IntakeStoreRequest extends FormRequest
         ];
     }
 
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        $this->merge(['sin' => str_replace(' ', '', ($this->sin))]);
+    }
 }

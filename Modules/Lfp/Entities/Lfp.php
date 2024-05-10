@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\DB;
 
 class Lfp extends ModuleModel
 {
-    protected $appends = ['sfas_ind', 'sfas_app'];
 
     /**
      * The attributes that are mass assignable.
@@ -16,7 +15,7 @@ class Lfp extends ModuleModel
     protected $fillable = [
         'application_id', 'sin', 'profession', 'employer', 'employment_status', 'community', 'declined_removed_reason',
         'app_idx',
-    ];
+        ];
 
     public function payments(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
@@ -28,26 +27,17 @@ class Lfp extends ModuleModel
         return $this->hasMany('Modules\Lfp\Entities\Application', 'lfp_id', 'id');
     }
 
-    public function getSfasIndAttribute(): ?object
+    public function sfasInd(Array $sin): array
     {
-        $sin = $this->attributes['sin'];
-
-        $awayInd = DB::connection('oracle')
-            ->select(env("LFP_QUERY1") . $sin);
-
-        // Convert the result to an object
-        return $awayInd ? (object) $awayInd[0] : null;
+        return DB::connection('oracle')
+            ->select(env("LFP_QUERY3") . "(" . implode(",", $sin) . ")");
     }
 
-    public function getSfasAppAttribute(): ?object
+    public function sfasApp(Array $apps): array|null
     {
-        $appId = $this->attributes['app_idx'];
-        if(is_null($appId)) return null;
+        if(empty($apps)) return null;
 
-        $awayPayment = DB::connection('oracle')
-            ->select(env("LFP_SFA_APP") . $appId);
-
-        // Convert the result to an object
-        return $awayPayment ? (object) $awayPayment[0] : null;
+        return DB::connection('oracle')
+            ->select(env("LFP_SFA_APPS") . "(" . implode(",", $apps) . ")");
     }
 }

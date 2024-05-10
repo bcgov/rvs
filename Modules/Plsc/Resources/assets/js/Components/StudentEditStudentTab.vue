@@ -20,9 +20,18 @@ tr {
                 <BreezeInput type="text" class="form-control" id="inputFirstName" v-model="editForm.first_name" />
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <BreezeLabel for="inputEmail" class="form-label" value="Email" />
                 <BreezeInput type="email" class="form-control" id="inputEmail" v-model="editForm.email" />
+            </div>
+            <div class="col-md-6">
+                <BreezeLabel for="inputPhoneNumber" class="form-label" value="Phone Number" />
+                <BreezeInput type="text" class="form-control" id="inputPhoneNumber" v-model="editForm.phone_number" />
+            </div>
+
+            <div class="col-md-4">
+                <BreezeLabel for="inputSin" class="form-label" value="SIN" />
+                <BreezeInput type="number" class="form-control" id="inputSin" v-model="editForm.sin" />
             </div>
             <div class="col-md-4">
                 <BreezeLabel for="inputBirth" class="form-label" value="Birth Date" />
@@ -35,19 +44,6 @@ tr {
                     <option value="F">Female</option>
                     <option value="O">Other</option>
                 </BreezeSelect>
-            </div>
-
-            <div class="col-md-4">
-                <BreezeLabel for="inputSin" class="form-label" value="SIN" />
-                <BreezeInput type="number" class="form-control" id="inputSin" v-model="editForm.sin" />
-            </div>
-            <div class="col-md-4">
-                <BreezeLabel for="inputPen" class="form-label" value="PEN" />
-                <BreezeInput type="text" class="form-control" id="inputPen" v-model="editForm.pen" />
-            </div>
-            <div class="col-md-4">
-                <BreezeLabel for="inputPhoneNumber" class="form-label" value="Phone Number" />
-                <BreezeInput type="text" class="form-control" id="inputPhoneNumber" v-model="editForm.phone_number" />
             </div>
 
             <div class="col-md-12">

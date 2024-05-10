@@ -74,12 +74,6 @@ class ApplicationController extends Controller
         Application::where('id', $application->id)->update($request->validated());
 
         return Redirect::route('plsc.students.show', [$application->student->id]);
-//
-//
-//        Application::where('id', $application->id)->update($request->validated());
-//        $application = Application::find($application->id);
-//
-//        return Redirect::route('twp.students.show', [$application->student_id]);
     }
 
     /**

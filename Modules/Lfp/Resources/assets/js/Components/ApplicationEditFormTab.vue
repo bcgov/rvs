@@ -117,7 +117,6 @@ tr {
                 </BreezeSelect>
             </div>
 
-
             <div v-if="editForm.errors != undefined" class="row">
                 <div class="col-12">
                     <div v-if="editForm.hasErrors == true" class="alert alert-danger mt-3">
@@ -171,16 +170,17 @@ export default {
         {
 
             this.editForm.formState = null;
+            this.editForm = useForm(this.editForm);
 
-                this.editForm.put('/lfp/applications/' + this.result.id, {
-                    onSuccess: () => {
-                        this.editForm.formState = true;
-                        this.noChanges = true;
-                    },
-                    onError: () => {
-                        this.editForm.formState = false;
-                    },
-                });
+            this.editForm.put('/lfp/applications/update/' + this.result.id, {
+                onSuccess: () => {
+                    this.editForm.formState = true;
+                    this.noChanges = true;
+                },
+                onError: () => {
+                    this.editForm.formState = false;
+                },
+            });
 
         },
 

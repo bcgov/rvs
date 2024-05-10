@@ -40,7 +40,10 @@
                                         <label class="btn btn-outline-success btn-sm me-1" for="intake_status_registered">Registered</label>
 
                                         <input @click="toggleStatus('Denied')" type="radio" class="btn-check" name="intake_status" id="intake_status_denied" autocomplete="off" :checked="intakeForm.intake_status === 'Denied'">
-                                        <label class="btn btn-outline-warning btn-sm" for="intake_status_denied">Denied</label>
+                                        <label class="btn btn-outline-warning btn-sm me-1" for="intake_status_denied">Denied</label>
+
+                                        <input @click="toggleStatus('Cancelled')" type="radio" class="btn-check" name="intake_status" id="intake_status_cancelled" autocomplete="off" :checked="intakeForm.intake_status === 'Cancelled'">
+                                        <label class="btn btn-outline-danger btn-sm" for="intake_status_cancelled">Cancelled</label>
                                     </div>
                                 </div>
                                 <form class="card-body" v-if="intakeForm != null" @submit.prevent="storeIntake">
@@ -60,13 +63,13 @@
                                         </div>
                                         <div class="col-md-3">
                                             <BreezeLabel for="inputReceiveDate" class="form-label" value="Receive Date" />
-                                            <BreezeInput type="date" min="2019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" class="form-control" id="inputReceiveDate" v-model="intakeForm.receive_date" />
+                                            <BreezeInput type="date" min="2000-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" class="form-control" id="inputReceiveDate" v-model="intakeForm.receive_date" />
                                         </div>
 
 
                                         <div class="col-md-3">
                                             <BreezeLabel for="inputRepaymentStartDate" class="form-label" value="Repayment Start Date" />
-                                            <BreezeInput type="date" min="2019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" class="form-control" id="inputRepaymentStartDate" v-model="intakeForm.repayment_start_date" />
+                                            <BreezeInput type="date" min="2000-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" class="form-control" id="inputRepaymentStartDate" v-model="intakeForm.repayment_start_date" />
                                         </div>
                                         <div class="col-md-3">
                                             <BreezeLabel for="inputAmountOwing" class="form-label" value="Amount Owing" />
