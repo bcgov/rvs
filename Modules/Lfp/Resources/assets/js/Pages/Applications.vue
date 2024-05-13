@@ -1,9 +1,9 @@
 <template>
 
-<AuthenticatedLayout v-bind="$attrs">
+    <AuthenticatedLayout v-bind="$attrs">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-3">
+            <div class="col-md-3">
                     <div class="card">
                         <div class="card-header">
                             LFP Applications Search
@@ -42,9 +42,10 @@
                                     </thead>
                                     <tbody>
                                     <tr v-for="(row, i) in results.data">
-                                        <td><Link :href="'/lfp/applications/show/' + row.id">{{ studentLastName(row.sfas_ind.last_name) }}</Link></td>
-                                        <td>{{ row.sfas_ind.first_name }}</td>
-                                        <td>{{ cleanDate(row.sfas_ind.birth_dte) }}</td>
+                                        <td><Link :href="'/lfp/applications/show/' + row.id"><span v-if="row.sfas_ind != null">{{ studentLastName(row.sfas_ind.last_name) }}</span></Link></td>
+                                        <td><span v-if="row.sfas_ind != null">{{ row.sfas_ind.first_name }}</span></td>
+                                        <td>{{ row.profession }}</td>
+                                        <td><span v-if="row.sfas_ind != null">{{ cleanDate(row.sfas_ind.birth_dte) }}</span></td>
                                         <td><span v-if="row.sfas_app != null">{{ cleanDate(row.sfas_app.pl_app_received_dte) }}</span></td>
                                         <td><span v-if="row.sfas_app != null">{{ row.sfas_app.pl_app_status_code }}</span></td>
                                     </tr>

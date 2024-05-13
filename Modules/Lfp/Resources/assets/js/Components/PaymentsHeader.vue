@@ -1,21 +1,27 @@
 <template>
     <tr>
         <th scope="col">
-                <span>Last Name</span>
+            <span>Last Name</span>
         </th>
         <th scope="col">
-                <span>First Name</span>
+            <span>First Name</span>
         </th>
         <th scope="col" style="min-width: 130px;">
-                <span>Employed at Anniv.</span>
-        </th>
-
-        <th scope="col" style="min-width: 130px;">
-                <span>Anniversary Date</span>
+            <span>Profession</span>
         </th>
 
         <th scope="col" style="min-width: 130px;">
-                <span>Status</span>
+            <span>Anniv. Date</span>
+        </th>
+
+        <th scope="col" style="min-width: 130px;">
+            <span>SFAS Status</span>
+        </th>
+        <th scope="col" style="min-width: 130px;">
+            <span>Prop. Date</span>
+        </th>
+        <th scope="col" style="min-width: 130px;">
+            <span>Prop. $$</span>
         </th>
 
     </tr>

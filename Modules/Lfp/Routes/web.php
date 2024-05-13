@@ -12,6 +12,8 @@
 */
 
 
+use Modules\Lfp\Http\Controllers\LfpController;
+
 Route::prefix('lfp')->group(function () {
     Route::group(
         [
@@ -21,7 +23,7 @@ Route::prefix('lfp')->group(function () {
         Route::get('/dashboard', 'LfpController@index')->name('dashboard');
         Route::get('/applications', 'LfpController@index')->name('applications.index');
         Route::get('/applications/show/{lfp}', 'LfpController@show')->name('applications.show');
-        Route::put('/applications/update/{lfp}', 'LfpController@update')->name('applications.update');
+        Route::put('/applications/update/{lfp}', [LfpController::class, 'update'])->name('applications.update');
         Route::get('/applications/sync', 'LfpController@sync')->name('applications.sync');
         Route::get('/intakes', 'IntakeController@index')->name('intakes.index');
         Route::get('/intakes/create', 'IntakeController@create')->name('intakes.create');
@@ -47,4 +49,3 @@ Route::prefix('lfp')->group(function () {
         });
     });
 });
-

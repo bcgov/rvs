@@ -73,7 +73,7 @@ tr {
                 <BreezeInput type="number" class="form-control bg-light" id="inputAge" v-model="editForm.age" readonly="readonly" disabled />
             </div>
 
-            <div class="col-md-12" v-if="editForm.citizenship === 'Canadian Citizen'">
+            <div class="col-md-12">
                 <BreezeLabel for="indigeneity" class="form-label" value="Indigeneity" />
                 <div v-for="type in indigeneity_types" :key="type.id" class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" :id="type.id" :value="type.id" v-model="indigeneity_data" />

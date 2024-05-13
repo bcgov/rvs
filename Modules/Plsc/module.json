@@ -1,0 +1,13 @@
+{
+    "name": "Plsc",
+    "alias": "plsc",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Plsc\\Providers\\PlscServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

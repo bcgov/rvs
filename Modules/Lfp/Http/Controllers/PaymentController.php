@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
+use Modules\Lfp\Entities\Lfp;
 use Modules\Lfp\Entities\Payment;
 use Modules\Lfp\Http\Requests\PaymentStoreRequest;
 use Modules\Lfp\Http\Requests\PaymentEditRequest;
@@ -50,35 +51,56 @@ class PaymentController extends Controller
         return Redirect::route('lfp.applications.show', [$payment->lfp_id]);
     }
 
-
     private function paginatePayments()
     {
-        $currentMonth = Carbon::now()->format('Y-m');
-        $lastMonth = Carbon::now()->subMonth()->format('Y-m');
-        $monthBeforeLast = Carbon::now()->subMonths(2)->format('Y-m');
-        $qry = sprintf(env("LFP_PAYMENTS_NO_FILTER"), $currentMonth, $lastMonth, $monthBeforeLast);
+        $currentMonth = Carbon::now()->format('Y-m') . "-01";
+        $lastMonth = Carbon::now()->subMonth()->format('Y-m') . "-01";
+        $monthBeforeLast = Carbon::now()->subMonths(2)->format('Y-m') . "-01";
 
+        $payments = Payment::whereIn('anniversary_date', [$currentMonth, $lastMonth, $monthBeforeLast])
+            ->orderByDesc('anniversary_date')
+            ->with('lfp');
         if (request()->filter_status !== null && request()->filter_status != 'all') {
-            $qry = sprintf(env("LFP_PAYMENTS_FILTER"), request()->filter_status, $currentMonth, $lastMonth, $monthBeforeLast);
-        }
-        $sfas = DB::connection('oracle')->select($qry . " ORDER BY pl_anniversary_dte DESC");
-        $sfas = collect($sfas)->pluck('pl_loan_forgiveness_pay_idx');
-
-        //start code to keep the order by the list as it came back from the external db
-        $sfas_array = $sfas->toArray();
-        $subquery = collect($sfas_array)
-            ->map(function ($id) use ($sfas_array){
-                return "WHEN $id THEN " . array_search($id, $sfas_array);
-            })
-            ->implode(' ');
-        $payments = Payment::with('lfp')->whereIn('pay_idx', $sfas)
-            ->orderByRaw("CASE pay_idx $subquery END");
-
-
-        if (request()->filter_status == null || request()->filter_status == 'all') {
-            $payments = $payments->orderBy('created_at', 'desc');
+            $payments = $payments->where('sfas_payment_status', request()->filter_status);
         }
 
-        return $payments->paginate(25)->onEachSide(1)->appends(request()->query());
+        $payments = $payments->paginate(25)->onEachSide(1)->appends(request()->query());
+
+        // inject payment data from sfas
+        $payIds = $payments->pluck('pay_idx');
+
+        // fetch sfas payments data in a single batch if payIds are not empty
+        $sfasPays = [];
+        if(!empty($payIds)) {
+            $rawSfasPays = (new Payment)->sfasPayment($payIds->toArray());
+            // convert list to a map for quick lookup
+            $sfasPays = collect($rawSfasPays)->keyBy('pl_loan_forgiveness_pay_idx');
+        }
+
+        // inject sfas payment data into payments
+        foreach ($payments as $payment) {
+            $payment->sfas_payment = $sfasPays[$payment->pay_idx] ?? null;
+        }
+
+        // fetch lfps in a single batch query
+        $appIds = $payments->pluck('app_idx')->unique();
+        $lfps = Lfp::whereIn('app_idx', $appIds)->get()->keyBy('app_idx');
+
+        // fetch individual data from sfas in a single batch if applicable
+        $sins = $lfps->pluck('sin')->unique()->toArray();
+        $sfasInds = !empty($sins) ? (new Lfp)->sfasInd($sins) : [];
+        $sfasIndMap = collect($sfasInds)->keyBy('sin');
+
+        // append to lfps with sfas individual data
+        foreach ($lfps as $lfp) {
+            $lfp->sfas_ind = $sfasIndMap[$lfp->sin] ?? null;
+        }
+
+        // inject sfas individual data into payments
+        foreach ($payments as $payment) {
+            $payment->sfas_ind = $lfps[$payment->app_idx]->sfas_ind ?? null;
+        }
+
+        return $payments;
     }
 }

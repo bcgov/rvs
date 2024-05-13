@@ -29,6 +29,7 @@
                 <option value="Ready">Ready</option>
                 <option value="Completed">Completed</option>
                 <option value="Denied">Denied</option>
+                <option value="Cancelled">Cancelled</option>
             </select>
         </th>
         <th scope="col">

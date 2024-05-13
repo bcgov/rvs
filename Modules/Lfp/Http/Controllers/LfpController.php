@@ -12,6 +12,7 @@ use Modules\Lfp\Entities\Application;
 use Modules\Lfp\Entities\Lfp;
 use Modules\Lfp\Entities\Payment;
 use Modules\Lfp\Entities\Util;
+use Modules\Lfp\Http\Requests\LfpEditRequest;
 use Response;
 
 class LfpController extends Controller
@@ -23,18 +24,21 @@ class LfpController extends Controller
      */
     public function index($status = true, $newApp = 0)
     {
-        $lfps = new Lfp();
-        $lfps = $this->paginateLfps($lfps);
-        $last_sync = Lfp::select('id', 'sin', 'app_idx', 'created_at')->where('created_at', '!=', null)
+        $lfps = $this->paginateLfps();
+        $last_sync = Lfp::select('id', 'sin', 'app_idx', 'created_at')
+            ->where('created_at', '!=', null)
             ->orderBy('created_at', 'desc')->first();
 
-        // Calculate the difference in hours
-        $hours_difference = Carbon::parse($last_sync->created_at)->diffInHours(Carbon::now());
+        $hours_difference = 2;
+        if(!is_null($last_sync)){
+            // Calculate the difference in hours
+            $hours_difference = Carbon::parse($last_sync->created_at)->diffInHours(Carbon::now());
+        }
 
         // Check if the difference is greater than 1 hour
         if ($hours_difference > 1) {
             // Sync applications
-            $this->sync();
+            //$this->sync();
         }
         $last_sync = Carbon::parse($last_sync->created_at)->format('Y-m-d H:i');
 
@@ -42,11 +46,28 @@ class LfpController extends Controller
             'status' => $status, 'results' => $lfps, 'app' => $newApp]);
     }
 
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(LfpEditRequest $request, Lfp $lfp)
+    {
+        Lfp::where('id', $lfp->id)->update($request->validated());
+        $lfp = Lfp::find($lfp->id);
+
+        return Redirect::route('lfp.applications.show', [$lfp->id]);
+    }
+
     public function sync($status = true, $newApp = 0)
     {
+        $qry = env("LFP_APP_SYNC") . "0";
         //select last app entered
         $lfp = Lfp::select('id', 'app_idx', 'sin')->whereNotNull('app_idx')->orderBy('created_at', 'desc')->first();
-        $qry = env("LFP_APP_SYNC") . $lfp->app_idx;
+        if(!is_null($lfp)){
+            $qry = env("LFP_APP_SYNC") . $lfp->app_idx;
+        }
         $sfas = DB::connection('oracle')->select($qry);
 
         foreach ($sfas as $app){
@@ -68,15 +89,35 @@ class LfpController extends Controller
                     $pay->lfp_id = $check->id;
                     $pay->app_idx = $spay->pl_loan_forgiveness_app_idx;
                     $pay->pay_idx = $spay->pl_loan_forgiveness_pay_idx;
+                    $pay->anniversary_date = $spay->pl_anniversary_dte;
+                    $pay->proposed_pay_amount = $spay->pl_dire_principal_pay_amt;
+                    $pay->proposed_hrs_of_service = $spay->hrs_of_service;
+                    $pay->sfas_pay_status = $spay->pl_payment_status_code;
+                    $pay->oc_pay_status = 'Pending';
                     $pay->save();
                 }
             }
         }
 
+
         return Redirect::route('lfp.applications.index');
     }
 
-    /**
+//$payments = Payment::whereNotNull('pay_idx')->get();
+//foreach($payments as $pay){
+//$qry = env("LFP_SFA_PAY_TBL") . "($pay->pay_idx)";
+//$sfas_payments = DB::connection('oracle')->select($qry);
+//foreach($sfas_payments as $spay){
+//$pay->anniversary_date = $spay->pl_anniversary_dte;
+//$pay->proposed_pay_amount = $spay->pl_dire_principal_pay_amt;
+//$pay->proposed_hrs_of_service = $spay->hrs_of_service;
+//$pay->sfas_pay_status = $spay->pl_payment_status_code;
+//$pay->oc_pay_status = $spay->pl_payment_status_code;
+//$pay->save();
+//}
+//}
+
+/**
      * Show the specified resource.
      * @param Lfp $lfp
      * @return \Inertia\Response
@@ -103,9 +144,9 @@ class LfpController extends Controller
             'student' => $student, 'app' => $application, 'utils' => $utils_array]);
     }
 
-    private function paginateLfps($lfps)
+    private function paginateLfps()
     {
-        $lfps = $lfps->where('app_idx', '!=', null);
+        $lfps = Lfp::where('app_idx', '!=', null);
         if (request()->filter_fname !== null) {
             $lfps = $lfps->where('first_name', 'ILIKE', '%'.request()->filter_fname.'%');
         }
@@ -144,12 +185,38 @@ class LfpController extends Controller
             }
         }
 
-        if (request()->sort !== null) {
-            $lfps = $lfps->orderBy(request()->sort, request()->direction);
-        } else {
-            $lfps = $lfps->orderBy('created_at', 'desc');
+        $lfps = $lfps->orderBy('sin')->paginate(25)->onEachSide(1)->appends(request()->query());
+
+        // inject individual data from sfas
+        $sins = $lfps->pluck('sin');
+
+        $sfasInd = (new Lfp)->sfasInd($sins->toArray());
+
+        foreach ($lfps as $lfp) {
+            $lfp->sfas_ind = null;
+            foreach($sfasInd as $ind){
+                if($lfp->sin == $ind->sin){
+                    $lfp->sfas_ind = $ind;
+                    break;
+                }
+            }
         }
 
-        return $lfps->paginate(25)->onEachSide(1)->appends(request()->query());
+        // inject app data from sfas
+        $apps = $lfps->pluck('app_idx');
+
+        $sfasApps = (new Lfp)->sfasApp($apps->toArray());
+
+        foreach ($lfps as $lfp) {
+            $lfp->sfas_app = null;
+            foreach($sfasApps as $ind){
+                if($lfp->app_idx == $ind->pl_loan_forgiveness_app_idx){
+                    $lfp->sfas_app = $ind;
+                    break;
+                }
+            }
+        }
+
+        return $lfps;
     }
 }

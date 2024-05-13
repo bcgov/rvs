@@ -2,6 +2,7 @@
     <tr>
         <th scope="col">Last Name</th>
         <th scope="col">First Name</th>
+        <th scope="col" style="min-width: 130px;">Profession</th>
         <th scope="col" style="min-width: 130px;">Date of Birth</th>
         <th scope="col" style="min-width: 130px;">Receive Date</th>
         <th scope="col" style="min-width: 130px;">Status</th>
