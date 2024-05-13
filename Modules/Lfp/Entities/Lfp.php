@@ -30,7 +30,7 @@ class Lfp extends ModuleModel
     public function sfasInd(Array $sin): array
     {
         return DB::connection('oracle')
-            ->select(env("LFP_QUERY3") . "(" . implode(",", $sin) . ")");
+            ->select(env("LFP_QUERY2") . "(" . implode(",", $sin) . ")");
     }
 
     public function sfasApp(Array $apps): array|null

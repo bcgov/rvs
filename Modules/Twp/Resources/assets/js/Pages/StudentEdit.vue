@@ -54,7 +54,7 @@
                             <div class="card">
                                 <div v-if="editForm != null" class="card-header">
                                     Edit Application
-                                    <div v-if="activeTab==='plsc-app' && lettersEnabled !== false" class="btn-group float-end ms-1">
+                                    <div v-if="activeTab==='twp-app' && lettersEnabled !== false" class="btn-group float-end ms-1">
                                         <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             Letters
                                         </button>
@@ -66,8 +66,8 @@
                                             <li v-if="lettersEnabled==='success_under_age'"><a class="dropdown-item" :href="'/twp/students-letters/student_success_under_age/' + activeApp.id" target="_blank">Under Age Student Successful</a></li>
                                         </ul>
                                     </div>
-                                    <button v-if="activeTab==='plsc-app' && editForm.application != null && editForm.application.application_status === 'APPROVED' && activeApp.program == null" type="button" class="btn btn-warning btn-sm float-end">Missing Program</button>
-                                    <button v-if="activeTab==='plsc-app' && editForm.application != null && editForm.application.application_status === 'APPROVED' && editForm.age < 19" type="button" class="btn btn-warning btn-sm float-end">Under 19</button>
+                                    <button v-if="activeTab==='twp-app' && editForm.application != null && editForm.application.application_status === 'APPROVED' && activeApp.program == null" type="button" class="btn btn-warning btn-sm float-end">Missing Program</button>
+                                    <button v-if="activeTab==='twp-app' && editForm.application != null && editForm.application.application_status === 'APPROVED' && editForm.age < 19" type="button" class="btn btn-warning btn-sm float-end">Under 19</button>
                                     <button v-if="activeTab==='payments'" type="button" class="btn btn-success btn-sm float-end" data-bs-toggle="modal" data-bs-target="#newPaymentModal">New Payment</button>
                                     <button v-if="activeTab==='grant-app'" type="button" class="btn btn-success btn-sm float-end" data-bs-toggle="modal" data-bs-target="#newGrantAppModal">New Grant App</button>
                                 </div>
