@@ -18,10 +18,16 @@
             <span>SFAS Status</span>
         </th>
         <th scope="col" style="min-width: 130px;">
+            <span>OShift Status</span>
+        </th>
+        <th scope="col" style="min-width: 130px;">
             <span>Prop. Date</span>
         </th>
         <th scope="col" style="min-width: 130px;">
             <span>Prop. $$</span>
+        </th>
+        <th scope="col" style="min-width: 130px;">
+            <span>Remove Flag</span>
         </th>
 
     </tr>

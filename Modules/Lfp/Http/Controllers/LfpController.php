@@ -38,7 +38,7 @@ class LfpController extends Controller
         // Check if the difference is greater than 1 hour
         if ($hours_difference > 1) {
             // Sync applications
-            //$this->sync();
+            $this->sync();
         }
         $last_sync = Carbon::parse($last_sync->created_at)->format('Y-m-d H:i');
 
@@ -102,7 +102,7 @@ class LfpController extends Controller
 
         return Redirect::route('lfp.applications.index');
     }
-
+//use Modules\Lfp\Entities\Payment;
 //$payments = Payment::whereNotNull('pay_idx')->get();
 //foreach($payments as $pay){
 //$qry = env("LFP_SFA_PAY_TBL") . "($pay->pay_idx)";
@@ -148,16 +148,18 @@ class LfpController extends Controller
     {
         $lfps = Lfp::where('app_idx', '!=', null);
         if (request()->filter_fname !== null) {
-            $lfps = $lfps->where('first_name', 'ILIKE', '%'.request()->filter_fname.'%');
+            $lfps = $lfps->where('first_name', 'ILIKE', '%'.request()->filter_fname.'%')
+                ->orWhere('full_name_alias', 'ILIKE', '%'.request()->filter_fname.'%');
+        }
+        if (request()->filter_lname !== null) {
+            $lfps = $lfps->where('last_name', 'ILIKE', '%'.request()->filter_lname.'%')
+                ->orWhere('full_name_alias', 'ILIKE', '%'.request()->filter_lname.'%');
         }
 
         if (request()->filter_sin !== null) {
             $lfps = $lfps->where('sin', request()->filter_sin);
         }
 
-        if (request()->filter_lname !== null) {
-            $lfps = $lfps->where('last_name', 'ILIKE', '%'.request()->filter_lname.'%');
-        }
         if (request()->filter_period !== null && request()->filter_period != 'all') {
             switch (request()->filter_period){
                 case 'current':

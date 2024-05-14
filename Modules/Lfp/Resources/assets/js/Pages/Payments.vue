@@ -3,7 +3,7 @@
     <AuthenticatedLayout v-bind="$attrs">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-3 mt-3">
+            <div class="col-md-3 mt-3">
                     <div class="card">
                         <div class="card-header">
                             LFP Application Search
@@ -43,10 +43,14 @@
                                         <td><Link :href="'/lfp/applications/show/' + row.lfp.id"><span v-if="row.sfas_ind != null">{{ studentLastName(row.sfas_ind.last_name) }}</span></Link></td>
                                         <td><span v-if="row.sfas_ind != null">{{ row.sfas_ind.first_name }}</span></td>
                                         <td>{{ row.profession }}</td>
-                                        <td>{{ cleanDate(row.sfas_payment.pl_anniversary_dte) }}</td>
-                                        <td>{{ row.sfas_payment.pl_payment_status_code }}</td>
-                                        <td>{{ row.sfas_payment.pl_payment_status_dte }}</td>
-                                        <td>${{ row.sfas_payment.pl_dire_principal_pay_amt }}</td>
+                                        <td>{{ cleanDate(row.anniversary_date) }}</td>
+                                        <td>{{ row.sfas_pay_status }}</td>
+                                        <td>{{ row.oc_pay_status }}</td>
+                                        <td>{{ row.proposed_pay_date }}</td>
+                                        <td>${{ row.proposed_pay_amount }}</td>
+                                        <td>
+                                            <span v-if="row.lfp?.declined_removed_reason != null" class="badge rounded-pill text-bg-danger">Removed</span>
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
