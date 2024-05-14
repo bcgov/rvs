@@ -14,7 +14,7 @@ class Lfp extends ModuleModel
      */
     protected $fillable = [
         'application_id', 'sin', 'profession', 'employer', 'employment_status', 'community', 'declined_removed_reason',
-        'app_idx', 'direct_lend', 'risk_sharing_guaranteed', 'full_name_alias',
+        'app_idx', 'direct_lend', 'risk_sharing_guaranteed', 'full_name_alias', 'comment',
         ];
 
     public function payments(): \Illuminate\Database\Eloquent\Relations\HasMany

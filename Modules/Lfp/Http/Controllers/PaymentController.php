@@ -60,47 +60,59 @@ class PaymentController extends Controller
         $payments = Payment::whereIn('anniversary_date', [$currentMonth, $lastMonth, $monthBeforeLast])
             ->orderByDesc('anniversary_date')
             ->with('lfp');
-        if (request()->filter_status !== null && request()->filter_status != 'all') {
-            $payments = $payments->where('sfas_payment_status', request()->filter_status);
+
+        if (request()->has('filter_status') && request()->filter_status != 'all') {
+            if (request()->filter_status == 'empty') {
+                $payments = $payments->whereNull('oc_pay_status');
+            } else {
+                $payments = $payments->where('oc_pay_status', 'ilike', request()->filter_status);
+            }
         }
+
+        // Respect the sort and direction from the request
+        $sort = request()->get('sort', 'anniversary_date');
+        $direction = request()->get('direction', 'desc');
+
+        $payments = $payments->orderBy($sort, $direction);
 
         $payments = $payments->paginate(25)->onEachSide(1)->appends(request()->query());
 
-        // inject payment data from sfas
+        // Inject payment data from sfas
         $payIds = $payments->pluck('pay_idx');
 
-        // fetch sfas payments data in a single batch if payIds are not empty
+        // Fetch sfas payments data in a single batch if payIds are not empty
         $sfasPays = [];
-        if(!empty($payIds)) {
+        if ($payIds->isNotEmpty()) {
             $rawSfasPays = (new Payment)->sfasPayment($payIds->toArray());
-            // convert list to a map for quick lookup
+            // Convert list to a map for quick lookup
             $sfasPays = collect($rawSfasPays)->keyBy('pl_loan_forgiveness_pay_idx');
         }
 
-        // inject sfas payment data into payments
+        // Inject sfas payment data into payments
         foreach ($payments as $payment) {
             $payment->sfas_payment = $sfasPays[$payment->pay_idx] ?? null;
         }
 
-        // fetch lfps in a single batch query
+        // Fetch lfps in a single batch query
         $appIds = $payments->pluck('app_idx')->unique();
         $lfps = Lfp::whereIn('app_idx', $appIds)->get()->keyBy('app_idx');
 
-        // fetch individual data from sfas in a single batch if applicable
+        // Fetch individual data from sfas in a single batch if applicable
         $sins = $lfps->pluck('sin')->unique()->toArray();
         $sfasInds = !empty($sins) ? (new Lfp)->sfasInd($sins) : [];
         $sfasIndMap = collect($sfasInds)->keyBy('sin');
 
-        // append to lfps with sfas individual data
+        // Append to lfps with sfas individual data
         foreach ($lfps as $lfp) {
             $lfp->sfas_ind = $sfasIndMap[$lfp->sin] ?? null;
         }
 
-        // inject sfas individual data into payments
+        // Inject sfas individual data into payments
         foreach ($payments as $payment) {
             $payment->sfas_ind = $lfps[$payment->app_idx]->sfas_ind ?? null;
         }
 
         return $payments;
     }
+
 }

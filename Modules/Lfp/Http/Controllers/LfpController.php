@@ -100,22 +100,8 @@ class LfpController extends Controller
 
         return Redirect::route('lfp.applications.index');
     }
-//use Modules\Lfp\Entities\Payment;
-//$payments = Payment::whereNotNull('pay_idx')->get();
-//foreach($payments as $pay){
-//$qry = env("LFP_SFA_PAY_TBL") . "($pay->pay_idx)";
-//$sfas_payments = DB::connection('oracle')->select($qry);
-//foreach($sfas_payments as $spay){
-//$pay->anniversary_date = $spay->pl_anniversary_dte;
-//$pay->proposed_pay_amount = $spay->pl_dire_principal_pay_amt;
-//$pay->proposed_hrs_of_service = $spay->hrs_of_service;
-//$pay->sfas_pay_status = $spay->pl_payment_status_code;
-//$pay->oc_pay_status = $spay->pl_payment_status_code;
-//$pay->save();
-//}
-//}
 
-/**
+    /**
      * Show the specified resource.
      * @param Lfp $lfp
      * @return \Inertia\Response
@@ -146,12 +132,14 @@ class LfpController extends Controller
     {
         $lfps = Lfp::where('app_idx', '!=', null);
         if (request()->filter_fname !== null) {
-            $lfps = $lfps->where('first_name', 'ILIKE', '%'.request()->filter_fname.'%')
-                ->orWhere('full_name_alias', 'ILIKE', '%'.request()->filter_fname.'%');
+//            $lfps = $lfps->where('first_name', 'ILIKE', '%'.request()->filter_fname.'%')
+//                ->orWhere('full_name_alias', 'ILIKE', '%'.request()->filter_fname.'%');
+            $lfps = $lfps->where('full_name_alias', 'ILIKE', '%'.request()->filter_fname.'%');
         }
         if (request()->filter_lname !== null) {
-            $lfps = $lfps->where('last_name', 'ILIKE', '%'.request()->filter_lname.'%')
-                ->orWhere('full_name_alias', 'ILIKE', '%'.request()->filter_lname.'%');
+//            $lfps = $lfps->where('last_name', 'ILIKE', '%'.request()->filter_lname.'%')
+//                ->orWhere('full_name_alias', 'ILIKE', '%'.request()->filter_lname.'%');
+            $lfps = $lfps->where('full_name_alias', 'ILIKE', '%'.request()->filter_lname.'%');
         }
 
         if (request()->filter_sin !== null) {

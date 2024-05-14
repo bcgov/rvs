@@ -145,6 +145,7 @@
                                         <option value="Pending">Pending</option>
                                         <option value="Ready">Ready</option>
                                         <option value="Completed">Completed</option>
+                                        <option value="Denial Pending">Denial Pending</option>
                                     </BreezeSelect>
                                 </div>
 

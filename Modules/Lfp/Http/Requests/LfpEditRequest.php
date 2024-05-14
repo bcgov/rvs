@@ -42,7 +42,7 @@ class LfpEditRequest extends FormRequest
             'sin' => 'required',
             'profession' => 'nullable', 'employer' => 'nullable', 'employment_status' => 'nullable', 'community' => 'nullable',
             'declined_removed_reason' => 'nullable', 'risk_sharing_guaranteed' => 'nullable', 'direct_lend' => 'nullable',
-            'app_idx' => 'nullable', 'full_name_alias' => 'nullable',
+            'app_idx' => 'nullable', 'full_name_alias' => 'nullable', 'comment' => 'nullable'
         ];
     }
 
@@ -53,6 +53,11 @@ class LfpEditRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
+        if (isset($this->sin)) {
+            //\D means "anything that isn't a digit":
+            $this->merge(['sin' => preg_replace('/\D/', '', $this->sin)]);
+        }
+
         if (isset($this->full_name_alias)) {
             $this->merge(['full_name_alias' => Str::title($this->full_name_alias)]);
         }

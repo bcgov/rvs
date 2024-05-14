@@ -88,6 +88,14 @@ const sinFormTemplate = {
 const sinForm = useForm(sinFormTemplate);
 const sinFormSubmit = () => {
     sinForm.filter_type = 'sin';
+    // Trim white spaces
+    sinForm.filter_sin = sinForm.filter_sin.replace(/\s+/g, '');
+
+    // Prevent submit if filter_sin is empty
+    if (!sinForm.filter_sin) {
+        return;
+    }
+
     sinForm.get(props.page, {
         onFinish: () => sinForm.reset('inputSin'),
     });
