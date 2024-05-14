@@ -14,12 +14,13 @@ class Lfp extends ModuleModel
      */
     protected $fillable = [
         'application_id', 'sin', 'profession', 'employer', 'employment_status', 'community', 'declined_removed_reason',
-        'app_idx',
+        'app_idx', 'direct_lend', 'risk_sharing_guaranteed', 'full_name_alias',
         ];
 
     public function payments(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany('Modules\Lfp\Entities\Payment', 'lfp_id', 'id');
+        return $this->hasMany('Modules\Lfp\Entities\Payment', 'lfp_id', 'id')
+            ->orderBy('anniversary_date', 'desc');
     }
 
     public function applications(): \Illuminate\Database\Eloquent\Relations\HasMany

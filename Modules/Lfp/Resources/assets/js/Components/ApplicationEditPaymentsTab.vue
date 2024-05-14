@@ -108,6 +108,15 @@
                                     <BreezeInput v-else type="text" class="form-control" id="inputeditStatusUpdateDte" v-model="editPaymentForm.sfas_payment_attr.pl_payment_status_dte" readonly disabled />
                                 </div>
                                 <div class="col-md-4">
+                                    <BreezeLabel for="inputAnnivDate" class="form-label" value="Prop. Anniv. Date" />
+                                    <BreezeInput type="date" min="2000-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" class="form-control" id="inputAnnivDate" v-model="editPaymentForm.anniversary_date" readonly disabled />
+                                </div>
+                                <div class="col-md-4">
+                                    <BreezeLabel for="inputSfasPayStatus" class="form-label" value="SFAS Status" />
+                                    <BreezeInput type="text" class="form-control" id="inputSfasPayStatus" v-model="editPaymentForm.sfas_pay_status" readonly disabled />
+                                </div>
+
+                                <div class="col-md-4">
                                     <BreezeLabel for="inputeditPaymentReport" class="form-label" value="Reconciled with Payment Report" />
                                     <BreezeInput type="date" min="2019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" class="form-control" id="inputeditPaymentReport" v-model="editPaymentForm.reconciled_with_payment_report_date" />
                                 </div>
@@ -116,10 +125,6 @@
                                     <BreezeInput type="date" min="2019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" class="form-control" id="inputeditGalaxyReport" v-model="editPaymentForm.reconciled_with_galaxy_date" />
                                 </div>
 
-                                <div class="col-md-4">
-                                    <BreezeLabel for="inputAnnivDate" class="form-label" value="Prop. Anniv. Date" />
-                                    <BreezeInput type="date" min="2000-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" class="form-control" id="inputAnnivDate" v-model="editPaymentForm.anniversary_date" />
-                                </div>
                                 <div class="col-md-4">
                                     <BreezeLabel for="inputPropPayDate" class="form-label" value="Prop. Pay Date" />
                                     <BreezeInput type="date" min="2000-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" class="form-control" id="inputPropPayDate" v-model="editPaymentForm.proposed_pay_date" />
@@ -132,10 +137,6 @@
                                 <div class="col-md-4">
                                     <BreezeLabel for="inputPropHrs" class="form-label" value="Prop. Hrs. of Service" />
                                     <BreezeInput type="number" class="form-control" id="inputPropHrs" v-model="editPaymentForm.proposed_hrs_of_service" />
-                                </div>
-                                <div class="col-md-4">
-                                    <BreezeLabel for="inputSfasPayStatus" class="form-label" value="SFAS Status" />
-                                    <BreezeInput type="text" class="form-control" id="inputSfasPayStatus" v-model="editPaymentForm.sfas_pay_status" readonly disabled />
                                 </div>
                                 <div class="col-md-4">
                                     <BreezeLabel for="inputOcPayStatus" class="form-label" value="OpenShift Status" />

@@ -37,6 +37,6 @@ class Payment extends ModuleModel
 
     public function getSfasPaymentAttrAttribute(): object|null
     {
-        return $this->sfasPayment([$this->pay_idx])[0];
+        return is_null($this->pay_idx) ? null : $this->sfasPayment([$this->pay_idx])[0];
     }
 }

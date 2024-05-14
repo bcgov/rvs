@@ -11,17 +11,21 @@ tr {
     <form v-if="editForm != null" @submit.prevent="updateApplication">
         <div class="row g-3">
 
-            <div class="col-md-4">
+            <div class="col-md-3">
+                <BreezeLabel for="inputSin" class="form-label" value="SIN" />
+                <BreezeInput type="text" class="form-control" id="inputSin" :value="student.sin" disabled readonly />
+            </div>
+            <div class="col-md-3">
                 <BreezeLabel for="inputFirstName" class="form-label" value="First Name" />
                 <BreezeInput type="text" class="form-control" id="inputFirstName" :value="student.first_name" disabled readonly />
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <BreezeLabel for="inputLastName" class="form-label" value="Last Name" />
                 <BreezeInput type="text" class="form-control" id="inputLastName" :value="student.last_name" disabled readonly />
             </div>
-            <div class="col-md-4">
-                <BreezeLabel for="inputSin" class="form-label" value="SIN" />
-                <BreezeInput type="text" class="form-control" id="inputSin" :value="student.sin" disabled readonly />
+            <div class="col-md-3">
+                <BreezeLabel for="inputFullNameAlias" class="form-label" value="Full Name Alias" />
+                <BreezeInput type="text" class="form-control" id="inputFullNameAlias" v-model="editForm.full_name_alias" />
             </div>
 
             <div class="col-md-4">
