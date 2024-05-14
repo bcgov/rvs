@@ -25,6 +25,7 @@ return new class extends Migration
         }
 
         Schema::connection(env('DB_DATABASE_LFP'))->table('lfps', function (Blueprint $table) {
+            $table->text('comment')->nullable();
             $table->string('full_name_alias', 40)->nullable();
         });
     }
@@ -37,6 +38,7 @@ return new class extends Migration
     public function down()
     {
         Schema::connection(env('DB_DATABASE_LFP'))->table('lfps', function (Blueprint $table) {
+            $table->dropColumn('comment');
             $table->dropColumn('full_name_alias');
             $table->dropColumn('risk_sharing_guaranteed');
             $table->dropColumn('direct_lend');

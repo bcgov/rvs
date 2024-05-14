@@ -24,11 +24,11 @@
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" href="#" @click="filterStatus('all')">All</a></li>
-                                    <li><a class="dropdown-item" href="#" @click="filterStatus('CANC')">Cancelled</a></li>
-                                    <li><a class="dropdown-item" href="#" @click="filterStatus('DNYD')">Denied</a></li>
-                                    <li><a class="dropdown-item" href="#" @click="filterStatus('EMPY')">Employment Letter Sent</a></li>
-                                    <li><a class="dropdown-item" href="#" @click="filterStatus('PAID')">Paid</a></li>
-                                    <li><a class="dropdown-item" href="#" @click="filterStatus('PROP')">Proposed</a></li>
+                                    <li><a class="dropdown-item" href="#" @click="filterStatus('empty')">New</a></li>
+                                    <li><a class="dropdown-item" href="#" @click="filterStatus('Pending')">Pending</a></li>
+                                    <li><a class="dropdown-item" href="#" @click="filterStatus('Ready')">Ready</a></li>
+                                    <li><a class="dropdown-item" href="#" @click="filterStatus('Completed')">Completed</a></li>
+                                    <li><a class="dropdown-item" href="#" @click="filterStatus('Denial Pending')">Denial Pending</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -49,7 +49,7 @@
                                         <td>{{ row.proposed_pay_date }}</td>
                                         <td>${{ row.proposed_pay_amount }}</td>
                                         <td>
-                                            <span v-if="row.lfp?.declined_removed_reason != null" class="badge rounded-pill text-bg-danger">Removed</span>
+                                            <span v-if="row.lfp?.declined_removed_reason != null && row.lfp?.declined_removed_reason != '-'" class="badge rounded-pill text-bg-danger">Removed</span>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -99,7 +99,6 @@ export default {
         },
         filterStatus: function (type)
         {
-
             let data = {
                 'filter_status': type
             };

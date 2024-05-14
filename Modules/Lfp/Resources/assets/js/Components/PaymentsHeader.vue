@@ -7,24 +7,48 @@
             <span>First Name</span>
         </th>
         <th scope="col" style="min-width: 130px;">
-            <span>Profession</span>
+            <a href="#" @click="switchSort('profession')">
+                <span>Profession</span>
+                <em v-if="sortClmn === 'profession' && sortType === 'desc'" class="bi bi-sort-alpha-up"></em>
+                <em v-else class="bi bi-sort-alpha-down"></em>
+            </a>
         </th>
 
         <th scope="col" style="min-width: 130px;">
-            <span>Anniv. Date</span>
+            <a href="#" @click="switchSort('anniversary_date')">
+                <span>Anniv. Date</span>
+                <em v-if="sortClmn === 'anniversary_date' && sortType === 'desc'" class="bi bi-sort-numeric-up"></em>
+                <em v-else class="bi bi-sort-numeric-down"></em>
+            </a>
         </th>
 
         <th scope="col" style="min-width: 130px;">
-            <span>SFAS Status</span>
+            <a href="#" @click="switchSort('sfas_pay_status')">
+                <span>SFAS Status</span>
+                <em v-if="sortClmn === 'sfas_pay_status' && sortType === 'desc'" class="bi bi-sort-alpha-up"></em>
+                <em v-else class="bi bi-sort-alpha-down"></em>
+            </a>
         </th>
         <th scope="col" style="min-width: 130px;">
-            <span>OShift Status</span>
+            <a href="#" @click="switchSort('oc_pay_status')">
+                <span>OShift Status</span>
+                <em v-if="sortClmn === 'oc_pay_status' && sortType === 'desc'" class="bi bi-sort-alpha-up"></em>
+                <em v-else class="bi bi-sort-alpha-down"></em>
+            </a>
         </th>
         <th scope="col" style="min-width: 130px;">
-            <span>Prop. Date</span>
+            <a href="#" @click="switchSort('proposed_pay_date')">
+                <span>Prop. Date</span>
+                <em v-if="sortClmn === 'proposed_pay_date' && sortType === 'desc'" class="bi bi-sort-numeric-up"></em>
+                <em v-else class="bi bi-sort-numeric-down"></em>
+            </a>
         </th>
         <th scope="col" style="min-width: 130px;">
-            <span>Prop. $$</span>
+            <a href="#" @click="switchSort('proposed_pay_amount')">
+                <span>Prop. $$</span>
+                <em v-if="sortClmn === 'proposed_pay_amount' && sortType === 'desc'" class="bi bi-sort-numeric-up"></em>
+                <em v-else class="bi bi-sort-numeric-down"></em>
+            </a>
         </th>
         <th scope="col" style="min-width: 130px;">
             <span>Remove Flag</span>
@@ -43,11 +67,10 @@ export default {
     props: {},
     data() {
         return {
-            sortClmn: 'receive_date',
-            sortType: 'asc',
+            sortClmn: 'anniversary_date',
+            sortType: 'desc',
             url: '',
-            path: '/lfp/payments',
-            appStatusSort: 'ALL',
+            path: '/lfp/payments'
         }
     },
     mounted() {
@@ -84,32 +107,6 @@ export default {
             Inertia.get(this.path, data, {
                 preserveState: true
             });
-
-        },
-
-        switchStatusSort: function (e) {
-
-            this.sortClmn = 'status';
-            this.sortType = this.appStatusSort;
-
-
-            let data = {
-                'sort': this.sortClmn,
-                'direction': this.sortType
-            };
-
-            //if the url has filter_x params then append them all
-            this.url.searchParams.forEach((value, key) => {
-                let filter = key.split('filter_');
-                if(filter.length > 1) {
-                    data[key] = value;
-                }
-            });
-
-            Inertia.get(this.path, data, {
-                preserveState: true
-            });
-
         },
     }
 };

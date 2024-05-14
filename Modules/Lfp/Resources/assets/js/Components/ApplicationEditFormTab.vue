@@ -121,6 +121,11 @@ tr {
                 </BreezeSelect>
             </div>
 
+            <div class="col-md-12">
+                <BreezeLabel for="inputEditComments" class="form-label" value="Comments" />
+                <textarea class="form-control" id="inputEditComments" v-model="editForm.comment" rows="3">{{ editForm.comment }}</textarea>
+            </div>
+
             <div v-if="editForm.errors != undefined" class="row">
                 <div class="col-12">
                     <div v-if="editForm.hasErrors == true" class="alert alert-danger mt-3">
@@ -185,9 +190,7 @@ export default {
                     this.editForm.formState = false;
                 },
             });
-
         },
-
     },
 
     mounted() {
