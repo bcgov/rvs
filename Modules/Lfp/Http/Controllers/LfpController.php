@@ -3,12 +3,10 @@
 namespace Modules\Lfp\Http\Controllers;
 
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
-use Modules\Lfp\Entities\Application;
 use Modules\Lfp\Entities\Lfp;
 use Modules\Lfp\Entities\Payment;
 use Modules\Lfp\Entities\Util;
@@ -25,20 +23,20 @@ class LfpController extends Controller
     public function index($status = true, $newApp = 0)
     {
         $lfps = $this->paginateLfps();
-        $last_sync = Lfp::select('id', 'sin', 'app_idx', 'created_at')
-            ->where('created_at', '!=', null)
-            ->orderBy('created_at', 'desc')->first();
+        $last_sync = Util::where('field_type', 'Last Sync')->first();
 
-        $hours_difference = 2;
+        $hours_difference = 3;
         if(!is_null($last_sync)){
             // Calculate the difference in hours
-            $hours_difference = Carbon::parse($last_sync->created_at)->diffInHours(Carbon::now());
+            $hours_difference = Carbon::parse($last_sync->field_name)->diffInHours(Carbon::now());
         }
 
-        // Check if the difference is greater than 1 hour
-        if ($hours_difference > 1) {
+        // Check if the difference is greater than 2 hour
+        if ($hours_difference > 2) {
             // Sync applications
             $this->sync();
+            $last_sync->field_name = Carbon::now();
+            $last_sync->save();
         }
         $last_sync = Carbon::parse($last_sync->created_at)->format('Y-m-d H:i');
 
@@ -189,34 +187,31 @@ class LfpController extends Controller
 
         $lfps = $lfps->orderBy('sin')->paginate(25)->onEachSide(1)->appends(request()->query());
 
+        $newLfp = new Lfp();
+
         // inject individual data from sfas
         $sins = $lfps->pluck('sin');
 
-        $sfasInd = (new Lfp)->sfasInd($sins->toArray());
-
+        $sfasInd = [];
+        if(!empty($sins)) {
+            $rawSfasInd = $newLfp->sfasInd($sins->toArray());
+            $sfasInd = collect($rawSfasInd)->keyBy('sin');
+        }
         foreach ($lfps as $lfp) {
-            $lfp->sfas_ind = null;
-            foreach($sfasInd as $ind){
-                if($lfp->sin == $ind->sin){
-                    $lfp->sfas_ind = $ind;
-                    break;
-                }
-            }
+            $lfp->sfas_ind = $sfasInd[$lfp->sin] ?? null;
         }
 
         // inject app data from sfas
         $apps = $lfps->pluck('app_idx');
 
-        $sfasApps = (new Lfp)->sfasApp($apps->toArray());
-
+        $sfasApps = [];
+        if(!empty($apps)) {
+            $rawSfasApps = $newLfp->sfasApp($apps->toArray());
+            $sfasApps = collect($rawSfasApps)->keyBy('pl_loan_forgiveness_app_idx');
+        }
+        // inject sfas app data into applications
         foreach ($lfps as $lfp) {
-            $lfp->sfas_app = null;
-            foreach($sfasApps as $ind){
-                if($lfp->app_idx == $ind->pl_loan_forgiveness_app_idx){
-                    $lfp->sfas_app = $ind;
-                    break;
-                }
-            }
+            $lfp->sfas_app = $sfasApps[$lfp->app_idx] ?? null;
         }
 
         return $lfps;
