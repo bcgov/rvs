@@ -3,14 +3,11 @@
 namespace App\Http\Middleware;
 
 use App\Models\ServiceAccount;
-use App\Models\User;
 use Closure;
 use Firebase\JWT\ExpiredException;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Response;
 
 class ApiAuth
@@ -55,7 +52,7 @@ class ApiAuth
             return Response::json(['status' => false, 'error' => "Invalid token."], 401);
         }else{
             //only validate for accounts that we have registered
-            if($decoded->clientId === env('SERVICE_ACCOUNT')){
+            if($decoded->aud === env('KEYCLOAK_AUD')){
                 $user = ServiceAccount::where('client_id', $decoded->clientId)->first();
                 if(!is_null($user)){
                     if($user->active)
@@ -64,6 +61,6 @@ class ApiAuth
             }
         }
 
-        return Response::json(['status' => false, 'error' => "Generic error."], 401);
+        return Response::json(['status' => false, 'error' => "Generic error."], 403);
     }
 }

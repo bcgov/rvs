@@ -12,7 +12,7 @@ class ServiceAccountController extends Controller
 {
     public function fetchData(Request $request)
     {
-        $tableName = $request->input('table');
+        $tableName = $request->input('table', '');
         $app = $request->input('app');
         $where = $request->input('q');
         $orderBy = $request->input('order');
