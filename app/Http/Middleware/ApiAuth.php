@@ -21,12 +21,10 @@ class ApiAuth
      */
     public function handle(Request $request, Closure $next, ...$roles)
     {
-        $allowedReferer = env('KEYCLOAK_APS_URL') . '/api';
-        $referer = $request->headers->get('referer');
-        $origin = $request->headers->get('origin');
+        $forwardedHost = $request->headers->get('X-Forwarded-Host');
 
         // Prevent access to the API except via the gateway
-        if ($referer !== $allowedReferer && $origin !== env('KEYCLOAK_APS_URL')) {
+        if ($forwardedHost !== env('KEYCLOAK_APS_URL')) {
             return Response::json(['error' => 'Unauthorized'], 403);
         }
 

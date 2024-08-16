@@ -182,6 +182,9 @@ RUN mkdir -p storage && mkdir -p bootstrap/cache && chmod -R ug+rwx storage boot
     && chmod +x /sbin/entrypoint.sh
 USER ${USER_ID}
 
+#composer install
+RUN composer install && npm install --prefix /var/www/html/ && npm run --prefix /var/www/html/ ${DEVENV}
+
 ENTRYPOINT ["/sbin/entrypoint.sh"]
 # Start!
 CMD ["apache2-foreground"]
