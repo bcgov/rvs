@@ -21,12 +21,20 @@ class ApiAuth
      */
     public function handle(Request $request, Closure $next, ...$roles)
     {
+        $allowedReferer = env('KEYCLOAK_APS_URL') . '/api';
+        $referer = $request->headers->get('referer');
+        $origin = $request->headers->get('origin');
+
+        // Prevent access to the API except via the gateway
+        if ($referer !== $allowedReferer && $origin !== env('KEYCLOAK_APS_URL')) {
+            return Response::json(['error' => 'Unauthorized'], 403);
+        }
 
         $token = request()->bearerToken();
         if(is_null($token)){
             return Response::json(['status' => false, 'error' => 'Missing token.'], 401);
         }
-        $jwksUri = env('KEYCLOAK_CERT');
+        $jwksUri = env('KEYCLOAK_APS_ISS') . env('KEYCLOAK_APS_CERT_PATH');
         $jwksJson = file_get_contents($jwksUri);
         $jwksData = json_decode($jwksJson, true);
         $matchingKey = null;
@@ -52,12 +60,12 @@ class ApiAuth
             return Response::json(['status' => false, 'error' => "Invalid token."], 401);
         }else{
             //only validate for accounts that we have registered
-            if($decoded->aud === env('KEYCLOAK_AUD')){
-                $user = ServiceAccount::where('client_id', $decoded->clientId)->first();
-                if(!is_null($user)){
-                    if($user->active)
+            if($decoded->iss === env('KEYCLOAK_APS_ISS')){
+//                $user = ServiceAccount::where('client_id', $decoded->clientId)->first();
+//                if(!is_null($user)){
+//                    if($user->active)
                         return $next($request);
-                }
+//                }
             }
         }
 
