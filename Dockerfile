@@ -6,6 +6,7 @@ ARG CA_HOSTS_LIST
 ARG TEST_ARG
 ARG USER_ID
 ARG DEBIAN_FRONTEND=noninteractive
+ARG DEVENV=prod
 
 # set entrypoint variables
 ENV USER_NAME=${USER_ID}
