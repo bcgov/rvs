@@ -92,8 +92,8 @@ export default {
             }
 
             let data = {
-                'sort': this.sortClmn,
-                'direction': this.sortType
+                'direction': this.sortType,
+                'sort': this.sortClmn
             };
 
             //if the url has filter_x params then append them all

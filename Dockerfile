@@ -6,6 +6,7 @@ ARG CA_HOSTS_LIST
 ARG TEST_ARG
 ARG USER_ID
 ARG DEBIAN_FRONTEND=noninteractive
+ARG DEVENV=prod
 
 # set entrypoint variables
 ENV USER_NAME=${USER_ID}
@@ -181,6 +182,9 @@ RUN mkdir -p storage && mkdir -p bootstrap/cache && chmod -R ug+rwx storage boot
 #openshift will complaine about permission \
     && chmod +x /sbin/entrypoint.sh
 USER ${USER_ID}
+
+#composer install
+RUN composer install && npm install --prefix /var/www/html/ && npm run --prefix /var/www/html/ ${DEVENV}
 
 ENTRYPOINT ["/sbin/entrypoint.sh"]
 # Start!

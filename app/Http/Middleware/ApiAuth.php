@@ -3,14 +3,11 @@
 namespace App\Http\Middleware;
 
 use App\Models\ServiceAccount;
-use App\Models\User;
 use Closure;
 use Firebase\JWT\ExpiredException;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Response;
 
 class ApiAuth
@@ -24,12 +21,18 @@ class ApiAuth
      */
     public function handle(Request $request, Closure $next, ...$roles)
     {
+        $forwardedHost = $request->headers->get('X-Forwarded-Host');
+
+        // Prevent access to the API except via the gateway
+        if ($forwardedHost !== env('KEYCLOAK_APS_URL')) {
+            return Response::json(['error' => 'Unauthorized'], 403);
+        }
 
         $token = request()->bearerToken();
         if(is_null($token)){
             return Response::json(['status' => false, 'error' => 'Missing token.'], 401);
         }
-        $jwksUri = env('KEYCLOAK_CERT');
+        $jwksUri = env('KEYCLOAK_APS_ISS') . env('KEYCLOAK_APS_CERT_PATH');
         $jwksJson = file_get_contents($jwksUri);
         $jwksData = json_decode($jwksJson, true);
         $matchingKey = null;
@@ -55,15 +58,15 @@ class ApiAuth
             return Response::json(['status' => false, 'error' => "Invalid token."], 401);
         }else{
             //only validate for accounts that we have registered
-            if($decoded->clientId === env('SERVICE_ACCOUNT')){
-                $user = ServiceAccount::where('client_id', $decoded->clientId)->first();
-                if(!is_null($user)){
-                    if($user->active)
+            if($decoded->iss === env('KEYCLOAK_APS_ISS')){
+//                $user = ServiceAccount::where('client_id', $decoded->clientId)->first();
+//                if(!is_null($user)){
+//                    if($user->active)
                         return $next($request);
-                }
+//                }
             }
         }
 
-        return Response::json(['status' => false, 'error' => "Generic error."], 401);
+        return Response::json(['status' => false, 'error' => "Generic error."], 403);
     }
 }
