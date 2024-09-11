@@ -31,6 +31,8 @@ class UserController extends Controller
             'clientId' => env('KEYCLOAK_CLIENT_ID'),
             'clientSecret' => env('KEYCLOAK_CLIENT_SECRET'),
             'redirectUri' => env('KEYCLOAK_REDIRECT_URI'),
+            'version' => '24.0.2', # Add this parameter to troubleshoot the issue
+
         ]);
 
         if (! $request->has('code')) {
