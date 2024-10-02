@@ -41,4 +41,9 @@ class Lfp extends ModuleModel
         return DB::connection('oracle')
             ->select(env("LFP_SFA_APPS") . "(" . implode(",", $apps) . ")");
     }
+
+    public function intake()
+    {
+        return $this->hasOne(Intake::class, 'app_idx', 'app_idx');
+    }
 }

@@ -7,6 +7,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use Modules\Lfp\Entities\Intake;
 use Modules\Lfp\Entities\Lfp;
 use Modules\Lfp\Entities\Payment;
 use Modules\Lfp\Entities\Util;
@@ -95,6 +96,16 @@ class LfpController extends Controller
                     $pay->save();
                 }
             }
+
+            // find any intake of the same sin that has already been registered but not connected to an sfas app
+            $intake = Intake::where('sin', $app->sin)
+                ->where('app_idx', null)
+                ->where('intake_status', 'Registered')
+                ->first();
+            if(!is_null($intake)){
+                $intake->app_idx = $app->app_idx;
+                $intake->save();
+            }
         }
 
 
@@ -108,7 +119,7 @@ class LfpController extends Controller
      */
     public function show(Lfp $lfp)
     {
-        $lfp = Lfp::with('payments')->where('id', $lfp->id)->first();
+        $lfp = Lfp::with('payments', 'intake')->where('id', $lfp->id)->first();
 
         $qry = env('LFP_QUERY1').$lfp->sin;
         $student = DB::connection('oracle')->select($qry);
