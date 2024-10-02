@@ -49,36 +49,40 @@
                                 <form class="card-body" v-if="intakeForm != null" @submit.prevent="storeIntake">
                                     <div class="row g-3">
 
-                                        <div class="col-md-3">
+                                        <div class="col-md-4">
                                             <BreezeLabel for="inputFirstName" class="form-label" value="First Name" />
                                             <BreezeInput type="text" class="form-control" id="inputFirstName" v-model="intakeForm.first_name" />
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-4">
                                             <BreezeLabel for="inputLastName" class="form-label" value="Last Name" />
                                             <BreezeInput type="text" class="form-control" id="inputLastName" v-model="intakeForm.last_name" />
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-4">
+                                            <BreezeLabel for="inputAliasName" class="form-label" value="Alias Name" />
+                                            <BreezeInput type="text" class="form-control" id="inputAliasName" v-model="intakeForm.alias_name" />
+                                        </div>
+
+                                        <div class="col-md-4">
                                             <BreezeLabel for="inputSin" class="form-label" value="SIN" />
                                             <BreezeInput type="text" class="form-control" id="inputSin" v-model="intakeForm.sin" />
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-4">
                                             <BreezeLabel for="inputReceiveDate" class="form-label" value="Receive Date" />
                                             <BreezeInput type="date" min="2000-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" class="form-control" id="inputReceiveDate" v-model="intakeForm.receive_date" />
                                         </div>
-
-
-                                        <div class="col-md-3">
+                                        <div class="col-md-4">
                                             <BreezeLabel for="inputRepaymentStartDate" class="form-label" value="Repayment Start Date" />
                                             <BreezeInput type="date" min="2000-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" class="form-control" id="inputRepaymentStartDate" v-model="intakeForm.repayment_start_date" />
                                         </div>
-                                        <div class="col-md-3">
+
+                                        <div class="col-md-4">
                                             <BreezeLabel for="inputAmountOwing" class="form-label" value="Amount Owing" />
                                             <div class="input-group">
                                                 <div class="input-group-text">$</div>
                                                 <BreezeInput type="number" step="0.001" class="form-control" id="inputAmountOwing" v-model="intakeForm.amount_owing" />
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-4">
                                             <BreezeLabel for="selectInGoodStanding" class="form-label" value="In Good Standing" />
                                             <BreezeSelect class="form-select" id="selectInGoodStanding" v-model="intakeForm.in_good_standing">
                                                 <option value="Yes">Yes</option>
@@ -86,7 +90,7 @@
                                                 <option value="Bankruptcy">Bankruptcy</option>
                                             </BreezeSelect>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-4">
                                             <BreezeLabel for="inputProposedRegistrationDate" class="form-label" value="Prop. Reg. Date" />
                                             <BreezeInput type="date" min="2019-01-01" max="2040-12-31" placeholder="Proposed registration date YYYY-MM-DD" class="form-control" id="inputProposedRegistrationDate" v-model="intakeForm.proposed_registration_date" />
                                         </div>
@@ -109,14 +113,12 @@
                                                 <option v-for="u in utils['Community']" :value="u">{{ u }}</option>
                                             </BreezeSelect>
                                         </div>
-
                                         <div class="col-md-3">
                                             <BreezeLabel for="selectEmploymentStatus" class="form-label" value="Employment Status" />
                                             <BreezeSelect class="form-select" id="selectEmploymentStatus" v-model="intakeForm.employment_status">
                                                 <option v-for="u in utils['Employment Status']" :value="u">{{ u }}</option>
                                             </BreezeSelect>
                                         </div>
-
 
 
                                         <div class="col-md-12">
