@@ -9,8 +9,8 @@ tr {
 </style>
 <template>
     <div>
-        <table v-if="student != null && student.length > 0">
-            <tr v-for="(v, k, i) in student[0]">
+        <table v-if="intake != null">
+            <tr v-for="(v, k, i) in intake">
                 <th>{{k}}:</th>
                 <td>{{v}}</td>
             </tr>
@@ -31,7 +31,7 @@ export default {
         BreezeInput, BreezeLabel, Link, BreezeSelect, FormSubmitAlert
     },
     props: {
-        student: Object,
+        intake: Object,
     },
     data() {
         return {

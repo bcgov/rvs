@@ -20,10 +20,10 @@
                                         </g>
                                     </svg>
 
-                                </Link> Student Info
+                                </Link> Intake Info
                             </div>
                             <div class="card-body">
-                                <ApplicationEditStudentTab :student="student"></ApplicationEditStudentTab>
+                                <ApplicationEditStudentTab :intake="result.intake"></ApplicationEditStudentTab>
                             </div>
                         </div>
                     </div>
