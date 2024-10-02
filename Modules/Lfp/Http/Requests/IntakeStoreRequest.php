@@ -40,6 +40,7 @@ class IntakeStoreRequest extends FormRequest
             'sin' => 'required',
             'first_name' => 'required',
             'last_name' => 'required',
+            'alias_name' => 'nullable',
             'profession' => 'nullable',
             'employer' => 'nullable',
             'community' => 'nullable',
