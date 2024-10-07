@@ -103,7 +103,7 @@ class LfpController extends Controller
                 ->where('intake_status', 'Registered')
                 ->first();
             if(!is_null($intake)){
-                $intake->app_idx = $app->app_idx;
+                $intake->app_idx = $app->pl_loan_forgiveness_app_idx;
                 $intake->save();
             }
         }
