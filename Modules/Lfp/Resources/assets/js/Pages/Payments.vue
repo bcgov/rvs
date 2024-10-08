@@ -19,6 +19,10 @@
                             Payments
 
                             <div class="d-inline-flex dropdown float-end">
+                                <template v-if="results != null && results.data.length > 0">
+                                    <div class="col-auto me-1"><button class="btn btn-success fw-light" @click="exportList"><i class="bi bi-filetype-csv"></i>
+                                    </button></div>
+                                </template>
                                 <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     filter by payment status
                                 </button>
@@ -83,10 +87,11 @@ export default {
         errors: {
             type: Object,
             default: () => ({})
-        }
+        },
     },
     data() {
         return {
+            filterType: 'all',
             applications: [],
         }
     },
@@ -99,8 +104,9 @@ export default {
         },
         filterStatus: function (type)
         {
+            this.filterType = type;
             let data = {
-                'filter_status': type
+                'filter_status': this.filterType
             };
 
             Inertia.get('/lfp/payments', data, {
@@ -111,7 +117,9 @@ export default {
         {
             return name == null ? "BLANK" : name;
         },
-
+        exportList: function () {
+            window.location.href = '/lfp/payments/download/' + this.filterType;
+        },
     },
     mounted() {
 
