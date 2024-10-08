@@ -2,6 +2,7 @@
 
 namespace Modules\Lfp\Http\Controllers;
 
+use Barryvdh\Debugbar\Facades\Debugbar;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -57,6 +58,8 @@ class PaymentController extends Controller
 
     public function downloadPayments(Request $request, $type)
     {
+        // Disable the Debugbar for this specific response
+        Debugbar::disable();
 
         $currentMonth = Carbon::now()->format('Y-m') . "-01";
         $lastMonth = Carbon::now()->subMonth()->format('Y-m') . "-01";

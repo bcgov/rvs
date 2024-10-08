@@ -65,7 +65,7 @@ class IntakeController extends Controller
     {
         //$intake = Intake::where('id', $intake->id)->first();
         $utils_array = [];
-        $utils = Util::whereIn('field_type', ['Profession', 'Employer', 'Community', 'Employment Status'])
+        $utils = Util::whereIn('field_type', ['Profession', 'Employer', 'Community', 'Employment Status', 'Remove Reason'])
             ->where('active_flag', true)->orderBy('field_name', 'asc')->get();
         foreach($utils as $u){
             $utils_array[$u->field_type][] = $u->field_name;
