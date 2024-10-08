@@ -3,7 +3,11 @@
 namespace Modules\Lfp\Http\Controllers;
 
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Schema;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
 use Modules\Lfp\Entities\Lfp;
@@ -49,6 +53,87 @@ class PaymentController extends Controller
         $payment = Payment::find($payment->id);
 
         return Redirect::route('lfp.applications.show', [$payment->lfp_id]);
+    }
+
+    public function downloadPayments(Request $request, $type)
+    {
+
+        $currentMonth = Carbon::now()->format('Y-m') . "-01";
+        $lastMonth = Carbon::now()->subMonth()->format('Y-m') . "-01";
+        $monthBeforeLast = Carbon::now()->subMonths(2)->format('Y-m') . "-01";
+
+        $payments = Payment::whereIn('anniversary_date', [$currentMonth, $lastMonth, $monthBeforeLast])
+            ->orderByDesc('anniversary_date')
+            ->with('lfp');
+
+        if ($type != 'all') {
+            if ($type == 'empty') {
+                $payments = $payments->whereNull('oc_pay_status');
+            } else {
+                $payments = $payments->where('oc_pay_status', 'ilike', $type);
+            }
+        }
+
+        try {
+
+            //default to exporting awarded
+            $payments = $payments->get();
+
+            // Get column names for Payment and Product tables
+            $paymentColumns = Schema::connection(env('DB_DATABASE_LFP'))->getColumnListing('payments');
+            $lfpColumns = Schema::connection(env('DB_DATABASE_LFP'))->getColumnListing('lfps');
+
+            // Prefix lfp columns to avoid name collisions
+            $lfpColumns = array_map(function($col) {
+                return 'lfpApp_' . $col;
+            }, $lfpColumns);
+
+            // Combine both payment and prefixed lfp columns for the header
+            $headers = array_merge($paymentColumns, $lfpColumns);
+
+            // Open a new CSV file for writing
+            $filename = $type.'-'.$monthBeforeLast.'TO'.$currentMonth.'.csv';
+            $csvFile = fopen('php://output', 'w');
+            header('Content-Type: text/csv');
+            header('Content-Disposition: attachment; filename="'.$filename.'"');
+
+
+            // Write the headers to the CSV file
+            fputcsv($csvFile, $headers);
+
+            // Loop through each payment and write the rows
+            foreach ($payments as $payment) {
+                // Get payment data
+                $paymentData = $payment->getAttributes();
+
+                // Get related product data and prefix the keys
+                $lfpData = $payment->lfp ? $payment->lfp->getAttributes() : array_fill(0, count($lfpColumns), null);
+                $prefixedLfpData = [];
+
+                if ($payment->lfp) {
+                    foreach ($lfpData as $key => $value) {
+                        $prefixedLfpData['lfpApp_' . $key] = $value;
+                    }
+                } else {
+                    $prefixedLfpData = array_fill_keys($lfpColumns, null); // Fill with nulls if no related lfp
+                }
+
+                // Combine payment and prefixed lfp data into a single row
+                $row = array_merge($paymentData, $prefixedLfpData);
+
+                // Write the row to the CSV file
+                fputcsv($csvFile, $row);
+            }
+
+
+            // Close the CSV file
+            fclose($csvFile);
+
+        } catch (\Exception $exception) {
+            Log::error('Error generating CSV for download: '.$exception);
+
+            return Response::make('Internal server error.', 500, []);
+        }
     }
 
     private function paginatePayments()
@@ -115,4 +200,55 @@ class PaymentController extends Controller
         return $payments;
     }
 
+    private function prepareCsvLine($record)
+    {
+        $csvValues = [
+            $record->application_number,
+            $record->sin,
+            $record->postal_code,
+            $record->birth_date,
+            '"'.$record->first_name.'"',
+            '"'.$record->middle_name.'"',
+            '"'.$record->last_name.'"',
+            $record->assessed_need_amount,
+            $record->total_unmet_need,
+            $record->weeks_of_study,
+            $record->weekly_unmet_need,
+            $record->program_year,
+            '"'.$record->street_address1.'"',
+            '"'.$record->street_address2.'"',
+            '"'.$record->city.'"',
+            '"'.$record->province.'"',
+            $record->gender,
+            $record->phone_number,
+            $record->study_start_date,
+            $record->study_end_date,
+            '"'.$record->institution_name.'"',
+            $record->program_code,
+            $record->inst_code,
+            '"'.$record->area_of_study.'"',
+            $record->degree_level,
+            $record->bursary_period_id,
+            $record->month_overlap,
+            $record->num_day_overlap,
+            $record->valid_institution,
+            $record->restriction,
+            $record->awarded_in_prior_year,
+            $record->withdrawal,
+            $record->nurse_type,
+            $record->sector,
+            $record->eligibility,
+            $record->neb_ineligible_reason,
+            $record->rank_by_unmet_need,
+            $record->rank_by_nurse_type,
+            $record->rank_by_sector,
+            $record->award_or_deny,
+            $record->neb_deny_reason,
+            $record->award_amount,
+            $record->sfas_award_id,
+            $record->supplier_no,
+        ];
+
+        return implode(',', $csvValues);
+    }
 }
