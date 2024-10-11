@@ -28,8 +28,10 @@ class Lfp extends ModuleModel
         return $this->hasMany('Modules\Lfp\Entities\Application', 'lfp_id', 'id');
     }
 
-    public function sfasInd(Array $sin): array
+    public function sfasInd(Array $sin): array|null
     {
+        if(empty($sin)) return null;
+
         return DB::connection('oracle')
             ->select(env("LFP_QUERY2") . "(" . implode(",", $sin) . ")");
     }

@@ -32,7 +32,7 @@ Route::prefix('lfp')->group(function () {
         Route::put('/intakes/{intake}', 'IntakeController@update')->name('intakes.update');
         Route::get('/payments', 'PaymentController@index')->name('payments.index');
         Route::put('/payments/{payment}', 'PaymentController@update')->name('payments.update');
-        Route::get('/payments/download/{type}', 'PaymentController@downloadPayments')->name('payments.download');
+        Route::get('/payments/download/{type}/{range}', 'PaymentController@downloadPayments')->name('payments.download');
 
         Route::group(['middleware' => 'lfp_admin'], function () {
             Route::group(

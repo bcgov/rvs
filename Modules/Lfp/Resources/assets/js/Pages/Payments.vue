@@ -20,8 +20,47 @@
 
                             <div class="d-inline-flex dropdown float-end">
                                 <template v-if="results != null && results.data.length > 0">
-                                    <div class="col-auto me-1"><button class="btn btn-success fw-light" @click="exportList"><i class="bi bi-filetype-csv"></i>
-                                    </button></div>
+                                    <div class="d-inline-flex dropdown me-1">
+                                        <button class="btn btn-success btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Export Payments <i class="bi bi-filetype-csv"></i>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="dropdown-item" href="#" @click="exportList('2')">
+                                                    Current month TO -2m
+                                                    <span v-if="currentRange === 2" class="badge rounded-pill text-bg-success ms-1">
+                                                <i class="bi bi-check-lg"></i>
+                                            </span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="#" @click="exportList('3')">
+                                                    Current month TO -3m
+                                                    <span v-if="currentRange === 3" class="badge rounded-pill text-bg-success ms-1">
+                                                <i class="bi bi-check-lg"></i>
+                                            </span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="#" @click="exportList('6')">
+                                                    Current month TO -6m
+                                                    <span v-if="currentRange === 6" class="badge rounded-pill text-bg-success ms-1">
+                                                <i class="bi bi-check-lg"></i>
+                                            </span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="#" @click="exportList('12')">
+                                                    Current month TO -12m
+                                                    <span v-if="currentRange === 12" class="badge rounded-pill text-bg-success ms-1">
+                                                <i class="bi bi-check-lg"></i>
+                                            </span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+<!--                                    <div class="col-auto me-1"><button class="btn btn-success fw-light" @click="exportList">-->
+<!--                                    </button></div>-->
                                 </template>
                                 <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     filter by payment status
@@ -93,9 +132,13 @@ export default {
         return {
             filterType: 'all',
             applications: [],
+            // currentRange: 2,
         }
     },
     methods: {
+        switchRange: function (range) {
+            this.currentRange = range;
+        },
         cleanDate: function(d)
         {
             if(d == null) return d;
@@ -117,8 +160,8 @@ export default {
         {
             return name == null ? "BLANK" : name;
         },
-        exportList: function () {
-            window.location.href = '/lfp/payments/download/' + this.filterType;
+        exportList: function (range) {
+            window.location.href = '/lfp/payments/download/' + this.filterType + '/' + range;
         },
     },
     mounted() {
