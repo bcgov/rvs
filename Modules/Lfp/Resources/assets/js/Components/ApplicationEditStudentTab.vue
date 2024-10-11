@@ -31,7 +31,7 @@ export default {
         BreezeInput, BreezeLabel, Link, BreezeSelect, FormSubmitAlert
     },
     props: {
-        intake: Object,
+        intake: Object|null,
     },
     data() {
         return {
