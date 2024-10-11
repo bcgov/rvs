@@ -56,14 +56,14 @@ class PaymentController extends Controller
         return Redirect::route('lfp.applications.show', [$payment->lfp_id]);
     }
 
-    public function downloadPayments(Request $request, $type)
+    public function downloadPayments(Request $request, $type, $range)
     {
         // Disable the Debugbar for this specific response
         Debugbar::disable();
 
         $currentMonth = Carbon::now()->format('Y-m') . "-01";
         $lastMonth = Carbon::now()->subMonth()->format('Y-m') . "-01";
-        $monthBeforeLast = Carbon::now()->subMonths(2)->format('Y-m') . "-01";
+        $monthBeforeLast = Carbon::now()->subMonths((integer)$range)->format('Y-m') . "-01";
 
         $payments = Payment::whereIn('anniversary_date', [$currentMonth, $lastMonth, $monthBeforeLast])
             ->orderByDesc('anniversary_date')
@@ -78,6 +78,11 @@ class PaymentController extends Controller
         }
 
         try {
+
+            $neededColumns = ['id', 'anniversary_date', 'proposed_pay_date', 'proposed_pay_amount',
+                'proposed_hrs_of_service',	'sfas_pay_status',	'oc_pay_status',
+                'lfpApp_sin', 'lfpApp_profession', 'lfpApp_employer', 'lfpApp_employment_status', 'lfpApp_community',
+                'lfpApp_declined_removed_reason', ];
 
             //default to exporting awarded
             $payments = $payments->get();
@@ -100,9 +105,14 @@ class PaymentController extends Controller
             header('Content-Type: text/csv');
             header('Content-Disposition: attachment; filename="'.$filename.'"');
 
-
+            $neededHeader = [];
+            foreach ($headers as $header) {
+                if( in_array($header, $neededColumns)) {
+                    $neededHeader[] = $header;
+                }
+            }
             // Write the headers to the CSV file
-            fputcsv($csvFile, $headers);
+            fputcsv($csvFile, $neededHeader);
 
             // Loop through each payment and write the rows
             foreach ($payments as $payment) {
@@ -124,8 +134,14 @@ class PaymentController extends Controller
                 // Combine payment and prefixed lfp data into a single row
                 $row = array_merge($paymentData, $prefixedLfpData);
 
+                $neededValues = [];
+                foreach ($row as $key => $value) {
+                    if( in_array($key, $neededColumns)) {
+                        $neededValues[] = $value;
+                    }
+                }
                 // Write the row to the CSV file
-                fputcsv($csvFile, $row);
+                fputcsv($csvFile, $neededValues);
             }
 
 

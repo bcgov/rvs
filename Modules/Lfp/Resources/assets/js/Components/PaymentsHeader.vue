@@ -29,7 +29,7 @@
                 <em v-else class="bi bi-sort-alpha-down"></em>
             </a>
         </th>
-        <th scope="col" style="min-width: 130px;">
+        <th scope="col" style="min-width: 135px;">
             <a href="#" @click="switchSort('oc_pay_status')">
                 <span>OShift Status</span>
                 <em v-if="sortClmn === 'oc_pay_status' && sortType === 'desc'" class="bi bi-sort-alpha-up"></em>
