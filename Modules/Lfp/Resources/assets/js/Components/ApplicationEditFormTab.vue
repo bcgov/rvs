@@ -126,6 +126,16 @@ tr {
                 <textarea class="form-control" id="inputEditComments" v-model="editForm.comment" rows="3">{{ editForm.comment }}</textarea>
             </div>
 
+            <div v-if="needsUpdate" class="row">
+                <div class="col-12">
+                    <div class="alert alert-warning mt-3">
+                        <ul>
+                            <li>Your form has some Intake data that has not been saved yet. Please click on Update Application to save that data.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
             <div v-if="editForm.errors != undefined" class="row">
                 <div class="col-12">
                     <div v-if="editForm.hasErrors == true" class="alert alert-danger mt-3">
@@ -164,13 +174,14 @@ export default {
         result: Object,
         app: Object|null,
         utils: Object,
-        student: Object
+        student: Object,
     },
     data() {
         return {
             noChanges: true,
             editForm: '',
-            readOnlyApp: ''
+            readOnlyApp: '',
+            needsUpdate: false,
         }
     },
     methods: {
@@ -200,6 +211,30 @@ export default {
         this.editForm = JSON.parse(JSON.stringify(this.result));
         this.editForm.formSuccessMsg = 'Form was submitted successfully.';
         this.editForm.formFailMsg = 'There was an error submitting this form.';
+
+        // If we have an intake and the application is missing some data from the intake, then pre-populate
+        if(this.result.intake != null){
+            if(this.editForm.profession == null){
+                this.editForm.profession = this.result.intake.profession;
+                this.needsUpdate = true;
+            }
+            if(this.editForm.employer == null){
+                this.editForm.employer = this.result.intake.employer;
+                this.needsUpdate = true;
+            }
+            if(this.editForm.employment_status == null){
+                this.editForm.employment_status = this.result.intake.employment_status;
+                this.needsUpdate = true;
+            }
+            if(this.editForm.community == null){
+                this.editForm.community = this.result.intake.community;
+                this.needsUpdate = true;
+            }
+            if(this.editForm.comment == null){
+                this.editForm.comment = this.result.intake.comment;
+                this.needsUpdate = true;
+            }
+        }
 
     }
 }
