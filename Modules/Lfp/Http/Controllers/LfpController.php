@@ -61,6 +61,8 @@ class LfpController extends Controller
 
     public function sync($status = true, $newApp = 0)
     {
+        ini_set('memory_limit', '-1');
+
         $qry = env("LFP_APP_SYNC") . "0";
         //select last app entered
         $lfp = Lfp::select('id', 'app_idx', 'sin')->whereNotNull('app_idx')->orderBy('created_at', 'desc')->first();
