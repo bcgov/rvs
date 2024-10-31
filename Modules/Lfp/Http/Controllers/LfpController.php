@@ -62,6 +62,7 @@ class LfpController extends Controller
     public function sync($status = true, $newApp = 0)
     {
         ini_set('memory_limit', '-1');
+        ini_set('max_execution_time', 60); // 60 seconds
 
         $qry = env("LFP_APP_SYNC") . "0";
         //select last app entered
@@ -74,9 +75,14 @@ class LfpController extends Controller
         foreach ($sfas as $app){
             $check = Lfp::select('id', 'app_idx', 'sin')->where('app_idx', $app->pl_loan_forgiveness_app_idx)->first();
             if(is_null($check)) {
+                // Only check for the sin and app_idx. Do not include first and last name
                 $check = Lfp::firstOrCreate([
                     'sin' => $app->sin,
                     'app_idx' => $app->pl_loan_forgiveness_app_idx,
+                ]);
+                $check->update([
+                    'first_name' => $app->first_name,
+                    'last_name' => $app->last_name,
                 ]);
             }
 

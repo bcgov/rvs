@@ -79,7 +79,8 @@ class PaymentController extends Controller
 
         try {
 
-            $neededColumns = ['id', 'anniversary_date', 'proposed_pay_date', 'proposed_pay_amount',
+            $neededColumns = ['id', 'lfpApp_full_name_alias', 'lfpApp_first_name', 'lfpApp_last_name',
+                'anniversary_date', 'proposed_pay_date', 'proposed_pay_amount',
                 'proposed_hrs_of_service',	'sfas_pay_status',	'oc_pay_status',
                 'lfpApp_sin', 'lfpApp_profession', 'lfpApp_employer', 'lfpApp_employment_status', 'lfpApp_community',
                 'lfpApp_declined_removed_reason', ];
