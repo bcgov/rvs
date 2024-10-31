@@ -62,10 +62,10 @@ class PaymentController extends Controller
         Debugbar::disable();
 
         $currentMonth = Carbon::now()->format('Y-m') . "-01";
-        $lastMonth = Carbon::now()->subMonth()->format('Y-m') . "-01";
+        //$lastMonth = Carbon::now()->subMonth()->format('Y-m') . "-01";
         $monthBeforeLast = Carbon::now()->subMonths((integer)$range)->format('Y-m') . "-01";
 
-        $payments = Payment::whereIn('anniversary_date', [$currentMonth, $lastMonth, $monthBeforeLast])
+        $payments = Payment::whereBetween('anniversary_date', [$monthBeforeLast, $currentMonth])
             ->orderByDesc('anniversary_date')
             ->with('lfp');
 
@@ -159,10 +159,15 @@ class PaymentController extends Controller
     private function paginatePayments()
     {
         $currentMonth = Carbon::now()->format('Y-m') . "-01";
-        $lastMonth = Carbon::now()->subMonth()->format('Y-m') . "-01";
+        //$lastMonth = Carbon::now()->subMonth()->format('Y-m') . "-01";
         $monthBeforeLast = Carbon::now()->subMonths(2)->format('Y-m') . "-01";
 
-        $payments = Payment::whereIn('anniversary_date', [$currentMonth, $lastMonth, $monthBeforeLast])
+        // If it is a filtered list then show records from today and back 6 months
+        if (request()->has('filter_status') && request()->filter_status != 'all') {
+            $monthBeforeLast = Carbon::now()->subMonths(6)->format('Y-m') . "-01";
+        }
+
+        $payments = Payment::whereBetween('anniversary_date', [$monthBeforeLast, $currentMonth])
             ->orderByDesc('anniversary_date')
             ->with('lfp');
 

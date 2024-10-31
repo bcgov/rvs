@@ -19,7 +19,7 @@
                             Applications
                             <div class="d-flex float-end">
                                 <small class="pt-1 me-2">last sync: {{ lastSync }}</small>
-                                <a href="/lfp/applications/sync" class="btn btn-success btn-sm">Sync Apps</a>
+<!--                                <a href="/lfp/applications/sync" class="btn btn-success btn-sm">Sync Apps</a>-->
                             </div>
                             <div class="d-inline-flex dropdown">
                                 <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
