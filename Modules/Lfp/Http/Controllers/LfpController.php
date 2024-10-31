@@ -151,13 +151,13 @@ class LfpController extends Controller
     {
         $lfps = Lfp::where('app_idx', '!=', null);
         if (request()->filter_fname !== null) {
-//            $lfps = $lfps->where('first_name', 'ILIKE', '%'.request()->filter_fname.'%')
-//                ->orWhere('full_name_alias', 'ILIKE', '%'.request()->filter_fname.'%');
+            $lfps = $lfps->where('first_name', 'ILIKE', '%'.request()->filter_fname.'%')
+                ->orWhere('full_name_alias', 'ILIKE', '%'.request()->filter_fname.'%');
             $lfps = $lfps->where('full_name_alias', 'ILIKE', '%'.request()->filter_fname.'%');
         }
         if (request()->filter_lname !== null) {
-//            $lfps = $lfps->where('last_name', 'ILIKE', '%'.request()->filter_lname.'%')
-//                ->orWhere('full_name_alias', 'ILIKE', '%'.request()->filter_lname.'%');
+            $lfps = $lfps->where('last_name', 'ILIKE', '%'.request()->filter_lname.'%')
+                ->orWhere('full_name_alias', 'ILIKE', '%'.request()->filter_lname.'%');
             $lfps = $lfps->where('full_name_alias', 'ILIKE', '%'.request()->filter_lname.'%');
         }
 
