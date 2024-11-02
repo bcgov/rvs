@@ -27,7 +27,7 @@
                 <option value="all">All</option>
                 <option value="Pending">Pending</option>
                 <option value="Ready">Ready</option>
-                <option value="Completed">Completed</option>
+                <option value="Registered">Registered</option>
                 <option value="Denied">Denied</option>
                 <option value="Cancelled">Cancelled</option>
             </select>
