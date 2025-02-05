@@ -7,6 +7,58 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+## Seeding Databases (local or dev environments)
+
+Laravel includes the ability to seed your database with data using seed classes. All seed classes are stored in the database/seeders directory.
+
+### Seeding main database
+
+Go to the app root directory and run:
+```
+php artisan db:seed
+```
+
+### Seeding LFP database
+
+Go to the app root directory and run:
+```
+php artisan db:seed --class="Modules\Lfp\Database\Seeders\LfpDatabaseSeeder"
+```
+
+### Seeding NEB database
+
+Go to the app root directory and run:
+```
+php artisan db:seed --class="Modules\Neb\Database\Seeders\NebDatabaseSeeder"
+```
+
+### Seeding PLSC database
+
+Go to the app root directory and run:
+```
+php artisan db:seed --class="Modules\Plsc\Database\Seeders\PlscDatabaseSeeder"
+```
+
+### Seeding TWP database
+
+Go to the app root directory and run:
+```
+php artisan db:seed --class="Modules\Twp\Database\Seeders\TwpDatabaseSeeder"
+```
+### Seeding VSS database
+
+Go to the app root directory and run:
+```
+php artisan db:seed --class="Modules\Vss\Database\Seeders\VssDatabaseSeeder"
+```
+
+### Seeding YEAF database
+
+Go to the app root directory and run:
+```
+php artisan db:seed --class="Modules\Yeaf\Database\Seeders\YeafDatabaseSeeder"
+```
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:

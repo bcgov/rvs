@@ -2,8 +2,13 @@
 
 namespace Modules\Lfp\Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Seeder;
+use Modules\Lfp\Database\Seeders\TablesSeeders\LfpApplicationsTableSeeder;
+use Modules\Lfp\Database\Seeders\TablesSeeders\LfpIntakesTableSeeder;
+use Modules\Lfp\Database\Seeders\TablesSeeders\LfpPaymentsTableSeeder;
+use Modules\Lfp\Database\Seeders\TablesSeeders\LfpStudentsTableSeeder;
+use Modules\Lfp\Database\Seeders\TablesSeeders\LfpTableSeeder;
 
 class LfpDatabaseSeeder extends Seeder
 {
@@ -16,6 +21,14 @@ class LfpDatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        // $this->call("OthersTableSeeder");
+        $this->call([
+            LfpTableSeeder::class,
+            LfpApplicationsTableSeeder::class,
+            LfpIntakesTableSeeder::class,
+            LfpPaymentsTableSeeder::class,
+            LfpStudentsTableSeeder::class,
+        ]);
+
+        Model::reguard();
     }
 }
