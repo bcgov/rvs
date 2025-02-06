@@ -18,16 +18,20 @@ class NebSfasProgramsTableSeeder extends Seeder
         $degreeLevels = ['Diploma', 'Bachelor', 'Master', 'Doctorate'];
 
         foreach (range(1, 20) as $index) {
-            DB::connection('neb')->table('sfas_programs')->insert([
-                'neb_program_code' => $faker->randomElement($programCodes),
-                'sfas_program_code' => $faker->unique()->bothify('??##'),
-                'area_of_study' => $faker->words(3, true),
-                'degree_level' => $faker->randomElement($degreeLevels),
-                'nurse_type' => $faker->randomElement($nurseTypes),
-                'eligible' => $faker->boolean(80), // 80% chance of being eligible
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+            $sfasProgramCode = $faker->unique()->bothify('??##');
+
+            DB::connection('neb')->table('sfas_programs')->updateOrInsert(
+                ['sfas_program_code' => $sfasProgramCode],
+                [
+                    'neb_program_code' => $faker->randomElement($programCodes),
+                    'area_of_study' => $faker->words(3, true),
+                    'degree_level' => $faker->randomElement($degreeLevels),
+                    'nurse_type' => $faker->randomElement($nurseTypes),
+                    'eligible' => $faker->boolean(80), // 80% chance of being eligible
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]
+            );
         }
     }
 }

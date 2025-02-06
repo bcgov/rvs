@@ -17,14 +17,9 @@ class NebBursaryPeriodsTableSeeder extends Seeder
             $periodStartDate = $startDate->copy()->addQuarters($i);
             $periodEndDate = $periodStartDate->copy()->addQuarters(1)->subDay();
 
-            $exists = DB::connection('neb')
-                ->table('bursary_periods')
-                ->where('bursary_period_start_date', $periodStartDate)
-                ->exists();
-
-            if (!$exists) {
-                DB::connection('neb')->table('bursary_periods')->insert([
-                    'bursary_period_start_date' => $periodStartDate,
+            DB::connection('neb')->table('bursary_periods')->updateOrInsert(
+                ['bursary_period_start_date' => $periodStartDate],
+                [
                     'bursary_period_end_date' => $periodEndDate,
                     'awarded' => $faker->boolean,
                     'default_award' => $faker->randomFloat(2, 1000, 5000),
@@ -34,9 +29,8 @@ class NebBursaryPeriodsTableSeeder extends Seeder
                     'budget_allocation_type' => $faker->randomElement(['Equal', 'Proportional', 'Custom']),
                     'created_at' => now(),
                     'updated_at' => now(),
-                ]);
-            }
+                ]
+            );
         }
     }
-
 }

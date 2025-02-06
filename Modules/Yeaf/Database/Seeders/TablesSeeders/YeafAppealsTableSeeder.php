@@ -16,26 +16,34 @@ class YeafAppealsTableSeeder extends Seeder
         $grantIds = DB::connection('yeaf')->table('grants')->pluck('grant_id')->toArray();
         $programYearIds = DB::connection('yeaf')->table('program_years')->pluck('program_year_id')->toArray();
 
-        $appealCodes = ['ACA', 'FIN', 'MED', 'OTH']; // Example appeal codes
-        $statusCodes = ['AP', 'DE', 'PE']; // Example status codes: Approved, Denied, Pending
+        $appealCodes = ['ACA', 'FIN', 'MED', 'OTH'];
+        $statusCodes = ['AP', 'DE', 'PE'];
 
         foreach (range(1, 20) as $index) {
+            $studentId = $faker->randomElement($studentIds);
+            $grantId = $faker->randomElement($grantIds);
+            $programYearId = $faker->randomElement($programYearIds);
+            $appealCode = $faker->randomElement($appealCodes);
             $createdAt = $faker->dateTimeThisYear();
 
-            DB::connection('yeaf')->table('appeals')->insert([
-                'student_id' => $faker->randomElement($studentIds),
-                'grant_id' => $faker->randomElement($grantIds),
-                'program_year_id' => $faker->randomElement($programYearIds),
-                'adjudicated_by_user_id' => $faker->uuid,
-                'updated_by_user_id' => $faker->uuid,
-                'appeal_code' => $faker->randomElement($appealCodes),
-                'appeal_date' => $faker->dateTimeBetween('-1 year', 'now'),
-                'status_code' => $faker->randomElement($statusCodes),
-                'status_affective_date' => $faker->dateTimeBetween($createdAt, 'now'),
-                'other_appeal_explain' => $faker->optional()->sentence,
-                'created_at' => $createdAt,
-                'updated_at' => $faker->dateTimeBetween($createdAt, 'now'),
-            ]);
+            DB::connection('yeaf')->table('appeals')->updateOrInsert(
+                [
+                    'student_id' => $studentId,
+                    'grant_id' => $grantId,
+                    'program_year_id' => $programYearId,
+                    'appeal_code' => $appealCode,
+                ],
+                [
+                    'adjudicated_by_user_id' => $faker->uuid,
+                    'updated_by_user_id' => $faker->uuid,
+                    'appeal_date' => $faker->dateTimeBetween('-1 year', 'now'),
+                    'status_code' => $faker->randomElement($statusCodes),
+                    'status_affective_date' => $faker->dateTimeBetween($createdAt, 'now'),
+                    'other_appeal_explain' => $faker->optional()->sentence,
+                    'created_at' => $createdAt,
+                    'updated_at' => $faker->dateTimeBetween($createdAt, 'now'),
+                ]
+            );
         }
     }
 }

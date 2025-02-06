@@ -26,7 +26,15 @@ class YeafProvincesTableSeeder extends Seeder
         ];
 
         foreach ($provinces as $province) {
-            DB::connection('yeaf')->table('provinces')->insert($province);
+            DB::connection('yeaf')->table('provinces')->updateOrInsert(
+                [
+                    'country_code' => $province['country_code'],
+                    'province_code' => $province['province_code']
+                ],
+                [
+                    'province_name' => $province['province_name']
+                ]
+            );
         }
     }
 }

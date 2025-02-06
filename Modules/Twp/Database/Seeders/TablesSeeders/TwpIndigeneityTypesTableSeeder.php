@@ -21,12 +21,14 @@ class TwpIndigeneityTypesTableSeeder extends Seeder
         ];
 
         foreach ($indigeneityTypes as $type) {
-            DB::connection('twp')->table('indigeneity_types')->insert([
-                'title' => $type,
-                'active_flag' => $faker->boolean(90),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+            DB::connection('twp')->table('indigeneity_types')->updateOrInsert(
+                ['title' => $type],
+                [
+                    'active_flag' => $faker->boolean(90),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]
+            );
         }
     }
 }

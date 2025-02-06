@@ -23,22 +23,27 @@ class NebRestrictionsTableSeeder extends Seeder
         ];
 
         foreach ($predefinedRestrictions as $code => $description) {
-            DB::connection('neb')->table('restrictions')->insert([
-                'restriction_code' => $code,
-                'restriction_description' => $description,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+            DB::connection('neb')->table('restrictions')->updateOrInsert(
+                ['restriction_code' => $code],
+                [
+                    'restriction_description' => $description,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]
+            );
         }
 
         // Add some additional random restrictions
         for ($i = 1; $i <= 3; $i++) {
-            DB::connection('neb')->table('restrictions')->insert([
-                'restriction_code' => $faker->unique()->bothify('REST_##??'),
-                'restriction_description' => $faker->sentence(4),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+            $restrictionCode = $faker->unique()->bothify('REST_##??');
+            DB::connection('neb')->table('restrictions')->updateOrInsert(
+                ['restriction_code' => $restrictionCode],
+                [
+                    'restriction_description' => $faker->sentence(4),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]
+            );
         }
     }
 }

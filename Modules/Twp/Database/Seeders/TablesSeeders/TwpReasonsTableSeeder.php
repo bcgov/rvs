@@ -15,14 +15,18 @@ class TwpReasonsTableSeeder extends Seeder
         $reasonStatuses = ['Approved', 'Rejected', 'Pending'];
 
         foreach (range(1, 10) as $index) {
-            DB::connection('twp')->table('reasons')->insert([
-                'reason_status' => $faker->randomElement($reasonStatuses),
-                'title' => $faker->sentence(3),
-                'letter_body' => $faker->paragraph(3),
-                'active_flag' => $faker->boolean(90), // 90% chance of being active
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+            $title = $faker->unique()->sentence(3);
+
+            DB::connection('twp')->table('reasons')->updateOrInsert(
+                ['title' => $title],
+                [
+                    'reason_status' => $faker->randomElement($reasonStatuses),
+                    'letter_body' => $faker->paragraph(3),
+                    'active_flag' => $faker->boolean(90), // 90% chance of being active
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]
+            );
         }
     }
 }

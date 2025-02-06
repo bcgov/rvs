@@ -17,32 +17,35 @@ use Modules\Vss\Database\Seeders\TablesSeeders\VssNatureOffencesTableSeeder;
 use Modules\Vss\Database\Seeders\TablesSeeders\VssReferralSourcesTableSeeder;
 use Modules\Vss\Database\Seeders\TablesSeeders\VssSanctionTypesTableSeeder;
 
-class VssDatabaseSeeder extends Seeder
-{
+class VssDatabaseSeeder extends Seeder {
+
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run()
-    {
-        Model::unguard();
-
-        $this->call([
-            VssAreaOfAuditsTableSeeder::class,
-            VssFundingTypesTableSeeder::class,
-            VssReferralSourcesTableSeeder::class,
-            VssInstitutionsTableSeeder::class,
-            VssNatureOffencesTableSeeder::class,
-            VssSanctionTypesTableSeeder::class,
-            VssIncidentsTableSeeder::class,
-            VssCaseAuditTypesTableSeeder::class,
-            VssCaseCommentsTableSeeder::class,
-            VssCaseFundingsTableSeeder::class,
-            VssCaseNatureOffencesTableSeeder::class,
-            VssCaseSanctionTypesTableSeeder::class,
-        ]);
-
-        Model::reguard();
+    public function run() {
+        if (app()->environment('local', 'development')) {
+            Model::unguard();
+            $this->call([
+                VssAreaOfAuditsTableSeeder::class,
+                VssFundingTypesTableSeeder::class,
+                VssReferralSourcesTableSeeder::class,
+                VssInstitutionsTableSeeder::class,
+                VssNatureOffencesTableSeeder::class,
+                VssSanctionTypesTableSeeder::class,
+                VssIncidentsTableSeeder::class,
+                VssCaseAuditTypesTableSeeder::class,
+                VssCaseCommentsTableSeeder::class,
+                VssCaseFundingsTableSeeder::class,
+                VssCaseNatureOffencesTableSeeder::class,
+                VssCaseSanctionTypesTableSeeder::class,
+            ]);
+            Model::reguard();
+        }
+        else {
+            $this->command->info('Seeding skipped in non-local/development environment.');
+        }
     }
+
 }

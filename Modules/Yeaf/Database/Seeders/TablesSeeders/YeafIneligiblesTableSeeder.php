@@ -26,15 +26,17 @@ class YeafIneligiblesTableSeeder extends Seeder
         ];
 
         foreach ($ineligibles as $ineligible) {
-            DB::connection('yeaf')->table('ineligibles')->insert([
-                'code_id' => $ineligible[0],
-                'description' => $ineligible[1],
-                'active_flag' => $faker->boolean(90), // 90% chance of being active
-                'code_type' => $ineligible[2],
-                'paragraph_text' => $faker->paragraph,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+            DB::connection('yeaf')->table('ineligibles')->updateOrInsert(
+                ['code_id' => $ineligible[0]], // Clé unique basée sur code_id
+                [
+                    'description' => $ineligible[1],
+                    'active_flag' => $faker->boolean(90),
+                    'code_type' => $ineligible[2],
+                    'paragraph_text' => $faker->paragraph,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]
+            );
         }
     }
 }

@@ -22,12 +22,14 @@ class TwpPaymentTypesTableSeeder extends Seeder
         ];
 
         foreach ($paymentTypes as $type) {
-            DB::connection('twp')->table('payment_types')->insert([
-                'title' => $type,
-                'active_flag' => $faker->boolean(90), // 90% chance of being active
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+            DB::connection('twp')->table('payment_types')->updateOrInsert(
+                ['title' => $type],
+                [
+                    'active_flag' => $faker->boolean(90), // 90% chance of being active
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]
+            );
         }
     }
 }

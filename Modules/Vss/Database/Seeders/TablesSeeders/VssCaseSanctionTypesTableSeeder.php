@@ -13,7 +13,6 @@ class VssCaseSanctionTypesTableSeeder extends Seeder
         $faker = Faker::create();
 
         $incidentIds = DB::connection('vss')->table('incidents')->pluck('incident_id')->toArray();
-
         $sanctionCodes = DB::connection('vss')->table('sanction_types')->pluck('sanction_code')->toArray();
 
         foreach ($incidentIds as $incidentId) {
@@ -21,10 +20,12 @@ class VssCaseSanctionTypesTableSeeder extends Seeder
             $selectedSanctions = $faker->randomElements($sanctionCodes, $numberOfSanctions);
 
             foreach ($selectedSanctions as $sanctionCode) {
-                DB::connection('vss')->table('case_sanction_types')->insert([
-                    'incident_id' => $incidentId,
-                    'sanction_code' => $sanctionCode,
-                ]);
+                DB::connection('vss')->table('case_sanction_types')->updateOrInsert(
+                    [
+                        'incident_id' => $incidentId,
+                        'sanction_code' => $sanctionCode,
+                    ],
+                );
             }
         }
     }

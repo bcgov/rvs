@@ -24,10 +24,12 @@ class TwpApplicationReasonsTableSeeder extends Seeder
             $selectedReasons = $faker->randomElements($reasonIds, $numberOfReasons);
 
             foreach ($selectedReasons as $reasonId) {
-                DB::connection('twp')->table('application_reasons')->insert([
-                    'application_id' => $applicationId,
-                    'reason_id' => $reasonId,
-                ]);
+                DB::connection('twp')->table('application_reasons')->updateOrInsert(
+                    [
+                        'application_id' => $applicationId,
+                        'reason_id' => $reasonId,
+                    ],
+                );
             }
         }
     }

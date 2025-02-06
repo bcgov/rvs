@@ -13,10 +13,15 @@ class YeafBatchesTableSeeder extends Seeder
         $faker = Faker::create();
 
         foreach (range(1, 10) as $index) {
-            DB::connection('yeaf')->table('batches')->insert([
-                'batch_number' => $faker->unique()->bothify('BATCH-####'),
-                'batch_date' => $faker->dateTimeBetween('-1 year', 'now'),
-            ]);
+            $batchNumber = $faker->unique()->bothify('BATCH-####');
+            $batchDate = $faker->dateTimeBetween('-1 year', 'now');
+
+            DB::connection('yeaf')->table('batches')->updateOrInsert(
+                ['batch_number' => $batchNumber],
+                [
+                    'batch_date' => $batchDate,
+                ]
+            );
         }
     }
 }

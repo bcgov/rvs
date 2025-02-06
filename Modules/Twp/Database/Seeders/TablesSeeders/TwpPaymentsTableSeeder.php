@@ -18,18 +18,26 @@ class TwpPaymentsTableSeeder extends Seeder
         $paymentTypeIds = DB::connection('twp')->table('payment_types')->pluck('id')->toArray();
 
         foreach (range(1, 50) as $index) {
-            DB::connection('twp')->table('payments')->insert([
-                'student_id' => $faker->randomElement($studentIds),
-                'program_id' => $faker->randomElement($programIds) ?? $programIds[0],
-                'application_id' => $faker->randomElement($applicationIds),
-                'payment_date' => $faker->dateTimeBetween('-1 year', 'now'),
-                'payment_amount' => $faker->randomFloat(2, 100, 5000),
-                'payment_type_id' => $faker->randomElement($paymentTypeIds),
-                'created_by' => $faker->name,
-                'updated_by' => $faker->name,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+            $studentId = $faker->randomElement($studentIds);
+            $applicationId = $faker->randomElement($applicationIds);
+            $paymentDate = $faker->dateTimeBetween('-1 year', 'now');
+
+            DB::connection('twp')->table('payments')->updateOrInsert(
+                [
+                    'student_id' => $studentId,
+                    'application_id' => $applicationId,
+                    'payment_date' => $paymentDate,
+                ],
+                [
+                    'program_id' => $faker->randomElement($programIds) ?? $programIds[0],
+                    'payment_amount' => $faker->randomFloat(2, 100, 5000),
+                    'payment_type_id' => $faker->randomElement($paymentTypeIds),
+                    'created_by' => $faker->name,
+                    'updated_by' => $faker->name,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]
+            );
         }
     }
 }

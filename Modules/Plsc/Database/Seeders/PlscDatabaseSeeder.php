@@ -8,23 +8,26 @@ use Modules\Plsc\Database\Seeders\TablesSeeders\PlscApplicationsTableSeeder;
 use Modules\Plsc\Database\Seeders\TablesSeeders\PlscInstitutionsTableSeeder;
 use Modules\Plsc\Database\Seeders\TablesSeeders\PlscStudentsTableSeeder;
 
-class PlscDatabaseSeeder extends Seeder
-{
+class PlscDatabaseSeeder extends Seeder {
+
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run()
-    {
-        Model::unguard();
-
-        $this->call([
-            PlscStudentsTableSeeder::class,
-            PlscInstitutionsTableSeeder::class,
-            PlscApplicationsTableSeeder::class,
-        ]);
-
-        Model::reguard();
+    public function run() {
+        if (app()->environment('local', 'development')) {
+            Model::unguard();
+            $this->call([
+                PlscStudentsTableSeeder::class,
+                PlscInstitutionsTableSeeder::class,
+                PlscApplicationsTableSeeder::class,
+            ]);
+            Model::reguard();
+        }
+        else {
+            $this->command->info('Seeding skipped in non-local/development environment.');
+        }
     }
+
 }

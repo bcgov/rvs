@@ -13,16 +13,19 @@ class NebPotentialRestrictionsTableSeeder extends Seeder
         $faker = Faker::create();
 
         $bursaryPeriodIds = DB::connection('neb')->table('bursary_periods')->pluck('id')->toArray();
-
         $studentSins = DB::connection('neb')->table('students')->pluck('sin')->toArray();
 
         foreach (range(1, 20) as $index) {
-            DB::connection('neb')->table('el_potential_restrictions')->insert([
-                'sin' => $faker->randomElement($studentSins),
-                'bursary_period_id' => $faker->randomElement($bursaryPeriodIds),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+            $sin = $faker->randomElement($studentSins);
+            $bursaryPeriodId = $faker->randomElement($bursaryPeriodIds);
+
+            DB::connection('neb')->table('el_potential_restrictions')->updateOrInsert(
+                ['sin' => $sin, 'bursary_period_id' => $bursaryPeriodId],
+                [
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]
+            );
         }
     }
 }

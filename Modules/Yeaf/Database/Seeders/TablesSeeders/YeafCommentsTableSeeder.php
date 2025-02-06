@@ -15,16 +15,23 @@ class YeafCommentsTableSeeder extends Seeder
         $studentIds = DB::connection('yeaf')->table('students')->pluck('student_id')->toArray();
 
         foreach (range(1, 20) as $index) {
+            $studentId = $faker->randomElement($studentIds);
+            $userId = $faker->uuid;
             $createdAt = $faker->dateTimeThisYear();
 
-            DB::connection('yeaf')->table('comments')->insert([
-                'student_id' => $faker->randomElement($studentIds),
-                'user_id' => $faker->uuid,
-                'comment_text' => $faker->paragraph,
-                'deleted_at' => $faker->optional(0.1)->dateTimeThisYear(), // 10% chance of being soft deleted
-                'created_at' => $createdAt,
-                'updated_at' => $faker->dateTimeBetween($createdAt, 'now'),
-            ]);
+            DB::connection('yeaf')->table('comments')->updateOrInsert(
+                [
+                    'student_id' => $studentId,
+                    'user_id' => $userId,
+                    'created_at' => $createdAt,
+                ],
+                [
+                    'comment_text' => $faker->paragraph,
+                    'deleted_at' => $faker->optional(0.1)->dateTimeThisYear(), // 10% chance of being soft deleted
+                    'updated_at' => $faker->dateTimeBetween($createdAt, 'now'),
+                ]
+            );
         }
     }
 }
+

@@ -13,7 +13,6 @@ class VssCaseNatureOffencesTableSeeder extends Seeder
         $faker = Faker::create();
 
         $incidentIds = DB::connection('vss')->table('incidents')->pluck('incident_id')->toArray();
-
         $natureCodes = DB::connection('vss')->table('nature_offences')->pluck('nature_code')->toArray();
 
         foreach ($incidentIds as $incidentId) {
@@ -21,10 +20,12 @@ class VssCaseNatureOffencesTableSeeder extends Seeder
             $selectedOffences = $faker->randomElements($natureCodes, $numberOfOffences);
 
             foreach ($selectedOffences as $natureCode) {
-                DB::connection('vss')->table('case_nature_offences')->insert([
-                    'incident_id' => $incidentId,
-                    'nature_code' => $natureCode,
-                ]);
+                DB::connection('vss')->table('case_nature_offences')->updateOrInsert(
+                    [
+                        'incident_id' => $incidentId,
+                        'nature_code' => $natureCode,
+                    ],
+                );
             }
         }
     }

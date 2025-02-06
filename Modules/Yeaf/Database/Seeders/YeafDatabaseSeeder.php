@@ -18,33 +18,36 @@ use Modules\Yeaf\Database\Seeders\TablesSeeders\YeafProgramYearsTableSeeder;
 use Modules\Yeaf\Database\Seeders\TablesSeeders\YeafProvincesTableSeeder;
 use Modules\Yeaf\Database\Seeders\TablesSeeders\YeafStudentsTableSeeder;
 
-class YeafDatabaseSeeder extends Seeder
-{
+class YeafDatabaseSeeder extends Seeder {
+
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run()
-    {
-        Model::unguard();
-
-        $this->call([
-            YeafCountriesTableSeeder::class,
-            YeafStudentsTableSeeder::class,
-            YeafCommentsTableSeeder::class,
-            YeafProvincesTableSeeder::class,
-            YeafProgramsTableSeeder::class,
-            YeafProgramYearsTableSeeder::class,
-            YeafBatchesTableSeeder::class,
-            YeafAdminsTableSeeder::class,
-            YeafGrantsTableSeeder::class,
-            YeafIneligiblesTableSeeder::class,
-            YeafGrantIneligiblesTableSeeder::class,
-            YeafInstitutionsTableSeeder::class,
-            YeafAppealsTableSeeder::class,
-        ]);
-
-        Model::reguard();
+    public function run() {
+        if (app()->environment('local', 'development')) {
+            Model::unguard();
+            $this->call([
+                YeafCountriesTableSeeder::class,
+                YeafStudentsTableSeeder::class,
+                YeafCommentsTableSeeder::class,
+                YeafProvincesTableSeeder::class,
+                YeafProgramsTableSeeder::class,
+                YeafProgramYearsTableSeeder::class,
+                YeafBatchesTableSeeder::class,
+                YeafAdminsTableSeeder::class,
+                YeafGrantsTableSeeder::class,
+                YeafIneligiblesTableSeeder::class,
+                YeafGrantIneligiblesTableSeeder::class,
+                YeafInstitutionsTableSeeder::class,
+                YeafAppealsTableSeeder::class,
+            ]);
+            Model::reguard();
+        }
+        else {
+            $this->command->info('Seeding skipped in non-local/development environment.');
+        }
     }
+
 }

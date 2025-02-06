@@ -17,32 +17,35 @@ use Modules\Twp\Database\Seeders\TablesSeeders\TwpProgramsTableSeeder;
 use Modules\Twp\Database\Seeders\TablesSeeders\TwpReasonsTableSeeder;
 use Modules\Twp\Database\Seeders\TablesSeeders\TwpStudentsTableSeeder;
 
-class TwpDatabaseSeeder extends Seeder
-{
+class TwpDatabaseSeeder extends Seeder {
+
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run()
-    {
-        Model::unguard();
-
-        $this->call([
-            TwpStudentsTableSeeder::class,
-            TwpInstitutionsTableSeeder::class,
-            TwpReasonsTableSeeder::class,
-            TwpApplicationsTableSeeder::class,
-            TwpProgramsTableSeeder::class,
-            TwpProgramHistoriesTableSeeder::class,
-            TwpApplicationReasonsTableSeeder::class,
-            TwpGrantsTableSeeder::class,
-            TwpIndigeneityTypesTableSeeder::class,
-            TwpIndigeneityTypeStudentTableSeeder::class,
-            TwpPaymentTypesTableSeeder::class,
-            TwpPaymentsTableSeeder::class,
-        ]);
-
-        Model::reguard();
+    public function run() {
+        if (app()->environment('local', 'development')) {
+            Model::unguard();
+            $this->call([
+                TwpStudentsTableSeeder::class,
+                TwpInstitutionsTableSeeder::class,
+                TwpReasonsTableSeeder::class,
+                TwpApplicationsTableSeeder::class,
+                TwpProgramsTableSeeder::class,
+                TwpProgramHistoriesTableSeeder::class,
+                TwpApplicationReasonsTableSeeder::class,
+                TwpGrantsTableSeeder::class,
+                TwpIndigeneityTypesTableSeeder::class,
+                TwpIndigeneityTypeStudentTableSeeder::class,
+                TwpPaymentTypesTableSeeder::class,
+                TwpPaymentsTableSeeder::class,
+            ]);
+            Model::reguard();
+        }
+        else {
+            $this->command->info('Seeding skipped in non-local/development environment.');
+        }
     }
+
 }

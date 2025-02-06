@@ -13,14 +13,18 @@ class PlscInstitutionsTableSeeder extends Seeder
         $faker = Faker::create();
 
         foreach (range(1, 20) as $index) {
-            DB::connection('plsc')->table('institutions')->insert([
-                'name' => $faker->unique()->company . ' University',
-                'contact_name' => $faker->name,
-                'contact_email' => $faker->unique()->safeEmail,
-                'active_flag' => $faker->boolean(80), // 80% chance of being active
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+            $name = $faker->unique()->company . ' University';
+
+            DB::connection('plsc')->table('institutions')->updateOrInsert(
+                ['name' => $name],
+                [
+                    'contact_name' => $faker->name,
+                    'contact_email' => $faker->unique()->safeEmail,
+                    'active_flag' => $faker->boolean(80), // 80% chance of being active
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]
+            );
         }
     }
 }
