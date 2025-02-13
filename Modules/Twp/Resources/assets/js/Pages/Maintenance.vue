@@ -33,6 +33,7 @@
                         <MaintenanceIndigeneityTypes v-if="page === 'indigeneity'" :results="results"></MaintenanceIndigeneityTypes>
                         <MaintenanceInstitutions v-if="page === 'institutions'" :results="results"></MaintenanceInstitutions>
                         <MaintenancePaymentTypes v-if="page === 'payments'" :results="results"></MaintenancePaymentTypes>
+                        <MaintenanceUtils v-if="page === 'utils'" :results="results" :categories="categories"></MaintenanceUtils>
                         <MaintenanceReports v-if="page === 'reports'" :results="results"></MaintenanceReports>
                     </div>
                 </div>
@@ -52,10 +53,12 @@ import MaintenanceInstitutions from "../Components/MaintenanceInstitutions";
 import MaintenanceIndigeneityTypes from "../Components/MaintenanceIndigeneityTypes.vue";
 import MaintenancePaymentTypes from "../Components/MaintenancePaymentTypes";
 import MaintenanceReports from "../Components/MaintenanceReports";
+import MaintenanceUtils from "../Components/MaintenanceUtils.vue";
 
 export default {
     name: 'Maintenance',
     components: {
+        MaintenanceUtils,
         MaintenanceReports,
         MaintenancePaymentTypes,
         MaintenanceInstitutions,
@@ -66,6 +69,7 @@ export default {
     },
     props: {
         results: Object,
+        categories: Array,
         page: String,
         provinces: Object,
         program_years: Object,

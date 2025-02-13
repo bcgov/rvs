@@ -7,12 +7,16 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Modules\Twp\Entities\Institution;
 use Modules\Twp\Entities\PaymentType;
 use Modules\Twp\Entities\Reason;
+use Modules\Twp\Entities\Util;
 use Modules\Twp\Http\Requests\InstitutionEditRequest;
 use Modules\Twp\Http\Requests\InstitutionStoreRequest;
+use Modules\Twp\Http\Requests\UtilEditRequest;
+use Modules\Twp\Http\Requests\UtilStoreRequest;
 
 class MaintenanceController extends Controller
 {
@@ -222,4 +226,56 @@ class MaintenanceController extends Controller
     {
         return Inertia::render('Twp::Maintenance', ['page' => $page]);
     }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Inertia\Response::render
+     */
+    public function utilList(Request $request): \Inertia\Response
+    {
+        $utils = Util::orderBy('field_name', 'asc')->get();
+
+        $cat_utils = [];
+        $cat_titles = [];
+        foreach ($utils as $util) {
+            $cat_utils[$util->field_type][] = $util;
+        }
+        foreach ($cat_utils as $k => $v) {
+            $cat_titles[] = $k;
+        }
+        sort($cat_titles);
+
+        return Inertia::render('Twp::Maintenance', ['status' => true, 'results' => $cat_utils,
+            'categories' => $cat_titles, 'page' => 'utils']);
+    }
+
+    /**
+     * Update a utility resource.
+     *
+     * @return \Illuminate\Http\RedirectResponse::render
+     */
+    public function utilUpdate(UtilEditRequest $request, Util $util): \Illuminate\Http\RedirectResponse
+    {
+        $util->update($request->validated());
+        $sortedUtils = Util::getSortedUtils();
+        Cache::put('sorted_utils', $sortedUtils, 180);
+
+        return Redirect::route('twp.maintenance.utils.list');
+    }
+
+    /**
+     * Store a utility resource.
+     *
+     * @return \Illuminate\Http\RedirectResponse::render
+     */
+    public function utilStore(UtilStoreRequest $request): \Illuminate\Http\RedirectResponse
+    {
+        Util::create($request->validated());
+        $sortedUtils = Util::getSortedUtils();
+        Cache::put('sorted_utils', $sortedUtils, 180);
+
+        return Redirect::route('twp.maintenance.utils.list');
+    }
+
 }

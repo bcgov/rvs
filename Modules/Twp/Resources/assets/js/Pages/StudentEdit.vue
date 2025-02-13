@@ -24,7 +24,7 @@
                                     </Link> Student Info
                                 </div>
                                 <div v-if="editForm != null" class="card-body">
-                                    <StudentEditStudentTab :result="editForm" :indigeneity_types="indigeneity_types"></StudentEditStudentTab>
+                                    <StudentEditStudentTab v-bind="$attrs" :result="editForm" :indigeneity_types="indigeneity_types"></StudentEditStudentTab>
                                 </div>
                             </div>
                             <div class="card mb-2">
@@ -40,9 +40,9 @@
                                                 <span v-if="app.received_date != null">{{ app.received_date }}</span>
                                                 <span v-else>Missing Received Date</span>
                                             </button>
-                                            <span v-if="app.application_status === 'APPROVED'" class="badge rounded-pill text-bg-success">{{app.application_status}}</span>
-                                            <span v-else-if="app.application_status === 'IN PROGRESS'" class="badge rounded-pill text-bg-info">{{app.application_status}}</span>
-                                            <span v-else-if="app.application_status === 'DENIED'" class="badge rounded-pill text-bg-danger">{{app.application_status}}</span>
+                                            <span v-if="app.application_status === 'Approved'" class="badge rounded-pill text-bg-success">{{app.application_status}}</span>
+                                            <span v-else-if="app.application_status === 'In Progress'" class="badge rounded-pill text-bg-info">{{app.application_status}}</span>
+                                            <span v-else-if="app.application_status === 'Denied'" class="badge rounded-pill text-bg-danger">{{app.application_status}}</span>
                                             <span v-else class="badge rounded-pill text-bg-primary">{{app.application_status}}</span>
                                         </li>
                                     </ul>
@@ -66,8 +66,8 @@
                                             <li v-if="lettersEnabled==='success_under_age'"><a class="dropdown-item" :href="'/twp/students-letters/student_success_under_age/' + activeApp.id" target="_blank">Under Age Student Successful</a></li>
                                         </ul>
                                     </div>
-                                    <button v-if="activeTab==='twp-app' && editForm.application != null && editForm.application.application_status === 'APPROVED' && activeApp.program == null" type="button" class="btn btn-warning btn-sm float-end">Missing Program</button>
-                                    <button v-if="activeTab==='twp-app' && editForm.application != null && editForm.application.application_status === 'APPROVED' && editForm.age < 19" type="button" class="btn btn-warning btn-sm float-end">Under 19</button>
+                                    <button v-if="activeTab==='twp-app' && editForm.application != null && editForm.application.application_status === 'Approved' && activeApp.program == null" type="button" class="btn btn-warning btn-sm float-end">Missing Program</button>
+                                    <button v-if="activeTab==='twp-app' && editForm.application != null && editForm.application.application_status === 'Approved' && editForm.age < 19" type="button" class="btn btn-warning btn-sm float-end">Under 19</button>
                                     <button v-if="activeTab==='payments'" type="button" class="btn btn-success btn-sm float-end" data-bs-toggle="modal" data-bs-target="#newPaymentModal">New Payment</button>
                                     <button v-if="activeTab==='grant-app'" type="button" class="btn btn-success btn-sm float-end" data-bs-toggle="modal" data-bs-target="#newGrantAppModal">New Grant App</button>
                                 </div>
@@ -89,16 +89,16 @@
                                     </ul>
                                     <div class="tab-content" id="myStudentTabContent">
                                         <div class="tab-pane fade" :class="activeTab==='twp-app' ? 'active show':''" id="twp-app-tab-pane" role="tabpanel" aria-labelledby="twp-app-tab" tabindex="1">
-                                            <StudentEditTwpAppTab v-if="activeTab==='twp-app'" :reasons="reasons" :twpStudentId="activeApp.student_id" :result="activeApp"></StudentEditTwpAppTab>
+                                            <StudentEditTwpAppTab v-if="activeTab==='twp-app'" v-bind="$attrs" :reasons="reasons" :twpStudentId="activeApp.student_id" :result="activeApp"></StudentEditTwpAppTab>
                                         </div>
                                         <div class="tab-pane fade" :class="activeTab==='grant-app' ? 'active show':''" id="grant-app-tab-pane" role="tabpanel" aria-labelledby="grant-app-tab" tabindex="2">
-                                            <StudentEditGrantAppTab v-if="activeTab==='grant-app'" :twpStudentId="activeApp.student_id" :result="activeApp.grants"></StudentEditGrantAppTab>
+                                            <StudentEditGrantAppTab v-if="activeTab==='grant-app'" v-bind="$attrs" :twpStudentId="activeApp.student_id" :result="activeApp.grants"></StudentEditGrantAppTab>
                                         </div>
                                         <div class="tab-pane fade" :class="activeTab==='program' ? 'active show':''" id="program-tab-pane" role="tabpanel" aria-labelledby="program-tab" tabindex="3">
-                                            <StudentEditProgramTab v-if="activeTab==='program'" :twpStudentId="activeApp.student_id" :twpApplicationId="activeApp.id" :result="activeApp.program" :schools="schools"></StudentEditProgramTab>
+                                            <StudentEditProgramTab v-if="activeTab==='program'" v-bind="$attrs" :twpStudentId="activeApp.student_id" :twpApplicationId="activeApp.id" :result="activeApp.program" :schools="schools"></StudentEditProgramTab>
                                         </div>
                                         <div v-if="activeApp.program != null" class="tab-pane fade" :class="activeTab==='payments' ? 'active show':''" id="payments-tab-pane" role="tabpanel" aria-labelledby="payments-tab" tabindex="4">
-                                            <StudentEditPaymentTab v-if="activeTab==='payments'" :twpStudentId="activeApp.student_id" :pTypes="p_types" :result="activeApp.payments" :program="activeApp.program"></StudentEditPaymentTab>
+                                            <StudentEditPaymentTab v-if="activeTab==='payments'" v-bind="$attrs" :twpStudentId="activeApp.student_id" :pTypes="p_types" :result="activeApp.payments" :program="activeApp.program"></StudentEditPaymentTab>
                                         </div>
                                     </div>
 
@@ -130,11 +130,9 @@
                                         <div class="col-md-4">
                                             <BreezeLabel for="inputApplicationStatus" class="form-label" value="Application Status" />
                                             <BreezeSelect class="form-select" id="inputApplicationStatus" v-model="newTwpForm.application_status">
-                                                <option value="APPROVED">Approved</option>
-                                                <option value="DENIED">Denied</option>
-                                                <option value="IN PROGRESS">In Progress</option>
-                                                <option value="APPROVED ON EXCEPTION">Approved on Exception</option>
-                                                <option value="WITHDRAWN">Withdrawn</option>
+                                                <option v-for="status in $attrs.utils['Application Status']" :key="status.id" :value="status.field_name">
+                                                    {{ status.field_name }}
+                                                </option>
                                             </BreezeSelect>
                                         </div>
                                         <div class="col-md-4">
@@ -183,11 +181,9 @@
                                         <div class="col-md-4">
                                             <BreezeLabel for="inputApplicationStatus" class="form-label" value="Application Status" />
                                             <BreezeSelect class="form-select" id="inputApplicationStatus" v-model="newGrantForm.grant_status">
-                                                <option value="APPROVED">Approved</option>
-                                                <option value="DENIED">Denied</option>
-                                                <option value="IN PROGRESS">In Progress</option>
-                                                <option value="APPROVED ON EXCEPTION">Approved on Exception</option>
-                                                <option value="WITHDRAWN">Withdrawn</option>
+                                                <option v-for="status in $attrs.utils['Application Status']" :key="status.id" :value="status.field_name">
+                                                    {{ status.field_name }}
+                                                </option>
                                             </BreezeSelect>
                                         </div>
                                         <div class="col-md-4">
@@ -386,16 +382,16 @@ export default {
             if(this.activeApp.program != null){
                 this.newPaymentForm.program_id = this.activeApp.program.id;
 
-                if(this.activeApp.application_status === 'APPROVED'){
+                if(this.activeApp.application_status === 'Approved'){
                     this.lettersEnabled = 'success';
                     if(this.result.age < 19){
                         this.lettersEnabled = 'success_under_age';
                     }
                 }
-                if(this.activeApp.application_status === "APPROVED ON EXCEPTION"){
+                if(this.activeApp.application_status === "Approved On Exception"){
                     this.lettersEnabled = 'success_with_exception';
                 }
-                if(this.activeApp.application_status === 'DENIED'){
+                if(this.activeApp.application_status === 'Denied'){
                     this.lettersEnabled = 'denied';
                 }
             }else{
@@ -568,16 +564,16 @@ export default {
 
                 this.lettersEnabled = false;
                 if(this.activeApp != null && this.activeApp.program != null && this.activeApp.program.institution != null){
-                    if(this.activeApp.application_status === 'APPROVED'){
+                    if(this.activeApp.application_status === 'Approved'){
                         this.lettersEnabled = 'success';
                         if(this.editForm.age < 19){
                             this.lettersEnabled = 'success_under_age';
                         }
                     }
-                    if(this.activeApp.application_status === "APPROVED ON EXCEPTION"){
+                    if(this.activeApp.application_status === "Approved On Exception"){
                         this.lettersEnabled = 'success_with_exception';
                     }
-                    if(this.activeApp.application_status === 'DENIED'){
+                    if(this.activeApp.application_status === 'Denied'){
                         this.lettersEnabled = 'denied';
                     }
                 }

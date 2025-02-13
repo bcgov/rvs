@@ -158,7 +158,7 @@ export default {
             newApplicationForm: null,
             newApplicationFormData: {
                 formState: true,
-                title: '', reason_status: 'DENIED', active_flag: false, letter_body: '',
+                title: '', reason_status: 'Denied', active_flag: false, letter_body: '',
             },
             editApplicationForm: null,
 

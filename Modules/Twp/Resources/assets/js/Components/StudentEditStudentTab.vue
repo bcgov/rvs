@@ -33,9 +33,10 @@ tr {
             <div class="col-md-4">
                 <BreezeLabel for="inputGender" class="form-label" value="Gender" />
                 <BreezeSelect class="form-select" id="inputGender" v-model="editForm.gender">
-                    <option value="M">Male</option>
-                    <option value="F">Female</option>
-                    <option value="O">Other</option>
+                    <option value="M">Man</option>
+                    <option value="F">Woman</option>
+                    <option value="O">Non-Binary</option>
+                    <option value="X">Prefer Not To Answer</option>
                 </BreezeSelect>
             </div>
             <div class="col-md-4">
@@ -50,10 +51,9 @@ tr {
             <div class="col-md-4">
                 <BreezeLabel for="inputCitizenship" class="form-label" value="Citizenship" />
                 <BreezeSelect class="form-select" id="inputCitizenship" v-model="editForm.citizenship">
-                    <option value="Canadian Citizen">Canadian Citizen</option>
-                    <option value="Permanent Resident">Permanent Resident</option>
-                    <option value="Protected Person">Protected Person</option>
-                    <option value="Other">Other</option>
+                    <option v-for="citizenship in $attrs.utils['Citizenship']" :key="citizenship.id" :value="citizenship.field_name">
+                        {{ citizenship.field_name }}
+                    </option>
                 </BreezeSelect>
             </div>
             <div class="col-md-12">
