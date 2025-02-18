@@ -39,12 +39,10 @@
         <th scope="col" style="min-width: 110px;">
             <BreezeSelect @change="switchStatusSort($event)" class="form-select" v-model="appStatusSort">
                 <option value="ALL">App Status - All</option>
-                <option value="APPROVED">App Status - Approved</option>
-                <option value="IN PROGRESS">App Status - In Progress</option>
                 <option value="APPROVED ON APPEAL">App Status - Approved on Appeal (legacy)</option>
-                <option value="APPROVED ON EXCEPTION">App Status - Approved on Exception</option>
-                <option value="WITHDRAWN">App Status - Withdrawn</option>
-                <option value="DENIED">App Status - Denied</option>
+                <option v-for="status in $attrs.utils['Application Status']" :key="status.id" :value="status.field_name">
+                    {{ status.field_name }}
+                </option>
             </BreezeSelect>
 
         </th>

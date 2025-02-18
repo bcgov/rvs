@@ -30,7 +30,7 @@
                                 <div v-if="results != null && results.data.length > 0" class="table-responsive pb-3">
                                     <table class="table table-striped">
                                         <thead>
-                                        <ApplicationsHeader></ApplicationsHeader>
+                                        <ApplicationsHeader v-bind="$attrs"></ApplicationsHeader>
                                         </thead>
                                         <tbody>
                                         <tr v-for="(row, i) in results.data">
@@ -40,12 +40,11 @@
                                             <td><span v-if="row.student != null">{{ row.student.pen}}</span></td>
                                             <td><span v-if="row.student != null">{{ row.student.sin}}</span></td>
                                             <td>
-                                                <span v-if="row.application_status == 'DENIED'">Denied</span>
+                                                <span v-if="row.application_status === 'DENIED'">Denied</span>
                                                 <BreezeSelect v-else @change="updateStatus(row, $event)" class="form-select" :id="'inputStudentAppStatus'+i" v-model="row.application_status">
-                                                    <option value="APPROVED">Approved</option>
-                                                    <option value="IN PROGRESS">In Progress</option>
-                                                    <option value="APPROVED ON EXCEPTION">Approved on Exception</option>
-                                                    <option value="WITHDRAWN">Withdrawn</option>
+                                                    <option v-for="status in $attrs.utils['Application Status']" :key="status.id" :value="status.field_name">
+                                                        {{ status.field_name }}
+                                                    </option>
                                                 </BreezeSelect>
                                             </td>
                                         </tr>

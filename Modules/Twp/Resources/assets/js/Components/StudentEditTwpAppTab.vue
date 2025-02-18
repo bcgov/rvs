@@ -18,11 +18,9 @@ tr {
                 <BreezeLabel for="inputApplicationStatus" class="form-label" value="Application Status" />
                 <BreezeInput v-if="editForm.application_status ==='APPROVED ON APPEAL'" type="text" class="form-control" id="inputApplicationStatus" v-model="editForm.application_status" readonly="readonly"/>
                 <BreezeSelect v-else class="form-select" id="inputApplicationStatus" v-model="editForm.application_status">
-                    <option value="APPROVED">Approved</option>
-                    <option value="DENIED">Denied</option>
-                    <option value="IN PROGRESS">In Progress</option>
-                    <option value="APPROVED ON EXCEPTION">Approved on Exception</option>
-                    <option value="WITHDRAWN">Withdrawn</option>
+                    <option v-for="status in $attrs.utils['Application Status']" :key="status.id" :value="status.field_name">
+                        {{ status.field_name }}
+                    </option>
                 </BreezeSelect>
             </div>
 <!--            <div class="col-md-4">-->
@@ -83,18 +81,13 @@ tr {
                 </template>
             </div>
 
-            <div v-if="editForm.exception_comments == ''
-            || editForm.exception_comments === 'Location of Study'
-            || editForm.exception_comments === 'Time in Care'
-            || editForm.exception_comments === 'Legal Status'
-            || editForm.exception_comments === 'Age'" class="col-md-12">
+            <div v-if="isValidExceptionComment" class="col-md-12">
                 <BreezeLabel for="inputExceptionComments" class="form-label" value="Exception Comment" />
                 <BreezeSelect class="form-select" id="inputExceptionComments" v-model="editForm.exception_comments">
                     <option value=""></option>
-                    <option value="Location of Study">Location of Study</option>
-                    <option value="Time in Care">Time in Care</option>
-                    <option value="Legal Status">Legal Status</option>
-                    <option value="Age">Age</option>
+                    <option v-for="exception in $attrs.utils['Exception Comment']" :key="exception.id" :value="exception.field_name">
+                        {{ exception.field_name }}
+                    </option>
                 </BreezeSelect>
             </div>
             <div v-else class="col-md-12">
@@ -168,6 +161,14 @@ export default {
                 fao_email: '',
                 fao_phone: '',
             }),
+        }
+    },
+    computed: {
+        isValidExceptionComment() {
+            return this.editForm.exception_comments === '' ||
+                this.$attrs.utils['Exception Comment'].some(exception =>
+                    exception.field_name === this.editForm.exception_comments
+                );
         }
     },
     methods: {

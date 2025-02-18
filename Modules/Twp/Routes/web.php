@@ -11,7 +11,7 @@
 |
 */
 
-Route::prefix('twp')->group(function () {
+Route::prefix('twp')->middleware(['web', \Modules\Twp\Http\Middleware\HandleInertiaRequests::class])->group(function () {
     Route::get('/maintenance/reports/{type}', 'ReportController@fetchReport')->name('twp.reports.type');
     Route::group(
         [
@@ -41,6 +41,10 @@ Route::prefix('twp')->group(function () {
                     Route::get('/indigeneity', 'IndigeneityTypeController@index')->name('indigeneity.index');
                     Route::post('/indigeneity', 'IndigeneityTypeController@store')->name('indigeneity.store');
                     Route::put('/indigeneity/{indigeneity}', 'IndigeneityTypeController@update')->name('indigeneity.update');
+
+                    Route::get('/utils', 'MaintenanceController@utilList')->name('utils.list');
+                    Route::put('/utils/{util}', 'MaintenanceController@utilUpdate')->name('utils.update');
+                    Route::post('/utils', 'MaintenanceController@utilStore')->name('utils.store');
 
                     Route::get('/institutions', 'MaintenanceController@institutionList')->name('institutions.list');
                     Route::post('/institutions', 'MaintenanceController@institutionStore')->name('institutions.store');
