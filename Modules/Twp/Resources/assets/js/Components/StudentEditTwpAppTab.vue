@@ -16,7 +16,7 @@ tr {
             </div>
             <div class="col-md-4">
                 <BreezeLabel for="inputApplicationStatus" class="form-label" value="Application Status" />
-                <BreezeInput v-if="editForm.application_status ==='Approved On Appeal'" type="text" class="form-control" id="inputApplicationStatus" v-model="editForm.application_status" readonly="readonly"/>
+                <BreezeInput v-if="editForm.application_status ==='APPROVED ON APPEAL'" type="text" class="form-control" id="inputApplicationStatus" v-model="editForm.application_status" readonly="readonly"/>
                 <BreezeSelect v-else class="form-select" id="inputApplicationStatus" v-model="editForm.application_status">
                     <option v-for="status in $attrs.utils['Application Status']" :key="status.id" :value="status.field_name">
                         {{ status.field_name }}
@@ -72,7 +72,7 @@ tr {
             </div>
 
 
-            <div v-if="editForm.application_status === 'Denied'" class="col-md-12">
+            <div v-if="editForm.application_status === 'DENIED'" class="col-md-12">
                 <template v-for="(reason, i) in denial_reasons">
                     <div v-if="reason.active_flag === true" class="form-check form-check-inline">
                         <input @click="updateReason(reason)" class="form-check-input" type="checkbox" :id="'inlineCheckbox'+i" v-model="reason.selected" :checked="checkReason(reason)">

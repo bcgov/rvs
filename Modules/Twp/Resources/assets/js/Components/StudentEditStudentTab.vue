@@ -35,7 +35,8 @@ tr {
                 <BreezeSelect class="form-select" id="inputGender" v-model="editForm.gender">
                     <option value="M">Man</option>
                     <option value="F">Woman</option>
-                    <option value="O">Non-Binary</option>
+                    <option value="N">Non-Binary</option>
+                    <option value="O">Other</option>
                     <option value="X">Prefer Not To Answer</option>
                 </BreezeSelect>
             </div>

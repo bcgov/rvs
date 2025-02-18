@@ -40,7 +40,7 @@
                                             <td><span v-if="row.student != null">{{ row.student.pen}}</span></td>
                                             <td><span v-if="row.student != null">{{ row.student.sin}}</span></td>
                                             <td>
-                                                <span v-if="row.application_status == 'Denied'">Denied</span>
+                                                <span v-if="row.application_status === 'DENIED'">Denied</span>
                                                 <BreezeSelect v-else @change="updateStatus(row, $event)" class="form-select" :id="'inputStudentAppStatus'+i" v-model="row.application_status">
                                                     <option v-for="status in $attrs.utils['Application Status']" :key="status.id" :value="status.field_name">
                                                         {{ status.field_name }}

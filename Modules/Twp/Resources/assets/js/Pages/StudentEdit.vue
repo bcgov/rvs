@@ -40,9 +40,9 @@
                                                 <span v-if="app.received_date != null">{{ app.received_date }}</span>
                                                 <span v-else>Missing Received Date</span>
                                             </button>
-                                            <span v-if="app.application_status === 'Approved'" class="badge rounded-pill text-bg-success">{{app.application_status}}</span>
-                                            <span v-else-if="app.application_status === 'In Progress'" class="badge rounded-pill text-bg-info">{{app.application_status}}</span>
-                                            <span v-else-if="app.application_status === 'Denied'" class="badge rounded-pill text-bg-danger">{{app.application_status}}</span>
+                                            <span v-if="app.application_status === 'APPROVED'" class="badge rounded-pill text-bg-success">{{app.application_status}}</span>
+                                            <span v-else-if="app.application_status === 'IN PROGRESS'" class="badge rounded-pill text-bg-info">{{app.application_status}}</span>
+                                            <span v-else-if="app.application_status === 'DENIED'" class="badge rounded-pill text-bg-danger">{{app.application_status}}</span>
                                             <span v-else class="badge rounded-pill text-bg-primary">{{app.application_status}}</span>
                                         </li>
                                     </ul>
@@ -66,8 +66,8 @@
                                             <li v-if="lettersEnabled==='success_under_age'"><a class="dropdown-item" :href="'/twp/students-letters/student_success_under_age/' + activeApp.id" target="_blank">Under Age Student Successful</a></li>
                                         </ul>
                                     </div>
-                                    <button v-if="activeTab==='twp-app' && editForm.application != null && editForm.application.application_status === 'Approved' && activeApp.program == null" type="button" class="btn btn-warning btn-sm float-end">Missing Program</button>
-                                    <button v-if="activeTab==='twp-app' && editForm.application != null && editForm.application.application_status === 'Approved' && editForm.age < 19" type="button" class="btn btn-warning btn-sm float-end">Under 19</button>
+                                    <button v-if="activeTab==='twp-app' && editForm.application != null && editForm.application.application_status === 'APPROVED' && activeApp.program == null" type="button" class="btn btn-warning btn-sm float-end">Missing Program</button>
+                                    <button v-if="activeTab==='twp-app' && editForm.application != null && editForm.application.application_status === 'APPROVED' && editForm.age < 19" type="button" class="btn btn-warning btn-sm float-end">Under 19</button>
                                     <button v-if="activeTab==='payments'" type="button" class="btn btn-success btn-sm float-end" data-bs-toggle="modal" data-bs-target="#newPaymentModal">New Payment</button>
                                     <button v-if="activeTab==='grant-app'" type="button" class="btn btn-success btn-sm float-end" data-bs-toggle="modal" data-bs-target="#newGrantAppModal">New Grant App</button>
                                 </div>
@@ -382,16 +382,16 @@ export default {
             if(this.activeApp.program != null){
                 this.newPaymentForm.program_id = this.activeApp.program.id;
 
-                if(this.activeApp.application_status === 'Approved'){
+                if(this.activeApp.application_status === 'APPROVED'){
                     this.lettersEnabled = 'success';
                     if(this.result.age < 19){
                         this.lettersEnabled = 'success_under_age';
                     }
                 }
-                if(this.activeApp.application_status === "Approved On Exception"){
+                if(this.activeApp.application_status === "APPROVED ON EXCEPTION"){
                     this.lettersEnabled = 'success_with_exception';
                 }
-                if(this.activeApp.application_status === 'Denied'){
+                if(this.activeApp.application_status === 'DENIED'){
                     this.lettersEnabled = 'denied';
                 }
             }else{
@@ -564,16 +564,16 @@ export default {
 
                 this.lettersEnabled = false;
                 if(this.activeApp != null && this.activeApp.program != null && this.activeApp.program.institution != null){
-                    if(this.activeApp.application_status === 'Approved'){
+                    if(this.activeApp.application_status === 'APPROVED'){
                         this.lettersEnabled = 'success';
                         if(this.editForm.age < 19){
                             this.lettersEnabled = 'success_under_age';
                         }
                     }
-                    if(this.activeApp.application_status === "Approved On Exception"){
+                    if(this.activeApp.application_status === "APPROVED ON EXCEPTION"){
                         this.lettersEnabled = 'success_with_exception';
                     }
-                    if(this.activeApp.application_status === 'Denied'){
+                    if(this.activeApp.application_status === 'DENIED'){
                         this.lettersEnabled = 'denied';
                     }
                 }

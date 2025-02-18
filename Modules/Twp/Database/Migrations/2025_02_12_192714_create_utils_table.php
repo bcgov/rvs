@@ -48,31 +48,31 @@ return new class extends Migration {
             ],
             // Application Status
             [
-                'field_name' => 'Approved',
+                'field_name' => 'APPROVED',
                 'field_type' => 'Application Status',
                 'active_flag' => TRUE,
                 'created_at' => now(),
             ],
             [
-                'field_name' => 'Denied',
+                'field_name' => 'DENIED',
                 'field_type' => 'Application Status',
                 'active_flag' => TRUE,
                 'created_at' => now(),
             ],
             [
-                'field_name' => 'In Progress',
+                'field_name' => 'IN PROGRESS',
                 'field_type' => 'Application Status',
                 'active_flag' => TRUE,
                 'created_at' => now(),
             ],
             [
-                'field_name' => 'Approved on Exception',
+                'field_name' => 'APPROVED ON EXCEPTION',
                 'field_type' => 'Application Status',
                 'active_flag' => TRUE,
                 'created_at' => now(),
             ],
             [
-                'field_name' => 'Withdrawn',
+                'field_name' => 'WITHDRAWN',
                 'field_type' => 'Application Status',
                 'active_flag' => TRUE,
                 'created_at' => now(),
