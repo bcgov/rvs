@@ -37,6 +37,7 @@
                                         <tr v-for="(row, i) in results.data">
                                             <td><Link :href="'/twp/students/' + row.id">{{ row.last_name }}</Link></td>
                                             <td>{{ row.first_name}}</td>
+                                            <td>{{ row.alias_name}}</td>
                                             <td>{{ row.birth_date}}</td>
                                             <td>{{ row.pen}}</td>
                                             <td>{{ row.sin}}</td>
@@ -67,13 +68,17 @@
 
                                 <div class="row g-3">
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <BreezeLabel for="inputLastName" class="form-label" value="Last Name" />
                                         <BreezeInput type="text" class="form-control" id="inputLastName" v-model="newStudentForm.last_name" />
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <BreezeLabel for="inputFirstName" class="form-label" value="First Name" />
                                         <BreezeInput type="text" class="form-control" id="inputFirstName" v-model="newStudentForm.first_name" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <BreezeLabel for="inputAliasName" class="form-label" value="Alias Name" />
+                                        <BreezeInput type="text" class="form-control" id="inputAliasName" v-model="newStudentForm.alias_name" />
                                     </div>
                                     <div class="col-md-6">
                                         <BreezeLabel for="inputEmail" class="form-label" value="Email" />
@@ -192,6 +197,7 @@ export default {
                 formFailMsg: 'There was an error submitting this form.',
                 last_name: '',
                 first_name: '',
+                alias_name: '',
                 birth_date: '',
                 email: '',
                 gender: '',

@@ -11,13 +11,17 @@ tr {
     <form v-if="editForm != null" @submit.prevent="updateStudent">
         <div class="row g-3">
 
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <BreezeLabel for="inputLastName" class="form-label" value="Last Name" />
                 <BreezeInput type="text" class="form-control" id="inputLastName" v-model="editForm.last_name" />
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <BreezeLabel for="inputFirstName" class="form-label" value="First Name" />
                 <BreezeInput type="text" class="form-control" id="inputFirstName" v-model="editForm.first_name" />
+            </div>
+            <div class="col-md-4">
+                <BreezeLabel for="inputAliasName" class="form-label" value="Alias Name" />
+                <BreezeInput type="text" class="form-control" id="inputAliasName" v-model="editForm.alias_name" />
             </div>
 
             <div class="col-md-4">
@@ -141,6 +145,7 @@ export default {
                 id: this.editForm.id,
                 last_name: this.editForm.last_name,
                 first_name: this.editForm.first_name,
+                alias_name: this.editForm.alias_name,
                 birth_date: this.editForm.birth_date,
                 email: this.editForm.email,
                 gender: this.editForm.gender,

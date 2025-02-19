@@ -36,6 +36,7 @@
                                         <tr v-for="(row, i) in results.data">
                                             <td><Link v-if="row.student != null" :href="'/twp/students/' + row.student.id">{{ studentLastName(row.student.last_name) }}</Link></td>
                                             <td><span v-if="row.student != null">{{ row.student.first_name}}</span></td>
+                                            <td><span v-if="row.student != null">{{ row.student.alias_name}}</span></td>
                                             <td><span v-if="row.student != null">{{ row.student.birth_date}}</span></td>
                                             <td><span v-if="row.student != null">{{ row.student.pen}}</span></td>
                                             <td><span v-if="row.student != null">{{ row.student.sin}}</span></td>
