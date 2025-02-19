@@ -3,6 +3,7 @@
 namespace Modules\Twp\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Modules\Twp\Entities\Util;
 
 class ApplicationEditRequest extends FormRequest
 {
@@ -39,14 +40,20 @@ class ApplicationEditRequest extends FormRequest
      */
     public function rules()
     {
+        // Get the list of Application Status stored in the DB
+        $applicationStatuses = Util::where('field_type', 'Application Status')
+            ->pluck('field_name')
+            ->toArray();
+
+        $applicationStatusesString = implode(',', $applicationStatuses);
+
         return [
             'id' => 'required',
             'student_id' => 'required',
             'received_date' => 'date_format:Y-m-d|nullable',
-            'application_status' => 'in:APPROVED,DENIED,IN PROGRESS,APPROVED ON APPEAL,APPROVED ON EXCEPTION,WITHDRAWN|nullable',
+            'application_status' => 'in:' . $applicationStatusesString . '|nullable',
             'denial_reason' => 'nullable',
             'exception_comments' => 'nullable',
-
             'institution_student_number' => 'nullable', 'apply_twp' => 'nullable', 'apply_lfg' => 'nullable',
             'confirmation_enrolment' => 'nullable', 'sabc_app_number' => 'nullable',
             'fao_name' => 'nullable', 'fao_email' => 'nullable|email', 'fao_phone' => 'nullable',

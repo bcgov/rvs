@@ -26,40 +26,25 @@ tr {
                 <div class="col-md-4">
                     <BreezeLabel for="inputCredentialType" class="form-label" value="Credential Level" />
                     <BreezeSelect class="form-select" id="inputCredentialType" v-model="editForm.credential_type">
-                        <option value="Bachelor">Bachelor</option>
-                        <option value="Certificate">Certificate</option>
-                        <option value="Diploma">Diploma</option>
-                        <option value="Non-Credit">Non-Credit</option>
-                        <option value="Unclassified Qualifying">Unclassified Qualifying</option>
-                        <option value="Other">Other</option>
+                        <option v-for="credential in $attrs.utils['Credential Level']" :key="credential.id" :value="credential.field_name">
+                            {{ credential.field_name }}
+                        </option>
                     </BreezeSelect>
                 </div>
                 <div class="col-md-4">
                     <BreezeLabel for="inputStudyField" class="form-label" value="Field of Study" />
                     <BreezeSelect class="form-select" id="inputStudyField" v-model="editForm.study_field">
-                        <option value="Art">Art</option>
-                        <option value="Sciences">Sciences</option>
-                        <option value="Trades">Trades</option>
-                        <option value="Health">Health</option>
-                        <option value="Education">Education</option>
-                        <option value="Visual and Performing Arts">Visual and Performing Arts</option>
-                        <option value="Business and Management">Business and Management</option>
-                        <option value="Engineering and Applied Sciences">Engineering and Applied Sciences</option>
-                        <option value="Human and Social Services">Human and Social Services</option>
-                        <option value="Developmental">Developmental</option>
-                        <option value="Personal Improvement and Leisure">Personal Improvement and Leisure</option>
-                        <option value="Other">Other</option>
-                        <option value="Unselected">Unselected</option>
+                        <option v-for="study in $attrs.utils['Field of Study']" :key="study.id" :value="study.field_name">
+                            {{ study.field_name }}
+                        </option>
                     </BreezeSelect>
                 </div>
                 <div class="col-md-4">
                     <BreezeLabel for="inputStudentStatus" class="form-label" value="Student Status" />
                     <BreezeSelect class="form-select" id="inputStudentStatus" v-model="editForm.student_status">
-                        <option value="Attending">Attending</option>
-                        <option value="Completed">Completed</option>
-                        <option value="Hiatus">Hiatus</option>
-                        <option value="Never Attended">Never Attended</option>
-                        <option value="No Longer Attending">No Longer Attending</option>
+                        <option v-for="status in $attrs.utils['Student Status']" :key="status.id" :value="status.field_name">
+                            {{ status.field_name }}
+                        </option>
                     </BreezeSelect>
                 </div>
 
@@ -74,10 +59,9 @@ tr {
                 <div class="col-md-3">
                     <BreezeLabel for="inputLengthType" class="form-label" value="Program Length Type" />
                     <BreezeSelect class="form-select" id="inputLengthType" v-model="editForm.program_length_type">
-                        <option value="day">Day</option>
-                        <option value="week">Week</option>
-                        <option value="month">Month</option>
-                        <option value="year">Year</option>
+                        <option v-for="length in $attrs.utils['Program Length Type']" :key="length.id" :value="length.field_name">
+                            {{ length.field_name }}
+                        </option>
                     </BreezeSelect>
                 </div>
                 <div class="col-md-3">

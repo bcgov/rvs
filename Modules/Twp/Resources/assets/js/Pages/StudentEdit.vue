@@ -24,7 +24,7 @@
                                     </Link> Student Info
                                 </div>
                                 <div v-if="editForm != null" class="card-body">
-                                    <StudentEditStudentTab :result="editForm" :indigeneity_types="indigeneity_types"></StudentEditStudentTab>
+                                    <StudentEditStudentTab v-bind="$attrs" :result="editForm" :indigeneity_types="indigeneity_types"></StudentEditStudentTab>
                                 </div>
                             </div>
                             <div class="card mb-2">
@@ -89,16 +89,16 @@
                                     </ul>
                                     <div class="tab-content" id="myStudentTabContent">
                                         <div class="tab-pane fade" :class="activeTab==='twp-app' ? 'active show':''" id="twp-app-tab-pane" role="tabpanel" aria-labelledby="twp-app-tab" tabindex="1">
-                                            <StudentEditTwpAppTab v-if="activeTab==='twp-app'" :reasons="reasons" :twpStudentId="activeApp.student_id" :result="activeApp"></StudentEditTwpAppTab>
+                                            <StudentEditTwpAppTab v-if="activeTab==='twp-app'" v-bind="$attrs" :reasons="reasons" :twpStudentId="activeApp.student_id" :result="activeApp"></StudentEditTwpAppTab>
                                         </div>
                                         <div class="tab-pane fade" :class="activeTab==='grant-app' ? 'active show':''" id="grant-app-tab-pane" role="tabpanel" aria-labelledby="grant-app-tab" tabindex="2">
-                                            <StudentEditGrantAppTab v-if="activeTab==='grant-app'" :twpStudentId="activeApp.student_id" :result="activeApp.grants"></StudentEditGrantAppTab>
+                                            <StudentEditGrantAppTab v-if="activeTab==='grant-app'" v-bind="$attrs" :twpStudentId="activeApp.student_id" :result="activeApp.grants"></StudentEditGrantAppTab>
                                         </div>
                                         <div class="tab-pane fade" :class="activeTab==='program' ? 'active show':''" id="program-tab-pane" role="tabpanel" aria-labelledby="program-tab" tabindex="3">
-                                            <StudentEditProgramTab v-if="activeTab==='program'" :twpStudentId="activeApp.student_id" :twpApplicationId="activeApp.id" :result="activeApp.program" :schools="schools"></StudentEditProgramTab>
+                                            <StudentEditProgramTab v-if="activeTab==='program'" v-bind="$attrs" :twpStudentId="activeApp.student_id" :twpApplicationId="activeApp.id" :result="activeApp.program" :schools="schools"></StudentEditProgramTab>
                                         </div>
                                         <div v-if="activeApp.program != null" class="tab-pane fade" :class="activeTab==='payments' ? 'active show':''" id="payments-tab-pane" role="tabpanel" aria-labelledby="payments-tab" tabindex="4">
-                                            <StudentEditPaymentTab v-if="activeTab==='payments'" :twpStudentId="activeApp.student_id" :pTypes="p_types" :result="activeApp.payments" :program="activeApp.program"></StudentEditPaymentTab>
+                                            <StudentEditPaymentTab v-if="activeTab==='payments'" v-bind="$attrs" :twpStudentId="activeApp.student_id" :pTypes="p_types" :result="activeApp.payments" :program="activeApp.program"></StudentEditPaymentTab>
                                         </div>
                                     </div>
 
@@ -130,11 +130,9 @@
                                         <div class="col-md-4">
                                             <BreezeLabel for="inputApplicationStatus" class="form-label" value="Application Status" />
                                             <BreezeSelect class="form-select" id="inputApplicationStatus" v-model="newTwpForm.application_status">
-                                                <option value="APPROVED">Approved</option>
-                                                <option value="DENIED">Denied</option>
-                                                <option value="IN PROGRESS">In Progress</option>
-                                                <option value="APPROVED ON EXCEPTION">Approved on Exception</option>
-                                                <option value="WITHDRAWN">Withdrawn</option>
+                                                <option v-for="status in $attrs.utils['Application Status']" :key="status.id" :value="status.field_name">
+                                                    {{ status.field_name }}
+                                                </option>
                                             </BreezeSelect>
                                         </div>
                                         <div class="col-md-4">
@@ -183,11 +181,9 @@
                                         <div class="col-md-4">
                                             <BreezeLabel for="inputApplicationStatus" class="form-label" value="Application Status" />
                                             <BreezeSelect class="form-select" id="inputApplicationStatus" v-model="newGrantForm.grant_status">
-                                                <option value="APPROVED">Approved</option>
-                                                <option value="DENIED">Denied</option>
-                                                <option value="IN PROGRESS">In Progress</option>
-                                                <option value="APPROVED ON EXCEPTION">Approved on Exception</option>
-                                                <option value="WITHDRAWN">Withdrawn</option>
+                                                <option v-for="status in $attrs.utils['Application Status']" :key="status.id" :value="status.field_name">
+                                                    {{ status.field_name }}
+                                                </option>
                                             </BreezeSelect>
                                         </div>
                                         <div class="col-md-4">
