@@ -252,6 +252,8 @@ class NebController extends Controller
 
     public function processNeb(Request $request)
     {
+        ini_set('memory_limit', '512M');
+
         $bursaryPeriod = BursaryPeriod::find($request->input('bursary_period_id'));
 
         if (! $bursaryPeriod) {
@@ -326,6 +328,7 @@ class NebController extends Controller
         if ($bP == null) {
             return null;
         }
+
         \Log::info('Starting process for BP: ' . $this->formattedBpsd . ' - ' . $this->formattedBped);
         \Log::info('processing: nebElPotentials');
 
