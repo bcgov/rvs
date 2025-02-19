@@ -5,6 +5,7 @@ namespace Modules\Twp\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Modules\Twp\Entities\Util;
 
 class GrantEditRequest extends FormRequest
 {
@@ -41,12 +42,20 @@ class GrantEditRequest extends FormRequest
      */
     public function rules()
     {
+
+        // Get the list of Application Status stored in the DB
+        $applicationStatuses = Util::where('field_type', 'Application Status')
+            ->pluck('field_name')
+            ->toArray();
+
+        $applicationStatusesString = implode(',', $applicationStatuses);
+
         return [
             'id' => 'required',
             'student_id' => 'required',
             'application_id' => 'required',
             'received_date' => 'present|date_format:Y-m-d|nullable',
-            'grant_status' => 'present|in:APPROVED,DENIED,IN PROGRESS,APPROVED ON APPEAL,APPROVED ON EXCEPTION,WITHDRAWN|nullable',
+            'grant_status' => 'in:' . $applicationStatusesString . '|nullable',
             'grant_amount' => 'present|numeric|nullable',
             'grant_comments' => 'nullable',
             'updated_by' => 'required',
