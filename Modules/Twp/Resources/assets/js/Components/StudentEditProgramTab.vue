@@ -59,7 +59,7 @@ tr {
                 <div class="col-md-3">
                     <BreezeLabel for="inputLengthType" class="form-label" value="Program Length Type" />
                     <BreezeSelect class="form-select" id="inputLengthType" v-model="editForm.program_length_type">
-                        <option v-for="length in $attrs.utils['Program Length Type']" :key="length.id" :value="length.field_name">
+                        <option v-for="length in $attrs.utils['Program Length Type']" :key="length.id" :value="length.field_name.toLowerCase()">
                             {{ length.field_name }}
                         </option>
                     </BreezeSelect>
