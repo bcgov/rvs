@@ -31,7 +31,7 @@ tr {
                                     </div>
                                     <div class="col-md-4">
                                         <BreezeLabel :for="'inputAppStatus'+i" class="form-label" value="Application Status" />
-                                        <BreezeInput type="text" class="form-control" :id="'inputAppStatus'+i" :value="grant.grant_status" />
+                                        <BreezeInput type="text" class="form-control" :id="'inputAppStatus'+i" :value="toTitleCase(grant.grant_status)" />
                                     </div>
                                     <div class="col-md-4">
                                         <BreezeLabel :for="'inputAmount'+i" class="form-label" value="Amount" />
@@ -93,6 +93,7 @@ export default {
     props: {
         result: Object,
         twpStudentId: String|Number|null,
+        toTitleCase: Function
     },
     data() {
         return {

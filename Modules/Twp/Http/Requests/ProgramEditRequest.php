@@ -40,17 +40,6 @@ class ProgramEditRequest extends FormRequest
      */
     public function rules()
     {
-
-        // Get the list of Program Length Types stored in the DB
-        $programLengthTypes = Util::where('field_type', 'Program Length Type')
-            ->pluck('field_name')
-            ->map(function ($item) {
-                return strtolower($item);
-            })
-            ->toArray();
-
-        $programLengthTypesString = implode(',', $programLengthTypes);
-
         return [
             'id' => 'required',
             'student_id' => 'required',
@@ -62,22 +51,10 @@ class ProgramEditRequest extends FormRequest
             'study_field' => 'nullable',
             'study_period_start_date' => 'present|date_format:Y-m-d|nullable',
             'program_length' => 'present|numeric|nullable',
-            'program_length_type' => 'in:' . $programLengthTypesString . '|nullable',
+            'program_length_type' => 'nullable|exists:'.env('DB_DATABASE_TWP').'.utils,field_name,field_type,Program Length Type',
             'total_estimated_cost' => 'present|numeric|nullable',
             'student_status' => 'present|in:Attending,Completed,Hiatus,Never Attended,No Longer Attending|nullable',
             'comments' => 'nullable',
         ];
-    }
-
-    /**
-     * Prepare the data for validation.
-     *
-     * @return void
-     */
-    protected function prepareForValidation()
-    {
-        if (isset($this->program_length_type)) {
-            $this->merge(['program_length_type' => Str::lower($this->program_length_type)]);
-        }
     }
 }

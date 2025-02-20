@@ -48,7 +48,7 @@
                 <option value="ALL">App Status - All</option>
                 <option value="APPROVED ON APPEAL">App Status - Approved on Appeal (legacy)</option>
                 <option v-for="status in $attrs.utils['Application Status']" :key="status.id" :value="status.field_name">
-                    {{ status.field_name }}
+                    {{ toTitleCase(status.field_name) }}
                 </option>
             </BreezeSelect>
 
@@ -63,7 +63,9 @@ import BreezeSelect from "@/Components/Select";
 export default {
     name: 'ApplicationsHeader',
     components: {BreezeSelect},
-    props: {},
+    props: {
+        toTitleCase: Function
+    },
     data() {
         return {
             sortClmn: 'last_name',
