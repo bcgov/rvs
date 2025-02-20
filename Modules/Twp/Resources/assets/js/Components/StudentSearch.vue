@@ -29,6 +29,12 @@
                     </div>
                 </div>
                 <div class="row mb-3">
+                    <BreezeLabel class="col-auto col-form-label" for="inputAliasName" value="Alias Name" />
+                    <div class="col-auto">
+                        <BreezeInput type="text" id="inputAliasName" class="form-control" v-model="nameForm.filter_aname" />
+                    </div>
+                </div>
+                <div class="row mb-3">
                     <div class="col-auto">
                         <BreezeButton class="btn btn-primary" :class="{ 'opacity-25': nameForm.processing }" :disabled="nameForm.processing">
                             Search
@@ -90,13 +96,14 @@ const switchSearchTerm = function (type){
 const nameFormTemplate = {
     filter_fname: '',
     filter_lname: '',
+    filter_aname: '',
     filter_type: '',
 };
 const nameForm = useForm(nameFormTemplate);
 const nameFormSubmit = () => {
     nameForm.filter_type = 'name';
     nameForm.get(props.page, {
-        onFinish: () => nameForm.reset('inputLastName', 'inputFirstName'),
+        onFinish: () => nameForm.reset('inputLastName', 'inputFirstName', 'inputAliasName'),
     });
 };
 

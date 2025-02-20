@@ -89,10 +89,10 @@
                                     </ul>
                                     <div class="tab-content" id="myStudentTabContent">
                                         <div class="tab-pane fade" :class="activeTab==='twp-app' ? 'active show':''" id="twp-app-tab-pane" role="tabpanel" aria-labelledby="twp-app-tab" tabindex="1">
-                                            <StudentEditTwpAppTab v-if="activeTab==='twp-app'" v-bind="$attrs" :reasons="reasons" :twpStudentId="activeApp.student_id" :result="activeApp"></StudentEditTwpAppTab>
+                                            <StudentEditTwpAppTab v-if="activeTab==='twp-app'" v-bind="$attrs" :reasons="reasons" :twpStudentId="activeApp.student_id" :result="activeApp" :toTitleCase="toTitleCase"></StudentEditTwpAppTab>
                                         </div>
                                         <div class="tab-pane fade" :class="activeTab==='grant-app' ? 'active show':''" id="grant-app-tab-pane" role="tabpanel" aria-labelledby="grant-app-tab" tabindex="2">
-                                            <StudentEditGrantAppTab v-if="activeTab==='grant-app'" v-bind="$attrs" :twpStudentId="activeApp.student_id" :result="activeApp.grants"></StudentEditGrantAppTab>
+                                            <StudentEditGrantAppTab v-if="activeTab==='grant-app'" v-bind="$attrs" :twpStudentId="activeApp.student_id" :result="activeApp.grants" :toTitleCase="toTitleCase"></StudentEditGrantAppTab>
                                         </div>
                                         <div class="tab-pane fade" :class="activeTab==='program' ? 'active show':''" id="program-tab-pane" role="tabpanel" aria-labelledby="program-tab" tabindex="3">
                                             <StudentEditProgramTab v-if="activeTab==='program'" v-bind="$attrs" :twpStudentId="activeApp.student_id" :twpApplicationId="activeApp.id" :result="activeApp.program" :schools="schools"></StudentEditProgramTab>
@@ -131,7 +131,7 @@
                                             <BreezeLabel for="inputApplicationStatus" class="form-label" value="Application Status" />
                                             <BreezeSelect class="form-select" id="inputApplicationStatus" v-model="newTwpForm.application_status">
                                                 <option v-for="status in $attrs.utils['Application Status']" :key="status.id" :value="status.field_name">
-                                                    {{ status.field_name }}
+                                                    {{ toTitleCase(status.field_name) }}
                                                 </option>
                                             </BreezeSelect>
                                         </div>
@@ -182,7 +182,7 @@
                                             <BreezeLabel for="inputApplicationStatus" class="form-label" value="Application Status" />
                                             <BreezeSelect class="form-select" id="inputApplicationStatus" v-model="newGrantForm.grant_status">
                                                 <option v-for="status in $attrs.utils['Application Status']" :key="status.id" :value="status.field_name">
-                                                    {{ status.field_name }}
+                                                    {{ toTitleCase(status.field_name) }}
                                                 </option>
                                             </BreezeSelect>
                                         </div>
@@ -363,7 +363,11 @@ export default {
         }
     },
     methods: {
-
+        toTitleCase(str) {
+            return str.toLowerCase().split(' ').map(function(word) {
+                return word.replace(word[0], word[0].toUpperCase());
+            }).join(' ');
+        },
         back: function()
         {
             window.history.back();

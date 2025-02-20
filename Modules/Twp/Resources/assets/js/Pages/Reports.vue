@@ -80,6 +80,7 @@
                                                 </tr>
                                                 <tr>
                                                     <th class="blue-cell">Name (Last, First)</th>
+                                                    <th class="blue-cell">Alias Name</th>
                                                     <th class="blue-cell">Date of Birth (yyyy-mm-dd)</th>
                                                     <th class="blue-cell">Student #</th>
                                                     <th class="blue-cell">PEN #</th>
@@ -99,6 +100,7 @@
                                                     <template v-for="(row, i) in results.programs">
                                                         <tr v-if="row.student_status == 'Attending' || row.student_status == 'Hiatus'">
                                                             <td class="blue-cell">{{ row.student.last_name }}, {{ row.student.first_name }}</td>
+                                                            <td class="blue-cell">{{ row.student.alias_name }}</td>
                                                             <td class="blue-cell">{{ row.student.birth_date }}</td>
                                                             <td class="blue-cell">{{ row.student.institution_student_number }}</td>
                                                             <td class="blue-cell">{{ row.student.pen }}</td>

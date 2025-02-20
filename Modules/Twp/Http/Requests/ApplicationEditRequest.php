@@ -40,18 +40,11 @@ class ApplicationEditRequest extends FormRequest
      */
     public function rules()
     {
-        // Get the list of Application Status stored in the DB
-        $applicationStatuses = Util::where('field_type', 'Application Status')
-            ->pluck('field_name')
-            ->toArray();
-
-        $applicationStatusesString = implode(',', $applicationStatuses);
-
         return [
             'id' => 'required',
             'student_id' => 'required',
             'received_date' => 'date_format:Y-m-d|nullable',
-            'application_status' => 'in:' . $applicationStatusesString . '|nullable',
+            'application_status' => 'nullable|exists:'.env('DB_DATABASE_TWP').'.utils,field_name,field_type,Application Status',
             'denial_reason' => 'nullable',
             'exception_comments' => 'nullable',
             'institution_student_number' => 'nullable', 'apply_twp' => 'nullable', 'apply_lfg' => 'nullable',

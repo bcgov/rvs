@@ -43,8 +43,8 @@ class StudentStoreRequest extends FormRequest
         return [
             'last_name' => 'required|string',
             'first_name' => 'required|string',
+            'alias_name' => 'nullable|string',
             'birth_date' => 'required|date_format:Y-m-d',
-
             'email' => 'email|nullable',
             'gender' => 'size:1|nullable',
             'pen' => 'max:9|nullable',

@@ -54,6 +54,19 @@ class UtilStoreRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge(['active_flag' => $this->toBoolean($this->active_flag)]);
+
+        // Program Length Type values must be stored all in lower cases
+        if ($this->field_type === 'Program Length Type') {
+            $this->merge([
+                'field_name' => strtolower($this->field_name),
+            ]);
+        }
+        // Application Status values must be stored all in upper cases
+        elseif ($this->field_type === 'Application Status') {
+            $this->merge([
+                'field_name' => strtoupper($this->field_name),
+            ]);
+        }
     }
 
     /**

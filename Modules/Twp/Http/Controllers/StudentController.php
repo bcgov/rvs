@@ -137,6 +137,9 @@ class StudentController extends Controller
         if (request()->filter_lname !== null) {
             $students = $students->where('last_name', 'ILIKE', '%'.request()->filter_lname.'%');
         }
+        if (request()->filter_aname !== null) {
+            $students = $students->where('alias_name', 'ILIKE', '%'.request()->filter_aname.'%');
+        }
 
         if (request()->filter_school !== null) {
             $students = $students->whereHas('applications', function ($query) {
@@ -171,6 +174,11 @@ class StudentController extends Controller
         if (request()->filter_lname !== null) {
             $apps = $apps->whereHas('student', function ($q) {
                 $q->where('last_name', 'ILIKE', '%'.request()->filter_lname.'%');
+            });
+        }
+        if (request()->filter_aname !== null) {
+            $apps = $apps->whereHas('student', function ($q) {
+                $q->where('alias_name', 'ILIKE', '%'.request()->filter_aname.'%');
             });
         }
 
