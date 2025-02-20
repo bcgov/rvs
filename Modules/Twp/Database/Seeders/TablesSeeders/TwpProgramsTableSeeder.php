@@ -37,7 +37,7 @@ class TwpProgramsTableSeeder extends Seeder
                     'study_period_start_date' => $startDate,
                     'credential' => $faker->randomElement(['Bachelor', 'Master', 'Diploma', 'Certificate']),
                     'program_length' => $faker->numberBetween(1, 4),
-                    'program_length_type' => $faker->randomElement(['Years', 'Semesters']),
+                    'program_length_type' => $faker->randomElement(['day','week','month','years', 'semesters']),
                     'total_estimated_cost' => $faker->randomFloat(2, 5000, 50000),
                     'student_status' => $faker->randomElement(['Full-time', 'Part-time']),
                     'comments' => $faker->optional()->paragraph,

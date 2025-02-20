@@ -251,25 +251,25 @@ return new class extends Migration {
             ],
             // Program Length Type
             [
-                'field_name' => 'Day',
+                'field_name' => 'day',
                 'field_type' => 'Program Length Type',
                 'active_flag' => TRUE,
                 'created_at' => now(),
             ],
             [
-                'field_name' => 'Week',
+                'field_name' => 'week',
                 'field_type' => 'Program Length Type',
                 'active_flag' => TRUE,
                 'created_at' => now(),
             ],
             [
-                'field_name' => 'Month',
+                'field_name' => 'month',
                 'field_type' => 'Program Length Type',
                 'active_flag' => TRUE,
                 'created_at' => now(),
             ],
             [
-                'field_name' => 'Year',
+                'field_name' => 'year',
                 'field_type' => 'Program Length Type',
                 'active_flag' => TRUE,
                 'created_at' => now(),

@@ -19,7 +19,7 @@ class Student extends ModuleModel
      * @var array<int, string>
      */
     protected $fillable = [
-        'last_name', 'first_name', 'birth_date', 'email', 'gender', 'pen', 'address', 'citizenship',
+        'last_name', 'first_name', 'alias_name', 'birth_date', 'email', 'gender', 'pen', 'address', 'citizenship',
         'bc_resident', 'address', 'comment', 'sin', ];
 
     public function applications()

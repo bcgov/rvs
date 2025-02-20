@@ -15,6 +15,7 @@ class TwpStudentsTableSeeder extends Seeder
         foreach (range(1, 20) as $index) {
             $firstName = $faker->firstName;
             $lastName = $faker->lastName;
+            $aliasName = $faker->firstName;
             $yeafStudentId = $faker->unique()->numberBetween(100000, 999999);
             $email = $faker->unique()->safeEmail;
 
@@ -25,6 +26,7 @@ class TwpStudentsTableSeeder extends Seeder
                     'name' => $firstName . ' ' . $lastName,
                     'first_name' => $firstName,
                     'last_name' => $lastName,
+                    'alias_name' => $aliasName,
                     'birth_date' => $faker->date('Y-m-d', '-18 years'),
                     'address' => $faker->address,
                     'email' => $email,

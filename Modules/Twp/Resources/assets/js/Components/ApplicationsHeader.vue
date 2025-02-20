@@ -14,6 +14,13 @@
                 <em v-else class="bi bi-sort-alpha-down"></em>
             </a>
         </th>
+        <th scope="col">
+            <a href="#" @click="switchSort('alias_name')">
+                <span>Alias Name</span>
+                <em v-if="sortClmn === 'alias_name' && sortType === 'desc'" class="bi bi-sort-alpha-up"></em>
+                <em v-else class="bi bi-sort-alpha-down"></em>
+            </a>
+        </th>
         <th scope="col" style="min-width: 130px;">
             <a href="#" @click="switchSort('birth_date')">
                 <span>Date of Birth</span>
@@ -36,12 +43,12 @@
                 <em v-else class="bi bi-sort-numeric-down"></em>
             </a>
         </th>
-        <th scope="col" style="min-width: 110px;">
+        <th scope="col" style="min-width: 100px; max-width: 250px;">
             <BreezeSelect @change="switchStatusSort($event)" class="form-select" v-model="appStatusSort">
                 <option value="ALL">App Status - All</option>
                 <option value="APPROVED ON APPEAL">App Status - Approved on Appeal (legacy)</option>
                 <option v-for="status in $attrs.utils['Application Status']" :key="status.id" :value="status.field_name">
-                    {{ status.field_name }}
+                    {{ toTitleCase(status.field_name) }}
                 </option>
             </BreezeSelect>
 
@@ -56,7 +63,9 @@ import BreezeSelect from "@/Components/Select";
 export default {
     name: 'ApplicationsHeader',
     components: {BreezeSelect},
-    props: {},
+    props: {
+        toTitleCase: Function
+    },
     data() {
         return {
             sortClmn: 'last_name',

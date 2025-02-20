@@ -59,8 +59,8 @@ tr {
                 <div class="col-md-3">
                     <BreezeLabel for="inputLengthType" class="form-label" value="Program Length Type" />
                     <BreezeSelect class="form-select" id="inputLengthType" v-model="editForm.program_length_type">
-                        <option v-for="length in $attrs.utils['Program Length Type']" :key="length.id" :value="length.field_name">
-                            {{ length.field_name }}
+                        <option v-for="length in $attrs.utils['Program Length Type']" :key="length.id" :value="length.field_name" >
+                            {{ capitalize(length.field_name) }}
                         </option>
                     </BreezeSelect>
                 </div>
@@ -145,7 +145,7 @@ tr {
                                     </div>
                                     <div class="col-md-3">
                                         <BreezeLabel :for="'inputLengthType'+i" class="form-label" value="Program Length Type" />
-                                        <BreezeInput readonly disabled type="text" class="form-control" :id="'inputLengthType'+i" :value="version.program_length_type" />
+                                        <BreezeInput readonly disabled type="text" class="form-control" :id="'inputLengthType'+i" :value="capitalize(version.program_length_type)" />
                                     </div>
                                     <div class="col-md-3">
                                         <BreezeLabel :for="'inputEstimatedCost'+i" class="form-label" value="Estimated Cost" />
@@ -213,6 +213,9 @@ export default {
         }
     },
     methods: {
+        capitalize(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+        },
         formatDate: function (value) {
             if(value !== undefined && value !== ''){
                 let date = value.split("T");

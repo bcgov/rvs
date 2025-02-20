@@ -23,7 +23,7 @@
                                 <Link :href="'/twp/maintenance/staff/' + row.id">{{ row.user_id }}</Link>
                             </th>
                             <td>{{ row.first_name }}</td>
-                            <td>{{ row.last_name}}</td>
+                            <td>{{ row.last_name }}</td>
                             <td>{{ row.email }}</td>
                             <td>
                                 <template v-for="role in row.roles">

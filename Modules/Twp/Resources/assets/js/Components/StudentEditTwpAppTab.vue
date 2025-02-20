@@ -19,7 +19,7 @@ tr {
                 <BreezeInput v-if="editForm.application_status ==='APPROVED ON APPEAL'" type="text" class="form-control" id="inputApplicationStatus" v-model="editForm.application_status" readonly="readonly"/>
                 <BreezeSelect v-else class="form-select" id="inputApplicationStatus" v-model="editForm.application_status">
                     <option v-for="status in $attrs.utils['Application Status']" :key="status.id" :value="status.field_name">
-                        {{ status.field_name }}
+                        {{ toTitleCase(status.field_name) }}
                     </option>
                 </BreezeSelect>
             </div>
@@ -134,6 +134,7 @@ export default {
         result: Object,
         twpStudentId: String|Number|null,
         reasons: Object,
+        toTitleCase: Function
     },
     data() {
         return {
