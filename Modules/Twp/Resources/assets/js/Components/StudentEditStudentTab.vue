@@ -103,14 +103,41 @@ tr {
         </div>
         <div class="card-footer mt-3">
             <button type="submit" class="btn me-2 btn-outline-success" :disabled="editForm.processing">Update Student</button>
-<!--            <Link @click="back" class="btn btn-outline-primary float-end" href="#">Back</Link>-->
+            <button type="button" class="btn me-2 btn-outline-danger float-end" data-bs-toggle="modal" data-bs-target="#deleteStudentModal">Delete Student</button>
         </div>
 
-        <FormSubmitAlert :form-state="editForm.formState"
-                         :success-msg="'Student record was updated successfully.'"></FormSubmitAlert>
+        <FormSubmitAlert
+            :form-state="editForm.formState"
+            :success-msg="editForm.successMessage"
+            :error-msg="editForm.errorMessage"
+        ></FormSubmitAlert>
 
     </form>
-
+    <!-- Modal for deleting Student -->
+    <div class="modal fade" id="deleteStudentModal" tabindex="-1" aria-labelledby="deleteStudentModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteStudentModalLabel">Confirm Student Deletion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p v-if="hasApplications" class="text-danger">
+                        Warning: This student has an ongoing application. Deletion is not allowed.
+                    </p>
+                    <p v-else>Are you sure you want to delete this student?</p>
+                    <div class="mb-3">
+                        <label for="deleteStudentComment" class="form-label">Comment</label>
+                        <textarea class="form-control" id="deleteComment" v-model="editForm.comment" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" @click="deleteStudent" :disabled="hasApplications">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 <script>
 import {Link, useForm} from '@inertiajs/vue3';
@@ -134,8 +161,13 @@ export default {
     data() {
         return {
             noChanges: true,
-            editForm: null,
+            editForm: { comment: '' },
             indigeneity_data: []
+        }
+    },
+    computed: {
+        hasApplications() {
+            return this.editForm.applications && this.editForm.applications.length > 0;
         }
     },
     methods: {
@@ -170,9 +202,36 @@ export default {
                 },
             });
         },
+        deleteStudent: function ()
+        {
+            // Close the Modal
+            $('#deleteStudentModal').modal('hide');
+
+            // Making sure there is no application for this student
+            if (this.hasApplications) {
+                return;
+            }
+
+            const deleteForm = useForm({
+                id: this.editForm.id,
+                comment: this.editForm.comment
+            });
+
+            deleteForm.delete('/twp/students/' + this.editForm.id, {
+                preserveState: false,
+                preserveScroll: true,
+                onSuccess: () => {
+                    this.editForm.formState = true;
+                },
+                onError: (errors) => {
+                    this.editForm.formState = false;
+                    this.editForm.errorMessage = errors.message || 'Error deleting student.';
+                }
+            });
+        }
     },
     mounted() {
-        this.editForm = this.result;
+        this.editForm = { ...this.result, comment: this.result.comment || '' };
         this.indigeneity_data = this.result.indigeneity.map((i) => i.id)
     }
 }

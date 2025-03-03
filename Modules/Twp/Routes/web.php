@@ -19,6 +19,7 @@ Route::prefix('twp')->middleware(['web', \Modules\Twp\Http\Middleware\HandleIner
             'as' => 'twp.',
         ], function () {
             Route::resource('students', 'StudentController');
+            Route::delete('students/{student}', 'StudentController@delete');
             Route::get('/application-list', 'StudentController@apps')->name('application-list');
             Route::resource('applications', 'ApplicationController');
             Route::resource('programs', 'ProgramController');
