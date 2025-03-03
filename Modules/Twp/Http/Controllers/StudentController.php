@@ -121,6 +121,24 @@ class StudentController extends Controller
         return Redirect::route('twp.students.show', [$student->id]);
     }
 
+    /**
+     * Soft delete the student
+     *
+     * @param  \Illuminate\Http\Request  $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function delete (Student $student) {
+        // Update Comment column
+        $comment = request('comment');
+        $student->update([
+            'comment' => $comment
+        ]);
+        // Soft delete student
+        $student->delete();
+        return redirect()->route('twp.students.index')->with('message', 'Student deleted successfully.');
+    }
+
     private function paginateStudents()
     {
         $students = Student::with('applications');
@@ -204,4 +222,5 @@ class StudentController extends Controller
     {
         return [Country::orderBy('country_code', 'asc')->get(), Province::orderBy('province_code', 'asc')->get()];
     }
+
 }
