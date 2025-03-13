@@ -16,26 +16,26 @@
 
         <div v-if="searchType === 'byName'" class="tab-pane fade show active" id="name-tab-pane" role="tabpanel" aria-labelledby="name-tab" tabindex="1">
             <form @submit.prevent="nameFormSubmit" class="m-3">
-                <div class="row mb-3">
-                    <BreezeLabel class="col-auto col-form-label" for="inputLastName" value="Last Name" />
-                    <div class="col-auto">
+                <div class="row mb-3 align-items-center">
+                    <BreezeLabel class="col-md-4 col-form-label text-md-end" for="inputLastName" value="Last Name" />
+                    <div class="col-md-6">
                         <BreezeInput type="text" id="inputLastName" class="form-control" v-model="nameForm.filter_lname" />
                     </div>
                 </div>
                 <div class="row mb-3">
-                    <BreezeLabel class="col-auto col-form-label" for="inputFirstName" value="First Name" />
-                    <div class="col-auto">
+                    <BreezeLabel class="col-md-4 col-form-label text-md-end" for="inputFirstName" value="First Name" />
+                    <div class="col-md-6">
                         <BreezeInput type="text" id="inputFirstName" class="form-control" v-model="nameForm.filter_fname" />
                     </div>
                 </div>
                 <div class="row mb-3">
-                    <BreezeLabel class="col-auto col-form-label" for="inputAliasName" value="Alias Name" />
-                    <div class="col-auto">
+                    <BreezeLabel class="col-md-4 col-form-label text-md-end" for="inputAliasName" value="Alias Name" />
+                    <div class="col-md-6">
                         <BreezeInput type="text" id="inputAliasName" class="form-control" v-model="nameForm.filter_aname" />
                     </div>
                 </div>
                 <div class="row mb-3">
-                    <div class="col-auto">
+                    <div class="col-md-6 offset-md-4">
                         <BreezeButton class="btn btn-primary" :class="{ 'opacity-25': nameForm.processing }" :disabled="nameForm.processing">
                             Search
                         </BreezeButton>
