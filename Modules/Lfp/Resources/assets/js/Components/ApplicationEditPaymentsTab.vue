@@ -269,7 +269,7 @@ export default {
         principalPaid() {
             let total = 0;
             for(let i=0; i<this.payments.length; i++){
-                if(this.payments[i].sfas_payment_attr.pl_payment_status_code === 'PAID')
+                if(this.payments[i].sfas_payment_attr && this.payments[i].sfas_payment_attr.pl_payment_status_code === 'PAID')
                     total += parseFloat(this.payments[i].sfas_payment_attr.pl_dire_principal_pay_amt);
             }
             return parseFloat(total.toFixed(3));
