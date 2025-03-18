@@ -49,7 +49,7 @@ class ApplicationEditRequest extends FormRequest
             'exception_comments' => 'nullable',
             'institution_student_number' => 'nullable', 'apply_twp' => 'nullable', 'apply_lfg' => 'nullable',
             'confirmation_enrolment' => 'nullable', 'sabc_app_number' => 'nullable',
-            'fao_name' => 'nullable', 'fao_email' => 'nullable|email', 'fao_phone' => 'nullable',
+            'fao_name' => 'nullable', 'fao_email' => 'nullable|email', 'fao_phone' => 'nullable', 'comment' => 'nullable',
 
         ];
     }

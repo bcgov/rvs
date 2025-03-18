@@ -27,6 +27,9 @@
                                 TWP Applications
                             </div>
                             <div class="card-body">
+                                <div v-if="$page.props.flash.message" class="alert alert-success">
+                                    {{ $page.props.flash.message }}
+                                </div>
                                 <div v-if="results != null && results.data.length > 0" class="table-responsive pb-3">
                                     <table class="table table-striped">
                                         <thead>
