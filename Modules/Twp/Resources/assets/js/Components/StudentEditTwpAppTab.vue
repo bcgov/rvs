@@ -109,13 +109,43 @@ tr {
         </div>
         <div class="card-footer mt-3">
             <button v-if="result==null" type="submit" class="btn me-2 btn-outline-success" :disabled="editForm.processing">Create Application</button>
-            <button v-else type="submit" class="btn me-2 btn-outline-success" :disabled="editForm.processing">Update Application</button>
+            <template v-else>
+                <button type="submit" class="btn me-2 btn-outline-success" :disabled="editForm.processing">Update Application</button>
+                <button type="button" class="btn me-2 btn-outline-danger float-end" data-bs-toggle="modal" data-bs-target="#deleteApplicationModal">Delete Application</button>
+
+            </template>
         </div>
 
         <FormSubmitAlert :form-state="editForm.formState"
                          :success-msg="'Application record was submitted successfully.'"></FormSubmitAlert>
 
     </form>
+
+    <!-- Modal for deleting Application-->
+    <div class="modal fade" id="deleteApplicationModal" tabindex="-1" aria-labelledby="deleteApplicationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteApplicationModalLabel">Confirm Application Deletion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p v-if="hasPayments" class="text-danger">
+                        Warning: This application has an ongoing payments. Deletion is not allowed.
+                    </p>
+                    <p v-else>Are you sure you want to delete this application?</p>
+                    <div class="mb-3">
+                        <label for="deleteApplicationComment" class="form-label">Comment</label>
+                        <textarea class="form-control" id="deleteComment" v-model="editForm.comment" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" @click="deleteApplication" :disabled="hasPayments">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </template>
 <script>
@@ -151,9 +181,9 @@ export default {
                 twp_status: '',
                 denial_reason: '',
                 exception_comments: '',
+                comment: '',
                 denial_list: [],
                 reasons: '',
-
                 institution_student_number: '',
                 apply_twp: '',
                 apply_lfg: '',
@@ -170,6 +200,10 @@ export default {
                 this.$attrs.utils['Exception Comment'].some(exception =>
                     exception.field_name === this.editForm.exception_comments
                 );
+        },
+        // Checking if the application has any payments linked
+        hasPayments() {
+            return this.result && this.result.payments && this.result.payments.length > 0;
         }
     },
     methods: {
@@ -250,6 +284,33 @@ export default {
                     }
                 }
             }
+        },
+        deleteApplication: function ()
+        {
+            // Close the Modal
+            $('#deleteApplicationModal').modal('hide');
+
+            // Making sure there is no application for this student
+            if (this.hasPayments) {
+                return;
+            }
+
+            const deleteForm = useForm({
+                id: this.editForm.id,
+                comment: this.editForm.comment
+            });
+
+            deleteForm.delete('/twp/applications/' + this.editForm.id, {
+                preserveState: false,
+                preserveScroll: true,
+                onSuccess: () => {
+                    this.editForm.formState = true;
+                },
+                onError: (errors) => {
+                    this.editForm.formState = false;
+                    this.editForm.errorMessage = errors.message || 'Error deleting application.';
+                }
+            });
         }
     },
     watch: {
