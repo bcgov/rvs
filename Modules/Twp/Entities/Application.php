@@ -4,10 +4,12 @@ namespace Modules\Twp\Entities;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Application extends ModuleModel
 {
     use HasFactory;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -16,7 +18,7 @@ class Application extends ModuleModel
      */
     protected $fillable = ['student_id', 'received_date', 'application_status', 'twp_status', 'denial_reason', 'exception_comments',
         'institution_student_number', 'apply_twp', 'apply_lfg', 'confirmation_enrolment', 'sabc_app_number',
-        'fao_name', 'fao_email', 'fao_phone', ];
+        'fao_name', 'fao_email', 'fao_phone', 'comment'];
 
     public function reasons()
     {

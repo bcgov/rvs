@@ -48,6 +48,24 @@ class ApplicationController extends Controller
     }
 
     /**
+     * Soft delete the application
+     *
+     * @param  \Illuminate\Http\Request  $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy(Application $application) {
+        // Update Comment column
+        $comment = request('comment');
+        $application->update([
+            'comment' => $comment
+        ]);
+        // Soft delete application
+        $application->delete();
+        return redirect()->route('twp.application-list')->with('message', 'Application deleted successfully.');
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @return \Illuminate\Http\RedirectResponse
