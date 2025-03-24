@@ -3,6 +3,7 @@
 namespace Modules\Twp\Http\Controllers;
 
 use Illuminate\Support\Facades\Redirect;
+use Modules\Twp\Entities\Application;
 use Modules\Twp\Entities\Payment;
 use Modules\Twp\Http\Requests\PaymentEditRequest;
 use Modules\Twp\Http\Requests\PaymentStoreRequest;
@@ -32,5 +33,19 @@ class PaymentController extends Controller
         $payment = Payment::find($payment->id);
 
         return Redirect::route('twp.students.show', [$payment->student_id]);
+    }
+
+    /**
+     * Soft delete the payment
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy(Payment $payment) {
+        // Update Comment column
+        $payment->update(['comment' => request('comment')]);
+        $student = $payment->student_id;
+        // Soft delete payment
+        $payment->delete();
+        return Redirect::route('twp.students.show', [$student])->with('message', 'Payment deleted successfully.');
     }
 }

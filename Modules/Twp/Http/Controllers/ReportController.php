@@ -86,6 +86,7 @@ class ReportController extends Controller
         return response()->json(Student::select('id', 'first_name', 'last_name', 'alias_name', 'sin', 'birth_date',
             'address', 'pen', 'email', 'gender', 'citizenship', 'bc_resident', 'comment')
             ->with('indigeneity')
+            ->whereNull('deleted_at')
             ->get(), 200);
     }
 
@@ -93,13 +94,13 @@ class ReportController extends Controller
     {
         return response()->json(TwpApp::select('id', 'student_id', 'received_date', 'application_status', 'denial_reason', 'exception_comments',
             'institution_student_number', 'apply_twp', 'apply_lfg', 'confirmation_enrolment', 'sabc_app_number',
-            'fao_name', 'fao_email', 'fao_phone')->get(), 200);
+            'fao_name', 'fao_email', 'fao_phone')->whereNull('deleted_at')->get(), 200);
     }
 
     public function payments(Request $request)
     {
         return response()->json(Payment::select('id', 'student_id', 'program_id', 'application_id', 'payment_type_id',
-            'payment_date', 'payment_amount', 'created_by', 'updated_by')->get(), 200);
+            'payment_date', 'payment_amount', 'created_by', 'updated_by')->whereNull('deleted_at')->get(), 200);
     }
 
     public function payment_types(Request $request)

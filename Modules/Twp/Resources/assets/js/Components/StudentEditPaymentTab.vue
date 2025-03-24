@@ -8,6 +8,9 @@ tr {
 }
 </style>
 <template>
+    <div v-if="deleteSuccessMessage" class="alert alert-success mt-3" style="max-width: 500px;">
+        {{ deleteSuccessMessage }}
+    </div>
     <p v-if="paymentForms.length === 0" class="text-center leading-5">No Payments.</p>
     <div v-else>
         <div class="row mb-3 text-center">
@@ -42,7 +45,7 @@ tr {
                                     <BreezeLabel :for="'inputPaymentDate'+i" class="form-label" value="Payment Date" />
                                     <BreezeInput type="date" max="2040-12-31" class="form-control" :id="'inputPaymentDate'+i" v-model="payment.payment_date" />
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <BreezeLabel :for="'inputPaymentAmount'+i" class="form-label" value="Payment Amount" />
                                     <div class="input-group">
                                         <div class="input-group-text">$</div>
@@ -50,16 +53,17 @@ tr {
                                     </div>
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <BreezeLabel :for="'inputPaymentType'+i" class="form-label" value="Payment Type" />
                                     <BreezeSelect class="form-select" :id="'inputPaymentAmount'+i" v-model="payment.payment_type_id">
                                         <option>Select Payment Type</option>
                                         <option v-for="type in pTypes" :value="type.id">{{ type.title }}</option>
                                     </BreezeSelect>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-4">
                                     <BreezeLabel class="form-label" value="&nbsp;" />
                                     <button type="submit" class="btn me-2 btn-outline-success" :disabled="!payment.isDirty">Save Payment</button>
+                                    <button type="button" class="btn me-2 btn-outline-danger" data-bs-toggle="modal" :data-bs-target="'#deletePaymentModal' + i">Delete Payment</button>
                                 </div>
 
                             </div>
@@ -76,16 +80,36 @@ tr {
 
                             <FormSubmitAlert :form-state="payment.formState"
                                              :success-msg="'Payment record was updated successfully.'"></FormSubmitAlert>
+
                         </form>
 
                     </div>
                 </div>
+                <!-- Modal for deleting Payment -->
+                <div class="modal fade" :id="'deletePaymentModal' + i" tabindex="-1" aria-labelledby="deletePaymentModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" :id="'deletePaymentModalLabel' + i">Confirm Payment Deletion</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Are you sure you want to delete this payment?</p>
+                                <div class="mb-3">
+                                    <label :for="'deleteComment' + i" class="form-label">Comment</label>
+                                    <textarea class="form-control" :id="'deleteComment' + i" v-model="payment.comment" rows="3"></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-danger" @click="deletePayment(i)">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-
         </div>
-
     </div>
-
 </template>
 <script>
 import {Link, useForm} from '@inertiajs/vue3';
@@ -104,11 +128,13 @@ export default {
         twpStudentId: String|null,
         program: Object,
         pTypes: Object,
+        utils: Object
     },
     data() {
         return {
             noChanges: true,
             paymentForms: [],
+            deleteSuccessMessage: null,
         }
     },
     methods: {
@@ -128,6 +154,33 @@ export default {
                 // preserveState: false,
 
             });
+        },
+        deletePayment: function (index)
+        {
+            $('#deletePaymentModal'+index).modal('hide');
+
+            this.paymentForms[index].formState = '';
+            this.paymentForms[index].delete('/twp/payments/' + this.paymentForms[index].id, {
+                preserveState: true,
+                preserveScroll: true,
+                data: { comment: this.paymentForms[index].comment },
+                onSuccess: () => {
+                    // Removed payment from array
+                    this.paymentForms.splice(index, 1);
+                    this.updateTotalPayment();
+                    // Display confirmation message
+                    this.deleteSuccessMessage = 'Payment deleted successfully.';
+                },
+                onError: (errors) => {
+                    this.paymentForms[index].formState = false;
+                    this.paymentForms[index].errorMessage = errors.message || 'Error deleting payment.';
+                }
+            });
+        },
+        updateTotalPayment: function () {
+            this.totalPayment = this.paymentForms.reduce((total, payment) => {
+                return total + parseFloat(payment.payment_amount || 0);
+            }, 0).toFixed(2);
         },
     },
     mounted() {
