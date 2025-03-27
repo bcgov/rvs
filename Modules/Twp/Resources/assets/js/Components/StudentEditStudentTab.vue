@@ -56,7 +56,7 @@ tr {
             <div class="col-md-4">
                 <BreezeLabel for="inputCitizenship" class="form-label" value="Citizenship" />
                 <BreezeSelect class="form-select" id="inputCitizenship" v-model="editForm.citizenship">
-                    <option v-for="citizenship in $attrs.utils['Citizenship']" :key="citizenship.id" :value="citizenship.field_name">
+                    <option v-for="citizenship in utils['Citizenship']" :key="citizenship.id" :value="citizenship.field_name">
                         {{ citizenship.field_name }}
                     </option>
                 </BreezeSelect>
@@ -156,7 +156,8 @@ export default {
         now: String,
         countries: Object,
         provinces: Object,
-        indigeneity_types: Object
+        indigeneity_types: Object,
+        utils: Object
     },
     data() {
         return {

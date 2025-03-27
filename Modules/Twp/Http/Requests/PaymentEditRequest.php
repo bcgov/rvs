@@ -53,7 +53,7 @@ class PaymentEditRequest extends FormRequest
             'payment_date' => 'required|date_format:Y-m-d',
             'payment_amount' => 'required|numeric',
             'updated_by' => 'required',
-
+            'comment' => 'nullable|string|max:255',
         ];
     }
 

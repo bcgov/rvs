@@ -51,7 +51,7 @@ class PaymentStoreRequest extends FormRequest
             'payment_amount' => 'required|numeric',
             'created_by' => 'required',
             'updated_by' => 'required',
-
+            'comment' => 'nullable|string|max:255',
         ];
     }
 

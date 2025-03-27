@@ -84,7 +84,6 @@ export default {
     mounted() {
         for(let i=0; i<this.$attrs.auth.user.roles.length; i++)
         {
-            console.log(this.$attrs.auth.user.roles[i].name.indexOf('Admin'));
             if(this.$attrs.auth.user.roles[i].name.indexOf('Admin') > -1)
             {
                 this.isAdmin = true;

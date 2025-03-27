@@ -93,7 +93,8 @@ export default {
     props: {
         result: Object,
         twpStudentId: String|Number|null,
-        toTitleCase: Function
+        toTitleCase: Function,
+        utils: Object
     },
     data() {
         return {
