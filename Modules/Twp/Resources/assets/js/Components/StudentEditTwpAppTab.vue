@@ -11,88 +11,102 @@ tr {
     <form v-if="editForm != null" @submit.prevent="updateStudent">
         <div class="row g-3">
             <div class="col-md-4">
-                <BreezeLabel for="inputReceivedDate" class="form-label" value="Received Date" />
-                <BreezeInput type="date" max="2040-12-31" placeholder="YYYY-MM-DD" class="form-control" id="inputReceivedDate" v-model="editForm.received_date" />
+                <BreezeLabel for="inputReceivedDate" class="form-label" value="Received Date"/>
+                <BreezeInput type="date" max="2040-12-31" placeholder="YYYY-MM-DD" class="form-control"
+                             id="inputReceivedDate" v-model="editForm.received_date"/>
             </div>
             <div class="col-md-4">
-                <BreezeLabel for="inputApplicationStatus" class="form-label" value="Application Status" />
-                <BreezeInput v-if="editForm.application_status ==='APPROVED ON APPEAL'" type="text" class="form-control" id="inputApplicationStatus" v-model="editForm.application_status" readonly="readonly"/>
-                <BreezeSelect v-else class="form-select" id="inputApplicationStatus" v-model="editForm.application_status">
-                    <option v-for="status in $attrs.utils['Application Status']" :key="status.id" :value="status.field_name">
+                <BreezeLabel for="inputApplicationStatus" class="form-label" value="Application Status"/>
+                <BreezeInput v-if="editForm.application_status ==='APPROVED ON APPEAL'" type="text"
+                             class="form-control" id="inputApplicationStatus" v-model="editForm.application_status"
+                             readonly="readonly"/>
+                <BreezeSelect v-else class="form-select" id="inputApplicationStatus"
+                              v-model="editForm.application_status">
+                    <option v-for="status in utils['Application Status']" :key="status.id"
+                            :value="status.field_name">
                         {{ toTitleCase(status.field_name) }}
                     </option>
                 </BreezeSelect>
             </div>
-<!--            <div class="col-md-4">-->
-<!--                <BreezeLabel v-if="editForm.twp_status" for="inputTwpStatus" class="form-label" :value="'TWP Status (' + editForm.twp_status + ')'" />-->
-<!--                <BreezeLabel v-else for="inputTwpStatus" class="form-label" value="TWP Status" />-->
-<!--                <BreezeSelect class="form-select" id="inputTwpStatus" v-model="editForm.twp_status">-->
-<!--                    <option value="Inactive">Inactive</option>-->
-<!--                    <option value="In Progress">In Progress</option>-->
-<!--                    <option value="Credential Completed">Credential Completed</option>-->
-<!--                    <option value="Time in Care">Time in Care</option>-->
-<!--                    <option value="No Time in Care">No Time in Care</option>-->
-<!--                </BreezeSelect>-->
-<!--            </div>-->
+            <!--            <div class="col-md-4">-->
+            <!--                <BreezeLabel v-if="editForm.twp_status" for="inputTwpStatus" class="form-label" :value="'TWP Status (' + editForm.twp_status + ')'" />-->
+            <!--                <BreezeLabel v-else for="inputTwpStatus" class="form-label" value="TWP Status" />-->
+            <!--                <BreezeSelect class="form-select" id="inputTwpStatus" v-model="editForm.twp_status">-->
+            <!--                    <option value="Inactive">Inactive</option>-->
+            <!--                    <option value="In Progress">In Progress</option>-->
+            <!--                    <option value="Credential Completed">Credential Completed</option>-->
+            <!--                    <option value="Time in Care">Time in Care</option>-->
+            <!--                    <option value="No Time in Care">No Time in Care</option>-->
+            <!--                </BreezeSelect>-->
+            <!--            </div>-->
             <div class="col-md-4">
-                <BreezeLabel for="inputStudentNumber" class="form-label" value="Inst. Student #" />
-                <BreezeInput type="text" class="form-control" id="inputStudentNumber" v-model="editForm.institution_student_number" />
+                <BreezeLabel for="inputStudentNumber" class="form-label" value="Inst. Student #"/>
+                <BreezeInput type="text" class="form-control" id="inputStudentNumber"
+                             v-model="editForm.institution_student_number"/>
             </div>
 
             <div class="col-md-4">
                 <div class="form-check">
-                    <label for="inputConfirmEnrol" class="form-check-label">Confirmation of Enrolment Required</label>
-                    <input type="checkbox" class="form-check-input" id="inputConfirmEnrol" v-model="editForm.confirmation_enrolment" />
+                    <label for="inputConfirmEnrol" class="form-check-label">Confirmation of Enrolment
+                        Required</label>
+                    <input type="checkbox" class="form-check-input" id="inputConfirmEnrol"
+                           v-model="editForm.confirmation_enrolment"/>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-check">
                     <label for="inputApplyTwp" class="form-check-label">Apply for TWP</label>
-                    <input type="checkbox" class="form-check-input" id="inputApplyTwp" v-model="editForm.apply_twp" />
+                    <input type="checkbox" class="form-check-input" id="inputApplyTwp"
+                           v-model="editForm.apply_twp"/>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-check">
                     <label for="inputApplyLfg" class="form-check-label">Apply for Learning for Future Grant</label>
-                    <input type="checkbox" class="form-check-input" id="inputApplyLfg" v-model="editForm.apply_lfg" />
+                    <input type="checkbox" class="form-check-input" id="inputApplyLfg"
+                           v-model="editForm.apply_lfg"/>
                 </div>
             </div>
 
             <div class="col-md-4">
-                <BreezeLabel for="inputFaoName" class="form-label" value="FAO Name" />
-                <BreezeInput type="text" class="form-control" id="inputFaoName" v-model="editForm.fao_name" />
+                <BreezeLabel for="inputFaoName" class="form-label" value="FAO Name"/>
+                <BreezeInput type="text" class="form-control" id="inputFaoName" v-model="editForm.fao_name"/>
             </div>
             <div class="col-md-4">
-                <BreezeLabel for="inputFaoEmail" class="form-label" value="FAO Email" />
-                <BreezeInput type="text" class="form-control" id="inputFaoEmail" v-model="editForm.fao_email" />
+                <BreezeLabel for="inputFaoEmail" class="form-label" value="FAO Email"/>
+                <BreezeInput type="text" class="form-control" id="inputFaoEmail" v-model="editForm.fao_email"/>
             </div>
             <div class="col-md-4">
-                <BreezeLabel for="inputFaoPhone" class="form-label" value="FAO Phone" />
-                <BreezeInput type="text" class="form-control" id="inputFaoPhone" v-model="editForm.fao_phone" />
+                <BreezeLabel for="inputFaoPhone" class="form-label" value="FAO Phone"/>
+                <BreezeInput type="text" class="form-control" id="inputFaoPhone" v-model="editForm.fao_phone"/>
             </div>
 
 
             <div v-if="editForm.application_status === 'DENIED'" class="col-md-12">
                 <template v-for="(reason, i) in denial_reasons">
                     <div v-if="reason.active_flag === true" class="form-check form-check-inline">
-                        <input @click="updateReason(reason)" class="form-check-input" type="checkbox" :id="'inlineCheckbox'+i" v-model="reason.selected" :checked="checkReason(reason)">
-                        <label @click="updateReason(reason)" class="form-check-label" :for="'inlineCheckbox'+i">{{ reason.title }}</label>
+                        <input @click="updateReason(reason)" class="form-check-input" type="checkbox"
+                               :id="'inlineCheckbox'+i" v-model="reason.selected" :checked="checkReason(reason)">
+                        <label @click="updateReason(reason)" class="form-check-label"
+                               :for="'inlineCheckbox'+i">{{ reason.title }}</label>
                     </div>
                 </template>
             </div>
 
             <div v-if="isValidExceptionComment" class="col-md-12">
-                <BreezeLabel for="inputExceptionComments" class="form-label" value="Exception Comment" />
+                <BreezeLabel for="inputExceptionComments" class="form-label" value="Exception Comment"/>
                 <BreezeSelect class="form-select" id="inputExceptionComments" v-model="editForm.exception_comments">
                     <option value=""></option>
-                    <option v-for="exception in $attrs.utils['Exception Comment']" :key="exception.id" :value="exception.field_name">
+                    <option v-for="exception in utils['Exception Comment']" :key="exception.id"
+                            :value="exception.field_name">
                         {{ exception.field_name }}
                     </option>
                 </BreezeSelect>
             </div>
             <div v-else class="col-md-12">
-                <BreezeLabel for="inputExceptionComments" class="form-label" value="Exception Comments" />
-                <BreezeInput type="text" class="form-control" id="inputExceptionComments" v-model="editForm.exception_comments" />
+                <BreezeLabel for="inputExceptionComments" class="form-label" value="Exception Comments"/>
+                <BreezeInput type="text" class="form-control" id="inputExceptionComments"
+                             v-model="editForm.exception_comments"/>
             </div>
 
             <div v-if="editForm.errors != undefined" class="row">
@@ -108,10 +122,16 @@ tr {
 
         </div>
         <div class="card-footer mt-3">
-            <button v-if="result==null" type="submit" class="btn me-2 btn-outline-success" :disabled="editForm.processing">Create Application</button>
+            <button v-if="result==null" type="submit" class="btn me-2 btn-outline-success"
+                    :disabled="editForm.processing">Create Application
+            </button>
             <template v-else>
-                <button type="submit" class="btn me-2 btn-outline-success" :disabled="editForm.processing">Update Application</button>
-                <button type="button" class="btn me-2 btn-outline-danger float-end" data-bs-toggle="modal" data-bs-target="#deleteApplicationModal">Delete Application</button>
+                <button type="submit" class="btn me-2 btn-outline-success" :disabled="editForm.processing">Update
+                    Application
+                </button>
+                <button type="button" class="btn me-2 btn-outline-danger float-end" data-bs-toggle="modal"
+                        data-bs-target="#deleteApplicationModal">Delete Application
+                </button>
 
             </template>
         </div>
@@ -122,7 +142,8 @@ tr {
     </form>
 
     <!-- Modal for deleting Application-->
-    <div class="modal fade" id="deleteApplicationModal" tabindex="-1" aria-labelledby="deleteApplicationModalLabel" aria-hidden="true">
+    <div class="modal fade" id="deleteApplicationModal" tabindex="-1" aria-labelledby="deleteApplicationModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -136,17 +157,19 @@ tr {
                     <p v-else>Are you sure you want to delete this application?</p>
                     <div class="mb-3">
                         <label for="deleteApplicationComment" class="form-label">Comment</label>
-                        <textarea class="form-control" id="deleteComment" v-model="editForm.comment" rows="3"></textarea>
+                        <textarea class="form-control" id="deleteComment" v-model="editForm.comment"
+                                  rows="3"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger" @click="deleteApplication" :disabled="hasPayments">Delete</button>
+                    <button type="button" class="btn btn-danger" @click="deleteApplication" :disabled="hasPayments">
+                        Delete
+                    </button>
                 </div>
             </div>
         </div>
     </div>
-
 </template>
 <script>
 import {Link, useForm} from '@inertiajs/vue3';
@@ -164,7 +187,8 @@ export default {
         result: Object,
         twpStudentId: String|Number|null,
         reasons: Object,
-        toTitleCase: Function
+        toTitleCase: Function,
+        utils: Object
     },
     data() {
         return {
@@ -197,7 +221,7 @@ export default {
     computed: {
         isValidExceptionComment() {
             return this.editForm.exception_comments === '' ||
-                this.$attrs.utils['Exception Comment'].some(exception =>
+                this.utils['Exception Comment'].some(exception =>
                     exception.field_name === this.editForm.exception_comments
                 );
         },

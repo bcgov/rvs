@@ -50,8 +50,6 @@ class ApplicationController extends Controller
     /**
      * Soft delete the application
      *
-     * @param  \Illuminate\Http\Request  $request
-     *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Application $application) {

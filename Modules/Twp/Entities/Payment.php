@@ -3,10 +3,12 @@
 namespace Modules\Twp\Entities;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Payment extends ModuleModel
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $appends = ['payment_type_readable'];
 
@@ -15,7 +17,7 @@ class Payment extends ModuleModel
      *
      * @var array<int, string>
      */
-    protected $fillable = ['student_id', 'program_id', 'payment_type_id', 'payment_date', 'payment_amount', 'application_id'];
+    protected $fillable = ['student_id', 'program_id', 'payment_type_id', 'payment_date', 'payment_amount', 'application_id', 'comment'];
 
     public function student()
     {

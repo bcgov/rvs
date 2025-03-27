@@ -24,7 +24,7 @@
                                     </Link> Student Info
                                 </div>
                                 <div v-if="editForm != null" class="card-body">
-                                    <StudentEditStudentTab v-bind="$attrs" :result="editForm" :indigeneity_types="indigeneity_types"></StudentEditStudentTab>
+                                    <StudentEditStudentTab :utils="$attrs.utils" :result="editForm" :indigeneity_types="indigeneity_types"></StudentEditStudentTab>
                                 </div>
                             </div>
                             <div class="card mb-2">
@@ -89,16 +89,16 @@
                                     </ul>
                                     <div class="tab-content" id="myStudentTabContent">
                                         <div class="tab-pane fade" :class="activeTab==='twp-app' ? 'active show':''" id="twp-app-tab-pane" role="tabpanel" aria-labelledby="twp-app-tab" tabindex="1">
-                                            <StudentEditTwpAppTab v-if="activeTab==='twp-app'" v-bind="$attrs" :reasons="reasons" :twpStudentId="activeApp.student_id" :result="activeApp" :toTitleCase="toTitleCase"></StudentEditTwpAppTab>
+                                            <StudentEditTwpAppTab v-if="activeTab==='twp-app'" :utils="$attrs.utils" :reasons="reasons" :twpStudentId="activeApp.student_id" :result="activeApp" :toTitleCase="toTitleCase"></StudentEditTwpAppTab>
                                         </div>
                                         <div class="tab-pane fade" :class="activeTab==='grant-app' ? 'active show':''" id="grant-app-tab-pane" role="tabpanel" aria-labelledby="grant-app-tab" tabindex="2">
-                                            <StudentEditGrantAppTab v-if="activeTab==='grant-app'" v-bind="$attrs" :twpStudentId="activeApp.student_id" :result="activeApp.grants" :toTitleCase="toTitleCase"></StudentEditGrantAppTab>
+                                            <StudentEditGrantAppTab v-if="activeTab==='grant-app'" :utils="$attrs.utils" :twpStudentId="activeApp.student_id" :result="activeApp.grants" :toTitleCase="toTitleCase"></StudentEditGrantAppTab>
                                         </div>
                                         <div class="tab-pane fade" :class="activeTab==='program' ? 'active show':''" id="program-tab-pane" role="tabpanel" aria-labelledby="program-tab" tabindex="3">
-                                            <StudentEditProgramTab v-if="activeTab==='program'" v-bind="$attrs" :twpStudentId="activeApp.student_id" :twpApplicationId="activeApp.id" :result="activeApp.program" :schools="schools"></StudentEditProgramTab>
+                                            <StudentEditProgramTab v-if="activeTab==='program'" :utils="$attrs.utils" :twpStudentId="activeApp.student_id" :twpApplicationId="activeApp.id" :result="activeApp.program" :schools="schools"></StudentEditProgramTab>
                                         </div>
                                         <div v-if="activeApp.program != null" class="tab-pane fade" :class="activeTab==='payments' ? 'active show':''" id="payments-tab-pane" role="tabpanel" aria-labelledby="payments-tab" tabindex="4">
-                                            <StudentEditPaymentTab v-if="activeTab==='payments'" v-bind="$attrs" :twpStudentId="activeApp.student_id" :pTypes="p_types" :result="activeApp.payments" :program="activeApp.program"></StudentEditPaymentTab>
+                                            <StudentEditPaymentTab v-if="activeTab==='payments'" :utils="$attrs.utils" :twpStudentId="activeApp.student_id" :pTypes="p_types" :result="activeApp.payments" :program="activeApp.program"></StudentEditPaymentTab>
                                         </div>
                                     </div>
 
