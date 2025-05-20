@@ -61,6 +61,7 @@ oc-build-web: | print-status build-web
 oc-deploy-web: | print-status deploy-web
 oc-build-patroni: | print-status build-patroni
 oc-deploy-patroni: | print-status deploy-patroni
+oc-build-cronjob: | print-status build-cronjob
 
 print-status:
 	@echo " +---------------------------------------------------------+ "
@@ -145,3 +146,12 @@ db-backup-deploy-postgresql:
 		-p DATABASE_SECRET_PASSWORD_KEY_NAME=superuser-password \
   	-p ENVIRONMENT_FRIENDLY_NAME='$(NAMESPACE) POSTGRESQL DB Backups' \
 		| oc -n $(NAMESPACE) apply -f -
+
+
+build-cronjob:
+	@echo "+\n++ PROCESSING CronJob\n+"
+	@oc -n $(BUILD_NAMESPACE) process -f bc_cron.yaml --param-file=$(PARAM_FILE) | oc -n $(BUILD_NAMESPACE) apply -f -
+	@echo "+\n++ BUILDING CronJob\n+"
+	@oc -n $(BUILD_NAMESPACE) start-build bc/$(HOST_PREFIX) --wait
+	@echo "+\n++ FINISHED BUILDING CronJob\n+"
+

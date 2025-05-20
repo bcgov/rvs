@@ -308,3 +308,6 @@ parameters:
     description: 'The number of attempts to try for a successful job outcome (default: 6)'
     value: '0'
     required: false
+  - name: LOGIN_TOKEN_SECRET
+    description: The secret having the login token
+    required: true
