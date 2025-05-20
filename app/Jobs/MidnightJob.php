@@ -76,7 +76,6 @@ class MidnightJob implements ShouldQueue
                     'first_name' => $app->first_name,
                     'last_name' => $app->last_name,
                 ]);
-                \Log::info('Midnight Job -- New/Update Application Found: ' . $check->id);
             }
 
             $qry = env("LFP_SFA_APP_PAY") . $app->pl_loan_forgiveness_app_idx;
