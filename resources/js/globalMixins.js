@@ -23,6 +23,18 @@ export const globalMixins = {
         $back: function()
         {
             window.history.back();
+        },
+        $formatMoney(
+            value,
+            { locale = 'en-CA', currency = 'CAD' } = {}
+        ) {
+            if (value === null || value === undefined || isNaN(value)) return '';
+            return new Intl.NumberFormat(locale, {
+                style: 'currency',
+                currency,
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+            }).format(Number(value));
         }
     }
 };

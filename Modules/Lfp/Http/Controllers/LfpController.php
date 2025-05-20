@@ -26,7 +26,7 @@ class LfpController extends Controller
         $lfps = $this->paginateLfps();
         $last_sync = Util::where('field_type', 'Last Sync')->first();
 
-        return Inertia::render('Lfp::Applications', ['page' => 'applications', 'lastSync' => $last_sync,
+        return Inertia::render('Lfp::Applications', ['page' => 'applications', 'lastSync' => $last_sync->field_name,
             'status' => $status, 'results' => $lfps, 'app' => $newApp]);
     }
 
