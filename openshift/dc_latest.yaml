@@ -113,6 +113,62 @@ objects:
               env:
               - name: "ENV_ARG"
                 value: "hi there"
+
+
+  - kind: CronJob
+    apiVersion: batch/v1
+    metadata:
+      name: ${JOB_NAME}
+      namespace: ${NAMESPACE}
+      labels:
+        template: 'rvs-midnight-cronjob'
+        cronjob: ${JOB_NAME}
+        app.kubernetes.io/part-of: ${LABEL_NAME}
+    spec:
+      schedule: ${SCHEDULE}
+      concurrencyPolicy: 'Forbid'
+      successfulJobsHistoryLimit: ${{SUCCESS_JOBS_HISTORY_LIMIT}}
+      failedJobsHistoryLimit: ${{FAILED_JOBS_HISTORY_LIMIT}}
+      jobTemplate:
+        metadata:
+          labels:
+            template: 'rvs-midnight-cronjob'
+            cronjob: ${JOB_NAME}
+        spec:
+          backoffLimit: ${{JOB_BACKOFF_LIMIT}}
+          template:
+            spec:
+              containers:
+                - name: ${JOB_NAME}
+                  image: image-registry.openshift-image-registry.svc:5000/${BUILD_NAMESPACE}/${NAME}-cron:${IMAGE_TAG}
+                  command: [ "/bin/sh", "-c" ]
+                  env:
+                    - name: LOGIN_TOKEN
+                      valueFrom:
+                        secretKeyRef:
+                          name: ${LOGIN_TOKEN_SECRET}
+                          key: token
+                  args:
+                    - >
+                      date
+
+                      oc login --token=$(LOGIN_TOKEN) --server=https://api.silver.devops.gov.bc.ca:6443
+
+                      oc version
+
+                      echo ""
+
+                      echo "==========> Starting schedule run"
+
+                      oc -n ${NAMESPACE} get pods -l deploymentconfig=${NAME} -o name | xargs -I {} sh -c 'oc exec -it {} -- php artisan job:dispatch-midnight && oc exec -it {} -- php artisan queue:work --once --queue=midnight'
+
+                      echo "==========> Finished schedule run"
+
+              restartPolicy: 'Never'
+              terminationGracePeriodSeconds: 30
+              activeDeadlineSeconds: 220
+              dnsPolicy: 'ClusterFirst'
+
   - apiVersion: route.openshift.io/v1
     kind: Route
     spec:
@@ -224,3 +280,31 @@ parameters:
     required: true
   - name: MAX_REPLICAS
     required: true
+
+  - name: 'JOB_NAME'
+    displayName: 'Job Name'
+    description: 'Name of the Scheduled Job to Create.'
+    value: 'rvs-midnight-cronjob'
+    required: true
+  - name: 'SCHEDULE'
+    displayName: 'Cron Schedule'
+    description: 'Cron Schedule to Execute the Job (in UTC)'
+    #value: '0 7 * * *' # at 8 UTC (00:00 midnight PST)
+    # value: '*/5 * * * *' #every 5 minutes
+    value: '0 * * * *' #at the top of the hour
+    required: true
+  - name: 'SUCCESS_JOBS_HISTORY_LIMIT'
+    displayName: 'Successful Job History Limit'
+    description: 'The number of successful jobs that will be retained'
+    value: '3'
+    required: true
+  - name: 'FAILED_JOBS_HISTORY_LIMIT'
+    displayName: 'Failed Job History Limit'
+    description: 'The number of failed jobs that will be retained'
+    value: '3'
+    required: true
+  - name: 'JOB_BACKOFF_LIMIT'
+    displayName: 'Job Backoff Limit'
+    description: 'The number of attempts to try for a successful job outcome (default: 6)'
+    value: '0'
+    required: false

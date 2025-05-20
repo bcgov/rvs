@@ -26,21 +26,6 @@ class LfpController extends Controller
         $lfps = $this->paginateLfps();
         $last_sync = Util::where('field_type', 'Last Sync')->first();
 
-        $hours_difference = 3;
-        if(!is_null($last_sync)){
-            // Calculate the difference in hours
-            $hours_difference = Carbon::parse($last_sync->field_name)->diffInHours(Carbon::now());
-        }
-
-        // Check if the difference is greater than 2 hour
-        if ($hours_difference > 2) {
-            // Sync applications
-            $this->sync();
-            $last_sync->field_name = Carbon::now();
-            $last_sync->save();
-        }
-        $last_sync = Carbon::parse($last_sync->created_at)->format('Y-m-d H:i');
-
         return Inertia::render('Lfp::Applications', ['page' => 'applications', 'lastSync' => $last_sync,
             'status' => $status, 'results' => $lfps, 'app' => $newApp]);
     }
@@ -59,66 +44,6 @@ class LfpController extends Controller
         return Redirect::route('lfp.applications.show', [$lfp->id]);
     }
 
-    public function sync($status = true, $newApp = 0)
-    {
-        ini_set('memory_limit', '-1');
-        ini_set('max_execution_time', 60); // 60 seconds
-
-        $qry = env("LFP_APP_SYNC") . "0";
-        //select last app entered
-        $lfp = Lfp::select('id', 'app_idx', 'sin')->whereNotNull('app_idx')->orderBy('created_at', 'desc')->first();
-        if(!is_null($lfp)){
-            $qry = env("LFP_APP_SYNC") . $lfp->app_idx;
-        }
-        $sfas = DB::connection('oracle')->select($qry);
-
-        foreach ($sfas as $app){
-            $check = Lfp::select('id', 'app_idx', 'sin')->where('app_idx', $app->pl_loan_forgiveness_app_idx)->first();
-            if(is_null($check)) {
-                // Only check for the sin and app_idx. Do not include first and last name
-                $check = Lfp::firstOrCreate([
-                    'sin' => $app->sin,
-                    'app_idx' => $app->pl_loan_forgiveness_app_idx,
-                ]);
-                $check->update([
-                    'first_name' => $app->first_name,
-                    'last_name' => $app->last_name,
-                ]);
-            }
-
-            $qry = env("LFP_SFA_APP_PAY") . $app->pl_loan_forgiveness_app_idx;
-            $sfas_payments = DB::connection('oracle')->select($qry);
-            foreach($sfas_payments as $spay){
-                $checkPayment = Payment::where('app_idx', $spay->pl_loan_forgiveness_app_idx)
-                    ->where('pay_idx', $spay->pl_loan_forgiveness_pay_idx)->count();
-                if($checkPayment === 0){
-                    $pay = Payment::firstOrNew(['pay_idx' => $spay->pl_loan_forgiveness_pay_idx]);
-                    $pay->lfp_id = $check->id;
-                    $pay->app_idx = $spay->pl_loan_forgiveness_app_idx;
-                    $pay->pay_idx = $spay->pl_loan_forgiveness_pay_idx;
-                    $pay->anniversary_date = $spay->pl_anniversary_dte;
-                    $pay->proposed_pay_amount = $spay->pl_dire_principal_pay_amt;
-                    $pay->proposed_hrs_of_service = $spay->hrs_of_service;
-                    $pay->sfas_pay_status = $spay->pl_payment_status_code;
-                    $pay->oc_pay_status = 'Pending';
-                    $pay->save();
-                }
-            }
-
-            // find any intake of the same sin that has already been registered but not connected to an sfas app
-            $intake = Intake::where('sin', $app->sin)
-                ->where('app_idx', null)
-                ->where('intake_status', 'Registered')
-                ->first();
-            if(!is_null($intake)){
-                $intake->app_idx = $app->pl_loan_forgiveness_app_idx;
-                $intake->save();
-            }
-        }
-
-
-        return Redirect::route('lfp.applications.index');
-    }
 
     /**
      * Show the specified resource.
