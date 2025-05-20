@@ -166,7 +166,7 @@ objects:
 
               restartPolicy: 'Never'
               terminationGracePeriodSeconds: 30
-              activeDeadlineSeconds: 220
+              activeDeadlineSeconds: 600 # 10 minutes
               dnsPolicy: 'ClusterFirst'
 
   - apiVersion: route.openshift.io/v1

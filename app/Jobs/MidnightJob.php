@@ -51,8 +51,9 @@ class MidnightJob implements ShouldQueue
 
     private function sync($status = true, $newApp = 0)
     {
+        \Log::info('Starting Sync');
         ini_set('memory_limit', '-1');
-        ini_set('max_execution_time', 60); // 60 seconds
+        ini_set('max_execution_time', 600); // 10 minutes
 
         $qry = env("LFP_APP_SYNC") . "0";
         //select last app entered
@@ -65,6 +66,7 @@ class MidnightJob implements ShouldQueue
         foreach ($sfas as $app){
             $check = Lfp::select('id', 'app_idx', 'sin')->where('app_idx', $app->pl_loan_forgiveness_app_idx)->first();
             if(is_null($check)) {
+
                 // Only check for the sin and app_idx. Do not include first and last name
                 $check = Lfp::firstOrCreate([
                     'sin' => $app->sin,
@@ -74,6 +76,7 @@ class MidnightJob implements ShouldQueue
                     'first_name' => $app->first_name,
                     'last_name' => $app->last_name,
                 ]);
+                \Log::info('Midnight Job -- New/Update Application Found: ' . $check->id);
             }
 
             $qry = env("LFP_SFA_APP_PAY") . $app->pl_loan_forgiveness_app_idx;
