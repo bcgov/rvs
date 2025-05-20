@@ -117,3 +117,5 @@ parameters:
     required: true
   - name: MAX_REPLICAS
     required: true
+  - name: LOGIN_TOKEN_SECRET
+    required: false
