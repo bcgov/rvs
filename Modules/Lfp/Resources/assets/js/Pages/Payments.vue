@@ -90,7 +90,7 @@
                                         <td>{{ row.sfas_pay_status }}</td>
                                         <td>{{ row.oc_pay_status }}</td>
                                         <td>{{ row.proposed_pay_date }}</td>
-                                        <td>${{ row.proposed_pay_amount }}</td>
+                                        <td>${{ $formatMoney(row.proposed_pay_amount) }}</td>
                                         <td>
                                             <span v-if="row.lfp?.declined_removed_reason != null && row.lfp?.declined_removed_reason != '-'" class="badge rounded-pill text-bg-danger">Removed</span>
                                         </td>

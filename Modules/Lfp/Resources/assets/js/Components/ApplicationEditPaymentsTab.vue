@@ -48,10 +48,10 @@
             <tbody>
             <tr v-for="(row, i) in payments">
                 <template v-if="row.sfas_payment_attr != null">
-                    <td><a href="#" @click="updatePayment(i)">${{ row.sfas_payment_attr.pl_dire_bcsl_before_pay_amt }}</a></td>
-                    <td>${{ row.sfas_payment_attr.pl_dire_principal_pay_amt }}</td>
-                    <td>${{ row.sfas_payment_attr.pl_risk_principal_pay_amt }}</td>
-                    <td>${{ row.sfas_payment_attr.pl_guar_principal_pay_amt }}</td>
+                    <td><a href="#" @click="updatePayment(i)">${{ $formatMoney(row.sfas_payment_attr.pl_dire_bcsl_before_pay_amt) }}</a></td>
+                    <td>${{ $formatMoney(row.sfas_payment_attr.pl_dire_principal_pay_amt) }}</td>
+                    <td>${{ $formatMoney(row.sfas_payment_attr.pl_risk_principal_pay_amt) }}</td>
+                    <td>${{ $formatMoney(row.sfas_payment_attr.pl_guar_principal_pay_amt) }}</td>
                     <td>{{ row.sfas_payment_attr.pl_payment_status_code }}</td>
                     <td>{{ cleanDate(row.sfas_payment_attr.pl_anniversary_dte) }}</td>
                 </template>

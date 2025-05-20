@@ -1,10 +1,10 @@
-#run oc process -f bc.yaml -p NAME=tbtb-yeaf IMAGE_TAG=latest OC_REPO_SECRET_USER=user-at-github | oc apply -f -
+#run oc process -f bc.yaml -p NAME=fsg IMAGE_TAG=latest OC_REPO_SECRET_USER=user-at-github | oc apply -f -
 kind: Template
 apiVersion: template.openshift.io/v1
 metadata:
-  name: ${NAME}
+  name: ${NAME}-cron
   labels:
-    buildconfig: ${NAME}
+    buildconfig: ${NAME}-cron
 objects:
   - apiVersion: v1
     kind: BuildConfig
@@ -15,15 +15,15 @@ objects:
       output:
         to:
           kind: ImageStreamTag
-          name: ${NAME}:${IMAGE_TAG}
+          name: ${NAME}-cron:${IMAGE_TAG}
       postCommit: {}
       resources:
         requests:
-          cpu: 2
-          memory: 8Gi
+          cpu: ${BUILD_CPU_REQUESTS}
+          memory: ${BUILD_MEM_REQUESTS}
         limits:
-          cpu: 4
-          memory: 16Gi
+          cpu: ${BUILD_CPU_LIMITS}
+          memory: ${BUILD_MEM_LIMITS}
       runPolicy: Serial
       source:
         git:
@@ -32,20 +32,20 @@ objects:
         type: Git
       strategy:
         dockerStrategy:
-          dockerfilePath: ./Dockerfile
+          dockerfilePath: ./DockerfileCron
           env:
-            - name: "TEST_ARG"
-              value: "hi there"
             - name: USER_ID
               value: ${OC_USER_ID}
+            - name: NPM_ENV
+              value: ${NPM_ENV}
         type: Docker
       successfulBuildsHistoryLimit: 5
     metadata:
       labels:
-        build: ${NAME}
-        buildconfig: ${NAME}
+        build: ${NAME}-cron
+        buildconfig: ${NAME}-cron
         build-branch: ${REPO_BRANCH}
-      name: ${NAME}
+      name: ${NAME}-cron
       namespace: ${BUILD_NAMESPACE}
       annotations:
         vault.hashicorp.com/agent-inject: 'true'
@@ -68,12 +68,12 @@ objects:
     metadata:
       generation: 1
       labels:
-        build: ${NAME}
-        buildconfig: ${NAME}
+        build: ${NAME}-cron
+        buildconfig: ${NAME}-cron
         build-branch: ${REPO_BRANCH}
-        image-stream: ${NAME}
+        image-stream: ${NAME}-cron
         image-stream-tag: ${IMAGE_TAG}
-      name: ${NAME}
+      name: ${NAME}-cron
 parameters:
   - name: NAME
     required: true
@@ -100,33 +100,32 @@ parameters:
 
   - name: LABEL_NAME
     required: false
-#  - name: IMAGE_TAG
-#    required: false
   - name: NAMESPACE
     required: false
 
-  - name: CPU_REQUESTS
+  - name: BUILD_CPU_REQUESTS
     required: true
-  - name: CPU_LIMITS
+  - name: BUILD_CPU_LIMITS
     required: true
-  - name: MEM_REQUESTS
+  - name: BUILD_MEM_REQUESTS
     required: true
-  - name: MEM_LIMITS
+  - name: BUILD_MEM_LIMITS
     required: true
   - name: MIN_REPLICAS
     required: true
   - name: MAX_REPLICAS
     required: true
-  - name: LOGIN_TOKEN_SECRET
-    required: false
-
-  - name: BUILD_CPU_REQUESTS
-    required: false
-  - name: BUILD_CPU_LIMITS
-    required: false
-  - name: BUILD_MEM_REQUESTS
-    required: false
-  - name: BUILD_MEM_LIMITS
-    required: false
   - name: NPM_ENV
+    required: true
+  - name: CPU_REQUESTS
+    required: false
+  - name: CPU_LIMITS
+    required: false
+  - name: MEM_REQUESTS
+    required: false
+  - name: MEM_LIMITS
+    required: false
+  - name: VAULT_ENV
+    required: false
+  - name: LOGIN_TOKEN_SECRET
     required: false
