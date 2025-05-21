@@ -152,6 +152,6 @@ build-cronjob:
 	@echo "+\n++ PROCESSING CronJob\n+"
 	@oc -n $(BUILD_NAMESPACE) process -f bc_cron.yaml --param-file=$(PARAM_FILE) | oc -n $(BUILD_NAMESPACE) apply -f -
 	@echo "+\n++ BUILDING CronJob\n+"
-	@oc -n $(BUILD_NAMESPACE) start-build bc/$(HOST_PREFIX) --wait
+	@oc -n $(BUILD_NAMESPACE) start-build bc/$(HOST_PREFIX)-cron --wait
 	@echo "+\n++ FINISHED BUILDING CronJob\n+"
 
