@@ -32,21 +32,21 @@ tr {
                 <BreezeLabel for="inputDLO" class="form-label" value="Direct Lend Outstanding Balance" />
                 <div class="input-group">
                     <div class="input-group-text">$</div>
-                    <BreezeInput type="number" step="0.001" class="form-control" id="inputDLO" :value="$formatMoney(readOnlyApp.pl_dire_forcalc_outstdg_amt)" disabled readonly />
+                    <BreezeInput type="number" step="0.001" class="form-control" id="inputDLO" :value="readOnlyApp.pl_dire_forcalc_outstdg_amt" disabled readonly />
                 </div>
             </div>
             <div class="col-md-4">
                 <BreezeLabel for="inputRSLO" class="form-label" value="Risk Sharing Outstanding Balance" />
                 <div class="input-group">
                     <div class="input-group-text">$</div>
-                    <BreezeInput type="number" step="0.001" class="form-control" id="inputRSLO" :value="$formatMoney(readOnlyApp.pl_risk_forcalc_outstanding_amt)" disabled readonly />
+                    <BreezeInput type="number" step="0.001" class="form-control" id="inputRSLO" :value="readOnlyApp.pl_risk_forcalc_outstanding_amt" disabled readonly />
                 </div>
             </div>
             <div class="col-md-4">
                 <BreezeLabel for="inputGLO" class="form-label" value="Guaranteed Outstanding Balance" />
                 <div class="input-group">
                     <div class="input-group-text">$</div>
-                    <BreezeInput type="number" step="0.001" class="form-control" id="inputGLO" :value="$formatMoney(readOnlyApp.pl_guar_forcalc_outstanding_amt)" disabled readonly />
+                    <BreezeInput type="number" step="0.001" class="form-control" id="inputGLO" :value="readOnlyApp.pl_guar_forcalc_outstanding_amt" disabled readonly />
                 </div>
             </div>
 
