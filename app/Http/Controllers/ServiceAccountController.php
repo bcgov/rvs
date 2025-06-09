@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
-use Response;
 
 class ServiceAccountController extends Controller
 {
-    public function fetchData(Request $request)
-    {
+    public function fetchData(Request $request): JsonResponse {
         $tableName = $request->input('table', '');
         $app = $request->input('app');
         $where = $request->input('q');
@@ -70,8 +69,7 @@ class ServiceAccountController extends Controller
         return response()->json(['status' => true, 'body' => $paginatedData]);
     }
 
-    public function fetchTables(Request $request)
-    {
+    public function fetchTables(Request $request): JsonResponse {
         $app = $request->input('app');
 
         try {
@@ -84,8 +82,7 @@ class ServiceAccountController extends Controller
         return Response::json(['status' => true, 'body' => $tables], 200);
     }
 
-    public function fetchColumns(Request $request)
-    {
+    public function fetchColumns(Request $request): JsonResponse {
         $tableName = $request->input('table');
         $app = $request->input('app');
         try {

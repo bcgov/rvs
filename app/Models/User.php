@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -44,15 +46,14 @@ class User extends Authenticatable
     /**
      * The roles that belong to the user.
      */
-    public function roles()
-    {
+    public function roles(): BelongsToMany {
         return $this->belongsToMany('App\Models\Role', 'role_user');
     }
 
     /**
      * The roles that belong to the user.
      */
-    public function hasRole($role)
+    public function hasRole($role): bool
     {
         return $this->roles->contains('name', $role);
     }
@@ -60,10 +61,11 @@ class User extends Authenticatable
     /**
      * Scope a query to only include admin users.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeIsActive($query)
+    public function scopeIsActive(Builder $query): Builder
     {
         return $query->where('disabled', '=', false);
     }

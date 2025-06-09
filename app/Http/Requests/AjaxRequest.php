@@ -9,8 +9,7 @@ class AjaxRequest extends Request
      *
      * @return bool
      */
-    public function authorize()
-    {
+    public function authorize(): bool {
         if ($this->isXmlHttpRequest()) {
             return true;
         }
@@ -21,10 +20,9 @@ class AjaxRequest extends Request
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    public function rules()
-    {
+    public function rules(): array {
         return [
             //
         ];

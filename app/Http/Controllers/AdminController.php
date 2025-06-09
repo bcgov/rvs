@@ -17,8 +17,7 @@ class AdminController extends Controller
     /**
      * Display first page after login (dashboard page)
      */
-    public function dashboard(Request $request)
-    {
+    public function dashboard(Request $request): \Inertia\Response {
         return Inertia::render('Admin/Home');
     }
 
@@ -26,8 +25,7 @@ class AdminController extends Controller
     /**
      * Display first page after login (dashboard page)
      */
-    public function users(Request $request)
-    {
+    public function users(Request $request): \Inertia\Response {
         $this->authorize('adminUpdate', Auth::user());
 
         $ministry = Ministry::first();
@@ -70,8 +68,7 @@ class AdminController extends Controller
     /**
      * Display first page after login (dashboard page)
      */
-    public function ministry(Request $request)
-    {
+    public function ministry(Request $request): \Inertia\Response {
         $this->authorize('adminUpdate', Ministry::class);
 
         $ministry = Ministry::first();

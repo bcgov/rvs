@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AjaxRequest;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -18,13 +19,11 @@ class UserController extends Controller
     /**
      * Display first page after login (dashboard page)
      */
-    public function home(Request $request)
-    {
+    public function home(Request $request): \Inertia\Response {
         return Inertia::render('Home');
     }
 
-    public function appLogin(Request $request)
-    {
+    public function appLogin(Request $request): \Inertia\Response|\Illuminate\Http\RedirectResponse {
         $provider = new Keycloak([
             'authServerUrl' => env('KEYCLOAK_SERVER_URL'),
             'realm' => env('KEYCLOAK_REALM'),
@@ -110,7 +109,7 @@ class UserController extends Controller
     /**
      * fetch active support users
      */
-    public function activeUsers(AjaxRequest $request)
+    public function activeUsers(AjaxRequest $request): JsonResponse
     {
         $users = User::whereEndDate(null)->whereDisabled(false)->get();
 
@@ -120,7 +119,7 @@ class UserController extends Controller
     /**
      * fetch cancelled support users
      */
-    public function cancelledUsers(AjaxRequest $request)
+    public function cancelledUsers(AjaxRequest $request): JsonResponse
     {
         $users = User::where('end_date', '!=', null)->whereDisabled(true)->get();
 
@@ -130,8 +129,7 @@ class UserController extends Controller
     /**
      * Display first page after login (dashboard page)
      */
-    public function dashboard(Request $request)
-    {
+    public function dashboard(Request $request): \Inertia\Response {
         return Inertia::render('Yeaf/Students');
     }
 
@@ -140,8 +138,7 @@ class UserController extends Controller
      *
      * @return \Inertia\Response
      */
-    public function login(Request $request)
-    {
+    public function login(Request $request): \Inertia\Response {
         return Inertia::render('Auth/Login', [
             'loginAttempt' => false,
             'hasAccess' => false,
@@ -154,8 +151,7 @@ class UserController extends Controller
      *
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function logout(Request $request)
-    {
+    public function logout(Request $request): \Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
@@ -163,8 +159,7 @@ class UserController extends Controller
         return redirect('/');
     }
 
-    private function newUser($idir_user)
-    {
+    private function newUser($idir_user): void {
         $user = User::where('user_id', 'ilike', $idir_user['idir_username'])->first();
         if (is_null($user)) {
             $user = new User();
