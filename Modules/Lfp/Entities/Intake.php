@@ -4,6 +4,29 @@ namespace Modules\Lfp\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property int $id
+ * @property string $sin
+ * @property string $first_name
+ * @property string $last_name
+ * @property string $profession
+ * @property string $employer
+ * @property string $employment_status
+ * @property string $community
+ * @property string $repayment_status
+ * @property bool $in_good_standing
+ * @property \Carbon\Carbon $repayment_start_date
+ * @property float $amount_owing
+ * @property string $intake_status
+ * @property \Carbon\Carbon $receive_date
+ * @property string $comment
+ * @property \Carbon\Carbon $proposed_registration_date
+ * @property string $denial_reason
+ * @property string $app_idx
+ * @property string $alias_name
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ */
 class Intake extends ModuleModel
 {
 
