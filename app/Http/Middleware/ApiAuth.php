@@ -2,13 +2,14 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\ServiceAccount;
 use Closure;
 use Firebase\JWT\ExpiredException;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Response;
 
 class ApiAuth
 {
@@ -19,7 +20,7 @@ class ApiAuth
      * @param  string|null  ...$roles
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next, ...$roles)
+    public function handle(Request $request, Closure $next, ...$roles): Response|RedirectResponse|JsonResponse
     {
         $forwardedHost = $request->headers->get('X-Forwarded-Host');
 

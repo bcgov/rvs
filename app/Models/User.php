@@ -48,6 +48,8 @@ class User extends Authenticatable
 
     /**
      * The roles that belong to the user.
+     *
+     * @return BelongsToMany<Role>
      */
     public function roles(): BelongsToMany {
         return $this->belongsToMany('App\Models\Role', 'role_user');
@@ -62,11 +64,10 @@ class User extends Authenticatable
     }
 
     /**
-     * Scope a query to only include admin users.
+     * Scope a query to only include active users.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Builder<User> $query
+     * @return Builder<User>
      */
     public function scopeIsActive(Builder $query): Builder
     {
