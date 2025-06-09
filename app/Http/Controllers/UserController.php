@@ -122,7 +122,7 @@ class UserController extends Controller
     {
         $users = User::whereEndDate(null)->whereDisabled(false)->get();
 
-        return Response::json(['status' => true, 'users' => $users]);
+        return response()->json(['status' => true, 'users' => $users]);
     }
 
     /**
@@ -132,7 +132,7 @@ class UserController extends Controller
     {
         $users = User::where('end_date', '!=', null)->whereDisabled(true)->get();
 
-        return Response::json(['status' => true, 'users' => $users]);
+        return response()->json(['status' => true, 'users' => $users]);
     }
 
     /**

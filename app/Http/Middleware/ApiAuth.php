@@ -54,18 +54,13 @@ class ApiAuth
         } catch (\Exception $e) {
             return Response::json(['status' => false, 'error' => "An error occurred: " . $e->getMessage()], 401);
         }
-
-        if(is_null($decoded)) {
-            return Response::json(['status' => false, 'error' => "Invalid token."], 401);
-        }else{
             //only validate for accounts that we have registered
-            if($decoded->iss === env('KEYCLOAK_APS_ISS')){
+        if (isset($decoded->iss) && $decoded->iss === env('KEYCLOAK_APS_ISS')) {
 //                $user = ServiceAccount::where('client_id', $decoded->clientId)->first();
 //                if(!is_null($user)){
 //                    if($user->active)
                         return $next($request);
 //                }
-            }
         }
 
         return Response::json(['status' => false, 'error' => "Generic error."], 403);
