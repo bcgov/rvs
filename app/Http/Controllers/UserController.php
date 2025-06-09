@@ -159,7 +159,10 @@ class UserController extends Controller
         return redirect('/');
     }
 
-    private function newUser($idir_user): void {
+    /**
+     * @param array<string, mixed> $idir_user
+     */
+    private function newUser(array $idir_user): void {
         $user = User::where('user_id', 'ilike', $idir_user['idir_username'])->first();
         if (is_null($user)) {
             $user = new User();

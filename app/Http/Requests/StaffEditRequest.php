@@ -49,13 +49,4 @@ class StaffEditRequest extends FormRequest
             $this->merge(['tele' => preg_replace('/\D/', '', $this->tele)]);
         }
     }
-
-    /**
-     * Convert to boolean
-     *
-     * @return bool
-     */
-    private function toBoolean($booleable): bool {
-        return filter_var($booleable, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
-    }
 }

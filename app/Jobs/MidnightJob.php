@@ -49,7 +49,7 @@ class MidnightJob implements ShouldQueue
     }
 
 
-    private function sync($status = true, $newApp = 0): null {
+    private function sync(bool $status = true, int $newApp = 0): null {
         \Log::info('Starting Sync');
         ini_set('memory_limit', '-1');
         ini_set('max_execution_time', 600); // 10 minutes

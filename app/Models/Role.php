@@ -40,8 +40,9 @@ class Role extends Model
     public const LFP_GUEST = 'LFP Guest';
     public const PLSC_GUEST = 'PLSC Guest';
 
-
-
+    /**
+     * @param array<string, mixed> $attributes
+     */
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);

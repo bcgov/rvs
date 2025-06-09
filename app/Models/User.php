@@ -37,6 +37,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * @param array<string, mixed> $attributes
+     */
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
@@ -53,7 +56,7 @@ class User extends Authenticatable
     /**
      * The roles that belong to the user.
      */
-    public function hasRole($role): bool
+    public function hasRole(string $role): bool
     {
         return $this->roles->contains('name', $role);
     }
