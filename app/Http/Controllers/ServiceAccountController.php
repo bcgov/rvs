@@ -53,7 +53,7 @@ class ServiceAccountController extends Controller
         try {
             $data = $query->get();
         } catch (\Exception $exception) {
-            return response()->json(['status' => false, 'body' => $exception->errorInfo[0]]);
+            return response()->json(['status' => false, 'body' => $exception->getMessage()]);
         }
 
         // Fetch total count for pagination
@@ -76,7 +76,7 @@ class ServiceAccountController extends Controller
             $tables = DB::connection(env('DB_DATABASE_' . strtoupper($app)))
                 ->select("SELECT table_name FROM information_schema.tables WHERE table_type = 'BASE TABLE' AND table_schema='public'");
         } catch (\Exception $exception) {
-            return response()->json(['status' => false, 'body' => $exception->errorInfo[0]], 200);
+            return response()->json(['status' => false, 'body' => $exception->getMessage()]);
         }
 
         return Response::json(['status' => true, 'body' => $tables], 200);
@@ -89,7 +89,7 @@ class ServiceAccountController extends Controller
             $columns = Schema::connection(env('DB_DATABASE_' . strtoupper($app)))
                 ->getColumns(strtolower($tableName));
         } catch (\Exception $exception) {
-            return response()->json(['status' => false, 'body' => $exception->errorInfo[0]], 200);
+            return response()->json(['status' => false, 'body' => $exception->getMessage()]);
         }
 
         return Response::json(['status' => true, 'body' => $columns], 200);
