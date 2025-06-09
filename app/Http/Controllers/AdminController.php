@@ -83,7 +83,7 @@ class AdminController extends Controller
     public function ministryEdit(MinistryEditRequest $request, User $user): Response
     {
         $this->authorize('update', Ministry::class);
-        Ministry::update($request->validated());
+        Ministry::query()->update($request->validated());
 
         $ministry = Ministry::first();
         $users = User::with('roles')->get();
