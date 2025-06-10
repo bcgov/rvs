@@ -27,8 +27,7 @@ class Comment extends ModuleModel
         'date' => 'datetime',
     ];
 
-    public function getCreatedHumanDateAttribute()
-    {
+    public function getCreatedHumanDateAttribute(): string {
         return date('d-M-y', strtotime($this->created_at));
     }
 }

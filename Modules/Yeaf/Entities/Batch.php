@@ -21,8 +21,7 @@ class Batch extends ModuleModel
 
     protected $appends = ['batch_human_date'];
 
-    public function getBatchHumanDateAttribute()
-    {
+    public function getBatchHumanDateAttribute(): string {
         $date = date('F Y', strtotime($this->batch_date));
 
         return Str::endsWith($this->batch_date, '15') ? $date.' - Mid' : $date.' - End';

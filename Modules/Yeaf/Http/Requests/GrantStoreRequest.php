@@ -14,18 +14,16 @@ class GrantStoreRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
-    {
+    public function authorize(): bool {
         return true;
     }
 
     /**
      * Get the error messages for the defined validation rules.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function messages()
-    {
+    public function messages(): array {
         return [
             'student_id.*' => 'Some fields are missing!',
             'institution_id.*' => 'Institution field is required.',
@@ -40,10 +38,9 @@ class GrantStoreRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function rules()
-    {
+    public function rules(): array {
         return [
             'student_id' => 'required',
             'institution_id' => 'required',
@@ -75,8 +72,7 @@ class GrantStoreRequest extends FormRequest
      *
      * @return void
      */
-    protected function prepareForValidation()
-    {
+    protected function prepareForValidation(): void {
         if (isset($this->application_receive_date)) {
             $this->merge(['application_receive_date' => date('Y-m-d', strtotime($this->application_receive_date))]);
         }
@@ -102,15 +98,5 @@ class GrantStoreRequest extends FormRequest
             'update_user_id' => Str::upper(Auth::user()->user_id),
         ]);
 
-    }
-
-    /**
-     * Convert to boolean
-     *
-     * @return bool
-     */
-    private function toBoolean($booleable)
-    {
-        return filter_var($booleable, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
     }
 }

@@ -5,10 +5,12 @@ namespace Modules\Yeaf\Http\Controllers;
 use App\Http\Requests\StaffEditRequest;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use Inertia\Response;
 use Modules\Yeaf\Entities\Admin;
 use Modules\Yeaf\Entities\Batch;
 use Modules\Yeaf\Entities\Ineligible;
@@ -22,6 +24,7 @@ use Modules\Yeaf\Http\Requests\MinistryEditRequest;
 use Modules\Yeaf\Http\Requests\ProgramYearEditRequest;
 use Modules\Yeaf\Http\Requests\ProgramYearStoreRequest;
 use PDF;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class MaintenanceController extends Controller
 {
@@ -30,14 +33,14 @@ class MaintenanceController extends Controller
      *
      * @return \Inertia\Response::render
      */
-    public function letters(Request $request): \Inertia\Response
+    public function letters(Request $request): Response
     {
         return Inertia::render('Yeaf::Maintenance', ['status' => true,
             'program_years' => ProgramYear::orderBy('year_start', 'desc')->get(),
             'batches' => Batch::orderBy('batch_number', 'desc')->get(), 'page' => 'letters', ]);
     }
 
-    public function downloadLetter(Request $request, $type, $extra)
+    public function downloadLetter(Request $request, $type, $extra): BinaryFileResponse
     {
         $admin = Admin::first();
         $now_d = date('F d, Y');
@@ -61,7 +64,7 @@ class MaintenanceController extends Controller
      *
      * @return \Inertia\Response::render
      */
-    public function staffList(Request $request): \Inertia\Response
+    public function staffList(Request $request): Response
     {
         $staff = User::with('roles')
             ->whereHas('roles', function ($q) {
@@ -84,7 +87,7 @@ class MaintenanceController extends Controller
      *
      * @return \Inertia\Response::render
      */
-    public function staffShow(Request $request, User $user): \Inertia\Response
+    public function staffShow(Request $request, User $user): Response
     {
         if ($user->roles->contains('name', Role::YEAF_ADMIN)) {
             $user->access_type = 'A';
@@ -100,7 +103,7 @@ class MaintenanceController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse::render
      */
-    public function staffEdit(StaffEditRequest $request, User $user): \Illuminate\Http\RedirectResponse
+    public function staffEdit(StaffEditRequest $request, User $user): RedirectResponse
     {
         $this->authorize('update', $user);
         $user->tele = $request->input('tele');
@@ -130,7 +133,7 @@ class MaintenanceController extends Controller
      *
      * @return \Inertia\Response::render
      */
-    public function ineligiblesList(Request $request): \Inertia\Response
+    public function ineligiblesList(Request $request): Response
     {
         $ineligibles = Ineligible::orderBy('code_id', 'asc')->get();
 
@@ -142,7 +145,7 @@ class MaintenanceController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse::render
      */
-    public function ineligibleEdit(IneligibleEditRequest $request, Ineligible $ineligible): \Illuminate\Http\RedirectResponse
+    public function ineligibleEdit(IneligibleEditRequest $request, Ineligible $ineligible): RedirectResponse
     {
         $this->authorize('update', Ineligible::class);
         $ineligible->code_id = $request->code_id;
@@ -160,7 +163,7 @@ class MaintenanceController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse::render
      */
-    public function ineligibleStore(IneligibleStoreRequest $request): \Illuminate\Http\RedirectResponse
+    public function ineligibleStore(IneligibleStoreRequest $request): RedirectResponse
     {
         $this->authorize('create', Ineligible::class);
         $ineligible = Ineligible::create($request->validated());
@@ -173,7 +176,7 @@ class MaintenanceController extends Controller
      *
      * @return \Inertia\Response::render
      */
-    public function programYearsList(Request $request): \Inertia\Response
+    public function programYearsList(Request $request): Response
     {
         $program_years = ProgramYear::orderBy('year_start', 'desc')->get();
 
@@ -185,7 +188,7 @@ class MaintenanceController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse::render
      */
-    public function programYearEdit(ProgramYearEditRequest $request, ProgramYear $programYear): \Illuminate\Http\RedirectResponse
+    public function programYearEdit(ProgramYearEditRequest $request, ProgramYear $programYear): RedirectResponse
     {
         $this->authorize('update', ProgramYear::class);
         ProgramYear::where('id', $programYear->id)->update($request->validated());
@@ -198,7 +201,7 @@ class MaintenanceController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse::render
      */
-    public function programYearStore(ProgramYearStoreRequest $request): \Illuminate\Http\RedirectResponse
+    public function programYearStore(ProgramYearStoreRequest $request): RedirectResponse
     {
         $this->authorize('create', ProgramYear::class);
         $py = ProgramYear::create($request->validated());
@@ -211,7 +214,7 @@ class MaintenanceController extends Controller
      *
      * @return \Inertia\Response::render
      */
-    public function batchesList(Request $request): \Inertia\Response
+    public function batchesList(Request $request): Response
     {
         $batches = Batch::orderBy('batch_number', 'desc')->get();
 
@@ -223,7 +226,7 @@ class MaintenanceController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse::render
      */
-    public function batchEdit(BatchEditRequest $request, Batch $batch): \Illuminate\Http\RedirectResponse
+    public function batchEdit(BatchEditRequest $request, Batch $batch): RedirectResponse
     {
         $this->authorize('update', Batch::class);
         Batch::where('id', $batch->id)->update($request->validated());
@@ -236,7 +239,7 @@ class MaintenanceController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse::render
      */
-    public function batchStore(BatchStoreRequest $request): \Illuminate\Http\RedirectResponse
+    public function batchStore(BatchStoreRequest $request): RedirectResponse
     {
         $this->authorize('create', Batch::class);
         Batch::create($request->validated());
@@ -250,7 +253,7 @@ class MaintenanceController extends Controller
      * @param  \App\Models\User  $user
      * @return \Inertia\Response::render
      */
-    public function ministryShow(Request $request): \Inertia\Response
+    public function ministryShow(Request $request): Response
     {
         $admin = Admin::first();
         $provinces = Province::where('country_code', 'CAN')->select('province_code')->get();
@@ -263,7 +266,7 @@ class MaintenanceController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse::render
      */
-    public function ministryUpdate(MinistryEditRequest $request, Admin $admin): \Illuminate\Http\RedirectResponse
+    public function ministryUpdate(MinistryEditRequest $request, Admin $admin): RedirectResponse
     {
         $this->authorize('update', Admin::class);
         Admin::where('id', $admin->id)->update($request->validated());
@@ -277,7 +280,7 @@ class MaintenanceController extends Controller
      * @param  \App\Models\User  $user
      * @return \Inertia\Response::render
      */
-    public function reportsShow(Request $request): \Inertia\Response
+    public function reportsShow(Request $request): Response
     {
         return Inertia::render('Yeaf::Maintenance', ['status' => true, 'page' => 'reports']);
     }
@@ -287,7 +290,7 @@ class MaintenanceController extends Controller
      *
      * @return \Inertia\Response::render
      */
-    public function index()
+    public function index(): Response
     {
         return Inertia::render('Yeaf::Students');
     }
@@ -297,7 +300,7 @@ class MaintenanceController extends Controller
      *
      * @return \Inertia\Response::render
      */
-    public function goToPage(Request $request, $page = 'area-of-audit')
+    public function goToPage(Request $request, $page = 'area-of-audit'): Response
     {
         return Inertia::render('Yeaf::Maintenance', ['page' => $page]);
     }

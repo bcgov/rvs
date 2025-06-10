@@ -11,15 +11,14 @@ class IneligiblePolicy
 {
     use HandlesAuthorization;
 
-    public function before(User $user, $ability)
-    {
+    public function before(User $user, $ability): bool {
         return $user->hasRole(Role::SUPER_ADMIN) || $user->hasRole(Role::YEAF_ADMIN);
     }
 
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
+    public function viewAny(User $user): void
     {
         //
     }
@@ -27,7 +26,7 @@ class IneligiblePolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Ineligible $model): bool
+    public function view(User $user, Ineligible $model): void
     {
         //
     }
@@ -51,7 +50,7 @@ class IneligiblePolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Ineligible $model): bool
+    public function delete(User $user, Ineligible $model): void
     {
         //
     }
@@ -59,7 +58,7 @@ class IneligiblePolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Ineligible $model): bool
+    public function restore(User $user, Ineligible $model): void
     {
         //
     }
@@ -67,7 +66,7 @@ class IneligiblePolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Ineligible $model): bool
+    public function forceDelete(User $user, Ineligible $model): void
     {
         //
     }

@@ -2,8 +2,10 @@
 
 namespace Modules\Yeaf\Http\Controllers;
 
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 use Modules\Yeaf\Entities\Country;
 use Modules\Yeaf\Entities\Institution;
 use Modules\Yeaf\Entities\Province;
@@ -17,8 +19,7 @@ class InstitutionController extends Controller
      *
      * @return \Inertia\Response
      */
-    public function index(Request $request)
-    {
+    public function index(Request $request): Response {
         $schools = new Institution();
         $schools = $this->paginateSchools($schools);
         [$countries, $provinces] = $this->getCountriesProvinces();
@@ -32,8 +33,7 @@ class InstitutionController extends Controller
      *
      * @return \Inertia\Response
      */
-    public function store(InstitutionStoreRequest $request)
-    {
+    public function store(InstitutionStoreRequest $request): Response {
         $institution = Institution::create($request->validated());
         $schools = new Institution();
         $schools = $this->paginateSchools($schools);
@@ -48,8 +48,7 @@ class InstitutionController extends Controller
      *
      * @return \Inertia\Response
      */
-    public function show(Institution $institution)
-    {
+    public function show(Institution $institution): Response {
         [$countries, $provinces] = $this->getCountriesProvinces();
 
         return Inertia::render('Yeaf::SchoolEdit', ['status' => true, 'result' => $institution, 'countries' => $countries, 'provinces' => $provinces]);
@@ -60,15 +59,18 @@ class InstitutionController extends Controller
      *
      * @return \Inertia\Response
      */
-    public function update(InstitutionUpdateRequest $request, Institution $institution)
-    {
+    public function update(InstitutionUpdateRequest $request, Institution $institution): Response {
         Institution::where('id', $institution->id)->update($request->validated());
         [$countries, $provinces] = $this->getCountriesProvinces();
 
         return Inertia::render('Yeaf::SchoolEdit', ['status' => true, 'result' => $institution, 'countries' => $countries, 'provinces' => $provinces]);
     }
 
-    private function paginateSchools($schools)
+    /**
+     * @param Builder $schools
+     * @return LengthAwarePaginator
+     */
+    private function paginateSchools($schools): LengthAwarePaginator
     {
         if (request()->filter_name !== null) {
             $schools = $schools->where('name', 'ILIKE', '%'.request()->filter_name.'%');
@@ -87,7 +89,10 @@ class InstitutionController extends Controller
         return $schools->paginate(25)->onEachSide(1)->appends(request()->query());
     }
 
-    private function getCountriesProvinces()
+    /**
+     * @return array{0: Collection<int, Country>, 1: Collection<int, Province>}
+     */
+    private function getCountriesProvinces(): array
     {
         return [Country::orderBy('country_code', 'asc')->get(), Province::orderBy('province_code', 'asc')->get()];
     }
