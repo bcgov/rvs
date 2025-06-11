@@ -5,6 +5,12 @@ namespace Modules\Yeaf\Entities;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
 
+/**
+ * @property int $id
+ * @property string $batch_number
+ * @property string $batch_date
+ * @property-read string $batch_human_date
+ */
 class Batch extends ModuleModel
 {
     use HasFactory;

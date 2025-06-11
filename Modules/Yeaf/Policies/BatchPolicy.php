@@ -11,7 +11,7 @@ class BatchPolicy
 {
     use HandlesAuthorization;
 
-    public function before(User $user, $ability): bool {
+    public function before(User $user): bool {
         return $user->hasRole(Role::SUPER_ADMIN) || $user->hasRole(Role::YEAF_ADMIN);
     }
 
@@ -42,7 +42,7 @@ class BatchPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Batch $model): bool
+    public function update(User $user): bool
     {
         return $user->hasRole(Role::YEAF_ADMIN) && $user->disabled === false;
     }

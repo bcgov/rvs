@@ -30,7 +30,7 @@ class ReportController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, $type): JsonResponse
+    public function index(Request $request, string $type): JsonResponse
     {
         if (Cache::has('traffic_light') && Cache::get('traffic_light') == true) {
             // Traffic light is set and true in the cache

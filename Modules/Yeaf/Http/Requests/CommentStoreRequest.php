@@ -2,7 +2,7 @@
 
 namespace Modules\Yeaf\Http\Requests;
 
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 
@@ -49,9 +49,12 @@ class CommentStoreRequest extends FormRequest
      * @return void
      */
     protected function prepareForValidation(): void {
-        $this->merge([
-            'user_id' => Str::upper(Auth::user()->user_id),
-        ]);
+        $user = Auth::user();
 
+        if ($user) {
+            $this->merge([
+                'user_id' => Str::upper($user->user_id),
+            ]);
+        }
     }
 }

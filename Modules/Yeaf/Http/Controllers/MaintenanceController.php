@@ -5,6 +5,7 @@ namespace Modules\Yeaf\Http\Controllers;
 use App\Http\Requests\StaffEditRequest;
 use App\Models\Role;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,7 +24,6 @@ use Modules\Yeaf\Http\Requests\IneligibleStoreRequest;
 use Modules\Yeaf\Http\Requests\MinistryEditRequest;
 use Modules\Yeaf\Http\Requests\ProgramYearEditRequest;
 use Modules\Yeaf\Http\Requests\ProgramYearStoreRequest;
-use PDF;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class MaintenanceController extends Controller
@@ -31,7 +31,7 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response::render
+     * @return \Inertia\Response
      */
     public function letters(Request $request): Response
     {
@@ -40,12 +40,13 @@ class MaintenanceController extends Controller
             'batches' => Batch::orderBy('batch_number', 'desc')->get(), 'page' => 'letters', ]);
     }
 
-    public function downloadLetter(Request $request, $type, $extra): BinaryFileResponse
+    public function downloadLetter(Request $request, string $type, string|int $extra): BinaryFileResponse
     {
         $admin = Admin::first();
         $now_d = date('F d, Y');
         $now_t = date('H:m:i');
         $user = Auth::user();
+        $file_name = '';
         if ($type === 'py') {
             $program_year = ProgramYear::find($extra);
             $pdf = PDF::loadView('yeaf::py-pdf', compact('program_year', 'admin', 'user', 'now_d', 'now_t'));
@@ -55,6 +56,9 @@ class MaintenanceController extends Controller
             $pdf = PDF::loadView('yeaf::batch-pdf', compact('batch', 'admin', 'user', 'now_d', 'now_t'));
             $file_name = $batch->batch_date;
         }
+        else {
+            abort(400, 'Invalid type specified');
+        }
 
         return $pdf->download(mt_rand().'-'.$file_name.'-letter.pdf');
     }
@@ -62,7 +66,7 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response::render
+     * @return \Inertia\Response
      */
     public function staffList(Request $request): Response
     {
@@ -85,7 +89,7 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response::render
+     * @return \Inertia\Response
      */
     public function staffShow(Request $request, User $user): Response
     {
@@ -101,7 +105,7 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\RedirectResponse::render
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function staffEdit(StaffEditRequest $request, User $user): RedirectResponse
     {
@@ -131,7 +135,7 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response::render
+     * @return \Inertia\Response
      */
     public function ineligiblesList(Request $request): Response
     {
@@ -143,7 +147,7 @@ class MaintenanceController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse::render
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function ineligibleEdit(IneligibleEditRequest $request, Ineligible $ineligible): RedirectResponse
     {
@@ -161,7 +165,7 @@ class MaintenanceController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse::render
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function ineligibleStore(IneligibleStoreRequest $request): RedirectResponse
     {
@@ -174,7 +178,7 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response::render
+     * @return \Inertia\Response
      */
     public function programYearsList(Request $request): Response
     {
@@ -186,7 +190,7 @@ class MaintenanceController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse::render
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function programYearEdit(ProgramYearEditRequest $request, ProgramYear $programYear): RedirectResponse
     {
@@ -199,7 +203,7 @@ class MaintenanceController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse::render
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function programYearStore(ProgramYearStoreRequest $request): RedirectResponse
     {
@@ -212,7 +216,7 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response::render
+     * @return \Inertia\Response
      */
     public function batchesList(Request $request): Response
     {
@@ -224,7 +228,7 @@ class MaintenanceController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse::render
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function batchEdit(BatchEditRequest $request, Batch $batch): RedirectResponse
     {
@@ -237,7 +241,7 @@ class MaintenanceController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse::render
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function batchStore(BatchStoreRequest $request): RedirectResponse
     {
@@ -250,8 +254,9 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \App\Models\User  $user
-     * @return \Inertia\Response::render
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Inertia\Response
      */
     public function ministryShow(Request $request): Response
     {
@@ -264,7 +269,7 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\RedirectResponse::render
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function ministryUpdate(MinistryEditRequest $request, Admin $admin): RedirectResponse
     {
@@ -277,8 +282,9 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \App\Models\User  $user
-     * @return \Inertia\Response::render
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Inertia\Response
      */
     public function reportsShow(Request $request): Response
     {
@@ -288,7 +294,7 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response::render
+     * @return \Inertia\Response
      */
     public function index(): Response
     {
@@ -298,9 +304,9 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response::render
+     * @return \Inertia\Response
      */
-    public function goToPage(Request $request, $page = 'area-of-audit'): Response
+    public function goToPage(Request $request, string $page = 'area-of-audit'): Response
     {
         return Inertia::render('Yeaf::Maintenance', ['page' => $page]);
     }

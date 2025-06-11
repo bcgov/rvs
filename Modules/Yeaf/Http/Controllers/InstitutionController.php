@@ -3,6 +3,8 @@
 namespace Modules\Yeaf\Http\Controllers;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -20,6 +22,7 @@ class InstitutionController extends Controller
      * @return \Inertia\Response
      */
     public function index(Request $request): Response {
+        /** @var Builder<Institution> $schools */
         $schools = new Institution();
         $schools = $this->paginateSchools($schools);
         [$countries, $provinces] = $this->getCountriesProvinces();
@@ -35,6 +38,7 @@ class InstitutionController extends Controller
      */
     public function store(InstitutionStoreRequest $request): Response {
         $institution = Institution::create($request->validated());
+        /** @var Builder<Institution> $schools */
         $schools = new Institution();
         $schools = $this->paginateSchools($schools);
 
@@ -67,10 +71,11 @@ class InstitutionController extends Controller
     }
 
     /**
-     * @param Builder $schools
-     * @return LengthAwarePaginator
+     * @param Builder<Institution> $schools
+     *
+     * @return LengthAwarePaginator<Institution>
      */
-    private function paginateSchools($schools): LengthAwarePaginator
+    private function paginateSchools(Builder $schools): LengthAwarePaginator
     {
         if (request()->filter_name !== null) {
             $schools = $schools->where('name', 'ILIKE', '%'.request()->filter_name.'%');

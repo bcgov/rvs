@@ -11,7 +11,7 @@ class AdminPolicy
 {
     use HandlesAuthorization;
 
-    public function before(User $user, $ability): bool
+    public function before(User $user): bool
     {
         return $user->hasRole(Role::SUPER_ADMIN);
     }
@@ -43,7 +43,7 @@ class AdminPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Admin $model): bool
+    public function update(User $user): bool
     {
         return $user->hasRole(Role::YEAF_ADMIN) && $user->disabled === false;
     }
