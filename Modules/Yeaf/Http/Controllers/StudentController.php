@@ -87,6 +87,9 @@ class StudentController extends Controller
         return Redirect::route('yeaf.students.show', [$student->id]);
     }
 
+    /**
+     * @return LengthAwarePaginator<Student>
+     */
     private function paginateStudents(): LengthAwarePaginator
     {
         if (request()->sort !== null) {
@@ -109,7 +112,7 @@ class StudentController extends Controller
     }
 
     /**
-     * @return array<int, Collection>
+     * @return array{0: Collection<int, Country>, 1: Collection<int, Province>}
      */
     private function getCountriesProvinces(): array {
         return [Country::orderBy('country_code', 'asc')->get(), Province::orderBy('province_code', 'asc')->get()];

@@ -2,15 +2,15 @@
 
 namespace Modules\Yeaf\Http\Controllers;
 
+use Barryvdh\DomPDF\Facade\Pdf;
 use DateTime;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
-use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Http\Response as HttpResponse;
 use Modules\Yeaf\Entities\Admin;
 use Modules\Yeaf\Entities\Appeal;
 use Modules\Yeaf\Entities\Grant;
@@ -78,9 +78,11 @@ class GrantController extends Controller
     /**
      * validate to export or to show errors on letter export request.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @param \Modules\Yeaf\Entities\Grant $grant
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function validateLetter(Grant $grant): RedirectResponse {
+    public function validateLetter(Grant $grant): \Illuminate\Http\JsonResponse {
         $msg = '';
         $stDocname = null;
 
@@ -116,16 +118,18 @@ class GrantController extends Controller
             }
         }
 
-        return Response::json(['status' => true, 'msg' => $msg, 'docName' => $stDocname]);
+        return response()->json(['status' => true, 'msg' => $msg, 'docName' => $stDocname]);
     }
 
     /**
      * validate to export or to show errors on letter export request.
      *
-     * @param  null  $docName
-     * @return \Illuminate\Http\RedirectResponse
+     * @param \Modules\Yeaf\Entities\Grant $grant
+     * @param null $docName
+     *
+     * @return \Illuminate\Http\Response
      */
-    public function exportLetter(Grant $grant, $docName = null): RedirectResponse {
+    public function exportLetter(Grant $grant, $docName = null): HttpResponse {
         if (! is_null($docName)) {
             $doc = $docName;
             $admin = Admin::first();
@@ -136,23 +140,28 @@ class GrantController extends Controller
             $user = Auth::user();
             $pdf = PDF::loadView('yeaf::pdf', compact('grant', 'admin', 'user', 'doc', 'student', 'officer', 'now_d', 'now_t'));
 
-            $file_name = $student->first_name.'-'.$student->last_name.'-'.match ($grant->status_code) {
-                'A' => 'approval-letter',
-                'D' => 'denial-letter',
-                'P' => 'pending-letter',
-            };
+            $file_name = $student->first_name . '-' . $student->last_name . '-' . match ($grant->status_code) {
+                    'A' => 'approval-letter',
+                    'D' => 'denial-letter',
+                    'P' => 'pending-letter',
+                    NULL => 'unknown-letter',
+                    default => 'general-letter',
+                };
 
             return $pdf->download($file_name.'.pdf');
         }
+
+        abort(400, 'Document name is required');
     }
 
     /**
      * validate to export or to show errors on letter export request.
      *
      * @param  null  $docName
-     * @return \Illuminate\Http\RedirectResponse
+     *
+     * @return \Illuminate\Http\Response
      */
-    public function exportWithdrawalLetter(Grant $grant, $docName = null): RedirectResponse {
+    public function exportWithdrawalLetter(Grant $grant, $docName = NULL): HttpResponse {
         if (! is_null($docName)) {
             $doc = $docName;
             $admin = Admin::first();
@@ -167,14 +176,16 @@ class GrantController extends Controller
 
             return $pdf->download($file_name.'.pdf');
         }
+
+        abort(400, 'Document name is required');
     }
 
     /**
      * update and evaluate a grant.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function evaluateApp(GrantEditRequest $request, Grant $grant): RedirectResponse {
+    public function evaluateApp(GrantEditRequest $request, Grant $grant): \Illuminate\Http\JsonResponse {
         $grant = $this->update($request, $grant);
         $this->updatePendingIneligibles($grant, $request);
         $this->updateDeniedIneligibles($grant, $request);
@@ -204,14 +215,12 @@ class GrantController extends Controller
         $grant = Grant::find($grant->id);
         $msg = $this->setStatus($grant);
         if ($msg != '') {
-            if (! is_null($msg)) {
-                $overall_messages[] = $msg;
-            }
+            $overall_messages[] = $msg;
         }
         $grant = Grant::find($grant->id);
         $return_grant = Grant::where('id', $grant->id)->with('school', 'grantPendingIneligibles', 'grantDeniedIneligibles', 'appeals')->first();
 
-        return Response::json(['status' => true, 'msg' => $overall_messages, 'app_ineligible' => $overall_app_ineligible,
+        return response()->json(['status' => true, 'msg' => $overall_messages, 'app_ineligible' => $overall_app_ineligible,
             'appeal_status' => $appeal_status, 'grant' => $return_grant, ]);
     }
 
@@ -230,7 +239,7 @@ class GrantController extends Controller
     private function getOverallMsgAndIneligible(string $msg, bool $app_ineligible, array &$overall_messages, bool $overall_app_ineligible): bool
     {
         if ($msg != '' || $app_ineligible == true) {
-            if (! is_null($msg) && ! in_array($msg, $overall_messages)) {
+            if (!in_array($msg, $overall_messages)) {
                 $overall_messages[] = $msg;
             }
             if ($app_ineligible == true) {
@@ -333,7 +342,7 @@ class GrantController extends Controller
                     $grant_appeal = new Appeal();
                     $grant_appeal->grant_id = $grant->grant_id;
                     $grant_appeal->appeal_id = $last_appeal_id->appeal_id + 1;
-                    $grant_appeal->student_id = $grant->student_id;
+                    $grant_appeal->student_id = (string) $grant->student_id;
                     $grant_appeal->program_year_id = $grant->program_year_id;
                     $grant_appeal->adjudicated_by_user_id = $appeal->adjudicated_by_user_id;
                     $grant_appeal->updated_by_user_id = Str::upper(Auth::user()->user_id);
@@ -351,6 +360,7 @@ class GrantController extends Controller
     }
 
     private function setStatus(Grant $grant): string {
+        /** @var (Grant&object{DeniedCnt: int, PendingCnt: int})|null $record */
         $record = Grant::select('grant_id')->withCount(['grantIneligibles as PendingCnt' => function ($query) {
             $query->where('ineligible_code_type', 'P')->where('cleared_flag', false);
         }], 'ineligible_code_type')->withCount(['grantIneligibles as DeniedCnt' => function ($query) {
@@ -489,7 +499,7 @@ class GrantController extends Controller
             ->groupBy('program_year_id')
             ->get();
 
-        if (! is_null($results) && count($results) >= $grant->py->max_years_allowed) {
+        if (count($results) >= $grant->py->max_years_allowed) {
             if ($messageFlag) {
                 $msg = 'This student has received funding for '.count($results).'.';
             }
@@ -564,6 +574,7 @@ class GrantController extends Controller
                     //                    'A' => 'Approved',
                     'P' => 'Pending',
                     'D' => 'Denied',
+                    default => 'Unknown'
                 };
             }
         }

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Http\Response as HttpResponse;
 use Modules\Yeaf\Entities\Admin;
 use Modules\Yeaf\Entities\Batch;
 use Modules\Yeaf\Entities\Ineligible;
@@ -24,7 +25,6 @@ use Modules\Yeaf\Http\Requests\IneligibleStoreRequest;
 use Modules\Yeaf\Http\Requests\MinistryEditRequest;
 use Modules\Yeaf\Http\Requests\ProgramYearEditRequest;
 use Modules\Yeaf\Http\Requests\ProgramYearStoreRequest;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class MaintenanceController extends Controller
 {
@@ -40,7 +40,7 @@ class MaintenanceController extends Controller
             'batches' => Batch::orderBy('batch_number', 'desc')->get(), 'page' => 'letters', ]);
     }
 
-    public function downloadLetter(Request $request, string $type, string|int $extra): BinaryFileResponse
+    public function downloadLetter(Request $request, string $type, string|int $extra): HttpResponse
     {
         $admin = Admin::first();
         $now_d = date('F d, Y');

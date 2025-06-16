@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * @property int $id
+ * @property int $program_year_id
  * @property int $year_start
  * @property int $year_end
  * @property float $grant_amount

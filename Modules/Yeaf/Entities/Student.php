@@ -42,16 +42,22 @@ class Student extends ModuleModel
         'postal_code', 'tele', 'email', 'gender', 'pen', 'institution_student_number', 'overaward_flag', 'investigate', 'pd', ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany<Grant>
      */
     public function grants(): HasMany {
         return $this->hasMany('Modules\Yeaf\Entities\Grant', 'student_id', 'student_id')->orderBy('grant_id');
     }
 
+    /**
+     * @return HasMany<Comment>
+     */
     public function comments(): HasMany {
         return $this->hasMany('Modules\Yeaf\Entities\Comment', 'student_id', 'student_id');
     }
 
+    /**
+     * @return HasMany<Appeal>
+     */
     public function appeals(): HasMany {
         return $this->hasMany('Modules\Yeaf\Entities\Appeal', 'student_id', 'student_id');
     }
