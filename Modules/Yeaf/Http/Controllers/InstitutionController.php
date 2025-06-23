@@ -23,8 +23,7 @@ class InstitutionController extends Controller
      */
     public function index(Request $request): Response {
         /** @var Builder<Institution> $schools */
-        $schools = new Institution();
-        $schools = $this->paginateSchools($schools);
+        $schools = $this->paginateSchools(Institution::query());
         [$countries, $provinces] = $this->getCountriesProvinces();
         $filter_name = $request->input('filter_name');
 
@@ -38,9 +37,7 @@ class InstitutionController extends Controller
      */
     public function store(InstitutionStoreRequest $request): Response {
         $institution = Institution::create($request->validated());
-        /** @var Builder<Institution> $schools */
-        $schools = new Institution();
-        $schools = $this->paginateSchools($schools);
+        $schools = $this->paginateSchools(Institution::query());
 
         [$countries, $provinces] = $this->getCountriesProvinces();
 

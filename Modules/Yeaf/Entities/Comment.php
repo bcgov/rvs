@@ -36,4 +36,9 @@ class Comment extends ModuleModel
     protected $casts = [
         'date' => 'datetime',
     ];
+
+    public function getCreatedHumanDateAttribute(): string
+    {
+        return $this->created_at ? $this->created_at->format('Y-m-d H:i') : '';
+    }
 }
