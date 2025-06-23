@@ -11,18 +11,16 @@ class InstitutionStoreRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
-    {
+    public function authorize(): bool {
         return true;
     }
 
     /**
      * Get the error messages for the defined validation rules.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function messages()
-    {
+    public function messages(): array {
         return [
             'institution_code.required' => 'Institution Code field is required.',
             'institution_code.size' => 'Institution Code field must be of 4 characters.',
@@ -42,10 +40,9 @@ class InstitutionStoreRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function rules()
-    {
+    public function rules(): array {
         $school_code_rule = 'required|size:4|unique:'.env('DB_DATABASE_VSS').'.institutions,institution_code';
         if (isset($this->id)) {
             $school_code_rule = 'required|size:4|unique:'.env('DB_DATABASE_VSS').'.institutions,institution_code,'.$this->id.',id';
@@ -64,8 +61,7 @@ class InstitutionStoreRequest extends FormRequest
      *
      * @return void
      */
-    protected function prepareForValidation()
-    {
+    protected function prepareForValidation(): void {
         if (isset($this->institution_code)) {
             $this->merge(['institution_code' => mb_strtoupper($this->institution_code)]);
         }

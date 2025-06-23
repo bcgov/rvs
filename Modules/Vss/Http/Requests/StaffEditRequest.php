@@ -13,18 +13,17 @@ class StaffEditRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
-    {
+    public function authorize(): bool {
         return true;
     }
 
     /**
      * Get the error messages for the defined validation rules.
      *
-     * @return array
+     * @return array<string, string>
+     *
      */
-    public function messages()
-    {
+    public function messages(): array {
         return [
             'disabled.boolean' => 'Status field is invalid',
         ];
@@ -33,10 +32,9 @@ class StaffEditRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, string|string[]>
      */
-    public function rules()
-    {
+    public function rules(): array {
         $user = User::find($this->id);
 
         return [
@@ -51,8 +49,7 @@ class StaffEditRequest extends FormRequest
      *
      * @return void
      */
-    protected function prepareForValidation()
-    {
+    protected function prepareForValidation(): void {
         if (isset($this->disabled)) {
             $this->merge(['disabled' => filter_var($this->disabled, FILTER_VALIDATE_BOOLEAN)]);
 

@@ -8,8 +8,7 @@ class FundingType extends ModuleModel
 {
     use HasFactory;
 
-    public function caseFundings()
-    {
+    public function caseFundings(): HasMany {
         return $this->hasMany('Modules\Vss\Entities\CaseFunding', 'funding_type', 'funding_type');
     }
 }

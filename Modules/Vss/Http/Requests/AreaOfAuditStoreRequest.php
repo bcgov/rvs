@@ -11,18 +11,16 @@ class AreaOfAuditStoreRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
-    {
+    public function authorize(): bool {
         return true;
     }
 
     /**
      * Get the error messages for the defined validation rules.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function messages()
-    {
+    public function messages(): array {
         return [
             'area_of_audit_code.required' => 'Audit Code field is required.',
             'area_of_audit_code.max' => 'Audit Code field size cannot be more than 3 characters.',
@@ -35,10 +33,9 @@ class AreaOfAuditStoreRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function rules()
-    {
+    public function rules(): array {
         $audit_code_rule = 'required|max:3|unique:'.env('DB_DATABASE_VSS').'.area_of_audits,area_of_audit_code';
         if (isset($this->id)) {
             $audit_code_rule = 'required|max:3|unique:'.env('DB_DATABASE_VSS').'.area_of_audits,area_of_audit_code,'.$this->id.',id';
@@ -55,8 +52,7 @@ class AreaOfAuditStoreRequest extends FormRequest
      *
      * @return void
      */
-    protected function prepareForValidation()
-    {
+    protected function prepareForValidation(): void {
         if (isset($this->area_of_audit_code)) {
             $this->merge(['area_of_audit_code' => mb_strtoupper($this->area_of_audit_code)]);
         }

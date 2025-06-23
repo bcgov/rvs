@@ -2,8 +2,10 @@
 
 namespace Modules\Vss\Http\Controllers;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use Inertia\Response;
 use Modules\Vss\Entities\NatureOffence;
 use Modules\Vss\Http\Requests\NatureOffenceStoreRequest;
 
@@ -14,8 +16,7 @@ class NatureOffenceController extends Controller
      *
      * @return \Inertia\Response
      */
-    public function index()
-    {
+    public function index(): Response {
         $offences = NatureOffence::orderBy('nature_code', 'asc')->get();
 
         return Inertia::render('Vss::Maintenance', ['status' => true, 'results' => $offences, 'page' => 'nature-offence']);
@@ -26,8 +27,7 @@ class NatureOffenceController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(NatureOffenceStoreRequest $request)
-    {
+    public function store(NatureOffenceStoreRequest $request): RedirectResponse {
         NatureOffence::create($request->validated());
 
         return Redirect::route('vss.maintenance.nature-offence.index');
@@ -38,8 +38,7 @@ class NatureOffenceController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(NatureOffenceStoreRequest $request, NatureOffence $natureOffence)
-    {
+    public function update(NatureOffenceStoreRequest $request, NatureOffence $natureOffence): RedirectResponse {
         //if the nature offence code updated
         if ($request->nature_code !== $natureOffence->nature_code) {
             //create new area

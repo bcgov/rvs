@@ -4,9 +4,12 @@ namespace Modules\Vss\Http\Controllers;
 
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Inertia\Response;
+use Inertia\ResponseFactory;
 use Modules\Vss\Entities\CaseComment;
 use Modules\Vss\Entities\Incident;
 
@@ -17,8 +20,7 @@ class CaseCommentController extends Controller
      *
      * @return \Inertia\ResponseFactory|\Inertia\Response
      */
-    public function show(Incident $caseComment)
-    {
+    public function show(Incident $caseComment): Response|ResponseFactory {
         $case = Incident::where('id', $caseComment->id)->with('comments', 'institution')->first();
         $staff = User::whereHas('roles', function ($q) {
             return $q->whereIn('name', [Role::VSS_ADMIN, Role::VSS_USER]);
@@ -32,8 +34,7 @@ class CaseCommentController extends Controller
      *
      * @return \Inertia\ResponseFactory|\Inertia\Response
      */
-    public function update(Request $request, Incident $caseComment)
-    {
+    public function update(Request $request, Incident $caseComment): Response|ResponseFactory {
         $case = Incident::where('id', $caseComment->id)->with('comments', 'institution')->first();
         $staff = User::whereHas('roles', function ($q) {
             return $q->whereIn('name', [Role::VSS_ADMIN, Role::VSS_USER]);
@@ -64,8 +65,7 @@ class CaseCommentController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(CaseComment $caseComment)
-    {
+    public function destroy(CaseComment $caseComment): RedirectResponse {
         $incident_id = $caseComment->incident_id;
         $caseComment->deleted_by_user_id = Auth::user()->user_id;
         $caseComment->save();

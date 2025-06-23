@@ -2,6 +2,10 @@
 
 namespace Modules\Vss\Entities;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Incident extends ModuleModel
@@ -23,69 +27,36 @@ class Incident extends ModuleModel
         'conviction_flag', 'sentence_comment',
     ];
 
-    public function funds()
-    {
+    public function funds(): HasMany {
         return $this->hasMany('Modules\Vss\Entities\CaseFunding', 'incident_id', 'incident_id');
     }
 
-    public function comments()
-    {
+    public function comments(): HasMany {
         return $this->hasMany('Modules\Vss\Entities\CaseComment', 'incident_id', 'incident_id')->orderByDesc('comment_date');
     }
 
-    public function audits()
-    {
+    public function audits(): HasMany {
         return $this->hasMany('Modules\Vss\Entities\CaseAuditType', 'incident_id', 'incident_id');
     }
 
-    public function offences()
-    {
+    public function offences(): HasMany {
         return $this->hasMany('Modules\Vss\Entities\CaseNatureOffence', 'incident_id', 'incident_id');
     }
 
-    public function sanctions()
-    {
+    public function sanctions(): HasMany {
         return $this->hasMany('Modules\Vss\Entities\CaseSanctionType', 'incident_id', 'incident_id');
     }
 
-    public function institution()
-    {
+    public function institution(): HasOne {
         return $this->hasOne('Modules\Vss\Entities\Institution', 'institution_code', 'institution_code');
     }
 
-    public function primaryAudit()
-    {
+    public function primaryAudit(): BelongsTo {
         return $this->belongsTo('Modules\Vss\Entities\AreaOfAudit', 'area_of_audit_code', 'area_of_audit_code');
     }
 
-    public function referral()
-    {
+    public function referral(): BelongsTo {
         return $this->belongsTo('Modules\Vss\Entities\ReferralSource', 'referral_source_id', 'id');
-    }
-
-    public function getTotalOverAwardAttribute()
-    {
-        $total = 0;
-        foreach ($this->funds as $fund) {
-            $total += $fund->over_award;
-        }
-
-        return $total;
-    }
-
-    public function getTotalPreventedFundingAttribute()
-    {
-        $total = 0;
-        foreach ($this->funds as $fund) {
-            $total += $fund->prevented_funding;
-        }
-
-        return $total;
-    }
-
-    public function getTotalAwardAttribute()
-    {
-        return $this->total_prevented_funding + $this->total_over_award;
     }
 
     /**
@@ -94,18 +65,8 @@ class Incident extends ModuleModel
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeActive($query)
-    {
+    public function scopeActive($query): Builder {
         return $query->where('archived', false);
     }
 
-    public function scopeIsActive($query)
-    {
-        return $query->where('archived', false);
-    }
-
-    public function scopeArchived($query)
-    {
-        return $query->where('archived', true);
-    }
 }

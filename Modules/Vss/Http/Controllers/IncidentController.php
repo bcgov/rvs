@@ -3,10 +3,14 @@
 namespace Modules\Vss\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use Inertia\Response;
+use Inertia\ResponseFactory;
 use Modules\Vss\Entities\AreaOfAudit;
 use Modules\Vss\Entities\CaseAuditType;
 use Modules\Vss\Entities\CaseNatureOffence;
@@ -25,7 +29,7 @@ class IncidentController extends Controller
      *
      * @return \Inertia\Response::render
      */
-    public function dashboard()
+    public function dashboard(): Response
     {
         $cases = Incident::where('bring_forward', true)->where('auditor_user_id', Auth::user()->user_id);
         $cases = $this->paginateCases($cases);
@@ -38,7 +42,7 @@ class IncidentController extends Controller
      *
      * @return \Inertia\Response::render
      */
-    public function index()
+    public function index(): Response
     {
         $cases = new Incident();
         $cases = $this->paginateCases($cases);
@@ -51,24 +55,11 @@ class IncidentController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Inertia\Response::render
-     */
-    public function archived(Request $request)
-    {
-        $cases = Incident::archived()->with('institution')->orderBy('created_at', 'desc')->paginate(25);
-
-        return inertia('Vss::ArchiveCases', ['status' => true, 'results' => $cases]);
-    }
-
-    /**
      * Show the form for creating a new resource.
      *
      * @return \Inertia\ResponseFactory|\Inertia\Response
      */
-    public function create()
-    {
+    public function create(): Response|ResponseFactory {
         $areaOfAudits = AreaOfAudit::get();
         $natureOffences = NatureOffence::get();
         $referrals = ReferralSource::get();
@@ -91,7 +82,7 @@ class IncidentController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(CaseStoreRequest $request)
+    public function store(CaseStoreRequest $request): RedirectResponse
     {
         $case = Incident::create($request->validated());
 
@@ -105,7 +96,7 @@ class IncidentController extends Controller
      *
      * @return \Inertia\ResponseFactory|\Inertia\Response
      */
-    public function show(Incident $case)
+    public function show(Incident $case): Response|ResponseFactory
     {
         $case = Incident::where('id', $case->id)->with('audits', 'offences.offence', 'sanctions.sanction', 'institution')->withTrashed()->first();
         $areaOfAudits = AreaOfAudit::get();
@@ -131,8 +122,7 @@ class IncidentController extends Controller
      * @param  \Modules\Vss\Entities\Incident  $incident
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(CaseStoreRequest $request, Incident $case)
-    {
+    public function update(CaseStoreRequest $request, Incident $case): RedirectResponse {
         $case->update($request->validated());
 
         $this->addAttachedRecords($request, $case);
@@ -140,8 +130,7 @@ class IncidentController extends Controller
         return Redirect::route('vss.cases.show', [$case->id]);
     }
 
-    private function addAttachedRecords($request, $case)
-    {
+    private function addAttachedRecords($request, $case): void {
         $case->audits()->delete();
         foreach ($request->old_audit_codes as $row) {
             $audit = AreaOfAudit::where('area_of_audit_code', $row['area_of_audit_code'])->first();
@@ -196,7 +185,7 @@ class IncidentController extends Controller
         }
     }
 
-    private function paginateCases($cases)
+    private function paginateCases($cases): LengthAwarePaginator
     {
         if (request()->filter_sin !== null) {
             $cases = $cases->where('sin', request()->filter_sin);

@@ -3,6 +3,7 @@
 namespace Modules\Vss\Entities;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class NatureOffence extends ModuleModel
 {
@@ -15,8 +16,7 @@ class NatureOffence extends ModuleModel
      */
     protected $fillable = ['nature_code', 'description'];
 
-    public function offences()
-    {
+    public function offences(): HasMany {
         return $this->hasMany('Modules\Vss\Entities\CaseNatureOffence', 'nature_code', 'nature_code');
     }
 }

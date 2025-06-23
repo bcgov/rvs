@@ -3,6 +3,7 @@
 namespace Modules\Vss\Entities;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class AreaOfAudit extends ModuleModel
 {
@@ -15,13 +16,11 @@ class AreaOfAudit extends ModuleModel
      */
     protected $fillable = ['area_of_audit_code', 'description'];
 
-    public function incidents()
-    {
+    public function incidents(): HasMany {
         return $this->hasMany('Modules\Vss\Entities\Incident', 'area_of_audit_code', 'area_of_audit_code');
     }
 
-    public function caseAuditTypes()
-    {
+    public function caseAuditTypes(): HasMany {
         return $this->hasMany('Modules\Vss\Entities\CaseAuditType', 'area_of_audit_code', 'area_of_audit_code');
     }
 }

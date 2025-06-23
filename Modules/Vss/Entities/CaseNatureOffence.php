@@ -3,6 +3,7 @@
 namespace Modules\Vss\Entities;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class CaseNatureOffence extends ModuleModel
 {
@@ -21,13 +22,11 @@ class CaseNatureOffence extends ModuleModel
      */
     protected $fillable = ['incident_id', 'nature_code'];
 
-    public function incident()
-    {
+    public function incident(): BelongsTo {
         return $this->belongsTo('Modules\Vss\Entities\Incident', 'incident_id', 'incident_id');
     }
 
-    public function offence()
-    {
+    public function offence(): BelongsTo {
         return $this->belongsTo('Modules\Vss\Entities\NatureOffence', 'nature_code', 'nature_code');
     }
 }

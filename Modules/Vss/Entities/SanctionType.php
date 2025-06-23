@@ -3,6 +3,7 @@
 namespace Modules\Vss\Entities;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class SanctionType extends ModuleModel
 {
@@ -15,8 +16,7 @@ class SanctionType extends ModuleModel
      */
     protected $fillable = ['sanction_code', 'description', 'short_description', 'disabled'];
 
-    public function sanctions()
-    {
+    public function sanctions(): HasMany {
         return $this->hasMany('Modules\Vss\Entities\CaseSanctionType', 'incident_id', 'incident_id');
     }
 }
