@@ -5,6 +5,20 @@ namespace Modules\Vss\Entities;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * 
+ *
+ * @property int $incident_id
+ * @property int $sanction_code
+ * @property-read \Modules\Vss\Entities\Incident $incident
+ * @property-read \Modules\Vss\Entities\SanctionType $sanction
+ * @method static \Illuminate\Database\Eloquent\Builder|CaseSanctionType newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CaseSanctionType newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CaseSanctionType query()
+ * @method static \Illuminate\Database\Eloquent\Builder|CaseSanctionType whereIncidentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CaseSanctionType whereSanctionCode($value)
+ * @mixin \Eloquent
+ */
 class CaseSanctionType extends ModuleModel
 {
     use HasFactory;

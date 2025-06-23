@@ -8,6 +8,110 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * 
+ *
+ * @property int $id
+ * @property int $incident_id
+ * @property float|null $application_number
+ * @property string $sin
+ * @property string|null $last_name
+ * @property string|null $first_name
+ * @property int $referral_source_id
+ * @property string $open_date
+ * @property string|null $reactivate_date
+ * @property string|null $year_of_audit
+ * @property string $institution_code
+ * @property string|null $auditor_user_id
+ * @property string|null $audit_date
+ * @property string|null $investigator_user_id
+ * @property string|null $investigation_date
+ * @property string $audit_type
+ * @property string $area_of_audit_code
+ * @property string $incident_status
+ * @property string|null $close_date
+ * @property bool $case_close
+ * @property string|null $reason_for_closing
+ * @property string|null $case_outcome
+ * @property bool $appeal_flag
+ * @property string|null $appeal_outcome
+ * @property string|null $severity
+ * @property bool $bring_forward
+ * @property string|null $bring_forward_date
+ * @property bool $rcmp_referral_flag
+ * @property string|null $rcmp_referral_date
+ * @property string|null $rcmp_closure_date
+ * @property bool $charges_laid_flag
+ * @property bool $conviction_flag
+ * @property string|null $sentence_comment
+ * @property bool $archived
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * 
+ * // Appended attributes
+ * @property float|null $total_award
+ * @property float|null $total_prevented_funding
+ * @property float|null $total_over_award
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Vss\Entities\CaseAuditType> $audits
+ * @property-read int|null $audits_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Vss\Entities\CaseComment> $comments
+ * @property-read int|null $comments_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Vss\Entities\CaseFunding> $funds
+ * @property-read int|null $funds_count
+ * @property-read \Modules\Vss\Entities\Institution|null $institution
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Vss\Entities\CaseNatureOffence> $offences
+ * @property-read int|null $offences_count
+ * @property-read \Modules\Vss\Entities\AreaOfAudit $primaryAudit
+ * @property-read \Modules\Vss\Entities\ReferralSource $referral
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Vss\Entities\CaseSanctionType> $sanctions
+ * @property-read int|null $sanctions_count
+ * @method static Builder|Incident active()
+ * @method static Builder|Incident newModelQuery()
+ * @method static Builder|Incident newQuery()
+ * @method static Builder|Incident onlyTrashed()
+ * @method static Builder|Incident query()
+ * @method static Builder|Incident whereAppealFlag($value)
+ * @method static Builder|Incident whereAppealOutcome($value)
+ * @method static Builder|Incident whereApplicationNumber($value)
+ * @method static Builder|Incident whereArchived($value)
+ * @method static Builder|Incident whereAreaOfAuditCode($value)
+ * @method static Builder|Incident whereAuditDate($value)
+ * @method static Builder|Incident whereAuditType($value)
+ * @method static Builder|Incident whereAuditorUserId($value)
+ * @method static Builder|Incident whereBringForward($value)
+ * @method static Builder|Incident whereBringForwardDate($value)
+ * @method static Builder|Incident whereCaseClose($value)
+ * @method static Builder|Incident whereCaseOutcome($value)
+ * @method static Builder|Incident whereChargesLaidFlag($value)
+ * @method static Builder|Incident whereCloseDate($value)
+ * @method static Builder|Incident whereConvictionFlag($value)
+ * @method static Builder|Incident whereCreatedAt($value)
+ * @method static Builder|Incident whereDeletedAt($value)
+ * @method static Builder|Incident whereFirstName($value)
+ * @method static Builder|Incident whereId($value)
+ * @method static Builder|Incident whereIncidentId($value)
+ * @method static Builder|Incident whereIncidentStatus($value)
+ * @method static Builder|Incident whereInstitutionCode($value)
+ * @method static Builder|Incident whereInvestigationDate($value)
+ * @method static Builder|Incident whereInvestigatorUserId($value)
+ * @method static Builder|Incident whereLastName($value)
+ * @method static Builder|Incident whereOpenDate($value)
+ * @method static Builder|Incident whereRcmpClosureDate($value)
+ * @method static Builder|Incident whereRcmpReferralDate($value)
+ * @method static Builder|Incident whereRcmpReferralFlag($value)
+ * @method static Builder|Incident whereReactivateDate($value)
+ * @method static Builder|Incident whereReasonForClosing($value)
+ * @method static Builder|Incident whereReferralSourceId($value)
+ * @method static Builder|Incident whereSentenceComment($value)
+ * @method static Builder|Incident whereSeverity($value)
+ * @method static Builder|Incident whereSin($value)
+ * @method static Builder|Incident whereUpdatedAt($value)
+ * @method static Builder|Incident whereYearOfAudit($value)
+ * @method static Builder|Incident withTrashed()
+ * @method static Builder|Incident withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Incident extends ModuleModel
 {
     use SoftDeletes;
