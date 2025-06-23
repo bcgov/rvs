@@ -4,6 +4,19 @@ namespace Modules\Lfp\Entities;
 
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @property int $id
+ * @property int|null $lfp_id
+ * @property string|null $app_idx
+ * @property string|null $pay_idx
+ * @property \Carbon\Carbon|null $anniversary_date
+ * @property float|null $proposed_pay_amount
+ * @property int|null $proposed_hrs_of_service
+ * @property string|null $sfas_pay_status
+ * @property string|null $oc_pay_status
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ */
 class Payment extends ModuleModel
 {
     protected $appends = ['sfas_payment_attr'];

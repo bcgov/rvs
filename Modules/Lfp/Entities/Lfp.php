@@ -4,6 +4,25 @@ namespace Modules\Lfp\Entities;
 
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @property int $id
+ * @property string|null $application_id
+ * @property string|null $sin
+ * @property string|null $profession
+ * @property string|null $employer
+ * @property string|null $employment_status
+ * @property string|null $community
+ * @property string|null $declined_removed_reason
+ * @property string|null $app_idx
+ * @property bool|null $direct_lend
+ * @property bool|null $risk_sharing_guaranteed
+ * @property string|null $full_name_alias
+ * @property string|null $first_name
+ * @property string|null $last_name
+ * @property string|null $comment
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ */
 class Lfp extends ModuleModel
 {
 

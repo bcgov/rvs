@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
-use Response;
+use Illuminate\Support\Facades\Response;
 
 class ServiceAccountController extends Controller
 {
-    public function fetchData(Request $request)
-    {
+    public function fetchData(Request $request): JsonResponse {
         $tableName = $request->input('table', '');
         $app = $request->input('app');
         $where = $request->input('q');
@@ -54,7 +54,7 @@ class ServiceAccountController extends Controller
         try {
             $data = $query->get();
         } catch (\Exception $exception) {
-            return response()->json(['status' => false, 'body' => $exception->errorInfo[0]]);
+            return response()->json(['status' => false, 'body' => $exception->getMessage()]);
         }
 
         // Fetch total count for pagination
@@ -70,29 +70,27 @@ class ServiceAccountController extends Controller
         return response()->json(['status' => true, 'body' => $paginatedData]);
     }
 
-    public function fetchTables(Request $request)
-    {
+    public function fetchTables(Request $request): JsonResponse {
         $app = $request->input('app');
 
         try {
             $tables = DB::connection(env('DB_DATABASE_' . strtoupper($app)))
                 ->select("SELECT table_name FROM information_schema.tables WHERE table_type = 'BASE TABLE' AND table_schema='public'");
         } catch (\Exception $exception) {
-            return response()->json(['status' => false, 'body' => $exception->errorInfo[0]], 200);
+            return response()->json(['status' => false, 'body' => $exception->getMessage()]);
         }
 
         return Response::json(['status' => true, 'body' => $tables], 200);
     }
 
-    public function fetchColumns(Request $request)
-    {
+    public function fetchColumns(Request $request): JsonResponse {
         $tableName = $request->input('table');
         $app = $request->input('app');
         try {
             $columns = Schema::connection(env('DB_DATABASE_' . strtoupper($app)))
                 ->getColumns(strtolower($tableName));
         } catch (\Exception $exception) {
-            return response()->json(['status' => false, 'body' => $exception->errorInfo[0]], 200);
+            return response()->json(['status' => false, 'body' => $exception->getMessage()]);
         }
 
         return Response::json(['status' => true, 'body' => $columns], 200);
