@@ -13,18 +13,16 @@ class StudentStoreRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
-    {
+    public function authorize(): bool {
         return true;
     }
 
     /**
      * Get the error messages for the defined validation rules.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function messages()
-    {
+    public function messages(): array {
         return [
             'sin.required' => 'The SIN field is required.',
             'sin.digits' => 'The SIN length must be exactly 9 with no spaces.',
@@ -48,10 +46,9 @@ class StudentStoreRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function rules()
-    {
+    public function rules(): array {
         return [
             'student_id' => 'required',
             'sin' => 'required|numeric|digits:9|unique:'.env('DB_DATABASE_YEAF').'.students,sin',
@@ -80,8 +77,7 @@ class StudentStoreRequest extends FormRequest
      *
      * @return void
      */
-    protected function prepareForValidation()
-    {
+    protected function prepareForValidation(): void {
         if (isset($this->birth_date)) {
             $this->merge(['birth_date' => date('Y-m-d', strtotime($this->birth_date))]);
         }
