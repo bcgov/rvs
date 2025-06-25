@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $referral_code
@@ -36,6 +36,9 @@ class ReferralSource extends ModuleModel
      */
     protected $fillable = ['referral_code', 'description'];
 
+    /**
+     * @return HasMany<Incident>
+     */
     public function incidents(): HasMany {
         return $this->hasMany('Modules\Vss\Entities\Incident', 'referral_source_id', 'id');
     }

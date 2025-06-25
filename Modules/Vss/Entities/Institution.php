@@ -5,7 +5,7 @@ namespace Modules\Vss\Entities;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $institution_code
@@ -37,6 +37,9 @@ class Institution extends ModuleModel
      */
     protected $fillable = ['institution_code', 'institution_name', 'institution_location_code', 'institution_type_code'];
 
+    /**
+     * @return hasMany<Incident>
+     */
     public function incidents(): HasMany {
         return $this->hasMany('Modules\Vss\Entities\Incident', 'institution_code', 'institution_code');
     }

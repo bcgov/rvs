@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $incident_id
@@ -48,7 +48,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
- * 
+ *
  * // Appended attributes
  * @property float|null $total_award
  * @property float|null $total_prevented_funding
@@ -131,34 +131,58 @@ class Incident extends ModuleModel
         'conviction_flag', 'sentence_comment',
     ];
 
+    /**
+     * @return HasMany<CaseFunding>
+     */
     public function funds(): HasMany {
         return $this->hasMany('Modules\Vss\Entities\CaseFunding', 'incident_id', 'incident_id');
     }
 
+    /**
+     * @return HasMany<CaseComment>
+     */
     public function comments(): HasMany {
         return $this->hasMany('Modules\Vss\Entities\CaseComment', 'incident_id', 'incident_id')->orderByDesc('comment_date');
     }
 
+    /**
+     * @return HasMany<CaseAuditType>
+     */
     public function audits(): HasMany {
         return $this->hasMany('Modules\Vss\Entities\CaseAuditType', 'incident_id', 'incident_id');
     }
 
+    /**
+     * @return HasMany<CaseNatureOffence>
+     */
     public function offences(): HasMany {
         return $this->hasMany('Modules\Vss\Entities\CaseNatureOffence', 'incident_id', 'incident_id');
     }
 
+    /**
+     * @return HasMany<CaseSanctionType>
+     */
     public function sanctions(): HasMany {
         return $this->hasMany('Modules\Vss\Entities\CaseSanctionType', 'incident_id', 'incident_id');
     }
 
+    /**
+     * @return HasOne<Institution>
+     */
     public function institution(): HasOne {
         return $this->hasOne('Modules\Vss\Entities\Institution', 'institution_code', 'institution_code');
     }
 
+    /**
+     * @return BelongsTo<AreaOfAudit>
+     */
     public function primaryAudit(): BelongsTo {
         return $this->belongsTo('Modules\Vss\Entities\AreaOfAudit', 'area_of_audit_code', 'area_of_audit_code');
     }
 
+    /**
+     * @return BelongsTo<ReferralSource>
+     */
     public function referral(): BelongsTo {
         return $this->belongsTo('Modules\Vss\Entities\ReferralSource', 'referral_source_id', 'id');
     }

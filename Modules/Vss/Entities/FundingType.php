@@ -5,7 +5,7 @@ namespace Modules\Vss\Entities;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $funding_type
@@ -26,6 +26,9 @@ class FundingType extends ModuleModel
 {
     use HasFactory;
 
+    /**
+     * @return HasMany<CaseFunding>
+     */
     public function caseFundings(): HasMany {
         return $this->hasMany('Modules\Vss\Entities\CaseFunding', 'funding_type', 'funding_type');
     }

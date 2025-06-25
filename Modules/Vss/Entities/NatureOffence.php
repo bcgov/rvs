@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $nature_code
@@ -36,6 +36,9 @@ class NatureOffence extends ModuleModel
      */
     protected $fillable = ['nature_code', 'description'];
 
+    /**
+     * @return HasMany<CaseNatureOffence>
+     */
     public function offences(): HasMany {
         return $this->hasMany('Modules\Vss\Entities\CaseNatureOffence', 'nature_code', 'nature_code');
     }
