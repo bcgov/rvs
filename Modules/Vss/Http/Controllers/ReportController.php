@@ -11,9 +11,35 @@ use Modules\Vss\Entities\FundingType;
 use Modules\Vss\Entities\Incident;
 use PDF;
 
+/**
+ *
+ */
 class ReportController extends Controller
 {
 
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param \Modules\Vss\Entities\Incident $case
+     *
+     * @return mixed
+     */
+    public function downloadSingleStudentReport(Request $request, Incident $case)
+    {
+        $case = Incident::where('id', $case->id)->with(
+            'primaryAudit', 'referral',
+            'funds.fundingType', 'comments', 'institution', 'audits', 'offences.offence', 'sanctions')->first();
+        $now_d = date('Y-m-d');
+        $now_t = date('H:m:i');
+        $pdf = PDF::loadView('vss::pdf', compact('case', 'now_d', 'now_t'));
+
+        return $pdf->download(mt_rand().'-'.$case->incident_id.'-student_report.pdf');
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Inertia\Response
+     */
     public function searchReports(Request $request): Response {
         [$results['pre'], $results['post'], $results['total']] = $this->fetchReport($request);
 

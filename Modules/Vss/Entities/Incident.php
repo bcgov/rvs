@@ -187,14 +187,50 @@ class Incident extends ModuleModel
         return $this->belongsTo('Modules\Vss\Entities\ReferralSource', 'referral_source_id', 'id');
     }
 
+    public function getTotalOverAwardAttribute()
+    {
+        $total = 0;
+        foreach ($this->funds as $fund) {
+            $total += $fund->over_award;
+        }
+
+        return $total;
+    }
+
+    public function getTotalPreventedFundingAttribute()
+    {
+        $total = 0;
+        foreach ($this->funds as $fund) {
+            $total += $fund->prevented_funding;
+        }
+
+        return $total;
+    }
+
+    public function getTotalAwardAttribute()
+    {
+        return $this->total_prevented_funding + $this->total_over_award;
+    }
+
     /**
      * Scope a query to only include admin users.
      *
-     * @param  Builder<\Modules\Vss\Entities\Incident>  $query
-     * @return Builder<\Modules\Vss\Entities\Incident>
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeActive(Builder $query): Builder {
+    public function scopeActive($query)
+    {
         return $query->where('archived', false);
+    }
+
+    public function scopeIsActive($query)
+    {
+        return $query->where('archived', false);
+    }
+
+    public function scopeArchived($query)
+    {
+        return $query->where('archived', true);
     }
 
 }

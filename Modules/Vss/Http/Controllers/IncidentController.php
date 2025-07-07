@@ -57,6 +57,20 @@ class IncidentController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Inertia\Response|\Inertia\ResponseFactory
+     */
+    public function archived(Request $request)
+    {
+        $cases = Incident::archived()->with('institution')->orderBy('created_at', 'desc')->paginate(25);
+
+        return inertia('Vss::ArchiveCases', ['status' => true, 'results' => $cases]);
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Inertia\ResponseFactory|\Inertia\Response
@@ -221,12 +235,12 @@ class IncidentController extends Controller
         }
         if (request()->filter_type !== null) {
             if (request()->filter_type === 'archive') {
-                $cases = $cases->archived();
+                $cases = $cases->where('archived', true);
             } else {
-                $cases = $cases->isActive();
+                $cases = $cases->active();
             }
         } else {
-            $cases = $cases->isActive();
+            $cases = $cases->active();
         }
 
         if (request()->sort !== null) {

@@ -80,4 +80,13 @@ class MaintenanceController extends Controller
         return Inertia::render('Vss::Dashboard');
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     */
+    public function goToPage(Request $request, string $page = 'area-of-audit')
+    {
+        return Inertia::render('Vss::Maintenance', ['page' => $page]);
+    }
+
 }

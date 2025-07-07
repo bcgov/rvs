@@ -20,8 +20,8 @@ class CaseFundingController extends Controller
      *
      * @return \Inertia\Response|\Inertia\ResponseFactory
      */
-    public function show(Incident $caseFunding): Response|ResponseFactory {
-        $case = Incident::where('id', $caseFunding->id)->with('funds.fundingType', 'institution')->first();
+    public function show($id): Response|ResponseFactory {
+        $case = Incident::with('funds.fundingType', 'institution')->findOrFail($id);
         $funds = FundingType::get();
         $schools = Institution::get();
 
