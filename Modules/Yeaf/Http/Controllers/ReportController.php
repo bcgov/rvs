@@ -3,6 +3,7 @@
 namespace Modules\Yeaf\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Http\Client\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -15,10 +16,23 @@ use Modules\Yeaf\Entities\Ineligible;
 use Modules\Yeaf\Entities\Institution;
 use Modules\Yeaf\Entities\ProgramYear;
 use Modules\Yeaf\Entities\Student;
-use Response;
 
 class ReportController extends Controller
 {
+
+    public function switchOn(Request $request)
+    {
+        // Set traffic light to true
+        $traffic_light = true;
+
+        // Store traffic light value in cache for 60 seconds
+        Cache::put('traffic_light', $traffic_light, 60);
+
+        return Response::json([
+            'status' => 'success',
+            'message' => 'Traffic light set to true',
+        ]);
+    }
 
     public function reportsStudents(Request $request): JsonResponse {
         return response()->json(Student::select('student_id', 'first_name', 'last_name', 'sin', 'birth_date',
@@ -120,6 +134,14 @@ class ReportController extends Controller
 
     public function batches(Request $request): JsonResponse {
         return response()->json(Batch::select('batch_number', 'batch_date')->get());
+    }
+
+    private function jsonFileDownload($name, $data)
+    {
+        header('Content-type: application/json');
+        header('Content-Disposition: attachment; filename='.$name.'.json');
+
+        return $data;
     }
 
 }
