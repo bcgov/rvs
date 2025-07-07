@@ -18,9 +18,10 @@ class CaseFundingController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param string $id
      * @return \Inertia\Response|\Inertia\ResponseFactory
      */
-    public function show($id): Response|ResponseFactory {
+    public function show(string $id): Response|ResponseFactory {
         $case = Incident::with('funds.fundingType', 'institution')->findOrFail($id);
         $funds = FundingType::get();
         $schools = Institution::get();

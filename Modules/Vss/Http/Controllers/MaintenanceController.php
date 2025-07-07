@@ -84,7 +84,7 @@ class MaintenanceController extends Controller
      * Display a listing of the resource.
      *
      */
-    public function goToPage(Request $request, string $page = 'area-of-audit')
+    public function goToPage(Request $request, string $page = 'area-of-audit'): Response
     {
         return Inertia::render('Vss::Maintenance', ['page' => $page]);
     }

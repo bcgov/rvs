@@ -187,6 +187,9 @@ class Incident extends ModuleModel
         return $this->belongsTo('Modules\Vss\Entities\ReferralSource', 'referral_source_id', 'id');
     }
 
+    /**
+     * @return int
+     */
     public function getTotalOverAwardAttribute()
     {
         $total = 0;
@@ -197,6 +200,9 @@ class Incident extends ModuleModel
         return $total;
     }
 
+    /**
+     * @return int
+     */
     public function getTotalPreventedFundingAttribute()
     {
         $total = 0;
@@ -207,6 +213,9 @@ class Incident extends ModuleModel
         return $total;
     }
 
+    /**
+     * @return float|null
+     */
     public function getTotalAwardAttribute()
     {
         return $this->total_prevented_funding + $this->total_over_award;
@@ -215,20 +224,28 @@ class Incident extends ModuleModel
     /**
      * Scope a query to only include admin users.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Builder<\Modules\Vss\Entities\Incident> $query
+     * @return Builder<\Modules\Vss\Entities\Incident>
      */
-    public function scopeActive($query)
+    public function scopeActive(Builder $query): Builder
     {
         return $query->where('archived', false);
     }
 
-    public function scopeIsActive($query)
+    /**
+     * @param Builder<\Modules\Vss\Entities\Incident> $query
+     * @return Builder<\Modules\Vss\Entities\Incident>
+     */
+    public function scopeIsActive(Builder $query): Builder
     {
         return $query->where('archived', false);
     }
 
-    public function scopeArchived($query)
+    /**
+     * @param Builder<\Modules\Vss\Entities\Incident> $query
+     * @return Builder<\Modules\Vss\Entities\Incident>
+     */
+    public function scopeArchived(Builder $query): Builder
     {
         return $query->where('archived', true);
     }
