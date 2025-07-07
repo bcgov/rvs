@@ -16,7 +16,6 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response::render
      */
     public function staffList(Request $request): Response
     {
@@ -31,7 +30,6 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response::render
      */
     public function staffShow(Request $request, User $user): Response
     {
@@ -46,7 +44,6 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\RedirectResponse::render
      */
     public function staffEdit(StaffEditRequest $request, User $user): RedirectResponse
     {
@@ -77,7 +74,6 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response::render
      */
     public function index(): Response
     {

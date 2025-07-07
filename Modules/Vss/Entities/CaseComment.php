@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $incident_id
@@ -48,6 +48,9 @@ class CaseComment extends ModuleModel
      */
     protected $fillable = ['incident_id', 'staff_user_id', 'comment_date', 'comment_text', 'deleted_by_user_id'];
 
+    /**
+     * @return BelongsTo<\Modules\Vss\Entities\Incident, \Modules\Vss\Entities\CaseComment>
+     */
     public function incident(): BelongsTo {
         return $this->belongsTo('Modules\Vss\Entities\Incident', 'incident_id', 'incident_id');
     }

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $area_of_audit_code
@@ -36,10 +36,16 @@ class CaseAuditType extends ModuleModel
      */
     protected $fillable = ['incident_id', 'area_of_audit_code', 'audit_type'];
 
+    /**
+     * @return BelongsTo<\Modules\Vss\Entities\Incident, \Modules\Vss\Entities\CaseAuditType>
+     */
     public function incident(): BelongsTo {
         return $this->belongsTo('Modules\Vss\Entities\Incident', 'incident_id', 'incident_id');
     }
 
+    /**
+     * @return BelongsTo<\Modules\Vss\Entities\AreaOfAudit, \Modules\Vss\Entities\CaseAuditType>
+     */
     public function audit(): BelongsTo {
         return $this->belongsTo('Modules\Vss\Entities\AreaOfAudit', 'area_of_audit_code', 'area_of_audit_code');
     }

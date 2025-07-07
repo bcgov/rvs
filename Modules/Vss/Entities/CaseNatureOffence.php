@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * 
+ *
  *
  * @property int $incident_id
  * @property string $nature_code
@@ -36,10 +36,16 @@ class CaseNatureOffence extends ModuleModel
      */
     protected $fillable = ['incident_id', 'nature_code'];
 
+    /**
+     * @return BelongsTo<\Modules\Vss\Entities\Incident, \Modules\Vss\Entities\CaseNatureOffence>
+     */
     public function incident(): BelongsTo {
         return $this->belongsTo('Modules\Vss\Entities\Incident', 'incident_id', 'incident_id');
     }
 
+    /**
+     * @return BelongsTo<\Modules\Vss\Entities\NatureOffence, \Modules\Vss\Entities\CaseNatureOffence>
+     */
     public function offence(): BelongsTo {
         return $this->belongsTo('Modules\Vss\Entities\NatureOffence', 'nature_code', 'nature_code');
     }

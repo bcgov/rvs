@@ -32,8 +32,7 @@ class VssController extends Controller
      * @param \Illuminate\Http\Request $request
      *
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request): void {
         //
     }
 

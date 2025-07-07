@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $incident_id
@@ -53,10 +53,16 @@ class CaseFunding extends ModuleModel
      */
     protected $fillable = ['incident_id', 'application_number', 'funding_type', 'fund_entry_date', 'over_award', 'prevented_funding', 'deleted_by_user_id'];
 
+    /**
+     * @return BelongsTo<\Modules\Vss\Entities\Incident, \Modules\Vss\Entities\CaseFunding>
+     */
     public function incident(): BelongsTo {
         return $this->belongsTo('Modules\Vss\Entities\Incident', 'incident_id', 'incident_id');
     }
 
+    /**
+     * @return BelongsTo<\Modules\Vss\Entities\FundingType, \Modules\Vss\Entities\CaseFunding>
+     */
     public function fundingType(): BelongsTo {
         return $this->belongsTo('Modules\Vss\Entities\FundingType', 'funding_type', 'funding_type');
     }

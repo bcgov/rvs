@@ -132,56 +132,56 @@ class Incident extends ModuleModel
     ];
 
     /**
-     * @return HasMany<CaseFunding>
+     * @return HasMany<\Modules\Vss\Entities\CaseFunding>
      */
     public function funds(): HasMany {
         return $this->hasMany('Modules\Vss\Entities\CaseFunding', 'incident_id', 'incident_id');
     }
 
     /**
-     * @return HasMany<CaseComment>
+     * @return HasMany<\Modules\Vss\Entities\CaseComment>
      */
     public function comments(): HasMany {
         return $this->hasMany('Modules\Vss\Entities\CaseComment', 'incident_id', 'incident_id')->orderByDesc('comment_date');
     }
 
     /**
-     * @return HasMany<CaseAuditType>
+     * @return HasMany<\Modules\Vss\Entities\CaseAuditType>
      */
     public function audits(): HasMany {
         return $this->hasMany('Modules\Vss\Entities\CaseAuditType', 'incident_id', 'incident_id');
     }
 
     /**
-     * @return HasMany<CaseNatureOffence>
+     * @return HasMany<\Modules\Vss\Entities\CaseNatureOffence>
      */
     public function offences(): HasMany {
         return $this->hasMany('Modules\Vss\Entities\CaseNatureOffence', 'incident_id', 'incident_id');
     }
 
     /**
-     * @return HasMany<CaseSanctionType>
+     * @return HasMany<\Modules\Vss\Entities\CaseSanctionType>
      */
     public function sanctions(): HasMany {
         return $this->hasMany('Modules\Vss\Entities\CaseSanctionType', 'incident_id', 'incident_id');
     }
 
     /**
-     * @return HasOne<Institution>
+     * @return HasOne<\Modules\Vss\Entities\Institution>
      */
     public function institution(): HasOne {
         return $this->hasOne('Modules\Vss\Entities\Institution', 'institution_code', 'institution_code');
     }
 
     /**
-     * @return BelongsTo<AreaOfAudit>
+     * @return BelongsTo<\Modules\Vss\Entities\AreaOfAudit, \Modules\Vss\Entities\Incident>
      */
     public function primaryAudit(): BelongsTo {
         return $this->belongsTo('Modules\Vss\Entities\AreaOfAudit', 'area_of_audit_code', 'area_of_audit_code');
     }
 
     /**
-     * @return BelongsTo<ReferralSource>
+     * @return BelongsTo<\Modules\Vss\Entities\ReferralSource, \Modules\Vss\Entities\Incident>
      */
     public function referral(): BelongsTo {
         return $this->belongsTo('Modules\Vss\Entities\ReferralSource', 'referral_source_id', 'id');
@@ -190,10 +190,10 @@ class Incident extends ModuleModel
     /**
      * Scope a query to only include admin users.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param  Builder<\Modules\Vss\Entities\Incident>  $query
+     * @return Builder<\Modules\Vss\Entities\Incident>
      */
-    public function scopeActive($query): Builder {
+    public function scopeActive(Builder $query): Builder {
         return $query->where('archived', false);
     }
 

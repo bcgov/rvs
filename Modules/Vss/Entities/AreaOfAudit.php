@@ -5,8 +5,9 @@ namespace Modules\Vss\Entities;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $area_of_audit_code
@@ -25,7 +26,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|AreaOfAudit whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|AreaOfAudit whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|AreaOfAudit whereUpdatedAt($value)
- * @mixin \Eloquent
  */
 class AreaOfAudit extends ModuleModel
 {
@@ -38,10 +38,16 @@ class AreaOfAudit extends ModuleModel
      */
     protected $fillable = ['area_of_audit_code', 'description'];
 
+    /**
+     * @return HasMany<\Modules\Vss\Entities\Incident>
+     */
     public function incidents(): HasMany {
         return $this->hasMany('Modules\Vss\Entities\Incident', 'area_of_audit_code', 'area_of_audit_code');
     }
 
+    /**
+     * @return HasMany<\Modules\Vss\Entities\CaseAuditType>
+     */
     public function caseAuditTypes(): HasMany {
         return $this->hasMany('Modules\Vss\Entities\CaseAuditType', 'area_of_audit_code', 'area_of_audit_code');
     }

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * 
+ *
  *
  * @property int $incident_id
  * @property int $sanction_code
@@ -36,10 +36,16 @@ class CaseSanctionType extends ModuleModel
      */
     protected $fillable = ['incident_id', 'sanction_code'];
 
+    /**
+     * @return BelongsTo<\Modules\Vss\Entities\Incident, \Modules\Vss\Entities\CaseSanctionType>
+     */
     public function incident(): BelongsTo {
         return $this->belongsTo('Modules\Vss\Entities\Incident', 'incident_id', 'incident_id');
     }
 
+    /**
+     * @return BelongsTo<\Modules\Vss\Entities\SanctionType, \Modules\Vss\Entities\CaseSanctionType>
+     */
     public function sanction(): BelongsTo {
         return $this->belongsTo('Modules\Vss\Entities\SanctionType', 'sanction_code', 'sanction_code');
     }

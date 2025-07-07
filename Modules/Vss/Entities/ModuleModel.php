@@ -5,7 +5,7 @@ namespace Modules\Vss\Entities;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * 
+ *
  *
  * @method static \Illuminate\Database\Eloquent\Builder|ModuleModel newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ModuleModel newQuery()
@@ -14,6 +14,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ModuleModel extends Model
 {
+
+    /**
+     * @param array<string, mixed> $attributes
+     */
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
