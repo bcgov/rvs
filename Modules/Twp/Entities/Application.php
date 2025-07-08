@@ -4,6 +4,10 @@ namespace Modules\Twp\Entities;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Application extends ModuleModel
@@ -20,8 +24,10 @@ class Application extends ModuleModel
         'institution_student_number', 'apply_twp', 'apply_lfg', 'confirmation_enrolment', 'sabc_app_number',
         'fao_name', 'fao_email', 'fao_phone', 'comment'];
 
-    public function reasons()
-    {
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Reason>
+     */
+    public function reasons(): BelongsToMany {
         return $this->belongsToMany(
             'Modules\Twp\Entities\Reason', // The model to access to
             'Modules\Twp\Entities\ApplicationReason', // The intermediate table that connects the Application with the Reason.
@@ -32,23 +38,31 @@ class Application extends ModuleModel
         );
     }
 
-    public function student()
-    {
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Student, Application>
+     */
+    public function student(): BelongsTo {
         return $this->belongsTo('Modules\Twp\Entities\Student', 'student_id', 'id');
     }
 
-    public function program()
-    {
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne<Program>
+     */
+    public function program(): HasOne {
         return $this->hasOne('Modules\Twp\Entities\Program', 'application_id', 'id');
     }
 
-    public function payments()
-    {
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Payment>
+     */
+    public function payments(): HasMany {
         return $this->hasMany('Modules\Twp\Entities\Payment', 'application_id', 'id');
     }
 
-    public function grants()
-    {
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Grant>
+     */
+    public function grants(): HasMany {
         return $this->hasMany('Modules\Twp\Entities\Grant', 'application_id', 'id')->orderByDesc('created_at');
     }
 }

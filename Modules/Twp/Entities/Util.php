@@ -4,14 +4,19 @@ namespace Modules\Twp\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ *
+ */
 class Util extends Model
 {
     protected $connection = 'twp';
 
     protected $fillable = ['field_name', 'field_type', 'field_description', 'active_flag'];
 
-    public static function getSortedUtils()
-    {
+    /**
+     * @return array<array<int, Util>>
+     */
+    public static function getSortedUtils(): array {
         $utils = self::select('id', 'field_name', 'field_type', 'field_description')
             ->where('active_flag', true)
             ->get();

@@ -12,18 +12,16 @@ class UtilEditRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
-    {
+    public function authorize(): bool {
         return true;
     }
 
     /**
      * Get the error messages for the defined validation rules.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function messages()
-    {
+    public function messages(): array {
         return [
             'id.*' => 'Utility ID field is not valid.',
             'field_name.*' => 'Title is not valid.',
@@ -35,10 +33,9 @@ class UtilEditRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function rules()
-    {
+    public function rules(): array {
         return [
             'id' => 'required',
             'field_name' => 'required',
@@ -54,8 +51,7 @@ class UtilEditRequest extends FormRequest
      *
      * @return void
      */
-    protected function prepareForValidation()
-    {
+    protected function prepareForValidation(): void {
         $this->merge(['active_flag' => $this->toBoolean($this->active_flag)]);
 
         // Program Length Type values must be stored all in lower cases
@@ -74,11 +70,10 @@ class UtilEditRequest extends FormRequest
 
     /**
      * Convert to boolean
-     *
+     * @param mixed $booleable
      * @return bool
      */
-    private function toBoolean($booleable)
-    {
+    private function toBoolean(mixed $booleable): bool {
         return filter_var($booleable, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
     }
 }

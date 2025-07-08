@@ -4,6 +4,9 @@ namespace Modules\Twp\Entities;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Student extends ModuleModel
@@ -22,29 +25,39 @@ class Student extends ModuleModel
         'last_name', 'first_name', 'alias_name', 'birth_date', 'email', 'gender', 'pen', 'address', 'citizenship',
         'bc_resident', 'address', 'comment', 'sin', ];
 
-    public function applications()
-    {
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Application>
+     */
+    public function applications(): HasMany {
         return $this->hasMany('Modules\Twp\Entities\Application', 'student_id', 'id');
     }
 
-    public function programs()
-    {
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Program>
+     */
+    public function programs(): HasMany {
         return $this->hasMany('Modules\Twp\Entities\Program', 'student_id', 'id');
     }
 
-    public function application()
-    {
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne<Application>
+     */
+    public function application(): HasOne {
         return $this->hasOne('Modules\Twp\Entities\Application', 'student_id', 'id');
     }
 
-    public function indigeneity()
-    {
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<IndigeneityType>
+     */
+    public function indigeneity(): BelongsToMany {
         return $this->belongsToMany(
             'Modules\Twp\Entities\IndigeneityType', 'indigeneity_type_student');
     }
 
-    public function getAgeAttribute()
-    {
+    /**
+     * @return int|null
+     */
+    public function getAgeAttribute(): ?int {
         if (is_null($this->birth_date)) {
             return null;
         }
@@ -52,8 +65,10 @@ class Student extends ModuleModel
         return (new Carbon($this->birth_date))->age;
     }
 
-    public function getAppStatusAttribute()
-    {
+    /**
+     * @return string
+     */
+    public function getAppStatusAttribute(): string {
         return is_null($this->application) ? '' : $this->application->application_status;
     }
 }

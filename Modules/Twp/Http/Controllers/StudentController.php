@@ -2,9 +2,12 @@
 
 namespace Modules\Twp\Http\Controllers;
 
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use Inertia\Response;
 use Modules\Twp\Entities\Application;
 use Modules\Twp\Entities\IndigeneityType;
 use Modules\Twp\Entities\Institution;
@@ -16,6 +19,9 @@ use Modules\Twp\Http\Requests\StudentUpdateRequest;
 use Modules\Yeaf\Entities\Country;
 use Modules\Yeaf\Entities\Province;
 
+/**
+ *
+ */
 class StudentController extends Controller
 {
     /**
@@ -23,8 +29,7 @@ class StudentController extends Controller
      *
      * @return \Inertia\Response
      */
-    public function index()
-    {
+    public function index(): Response {
         $schools = Institution::orderBy('name', 'asc')->get();
         $students = $this->paginateStudents();
         [$countries, $provinces] = $this->getCountriesProvinces();
@@ -45,10 +50,9 @@ class StudentController extends Controller
      *
      * @return \Inertia\Response
      */
-    public function apps()
-    {
+    public function apps(): Response {
         $schools = Institution::orderBy('name', 'asc')->get();
-        $apps = new Application();
+        $apps = Application::query();
         $apps = $this->paginateApps($apps);
         [$countries, $provinces] = $this->getCountriesProvinces();
 
@@ -60,8 +64,7 @@ class StudentController extends Controller
      *
      * @return \Inertia\Response
      */
-    public function store(StudentStoreRequest $request)
-    {
+    public function store(StudentStoreRequest $request): Response {
         $schools = Institution::orderBy('name', 'asc')->get();
         $student = Student::create($request->validated());
         $student->indigeneity()->sync($request->safe()['indigeneity']);
@@ -85,8 +88,7 @@ class StudentController extends Controller
      *
      * @return \Inertia\Response
      */
-    public function show(Student $student)
-    {
+    public function show(Student $student): Response {
         $student = Student::where('id', $student->id)
             ->with(
                 'applications.reasons',
@@ -109,11 +111,12 @@ class StudentController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Modules\Twp\Http\Requests\StudentUpdateRequest $request
+     * @param \Modules\Twp\Entities\Student $student
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(StudentUpdateRequest $request, Student $student)
-    {
+    public function update(StudentUpdateRequest $request, Student $student): RedirectResponse {
         $studentRecord = Student::where('id', $student->id)->first();
         $studentRecord->update($request->validated());
         $studentRecord->indigeneity()->sync($request->safe()['indigeneity']);
@@ -124,11 +127,11 @@ class StudentController extends Controller
     /**
      * Soft delete the student
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Modules\Twp\Entities\Student $student
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function delete (Student $student) {
+    public function delete (Student $student): RedirectResponse {
         // Update Comment column
         $comment = request('comment');
         $student->update([
@@ -139,8 +142,10 @@ class StudentController extends Controller
         return redirect()->route('twp.students.index')->with('message', 'Student deleted successfully.');
     }
 
-    private function paginateStudents()
-    {
+    /**
+     * @return \Illuminate\Pagination\LengthAwarePaginator<Student>
+     */
+    private function paginateStudents(): LengthAwarePaginator {
         $students = Student::with('applications');
 
         if (request()->sort === 'app_status' && request()->direction !== 'ALL') {
@@ -176,7 +181,11 @@ class StudentController extends Controller
         return $students->paginate(25)->onEachSide(1)->appends(request()->query());
     }
 
-    private function paginateApps($apps)
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder<Application> $apps
+     * @return LengthAwarePaginator<Application>
+     */
+    private function paginateApps(\Illuminate\Database\Eloquent\Builder $apps): LengthAwarePaginator
     {
         $apps = $apps->with('student');
 
@@ -218,8 +227,10 @@ class StudentController extends Controller
         return $apps->paginate(25)->onEachSide(1)->appends(request()->query());
     }
 
-    private function getCountriesProvinces()
-    {
+    /**
+     * @return array{\Illuminate\Database\Eloquent\Collection<int, Country>, \Illuminate\Database\Eloquent\Collection<int, Province>}
+     */
+    private function getCountriesProvinces(): array {
         return [Country::orderBy('country_code', 'asc')->get(), Province::orderBy('province_code', 'asc')->get()];
     }
 
