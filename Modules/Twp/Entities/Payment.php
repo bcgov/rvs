@@ -7,6 +7,22 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ *
+ * @property int $id
+ * @property int $student_id
+ * @property int $program_id
+ * @property int $application_id
+ * @property string $payment_date
+ * @property float $payment_amount
+ * @property int $payment_type_id
+ * @property string|null $created_by
+ * @property string|null $updated_by
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $comment
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ */
 class Payment extends ModuleModel
 {
     use HasFactory;

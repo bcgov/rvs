@@ -6,6 +6,27 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ *
+ * @property int $id
+ * @property int $student_id
+ * @property int $application_id
+ * @property int|null $yeaf_institution_id
+ * @property int|null $yeaf_program_year_id
+ * @property string|null $yeaf_study_start_date
+ * @property string|null $yeaf_study_end_date
+ * @property string $study_field
+ * @property string|null $institution_name
+ * @property string|null $study_period_start_date
+ * @property string|null $credential
+ * @property int|null $program_length
+ * @property string|null $program_length_type
+ * @property float $total_estimated_cost
+ * @property string|null $student_status
+ * @property string|null $comments
+ * @property int|null $institution_twp_id
+ * @property string|null $credential_type
+ */
 class Program extends ModuleModel
 {
     use HasFactory;

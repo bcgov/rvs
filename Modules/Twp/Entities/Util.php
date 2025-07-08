@@ -6,6 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  *
+ * @property int $id
+ * @property string $field_name
+ * @property string $field_type
+ * @property string|null $field_description
+ * @property bool $active_flag
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  */
 class Util extends Model
 {

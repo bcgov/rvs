@@ -9,6 +9,21 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property int $id
+ * @property string|null $last_name
+ * @property string|null $first_name
+ * @property string|null $alias_name
+ * @property string|null $birth_date
+ * @property string|null $email
+ * @property string|null $gender
+ * @property string|null $pen
+ * @property string|null $address
+ * @property string|null $citizenship
+ * @property bool $bc_resident
+ * @property string|null $comment
+ * @property string|null $sin
+ */
 class Student extends ModuleModel
 {
     use HasFactory;

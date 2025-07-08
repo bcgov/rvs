@@ -10,6 +10,26 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property int $id
+ * @property int $student_id
+ * @property string $received_date
+ * @property string $application_status
+ * @property string|null $twp_status
+ * @property string|null $denial_reason
+ * @property string|null $exception_comments
+ * @property string|null $institution_student_number
+ * @property bool $apply_twp
+ * @property bool $apply_lfg
+ * @property string|null $confirmation_enrolment
+ * @property string|null $sabc_app_number
+ * @property string|null $fao_name
+ * @property string|null $fao_email
+ * @property string|null $fao_phone
+ * @property string|null $comment
+ * @property string|null $created_by
+ * @property string|null $updated_by
+ */
 class Application extends ModuleModel
 {
     use HasFactory;
