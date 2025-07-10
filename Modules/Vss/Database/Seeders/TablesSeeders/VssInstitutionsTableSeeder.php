@@ -13,11 +13,11 @@ class VssInstitutionsTableSeeder extends Seeder
         $faker = Faker::create();
 
         $institutions = [
-            'UBC' => 'University of British Columbia',
-            'SFU' => 'Simon Fraser University',
+            'UNBC' => 'University of British Columbia',
+            'SFUV' => 'Simon Fraser University',
             'UVic' => 'University of Victoria',
             'BCIT' => 'British Columbia Institute of Technology',
-            'VCC' => 'Vancouver Community College',
+            'VCCO' => 'Vancouver Community College',
         ];
 
         $locationCodes = ['BC', 'AB', 'ON', 'QC', 'NS'];

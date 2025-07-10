@@ -13,8 +13,7 @@ class VssController extends Controller
      *
      * @return Renderable
      */
-    public function index()
-    {
+    public function index(): Renderable {
         return view('vss::index');
     }
 
@@ -23,18 +22,17 @@ class VssController extends Controller
      *
      * @return Renderable
      */
-    public function create()
-    {
+    public function create(): Renderable {
         return view('vss::create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @return Renderable
+     * @param \Illuminate\Http\Request $request
+     *
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request): void {
         //
     }
 
@@ -44,8 +42,7 @@ class VssController extends Controller
      * @param  int  $id
      * @return Renderable
      */
-    public function show($id)
-    {
+    public function show($id): Renderable {
         return view('vss::show');
     }
 
@@ -55,8 +52,7 @@ class VssController extends Controller
      * @param  int  $id
      * @return Renderable
      */
-    public function edit($id)
-    {
+    public function edit($id): Renderable {
         return view('vss::edit');
     }
 
@@ -66,8 +62,7 @@ class VssController extends Controller
      * @param  int  $id
      * @return Renderable
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id) {
         //
     }
 
@@ -77,8 +72,7 @@ class VssController extends Controller
      * @param  int  $id
      * @return Renderable
      */
-    public function destroy($id)
-    {
+    public function destroy($id) {
         //
     }
 }

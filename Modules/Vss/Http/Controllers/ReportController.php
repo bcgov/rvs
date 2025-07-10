@@ -4,14 +4,25 @@ namespace Modules\Vss\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 use Modules\Vss\Entities\AreaOfAudit;
 use Modules\Vss\Entities\CaseFunding;
 use Modules\Vss\Entities\FundingType;
 use Modules\Vss\Entities\Incident;
 use PDF;
 
+/**
+ *
+ */
 class ReportController extends Controller
 {
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param \Modules\Vss\Entities\Incident $case
+     *
+     * @return mixed
+     */
     public function downloadSingleStudentReport(Request $request, Incident $case)
     {
         $case = Incident::where('id', $case->id)->with(
@@ -24,15 +35,21 @@ class ReportController extends Controller
         return $pdf->download(mt_rand().'-'.$case->incident_id.'-student_report.pdf');
     }
 
-    public function searchReports(Request $request)
-    {
+    /**
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Inertia\Response
+     */
+    public function searchReports(Request $request): Response {
         [$results['pre'], $results['post'], $results['total']] = $this->fetchReport($request);
 
         return Inertia::render('Vss::Reports', ['results' => $results, 'start' => $request->inputStartDate, 'end' => $request->inputEndDate]);
     }
 
-    private function fetchReport(Request $request)
-    {
+    /**
+     * @return array<int, array<string, array<string, float>>>
+     */
+    private function fetchReport(Request $request): array {
         $table = [];
         $funding_types = FundingType::orderBy('funding_type')->get();
         $areas_of_audit = AreaOfAudit::orderBy('description')->get();

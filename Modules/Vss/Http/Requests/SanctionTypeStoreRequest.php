@@ -13,18 +13,16 @@ class SanctionTypeStoreRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
-    {
+    public function authorize(): bool {
         return true;
     }
 
     /**
      * Get the error messages for the defined validation rules.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function messages()
-    {
+    public function messages(): array {
         return [
             'sanction_code.required' => 'Sanction Code field is required.',
             'sanction_code.unique' => 'Sanction Code is already in use.',
@@ -39,10 +37,9 @@ class SanctionTypeStoreRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function rules()
-    {
+    public function rules(): array {
         $sanction_code_rule = 'required|unique:'.env('DB_DATABASE_VSS').'.sanction_types,sanction_code';
         if (isset($this->id)) {
             $sanction_code_rule = 'required|unique:'.env('DB_DATABASE_VSS').'.sanction_types,sanction_code,'.$this->id.',id';
@@ -62,8 +59,7 @@ class SanctionTypeStoreRequest extends FormRequest
      *
      * @return void
      */
-    protected function prepareForValidation()
-    {
+    protected function prepareForValidation(): void {
         //if we are creating new record
         if (! isset($this->id)) {
             $last = SanctionType::select('sanction_code')->orderBy('sanction_code', 'desc')->first();

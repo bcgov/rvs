@@ -2,9 +2,12 @@
 
 namespace Modules\Vss\Http\Controllers;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Inertia\Response;
+use Inertia\ResponseFactory;
 use Modules\Vss\Entities\CaseFunding;
 use Modules\Vss\Entities\FundingType;
 use Modules\Vss\Entities\Incident;
@@ -15,11 +18,11 @@ class CaseFundingController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param string $id
      * @return \Inertia\Response|\Inertia\ResponseFactory
      */
-    public function show(Incident $caseFunding)
-    {
-        $case = Incident::where('id', $caseFunding->id)->with('funds.fundingType', 'institution')->first();
+    public function show(string $id): Response|ResponseFactory {
+        $case = Incident::with('funds.fundingType', 'institution')->findOrFail($id);
         $funds = FundingType::get();
         $schools = Institution::get();
 
@@ -31,8 +34,7 @@ class CaseFundingController extends Controller
      *
      * @return \Inertia\Response|\Inertia\ResponseFactory
      */
-    public function update(Request $request, Incident $caseFunding)
-    {
+    public function update(Request $request, Incident $caseFunding): Response|ResponseFactory {
         foreach ($request->old_rows as $row) {
             CaseFunding::where('id', $row['id'])
                 ->update([
@@ -67,8 +69,7 @@ class CaseFundingController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(CaseFunding $caseFunding)
-    {
+    public function destroy(CaseFunding $caseFunding): RedirectResponse {
         $incident_id = $caseFunding->incident_id;
         $caseFunding->deleted_by_user_id = Auth::user()->user_id;
         $caseFunding->save();
