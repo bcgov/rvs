@@ -184,9 +184,7 @@ class StudentController extends Controller
         }
 
         if (request()->filter_school !== null) {
-            $apps = $apps->whereHas('program', function ($q) {
-                $q->where('institution_id', request()->filter_school);
-            });
+            $apps = $apps->where('institution_id', request()->filter_school);
         }
 
         if (request()->sort !== null && request()->sort !== 'app_status') {
