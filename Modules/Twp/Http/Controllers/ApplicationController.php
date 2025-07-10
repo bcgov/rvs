@@ -2,16 +2,16 @@
 
 namespace Modules\Twp\Http\Controllers;
 
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
-use Inertia\Response;
 use Modules\Twp\Entities\Application;
 use Modules\Twp\Entities\Reason;
 use Modules\Twp\Http\Requests\ApplicationEditRequest ;
 use Modules\Twp\Http\Requests\ApplicationStoreRequest;
 use Modules\Yeaf\Entities\Admin;
-use PDF;
+
 
 /**
  *
@@ -111,9 +111,10 @@ class ApplicationController extends Controller
             'school_denied' => 'twp::school-denied',
             default => 'twp::student-success',
         };
-        $pdf = PDF::loadView($letter_file, compact('admin', 'reasons', 'app', 'now_d', 'contact_email', 'contact_name'));
-        $pdf->getDomPDF()->set_option('enable_php', true);
-        $pdf->set_paper('Letter', 'portrait');
+        $pdf = PDF::loadView($letter_file, compact('admin', 'reasons', 'app', 'now_d', 'contact_email', 'contact_name'))->setPaper('Letter', 'portrait')->setOptions([
+            'isHtml5ParserEnabled' => true,
+            'isRemoteEnabled' => true
+        ]);
         $file_name = $app->student->birth_date;
 
         $file_name = mt_rand().'-'.$file_name.'-letter.pdf';
@@ -138,9 +139,10 @@ class ApplicationController extends Controller
         $contact_name = $request->contact_name;
         $contact_email = $request->contact_email;
 
-        $pdf = PDF::loadView('twp::school-denied', compact('admin', 'reasons', 'app', 'now_d', 'contact_email', 'contact_name'));
-        $pdf->getDomPDF()->set_option('enable_php', true);
-        $pdf->set_paper('Letter', 'portrait');
+        $pdf = PDF::loadView('twp::school-denied', compact('admin', 'reasons', 'app', 'now_d', 'contact_email', 'contact_name'))->setPaper('Letter', 'portrait')->setOptions([
+            'isHtml5ParserEnabled' => true,
+            'isRemoteEnabled' => true
+        ]);
         $file_name = $app->student->birth_date;
 
         $file_name = mt_rand().'-'.$file_name.'-letter.pdf';
@@ -165,9 +167,10 @@ class ApplicationController extends Controller
         $contact_name = $request->contact_name;
         $contact_email = $request->contact_email;
 
-        $pdf = PDF::loadView('twp::student-transfer', compact('admin', 'reasons', 'app', 'now_d', 'contact_email', 'contact_name'));
-        $pdf->getDomPDF()->set_option('enable_php', true);
-        $pdf->set_paper('Letter', 'portrait');
+        $pdf = PDF::loadView('twp::student-transfer', compact('admin', 'reasons', 'app', 'now_d', 'contact_email', 'contact_name'))->setPaper('Letter', 'portrait')->setOptions([
+            'isHtml5ParserEnabled' => true,
+            'isRemoteEnabled' => true
+        ]);
         $file_name = $app->student->birth_date;
 
         $file_name = mt_rand().'-'.$file_name.'-letter.pdf';

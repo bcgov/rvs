@@ -8,7 +8,7 @@ class ModuleModel extends Model
 {
 
     /**
-     * @param array $attributes<int, mixed>
+     * @param array<string, mixed> $attributes
      */
     public function __construct(array $attributes = [])
     {
