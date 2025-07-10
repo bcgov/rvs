@@ -5,6 +5,12 @@ namespace Modules\Yeaf\Entities;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
 
+/**
+ * @property int $id
+ * @property string $batch_number
+ * @property string $batch_date
+ * @property-read string $batch_human_date
+ */
 class Batch extends ModuleModel
 {
     use HasFactory;
@@ -21,8 +27,7 @@ class Batch extends ModuleModel
 
     protected $appends = ['batch_human_date'];
 
-    public function getBatchHumanDateAttribute()
-    {
+    public function getBatchHumanDateAttribute(): string {
         $date = date('F Y', strtotime($this->batch_date));
 
         return Str::endsWith($this->batch_date, '15') ? $date.' - Mid' : $date.' - End';

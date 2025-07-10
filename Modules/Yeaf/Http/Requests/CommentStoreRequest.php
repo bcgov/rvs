@@ -2,7 +2,7 @@
 
 namespace Modules\Yeaf\Http\Requests;
 
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 
@@ -13,18 +13,16 @@ class CommentStoreRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
-    {
+    public function authorize(): bool {
         return true;
     }
 
     /**
      * Get the error messages for the defined validation rules.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function messages()
-    {
+    public function messages(): array {
         return [
             'student_id.*' => 'Some fields are missing!',
             'user_id.*' => 'Required field is missing.',
@@ -35,10 +33,9 @@ class CommentStoreRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function rules()
-    {
+    public function rules(): array {
         return [
             'student_id' => 'required',
             'user_id' => 'required',
@@ -51,21 +48,13 @@ class CommentStoreRequest extends FormRequest
      *
      * @return void
      */
-    protected function prepareForValidation()
-    {
-        $this->merge([
-            'user_id' => Str::upper(Auth::user()->user_id),
-        ]);
+    protected function prepareForValidation(): void {
+        $user = Auth::user();
 
-    }
-
-    /**
-     * Convert to boolean
-     *
-     * @return bool
-     */
-    private function toBoolean($booleable)
-    {
-        return filter_var($booleable, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+        if ($user) {
+            $this->merge([
+                'user_id' => Str::upper($user->user_id),
+            ]);
+        }
     }
 }

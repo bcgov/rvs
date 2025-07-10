@@ -5,6 +5,16 @@ namespace Modules\Yeaf\Entities;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property int $id
+ * @property string $student_id
+ * @property string $comment_text
+ * @property int $user_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read string $created_human_date
+ */
 class Comment extends ModuleModel
 {
     use HasFactory, SoftDeletes;
@@ -27,8 +37,8 @@ class Comment extends ModuleModel
         'date' => 'datetime',
     ];
 
-    public function getCreatedHumanDateAttribute()
+    public function getCreatedHumanDateAttribute(): string
     {
-        return date('d-M-y', strtotime($this->created_at));
+        return $this->created_at ? $this->created_at->format('Y-m-d H:i') : '';
     }
 }
