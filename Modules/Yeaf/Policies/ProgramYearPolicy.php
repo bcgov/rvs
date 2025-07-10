@@ -7,13 +7,9 @@ use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Modules\Yeaf\Entities\ProgramYear;
 
-class PogramYearPolicy
+class ProgramYearPolicy
 {
     use HandlesAuthorization;
-
-    public function before(User $user): bool {
-        return $user->hasRole(Role::SUPER_ADMIN) || $user->hasRole(Role::YEAF_ADMIN);
-    }
 
     /**
      * Determine whether the user can view any models.
