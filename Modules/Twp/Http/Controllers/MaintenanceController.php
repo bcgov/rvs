@@ -5,10 +5,12 @@ namespace Modules\Twp\Http\Controllers;
 use App\Http\Requests\StaffEditRequest;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
+use Inertia\Response;
 use Modules\Twp\Entities\Institution;
 use Modules\Twp\Entities\PaymentType;
 use Modules\Twp\Entities\Reason;
@@ -22,10 +24,10 @@ class MaintenanceController extends Controller
 {
     /**
      * Display a listing of the resource.
+     * @param  \Illuminate\Http\Request  $request
      *
-     * @return \Inertia\Response::render
      */
-    public function institutionList(Request $request): \Inertia\Response
+    public function institutionList(Request $request): Response
     {
         $schools = Institution::orderBy('created_at', 'desc')->get();
 
@@ -35,10 +37,12 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\RedirectResponse::render
+     * @param \Modules\Twp\Http\Requests\InstitutionStoreRequest $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function institutionStore(InstitutionStoreRequest $request): \Illuminate\Http\RedirectResponse
+    public function institutionStore(InstitutionStoreRequest $request): RedirectResponse
     {
         $this->authorize('create', Institution::class);
         Institution::create($request->all());
@@ -49,9 +53,11 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\RedirectResponse::render
+     * @param \Modules\Twp\Http\Requests\InstitutionEditRequest $request
+     * @param \Modules\Twp\Entities\Institution $institution
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function institutionUpdate(InstitutionEditRequest $request, Institution $institution): \Illuminate\Http\RedirectResponse
+    public function institutionUpdate(InstitutionEditRequest $request, Institution $institution): RedirectResponse
     {
         $this->authorize('update', $institution);
         Institution::where('id', $institution->id)->update($request->validated());
@@ -61,10 +67,10 @@ class MaintenanceController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
-     * @return \Inertia\Response::render
+     * @param \Illuminate\Http\Request $request
+     * @return \Inertia\Response
      */
-    public function staffList(Request $request): \Inertia\Response
+    public function staffList(Request $request): Response
     {
         $staff = User::with('roles')
             ->whereHas('roles', function ($q) {
@@ -85,9 +91,12 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response::render
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\User $user
+     *
+     * @return \Inertia\Response
      */
-    public function staffShow(Request $request, User $user): \Inertia\Response
+    public function staffShow(Request $request, User $user): Response
     {
         if ($user->roles->contains('name', Role::TWP_ADMIN)) {
             $user->access_type = 'A';
@@ -101,9 +110,13 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\RedirectResponse::render
+     * @param \App\Http\Requests\StaffEditRequest $request
+     * @param \App\Models\User $user
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function staffEdit(StaffEditRequest $request, User $user): \Illuminate\Http\RedirectResponse
+    public function staffEdit(StaffEditRequest $request, User $user): RedirectResponse
     {
         $this->authorize('update', $user);
 
@@ -134,10 +147,10 @@ class MaintenanceController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
-     * @return \Inertia\Response::render
+     * @param \Illuminate\Http\Request $request
+     * @return \Inertia\Response
      */
-    public function reasonList(Request $request): \Inertia\Response
+    public function reasonList(Request $request): Response
     {
         $reasons = Reason::get();
 
@@ -147,10 +160,13 @@ class MaintenanceController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\Request  $request
-     * @return \Illuminate\Http\RedirectResponse::render
+     * @param \App\Http\Requests\Request $request
+     * @param \Modules\Twp\Entities\Reason $reason
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function reasonUpdate(Request $request, Reason $reason): \Illuminate\Http\RedirectResponse
+    public function reasonUpdate(Request $request, Reason $reason): RedirectResponse
     {
         $this->authorize('update', Reason::class);
         $reason->reason_status = $request->reason_status;
@@ -165,9 +181,12 @@ class MaintenanceController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse::render
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function reasonStore(Request $request): \Illuminate\Http\RedirectResponse
+    public function reasonStore(Request $request): RedirectResponse
     {
         $this->authorize('create', Reason::class);
         Reason::create($request->all());
@@ -178,9 +197,12 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response::render
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Inertia\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function paymentList(Request $request): \Inertia\Response
+    public function paymentList(Request $request): Response
     {
         $this->authorize('create', PaymentType::class);
         $paymentTypes = PaymentType::get();
@@ -191,11 +213,13 @@ class MaintenanceController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\Request  $request
-     * @param  PaymentType  $paymentType
-     * @return \Illuminate\Http\RedirectResponse::render
+     * @param \App\Http\Requests\Request $request
+     * @param \Modules\Twp\Entities\PaymentType $payment
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function paymentUpdate(Request $request, PaymentType $payment): \Illuminate\Http\RedirectResponse
+    public function paymentUpdate(Request $request, PaymentType $payment): RedirectResponse
     {
         $this->authorize('update', PaymentType::class);
         $payment->title = $request->title;
@@ -208,9 +232,11 @@ class MaintenanceController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse::render
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function paymentStore(Request $request): \Illuminate\Http\RedirectResponse
+    public function paymentStore(Request $request): RedirectResponse
     {
         PaymentType::create($request->all());
 
@@ -220,19 +246,30 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response::render
+     * @param \Illuminate\Http\Request $request
+     * @param string $page
+     *
+     * @return \Inertia\Response
      */
-    public function goToPage(Request $request, $page = 'staff')
+    public function goToPage(Request $request, string $page = 'staff'): Response
     {
+        // Check if the page exists in the allowed pages
+        $allowedPages = ['staff', 'institutions', 'reasons', 'payments', 'utils', 'reports'];
+        if (!in_array($page, $allowedPages)) {
+            $page = 'staff'; // Default to staff if the page is not allowed
+        }
+
+        // Render the Inertia response with the specified page
         return Inertia::render('Twp::Maintenance', ['page' => $page]);
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response::render
+     * @param \Illuminate\Http\Request $request
+     * @return \Inertia\Response
      */
-    public function utilList(Request $request): \Inertia\Response
+    public function utilList(Request $request): Response
     {
         $utils = Util::orderBy('field_name', 'asc')->get();
 
@@ -253,9 +290,11 @@ class MaintenanceController extends Controller
     /**
      * Update a utility resource.
      *
-     * @return \Illuminate\Http\RedirectResponse::render
+     * @param \Modules\Twp\Http\Requests\UtilEditRequest $request
+     * @param \Modules\Twp\Entities\Util $util
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function utilUpdate(UtilEditRequest $request, Util $util): \Illuminate\Http\RedirectResponse
+    public function utilUpdate(UtilEditRequest $request, Util $util): RedirectResponse
     {
         $util->update($request->validated());
         $sortedUtils = Util::getSortedUtils();
@@ -267,9 +306,10 @@ class MaintenanceController extends Controller
     /**
      * Store a utility resource.
      *
-     * @return \Illuminate\Http\RedirectResponse::render
+     * @param \Modules\Twp\Http\Requests\UtilStoreRequest $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function utilStore(UtilStoreRequest $request): \Illuminate\Http\RedirectResponse
+    public function utilStore(UtilStoreRequest $request): RedirectResponse
     {
         Util::create($request->validated());
         $sortedUtils = Util::getSortedUtils();

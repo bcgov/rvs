@@ -4,8 +4,32 @@ namespace Modules\Twp\Entities;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property int $id
+ * @property int $student_id
+ * @property string $received_date
+ * @property string $application_status
+ * @property string|null $twp_status
+ * @property string|null $denial_reason
+ * @property string|null $exception_comments
+ * @property string|null $institution_student_number
+ * @property bool $apply_twp
+ * @property bool $apply_lfg
+ * @property string|null $confirmation_enrolment
+ * @property string|null $sabc_app_number
+ * @property string|null $fao_name
+ * @property string|null $fao_email
+ * @property string|null $fao_phone
+ * @property string|null $comment
+ * @property string|null $created_by
+ * @property string|null $updated_by
+ */
 class Application extends ModuleModel
 {
     use HasFactory;
@@ -20,8 +44,10 @@ class Application extends ModuleModel
         'institution_student_number', 'apply_twp', 'apply_lfg', 'confirmation_enrolment', 'sabc_app_number',
         'fao_name', 'fao_email', 'fao_phone', 'comment'];
 
-    public function reasons()
-    {
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Reason>
+     */
+    public function reasons(): BelongsToMany {
         return $this->belongsToMany(
             'Modules\Twp\Entities\Reason', // The model to access to
             'Modules\Twp\Entities\ApplicationReason', // The intermediate table that connects the Application with the Reason.
@@ -32,23 +58,31 @@ class Application extends ModuleModel
         );
     }
 
-    public function student()
-    {
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Student, Application>
+     */
+    public function student(): BelongsTo {
         return $this->belongsTo('Modules\Twp\Entities\Student', 'student_id', 'id');
     }
 
-    public function program()
-    {
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne<Program>
+     */
+    public function program(): HasOne {
         return $this->hasOne('Modules\Twp\Entities\Program', 'application_id', 'id');
     }
 
-    public function payments()
-    {
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Payment>
+     */
+    public function payments(): HasMany {
         return $this->hasMany('Modules\Twp\Entities\Payment', 'application_id', 'id');
     }
 
-    public function grants()
-    {
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Grant>
+     */
+    public function grants(): HasMany {
         return $this->hasMany('Modules\Twp\Entities\Grant', 'application_id', 'id')->orderByDesc('created_at');
     }
 }

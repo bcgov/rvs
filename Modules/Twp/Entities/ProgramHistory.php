@@ -3,6 +3,7 @@
 namespace Modules\Twp\Entities;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProgramHistory extends ModuleModel
 {
@@ -17,13 +18,17 @@ class ProgramHistory extends ModuleModel
         'program_length', 'program_length_type', 'total_estimated_cost', 'student_status', 'comments', 'credential_type',
         'institution_twp_id', 'program_twp_id', 'application_id', 'study_field', ];
 
-    public function program()
-    {
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Program, ProgramHistory>
+     */
+    public function program(): BelongsTo {
         return $this->belongsTo('Modules\Twp\Entities\Program', 'program_twp_id', 'id');
     }
 
-    public function student()
-    {
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Student, ProgramHistory>
+     */
+    public function student(): BelongsTo {
         return $this->belongsTo('Modules\Twp\Entities\Student', 'student_id', 'id');
     }
 }
