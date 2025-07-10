@@ -7,7 +7,21 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- *
+ * @property int $id
+ * @property int $student_id
+ * @property int $institution_id
+ * @property int|null $app_idx
+ * @property int|null $individual_idx
+ * @property int|null $application_year
+ * @property string|null $program_of_study
+ * @property string|null $status_code
+ * @property string|null $comment
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
+ * @property-read Student $student
+ * @property-read Institution $institution
+ * @property-read object|null $sfas_app
  */
 class Application extends ModuleModel
 {

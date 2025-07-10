@@ -86,7 +86,7 @@ class PlscController extends Controller
     public function show(Application $plsc): Response {
         $plsc = Application::where('id', $plsc->id)->first();
 
-        $qry = env('LFP_QUERY1').$plsc->sin;
+        $qry = env('LFP_QUERY1').$plsc->student->sin;
         $student = DB::connection('oracle')->select($qry);
 
         $application = [];
