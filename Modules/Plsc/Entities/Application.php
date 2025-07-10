@@ -2,9 +2,13 @@
 
 namespace Modules\Plsc\Entities;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ *
+ */
 class Application extends ModuleModel
 {
     use SoftDeletes;
@@ -27,17 +31,24 @@ class Application extends ModuleModel
     ];
 
 
-    public function student()
-    {
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Student, Application>
+     */
+    public function student(): BelongsTo {
         return $this->belongsTo('Modules\Plsc\Entities\Student');
     }
 
 
-    public function institution()
-    {
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Institution, Application>
+     */
+    public function institution(): BelongsTo {
         return $this->belongsTo('Modules\Plsc\Entities\Institution');
     }
 
+    /**
+     * @return object|null
+     */
     public function getSfasAppAttribute(): ?object
     {
         $appId = $this->attributes['app_idx'];

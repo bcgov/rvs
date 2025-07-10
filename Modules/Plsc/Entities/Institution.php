@@ -2,6 +2,8 @@
 
 namespace Modules\Plsc\Entities;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 class Institution extends ModuleModel
 {
 
@@ -12,8 +14,10 @@ class Institution extends ModuleModel
      */
     protected $fillable = ['name', 'contact_name', 'contact_email', 'active_flag'];
 
-    public function applications()
-    {
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Application>
+     */
+    public function applications(): HasMany {
         return $this->hasMany('Modules\Plsc\Entities\Application');
     }
 }

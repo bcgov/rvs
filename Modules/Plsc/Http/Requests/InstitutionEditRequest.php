@@ -12,18 +12,16 @@ class InstitutionEditRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
-    {
+    public function authorize(): bool {
         return true;
     }
 
     /**
      * Get the error messages for the defined validation rules.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function messages()
-    {
+    public function messages(): array {
         return [
             'name.required' => 'Institution Name field is required.',
             'name.string' => 'Institution Name field is not valid.',
@@ -36,10 +34,9 @@ class InstitutionEditRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function rules()
-    {
+    public function rules(): array {
         return [
             'active_flag' => 'required|boolean',
             'name' => 'required|string|unique:'.env('DB_DATABASE_TWP').'.institutions,name,'.$this->id.',id',
@@ -53,8 +50,7 @@ class InstitutionEditRequest extends FormRequest
      *
      * @return void
      */
-    protected function prepareForValidation()
-    {
+    protected function prepareForValidation(): void {
         if (isset($this->contact_name)) {
             $this->merge(['contact_name' => Str::title($this->contact_name)]);
         }
@@ -70,8 +66,7 @@ class InstitutionEditRequest extends FormRequest
      *
      * @return bool
      */
-    private function toBoolean($booleable)
-    {
+    private function toBoolean($booleable): bool {
         return filter_var($booleable, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
     }
 }
