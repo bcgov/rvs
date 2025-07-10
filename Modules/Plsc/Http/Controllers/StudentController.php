@@ -4,6 +4,7 @@ namespace Modules\Plsc\Http\Controllers;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -160,11 +161,11 @@ class StudentController extends Controller
     }
 
     /**
-     * @param $apps
+     * @param \Illuminate\Database\Eloquent\Builder<\Modules\Plsc\Entities\Application> $apps
      *
      * @return mixed
      */
-    private function paginateApps($apps): mixed {
+    private function paginateApps(Builder $apps): mixed {
         $apps = $apps->with('student');
 
         if (request()->sort === 'app_status' && request()->direction !== 'ALL') {

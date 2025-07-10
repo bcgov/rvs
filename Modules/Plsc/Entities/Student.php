@@ -19,7 +19,7 @@ class Student extends ModuleModel
         'citizenship', 'last_name', 'first_name', 'gender', 'pen', 'birth_date', 'sin', 'comment', 'individual_idx', ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Application>>
      */
     public function applications(): HasMany {
         return $this->hasMany('Modules\Plsc\Entities\Application');

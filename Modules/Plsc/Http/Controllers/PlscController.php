@@ -51,12 +51,12 @@ class PlscController extends Controller
     }
 
     /**
-     * @param $status
-     * @param $newApp
+     * @param bool $status
+     * @param int $newApp
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function sync($status = true, $newApp = 0): RedirectResponse {
+    public function sync(bool $status = true, int $newApp = 0): RedirectResponse {
         $qry = env("PLSC_APP_SYNC") . "0";
         //select last app entered
         $plsc = Application::select('id', 'app_idx', 'sin')->whereNotNull('app_idx')->orderBy('created_at', 'desc')->first();

@@ -64,9 +64,11 @@ class InstitutionStoreRequest extends FormRequest
     /**
      * Convert to boolean
      *
+     * @param mixed $booleable
+     *
      * @return bool
      */
-    private function toBoolean($booleable): bool {
+    private function toBoolean(mixed $booleable): bool {
         return filter_var($booleable, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
     }
 }
