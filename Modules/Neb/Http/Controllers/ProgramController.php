@@ -33,7 +33,7 @@ class ProgramController extends Controller
         if ($request->id) {
             $program = Program::find($request->id);
 
-            return Response::json([
+            return FacadeResponse::json([
                 'id' => $request->id,
                 'page' => 'programs',
                 'programs' => $program,
