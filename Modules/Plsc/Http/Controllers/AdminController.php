@@ -12,8 +12,7 @@ class AdminController extends Controller
      * Display a listing of the resource.
      * @return Renderable
      */
-    public function index()
-    {
+    public function index(): Renderable {
         return view('plsc::index');
     }
 
@@ -21,17 +20,16 @@ class AdminController extends Controller
      * Show the form for creating a new resource.
      * @return Renderable
      */
-    public function create()
-    {
+    public function create(): Renderable {
         return view('plsc::create');
     }
 
     /**
      * Store a newly created resource in storage.
      * @param Request $request
-     * @return Renderable
+     * @return void
      */
-    public function store(Request $request)
+    public function store(Request $request): void
     {
         //
     }
@@ -41,7 +39,7 @@ class AdminController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function show($id)
+    public function show($id): Renderable
     {
         return view('plsc::show');
     }
@@ -51,8 +49,7 @@ class AdminController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function edit($id)
-    {
+    public function edit($id): Renderable {
         return view('plsc::edit');
     }
 
@@ -60,9 +57,9 @@ class AdminController extends Controller
      * Update the specified resource in storage.
      * @param Request $request
      * @param int $id
-     * @return Renderable
+     * @return void
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): void
     {
         //
     }
@@ -70,9 +67,9 @@ class AdminController extends Controller
     /**
      * Remove the specified resource from storage.
      * @param int $id
-     * @return Renderable
+     * @return void
      */
-    public function destroy($id)
+    public function destroy($id): void
     {
         //
     }

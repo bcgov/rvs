@@ -2,11 +2,15 @@
 
 namespace Modules\Plsc\Http\Controllers;
 
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use Inertia\Response;
 use Modules\Plsc\Entities\Institution;
 use Modules\Plsc\Entities\Student;
 use Modules\Plsc\Http\Requests\StudentStoreRequest;
@@ -20,8 +24,7 @@ class StudentController extends Controller
      * Display a listing of the resource.
      * @return \Inertia\Response
      */
-    public function index()
-    {
+    public function index(): Response {
         $schools = Institution::orderBy('name', 'asc')->get();
         $students = $this->paginateStudents();
         [$countries, $provinces] = $this->getCountriesProvinces();
@@ -39,8 +42,7 @@ class StudentController extends Controller
      * Show the form for creating a new resource.
      * @return Renderable
      */
-    public function create()
-    {
+    public function create(): Renderable {
         return view('plsc::create');
     }
 
@@ -48,10 +50,11 @@ class StudentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
+     * @param \Modules\Plsc\Http\Requests\StudentStoreRequest $request
+     *
      * @return \Inertia\Response
      */
-    public function store(StudentStoreRequest $request)
-    {
+    public function store(StudentStoreRequest $request): Response {
         $schools = Institution::orderBy('name', 'asc')->get();
         $student = Student::create($request->validated());
         $students = $this->paginateStudents();
@@ -71,10 +74,11 @@ class StudentController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param \Modules\Plsc\Entities\Student $student
+     *
      * @return \Inertia\Response
      */
-    public function show(Student $student)
-    {
+    public function show(Student $student): Response {
         $student = Student::where('id', $student->id)
             ->with(
                 'applications')
@@ -91,19 +95,19 @@ class StudentController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function edit($id)
-    {
+    public function edit($id): Renderable {
         return view('plsc::edit');
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Modules\Plsc\Http\Requests\StudentUpdateRequest $request
+     * @param \Modules\Plsc\Entities\Student $student
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(StudentUpdateRequest $request, Student $student)
-    {
+    public function update(StudentUpdateRequest $request, Student $student): RedirectResponse {
         $studentRecord = Student::where('id', $student->id)->first();
         $studentRecord->update($request->validated());
 
@@ -113,16 +117,17 @@ class StudentController extends Controller
     /**
      * Remove the specified resource from storage.
      * @param int $id
-     * @return Renderable
+     *
      */
-    public function destroy($id)
-    {
+    public function destroy($id): void {
         //
     }
 
 
-    private function paginateStudents()
-    {
+    /**
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator<\Modules\Plsc\Entities\Student>
+     */
+    private function paginateStudents(): LengthAwarePaginator {
         $students = Student::with('applications');
 
         if (request()->sort === 'app_status' && request()->direction !== 'ALL') {
@@ -155,8 +160,12 @@ class StudentController extends Controller
         return $students->paginate(25)->onEachSide(1)->appends(request()->query());
     }
 
-    private function paginateApps($apps)
-    {
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder<\Modules\Plsc\Entities\Application> $apps
+     *
+     * @return mixed
+     */
+    private function paginateApps(Builder $apps): mixed {
         $apps = $apps->with('student');
 
         if (request()->sort === 'app_status' && request()->direction !== 'ALL') {
@@ -175,9 +184,7 @@ class StudentController extends Controller
         }
 
         if (request()->filter_school !== null) {
-            $apps = $apps->whereHas('program', function ($q) {
-                $q->where('institution_id', request()->filter_school);
-            });
+            $apps = $apps->where('institution_id', request()->filter_school);
         }
 
         if (request()->sort !== null && request()->sort !== 'app_status') {
@@ -192,8 +199,10 @@ class StudentController extends Controller
         return $apps->paginate(25)->onEachSide(1)->appends(request()->query());
     }
 
-    private function getCountriesProvinces()
-    {
+    /**
+     * @return  array{0: \Illuminate\Database\Eloquent\Collection<int, \Modules\Yeaf\Entities\Country>, 1: \Illuminate\Database\Eloquent\Collection<int, \Modules\Yeaf\Entities\Province>}
+     */
+    private function getCountriesProvinces(): array {
         return [Country::orderBy('country_code', 'asc')->get(), Province::orderBy('province_code', 'asc')->get()];
     }
 }
