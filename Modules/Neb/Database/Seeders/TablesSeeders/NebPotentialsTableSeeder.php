@@ -34,9 +34,13 @@ class NebPotentialsTableSeeder extends Seeder
                     'weekly_unmet_need' => $faker->randomFloat(2, 0, 500),
                     'program_year' => $faker->numberBetween(1, 4),
                     'street_address1' => $faker->streetAddress,
-                    'street_address2' => $faker->optional()->secondaryAddress,
+                    'street_address2' => $faker->optional()->streetAddress,
                     'city' => $faker->city,
-                    'province' => $faker->state,
+                    'province' => $faker->randomElement([
+                        'Alberta', 'British Columbia', 'Manitoba', 'New Brunswick',
+                        'Newfoundland and Labrador', 'Nova Scotia', 'Ontario',
+                        'Prince Edward Island', 'Quebec', 'Saskatchewan'
+                    ]),
                     'gender' => $faker->randomElement(['M', 'F', 'O']),
                     'phone_number' => $faker->numerify('##########'),
                     'study_start_date' => $studyStartDate,
