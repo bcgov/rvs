@@ -58,11 +58,11 @@ class UtilEditRequest extends FormRequest
     /**
      * Convert to boolean
      *
-     * @param $booleable
+     * @param bool $booleable
      *
      * @return bool
      */
-    private function toBoolean($booleable): bool {
+    private function toBoolean(bool $booleable): bool {
         return filter_var($booleable, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
     }
 }

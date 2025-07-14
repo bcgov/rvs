@@ -18,12 +18,16 @@ use Modules\Lfp\Http\Requests\LfpEditRequest;
 
 class LfpController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
+     * @param bool $status
+     * @param int $newApp
+     *
      * @return \Inertia\Response
      */
-    public function index($status = true, $newApp = 0): Response {
+    public function index(bool $status = true, int $newApp = 0): Response {
         $lfps = $this->paginateLfps();
         $last_sync = Util::where('field_type', 'Last Sync')->first();
 

@@ -32,10 +32,14 @@ class LfpStudentsTableSeeder extends Seeder
                     'citizenship' => substr($faker->country, 0, 20),
                     'marital_status' => $faker->randomElement(['Single', 'Married', 'Divorced', 'Widowed']),
                     'address1' => $faker->streetAddress,
-                    'address2' => $faker->optional()->secondaryAddress,
+                    'address2' => $faker->optional()->streetAddress,
                     'city' => $faker->city,
                     'postal_code' => substr($faker->postcode, 0, 7),
-                    'province' => $faker->state,
+                    'province' => $faker->randomElement([
+                        'Alberta', 'British Columbia', 'Manitoba', 'New Brunswick',
+                        'Newfoundland and Labrador', 'Nova Scotia', 'Ontario',
+                        'Prince Edward Island', 'Quebec', 'Saskatchewan'
+                    ]),
                     'country' => $faker->country,
                     'phone_number' => substr($faker->phoneNumber, 0, 10),
                     'email' => $faker->safeEmail,

@@ -66,12 +66,12 @@ class PaymentController extends Controller
 
     /**
      * @param \Illuminate\Http\Request $request
-     * @param $type
-     * @param $range
+     * @param string $type
+     * @param int $range
      *
      * @return \Illuminate\Http\Response|null
      */
-    public function downloadPayments(Request $request, $type, $range): \Illuminate\Http\Response|null
+    public function downloadPayments(Request $request, string $type, int $range): \Illuminate\Http\Response|null
     {
         // Disable the Debugbar for this specific response
         Debugbar::disable();
@@ -246,11 +246,11 @@ class PaymentController extends Controller
     }
 
     /**
-     * @param $record
+     * @param object $record
      *
      * @return string
      */
-    private function prepareCsvLine($record): string
+    private function prepareCsvLine(object $record): string
     {
         $csvValues = [
             $record->application_number,

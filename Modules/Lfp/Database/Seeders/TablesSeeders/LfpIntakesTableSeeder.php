@@ -36,7 +36,7 @@ class LfpIntakesTableSeeder extends Seeder
                     'denial_reason' => $faker->optional()->sentence,
                     'proposed_registration_date' => $faker->optional()
                         ->dateTimeBetween('now', '+1 year')
-                        ?->format('Y-m-d'),
+                        ->format('Y-m-d'),
                     'app_idx' => $appIdx,
                     'alias_name' => $faker->optional()->name,
                 ]

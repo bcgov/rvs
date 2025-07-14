@@ -42,7 +42,7 @@ class Payment extends ModuleModel
     }
 
     /**
-     * @param array $payIds
+     * @param array<int, string> $payIds
      *
      * @return array<object>|null
      */

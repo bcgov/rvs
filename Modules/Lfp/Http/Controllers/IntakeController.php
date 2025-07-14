@@ -46,7 +46,9 @@ class IntakeController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     * @param Request $request
+     *
+     * @param \Modules\Lfp\Http\Requests\IntakeStoreRequest $request
+     *
      * @return \Inertia\Response
      */
     public function store(IntakeStoreRequest $request): Response {
@@ -77,8 +79,10 @@ class IntakeController extends Controller
 
     /**
      * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
+     *
+     * @param \Modules\Lfp\Http\Requests\IntakeEditRequest $request
+     * @param \Modules\Lfp\Entities\Intake $intake
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(IntakeEditRequest $request, Intake $intake): RedirectResponse {

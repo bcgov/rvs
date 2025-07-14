@@ -56,7 +56,7 @@ class Lfp extends ModuleModel
     }
 
     /**
-     * @param array $sin
+     * @param array<string> $sin
      *
      * @return array<object>|null
      */
@@ -69,7 +69,7 @@ class Lfp extends ModuleModel
     }
 
     /**
-     * @param array $apps
+     * @param array<string> $apps
      *
      * @return array<object>|null
      */
