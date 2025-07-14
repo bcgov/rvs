@@ -48,7 +48,7 @@ class BursaryPeriodController extends Controller
         if ($request->id) {
             $bp = BursaryPeriod::find($request->id);
 
-            return Response::json([
+            return FacadeResponse::json([
                 'id' => $request->id,
                 'page' => 'bursary-periods',
                 'bp' => $bp,
