@@ -13,18 +13,16 @@ class LfpEditRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
-    {
+    public function authorize(): bool {
         return true;
     }
 
     /**
      * Get the error messages for the defined validation rules.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function messages()
-    {
+    public function messages(): array {
         return [
             'sin.*' => 'SIN field is not valid.',
         ];
@@ -33,10 +31,9 @@ class LfpEditRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function rules()
-    {
+    public function rules(): array {
         return [
             'id' => 'required',
             'sin' => 'required',
@@ -51,8 +48,7 @@ class LfpEditRequest extends FormRequest
      *
      * @return void
      */
-    protected function prepareForValidation()
-    {
+    protected function prepareForValidation(): void {
         if (isset($this->sin)) {
             //\D means "anything that isn't a digit":
             $this->merge(['sin' => preg_replace('/\D/', '', $this->sin)]);

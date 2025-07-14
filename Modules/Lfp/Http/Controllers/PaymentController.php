@@ -4,6 +4,7 @@ namespace Modules\Lfp\Http\Controllers;
 
 use Barryvdh\Debugbar\Facades\Debugbar;
 use Carbon\Carbon;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
@@ -22,10 +23,12 @@ class PaymentController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param bool $status
+     * @param int $newApp
+     *
      * @return \Inertia\Response
      */
-    public function index($status = true, $newApp = 0)
-    {
+    public function index($status = true, $newApp = 0): \Inertia\Response {
         $payments = $this->paginatePayments();
 
         return Inertia::render('Lfp::Payments', ['page' => 'applications', 'status' => $status, 'results' => $payments, 'app' => $newApp]);
@@ -34,9 +37,11 @@ class PaymentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
+     * @param \Modules\Lfp\Http\Requests\PaymentStoreRequest $request
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(PaymentStoreRequest $request)
+    public function store(PaymentStoreRequest $request): RedirectResponse
     {
         $payment = Payment::create($request->validated());
 
@@ -46,9 +51,12 @@ class PaymentController extends Controller
     /**
      * Update the specified resource in storage.
      *
+     * @param \Modules\Lfp\Http\Requests\PaymentEditRequest $request
+     * @param \Modules\Lfp\Entities\Payment $payment
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(PaymentEditRequest $request, Payment $payment)
+    public function update(PaymentEditRequest $request, Payment $payment): RedirectResponse
     {
         Payment::where('id', $payment->id)->update($request->validated());
         $payment = Payment::find($payment->id);
@@ -56,7 +64,14 @@ class PaymentController extends Controller
         return Redirect::route('lfp.applications.show', [$payment->lfp_id]);
     }
 
-    public function downloadPayments(Request $request, $type, $range)
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param $type
+     * @param $range
+     *
+     * @return \Illuminate\Http\Response|null
+     */
+    public function downloadPayments(Request $request, $type, $range): \Illuminate\Http\Response|null
     {
         // Disable the Debugbar for this specific response
         Debugbar::disable();
@@ -148,6 +163,7 @@ class PaymentController extends Controller
 
             // Close the CSV file
             fclose($csvFile);
+            return new \Illuminate\Http\Response();
 
         } catch (\Exception $exception) {
             Log::error('Error generating CSV for download: '.$exception);
@@ -156,8 +172,12 @@ class PaymentController extends Controller
         }
     }
 
-    private function paginatePayments()
-    {
+    /**
+     * @return mixed
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
+    private function paginatePayments(): mixed {
         $currentMonth = Carbon::now()->format('Y-m') . "-01";
         //$lastMonth = Carbon::now()->subMonth()->format('Y-m') . "-01";
         $monthBeforeLast = Carbon::now()->subMonths(2)->format('Y-m') . "-01";
@@ -225,7 +245,12 @@ class PaymentController extends Controller
         return $payments;
     }
 
-    private function prepareCsvLine($record)
+    /**
+     * @param $record
+     *
+     * @return string
+     */
+    private function prepareCsvLine($record): string
     {
         $csvValues = [
             $record->application_number,

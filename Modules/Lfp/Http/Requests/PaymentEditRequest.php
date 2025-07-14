@@ -13,18 +13,16 @@ class PaymentEditRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
-    {
+    public function authorize(): bool {
         return true;
     }
 
     /**
      * Get the error messages for the defined validation rules.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function messages()
-    {
+    public function messages(): array {
         return [
             'lfp_id.*' => 'LFP ID field is not valid.',
             'app_idx.*' => 'Missing connection to SFAS App.',
@@ -38,10 +36,9 @@ class PaymentEditRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function rules()
-    {
+    public function rules(): array {
         return [
             'id' => 'required',
             'lfp_id' => 'required|exists:Modules\Lfp\Entities\Lfp,id',

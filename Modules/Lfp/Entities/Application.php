@@ -3,6 +3,7 @@
 namespace Modules\Lfp\Entities;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Application extends ModuleModel
 {
@@ -16,8 +17,10 @@ class Application extends ModuleModel
     protected $fillable = [
         'lfp_id', 'application_number', ];
 
-    public function payment()
-    {
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Lfp, Application>
+     */
+    public function payment(): BelongsTo {
         return $this->belongsTo('Modules\Lfp\Entities\Lfp', 'lfp_id', 'id');
     }
 
