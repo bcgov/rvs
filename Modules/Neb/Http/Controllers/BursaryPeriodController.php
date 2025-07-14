@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Support\Facades\Response as FacadeResponse;
 use Modules\Neb\Entities\Application;
 use Modules\Neb\Entities\BursaryPeriod;
 use Modules\Neb\Entities\Neb;
@@ -31,7 +32,7 @@ class BursaryPeriodController extends Controller
     public function tobeAwarded(): JsonResponse {
         $bp = BursaryPeriod::where('awarded', false)->get();
 
-        return \Illuminate\Support\Facades\Response::json([
+        return FacadeResponse::json([
             'status' => 'success',
             'bp' => $bp,
         ]);
@@ -41,9 +42,9 @@ class BursaryPeriodController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return response.json
+     * @return \Illuminate\Http\JsonResponse.json
      */
-    public function fetch(Request $request): Response {
+    public function fetch(Request $request): JsonResponse {
         if ($request->id) {
             $bp = BursaryPeriod::find($request->id);
 
@@ -56,7 +57,7 @@ class BursaryPeriodController extends Controller
 
         $bursaryPeriods = BursaryPeriod::orderBy('bursary_period_start_date', 'desc')->get();
 
-        return Response::json([
+        return FacadeResponse::json([
             'page' => 'bursary-periods',
             'bp' => $bursaryPeriods,
         ]);
