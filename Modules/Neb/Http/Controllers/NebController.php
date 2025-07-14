@@ -2,11 +2,11 @@
 
 namespace Modules\Neb\Http\Controllers;
 
-use Auth;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
@@ -29,28 +29,28 @@ class NebController extends Controller
 {
 
     /**
-     * @var
+     * @var string
      */
     public $programCodesString;
 
     /**
-     * @var
+     * @var string
      */
     public $formattedBpsd;
 
     /**
-     * @var
+     * @var string
      */
     public $formattedBped;
 
     /**
      * @param \Illuminate\Http\Request $request
-     * @param $type
-     * @param $id
+     * @param string $type
+     * @param int $id
      *
      * @return \Symfony\Component\HttpFoundation\StreamedResponse|Response|null
      */
-    public function exportNeb(Request $request, $type, $id): StreamedResponse|Response|null {
+    public function exportNeb(Request $request, string $type, int $id): StreamedResponse|Response|null {
         $bursaryPeriod = BursaryPeriod::find($id);
         if ($bursaryPeriod == null) {
             return null;
@@ -62,6 +62,7 @@ class NebController extends Controller
                 'in' => 'ineligible',
                 'aw' => 'awarded',
                 'aw_txt' => 'awarded_text',
+                default => throw new \InvalidArgumentException("Invalid export type: $type")
             };
 
             //default to exporting awarded
@@ -837,12 +838,12 @@ class NebController extends Controller
     }
 
     /**
-     * @param $record
-     * @param $bp
+     * @param ElPotential $record
+     * @param BursaryPeriod $bp
      *
      * @return string
      */
-    public function awardedTextLine($record, $bp): string {
+    public function awardedTextLine(ElPotential $record, BursaryPeriod $bp): string {
         $line = 'SP04';
         $line .= $this->padStringWithSpaces(date('Ymd', strtotime($bp->bursary_period_start_date)), 8);
         $line .= $this->padStringWithSpaces(date('Ymd', strtotime($bp->bursary_period_end_date)), 8);
@@ -883,11 +884,11 @@ class NebController extends Controller
     }
 
     /**
-     * @param $record
+     * @param ElPotential $record
      *
      * @return string
      */
-    private function prepareCsvLine($record): string {
+    private function prepareCsvLine(ElPotential $record): string {
         $csvValues = [
             $record->application_number,
             $record->sin,
@@ -939,13 +940,13 @@ class NebController extends Controller
     }
 
     /**
-     * @param $inputString
-     * @param $desiredLength
-     * @param $preFixWithZero
+     * @param string|float|int|null $inputString
+     * @param int $desiredLength
+     * @param bool $preFixWithZero
      *
      * @return string
      */
-    private function padStringWithSpaces($inputString, $desiredLength, $preFixWithZero = false): string {
+    private function padStringWithSpaces(string|float|int|null $inputString, int $desiredLength, bool $preFixWithZero = false): string {
         if ($inputString === null) {
             $inputString = '';
         }
