@@ -11,18 +11,16 @@ class SfasProgramStoreRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
-    {
+    public function authorize(): bool {
         return true;
     }
 
     /**
      * Get the error messages for the defined validation rules.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function messages()
-    {
+    public function messages(): array {
         return [
         ];
     }
@@ -30,10 +28,9 @@ class SfasProgramStoreRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function rules()
-    {
+    public function rules(): array {
         return [
             'sfas_program_code' => 'required|unique:'.env('DB_DATABASE_NEB').'.sfas_programs,sfas_program_code|max:4',
             'area_of_study' => 'required|min:3',
@@ -49,7 +46,6 @@ class SfasProgramStoreRequest extends FormRequest
      *
      * @return void
      */
-    protected function prepareForValidation()
-    {
+    protected function prepareForValidation(): void {
     }
 }

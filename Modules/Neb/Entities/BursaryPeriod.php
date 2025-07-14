@@ -26,13 +26,17 @@ class BursaryPeriod extends ModuleModel
         'budget_allocation_type',
     ];
 
-    public function getBpsdAttribute()
-    {
+    /**
+     * @return string
+     */
+    public function getBpsdAttribute(): string {
         return date('y-m-d', strtotime($this->bursary_period_start_date));
     }
 
-    public function getBpedAttribute()
-    {
+    /**
+     * @return string
+     */
+    public function getBpedAttribute(): string {
         return date('y-m-d', strtotime($this->bursary_period_end_date));
     }
 }

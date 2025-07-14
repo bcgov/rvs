@@ -3,6 +3,7 @@
 namespace Modules\Neb\Entities;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ElPotential extends ModuleModel
@@ -26,12 +27,17 @@ class ElPotential extends ModuleModel
         'award_amount', 'sfas_award_id', 'supplier_no', 'created_by', 'finalized',
     ];
 
-    public function student()
-    {
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Student, ElPotential>
+     */
+    public function student(): BelongsTo {
         return $this->belongsTo('Modules\Neb\Entities\Student', 'sin', 'sin');
     }
 
-    public function bursaryPeriod()
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<BursaryPeriod, ElPotential>
+     */
+    public function bursaryPeriod(): BelongsTo
     {
         return $this->belongsTo('Modules\Neb\Entities\BursaryPeriod', 'bursary_period_id', 'id');
     }

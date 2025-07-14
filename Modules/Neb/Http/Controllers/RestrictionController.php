@@ -2,11 +2,13 @@
 
 namespace Modules\Neb\Http\Controllers;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use Inertia\Response;
 use Modules\Neb\Entities\Restriction;
 use Modules\Neb\Http\Requests\RestrictionStoreRequest;
-use Response;
+
 
 class RestrictionController extends Controller
 {
@@ -15,8 +17,7 @@ class RestrictionController extends Controller
      *
      * @return \Inertia\Response
      */
-    public function index()
-    {
+    public function index(): Response {
         return Inertia::render('Neb::Restrictions', ['page' => 'restrictions']);
     }
 
@@ -25,8 +26,7 @@ class RestrictionController extends Controller
      *
      * @return response.json
      */
-    public function fetch(\Illuminate\Http\Request $request)
-    {
+    public function fetch(\Illuminate\Http\Request $request): Response {
         if ($request->id) {
             $restriction = Restriction::find($request->id);
 
@@ -47,10 +47,11 @@ class RestrictionController extends Controller
     /**
      * Store a newly created resource in storage.
      *
+     * @param \Modules\Neb\Http\Requests\RestrictionStoreRequest $request
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(RestrictionStoreRequest $request)
-    {
+    public function store(RestrictionStoreRequest $request): RedirectResponse {
         $restriction = Restriction::create($request->validated());
 
         return Redirect::route('neb.restrictions.show', [$restriction->id]);

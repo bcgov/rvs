@@ -2,22 +2,23 @@
 
 namespace Modules\Neb\Http\Controllers;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use Inertia\Response;
 use Modules\Neb\Entities\Program;
 use Modules\Neb\Http\Requests\ProgramStoreRequest;
-use Response;
 
 class ProgramController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
      * @return \Inertia\Response
      */
-    public function index()
-    {
+    public function index(): Response {
         return Inertia::render('Neb::NebPrograms', ['page' => 'programs']);
     }
 
@@ -26,8 +27,7 @@ class ProgramController extends Controller
      *
      * @return response.json
      */
-    public function fetch(Request $request)
-    {
+    public function fetch(Request $request): Response {
         if ($request->id) {
             $program = Program::find($request->id);
 
@@ -49,10 +49,11 @@ class ProgramController extends Controller
     /**
      * Store a newly created resource in storage.
      *
+     * @param \Modules\Neb\Http\Requests\ProgramStoreRequest $request
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(ProgramStoreRequest $request)
-    {
+    public function store(ProgramStoreRequest $request): RedirectResponse {
         $program = Program::create($request->validated());
 
         return Redirect::route('neb.programs.show', [$program->id]);

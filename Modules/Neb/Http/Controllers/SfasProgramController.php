@@ -2,12 +2,13 @@
 
 namespace Modules\Neb\Http\Controllers;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use Inertia\Response;
 use Modules\Neb\Entities\Program;
 use Modules\Neb\Entities\SfasProgram;
 use Modules\Neb\Http\Requests\SfasProgramStoreRequest;
-use Response;
 
 class SfasProgramController extends Controller
 {
@@ -16,8 +17,7 @@ class SfasProgramController extends Controller
      *
      * @return \Inertia\Response
      */
-    public function index()
-    {
+    public function index(): Response {
         return Inertia::render('Neb::SfasPrograms', ['page' => 'sfas-programs']);
     }
 
@@ -26,8 +26,7 @@ class SfasProgramController extends Controller
      *
      * @return response.json
      */
-    public function fetch(\Illuminate\Http\Request $request)
-    {
+    public function fetch(\Illuminate\Http\Request $request): Response {
         if ($request->id) {
             $sfasProgram = SfasProgram::find($request->id);
 
@@ -50,10 +49,11 @@ class SfasProgramController extends Controller
     /**
      * Store a newly created resource in storage.
      *
+     * @param \Modules\Neb\Http\Requests\SfasProgramStoreRequest $request
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(SfasProgramStoreRequest $request)
-    {
+    public function store(SfasProgramStoreRequest $request): RedirectResponse {
         $sfasProgram = SfasProgram::create($request->validated());
 
         return Redirect::route('neb.sfas-programs.show', [$sfasProgram->id]);

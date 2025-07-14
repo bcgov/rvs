@@ -3,6 +3,7 @@
 namespace Modules\Neb\Entities;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Neb extends ModuleModel
 {
@@ -20,11 +21,16 @@ class Neb extends ModuleModel
         'awarded_in_prior_year', 'withdrawal', 'neb_ineligible_reason',
     ];
 
-    public function application()
-    {
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Application, Neb>
+     */
+    public function application(): BelongsTo {
         return $this->belongsTo('Modules\Neb\Entities\Application', 'application_id', 'application_id');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<BursaryPeriod, Neb>
+     */
     public function bursaryPeriod()
     {
         return $this->belongsTo('Modules\Neb\Entities\BursaryPeriod', 'bursary_period_id', 'id');

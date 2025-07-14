@@ -21,8 +21,7 @@ class NebServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
-    {
+    public function boot(): void {
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
@@ -34,8 +33,7 @@ class NebServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
-    {
+    public function register(): void {
         $this->app->register(RouteServiceProvider::class);
     }
 
@@ -44,8 +42,7 @@ class NebServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function registerConfig()
-    {
+    protected function registerConfig(): void {
         $this->publishes([
             module_path($this->moduleName, 'Config/config.php') => config_path($this->moduleNameLower.'.php'),
         ], 'config');
@@ -59,8 +56,7 @@ class NebServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function registerViews()
-    {
+    public function registerViews(): void {
         $viewPath = resource_path('views/modules/'.$this->moduleNameLower);
 
         $sourcePath = module_path($this->moduleName, 'Resources/views');
@@ -77,8 +73,7 @@ class NebServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function registerTranslations()
-    {
+    public function registerTranslations(): void {
         $langPath = resource_path('lang/modules/'.$this->moduleNameLower);
 
         if (is_dir($langPath)) {
@@ -91,13 +86,15 @@ class NebServiceProvider extends ServiceProvider
     /**
      * Get the services provided by the provider.
      *
-     * @return array
+     * @return array<string>
      */
-    public function provides()
-    {
+    public function provides(): array {
         return [];
     }
 
+    /**
+     * @return array<string>
+     */
     private function getPublishableViewPaths(): array
     {
         $paths = [];
