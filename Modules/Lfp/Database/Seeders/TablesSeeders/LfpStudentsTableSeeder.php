@@ -40,7 +40,7 @@ class LfpStudentsTableSeeder extends Seeder
                         'Newfoundland and Labrador', 'Nova Scotia', 'Ontario',
                         'Prince Edward Island', 'Quebec', 'Saskatchewan'
                     ]),
-                    'country' => $faker->country,
+                    'country' => substr($faker->country, 0, 40),
                     'phone_number' => substr($faker->phoneNumber, 0, 10),
                     'email' => $faker->safeEmail,
                     'created_at' => now(),
