@@ -15,12 +15,12 @@
 use Modules\Plsc\Http\Controllers\ApplicationController;
 use Modules\Plsc\Http\Controllers\StudentController;
 
-Route::prefix('plsc')->group(function () {
+Route::prefix('plsc')->group(function (): void {
     Route::group(
         [
             'middleware' => ['auth', 'plsc_active'],
             'as' => 'plsc.',
-        ], function () {
+        ], function (): void {
 
         Route::resource('students', StudentController::class);
         Route::resource('applications', ApplicationController::class);

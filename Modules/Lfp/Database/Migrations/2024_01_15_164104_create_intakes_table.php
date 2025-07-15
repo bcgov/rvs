@@ -13,7 +13,7 @@ class CreateIntakesTable extends Migration
      */
     public function up()
     {
-        Schema::connection(env('DB_DATABASE_LFP'))->create('intakes', function (Blueprint $table) {
+        Schema::connection(env('DB_DATABASE_LFP'))->create('intakes', function (Blueprint $table): void {
             $table->id();
             $table->bigInteger('sin')->nullable()->comment('Social insurance number.');
             $table->string('first_name', 30)->nullable();

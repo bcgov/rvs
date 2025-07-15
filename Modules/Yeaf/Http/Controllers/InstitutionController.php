@@ -71,11 +71,11 @@ class InstitutionController extends Controller
     }
 
     /**
-     * @param Builder<Institution> $schools
+     * @param \Illuminate\Database\Eloquent\Builder|\Modules\Yeaf\Entities\Institution $schools
      *
      * @return LengthAwarePaginator<Institution>
      */
-    private function paginateSchools(Builder $schools): LengthAwarePaginator
+    private function paginateSchools(Builder|Institution $schools): LengthAwarePaginator
     {
         if (request()->filter_name !== null) {
             $schools = $schools->where('name', 'ILIKE', '%'.request()->filter_name.'%');

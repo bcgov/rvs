@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::connection(env('DB_DATABASE_NEB'))->create('el_potential_restriction_details', function (Blueprint $table) {
+        Schema::connection(env('DB_DATABASE_NEB'))->create('el_potential_restriction_details', function (Blueprint $table): void {
             $table->id();
             $table->bigInteger('sin')->nullable();
             $table->string('restriction_code', 12)->nullable();

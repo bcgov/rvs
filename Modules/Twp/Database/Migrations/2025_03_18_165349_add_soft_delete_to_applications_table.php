@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::connection(env('DB_DATABASE_TWP'))
-            ->table('applications', function (Blueprint $table) {
+            ->table('applications', function (Blueprint $table): void {
                 $table->softDeletes();
             });
     }
@@ -22,7 +22,7 @@ return new class extends Migration
      */
     public function down(): void {
         Schema::connection(env('DB_DATABASE_TWP'))
-            ->table('applications', function (Blueprint $table) {
+            ->table('applications', function (Blueprint $table): void {
                 $table->dropSoftDeletes();
             });
     }

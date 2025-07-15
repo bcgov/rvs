@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         if (! Schema::connection(env('DB_DATABASE_TWP'))->hasTable('programs')) {
-            Schema::connection(env('DB_DATABASE_TWP'))->create('programs', function (Blueprint $table) {
+            Schema::connection(env('DB_DATABASE_TWP'))->create('programs', function (Blueprint $table): void {
                 $table->id();
 
                 $table->bigInteger('student_id');

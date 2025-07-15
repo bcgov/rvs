@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::connection(env('DB_DATABASE_NEB'))->create('students', function (Blueprint $table) {
+        Schema::connection(env('DB_DATABASE_NEB'))->create('students', function (Blueprint $table): void {
             $table->id();
             $table->bigInteger('sin')->comment('Social insurance number.');
             $table->bigInteger('pen')->nullable()->comment('Personal education number.');

@@ -128,7 +128,7 @@ class ReportController extends Controller
 
     public function staff(Request $request): JsonResponse {
         $users = User::select('id', 'user_id', 'first_name', 'last_name', 'disabled',
-            'access_type', 'tele', 'email')->whereHas('roles', function ($q) {
+            'access_type', 'tele', 'email')->whereHas('roles', function ($q): void {
                 $q->whereIn('name', ['TWP Admin', 'TWP User']);
             })->get();
 

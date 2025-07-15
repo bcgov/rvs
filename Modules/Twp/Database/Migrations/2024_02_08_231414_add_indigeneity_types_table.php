@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::connection(env('DB_DATABASE_TWP'))->create('indigeneity_types', function (Blueprint $table) {
+        Schema::connection(env('DB_DATABASE_TWP'))->create('indigeneity_types', function (Blueprint $table): void {
             $table->id();
             $table->string('title')->nullable();
             $table->boolean('active_flag')->default(true);

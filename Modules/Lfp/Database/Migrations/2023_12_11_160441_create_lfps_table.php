@@ -13,7 +13,7 @@ class CreateLfpsTable extends Migration
      */
     public function up()
     {
-        Schema::connection(env('DB_DATABASE_LFP'))->create('lfps', function (Blueprint $table) {
+        Schema::connection(env('DB_DATABASE_LFP'))->create('lfps', function (Blueprint $table): void {
             $table->id();
 
             $table->bigInteger('application_id')->nullable();

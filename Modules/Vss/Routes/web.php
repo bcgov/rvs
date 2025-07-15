@@ -11,13 +11,13 @@
 |
 */
 
-Route::prefix('vss')->group(function () {
+Route::prefix('vss')->group(function (): void {
     //    Route::get('/', 'VssController@index');
     Route::group(
         [
             'middleware' => ['auth', 'vss_active'],
             'as' => 'vss.',
-        ], function () {
+        ], function (): void {
             Route::get('/fetch-active-users', 'AdminController@activeUsers')->name('fetch-active-users');
             Route::get('/fetch-cancelled-users', 'AdminController@cancelledUsers')->name('fetch-cancelled-users');
 
@@ -42,14 +42,14 @@ Route::prefix('vss')->group(function () {
             Route::post('/reports', 'ReportController@searchReports')->name('reports-search');
 
         //authenticated admin routes
-            Route::group(['middleware' => 'vss_admin'], function () {
+            Route::group(['middleware' => 'vss_admin'], function (): void {
 
-                Route::name('maintenance.')->group(function () {
+                Route::name('maintenance.')->group(function (): void {
                     Route::get('/maintenance/staff', 'MaintenanceController@staffList')->name('staff.list');
                     Route::get('/maintenance/staff/{user}', 'MaintenanceController@staffShow')->name('staff.show');
                     Route::post('/maintenance/staff/{user}', 'MaintenanceController@staffEdit')->name('staff.edit');
 
-                    Route::prefix('maintenance')->group(function () {
+                    Route::prefix('maintenance')->group(function (): void {
                         Route::resource('area-of-audit', Modules\Vss\Http\Controllers\AreaOfAuditController::class);
                         Route::resource('sanction-type', Modules\Vss\Http\Controllers\SanctionTypeController::class);
                         Route::resource('nature-offence', Modules\Vss\Http\Controllers\NatureOffenceController::class);

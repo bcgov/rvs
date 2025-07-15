@@ -13,7 +13,7 @@ class CreateUtilsTable extends Migration
      */
     public function up()
     {
-        Schema::connection(env('DB_DATABASE_LFP'))->create('utils', function (Blueprint $table) {
+        Schema::connection(env('DB_DATABASE_LFP'))->create('utils', function (Blueprint $table): void {
             $table->id();
 
             $table->string('field_name');
