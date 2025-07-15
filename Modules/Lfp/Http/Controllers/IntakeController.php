@@ -4,11 +4,14 @@ namespace Modules\Lfp\Http\Controllers;
 
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use Inertia\Response;
 use Modules\Lfp\Entities\Intake;
 use Modules\Lfp\Entities\Util;
 use Modules\Lfp\Http\Requests\IntakeEditRequest;
@@ -20,8 +23,7 @@ class IntakeController extends Controller
      * Display a listing of the resource.
      * @return \Inertia\Response
      */
-    public function index()
-    {
+    public function index(): Response {
         $intakes = $this->paginateIntakes();
 
         return Inertia::render('Lfp::Intakes', ['page' => 'intakes', 'results' => $intakes]);
@@ -31,8 +33,7 @@ class IntakeController extends Controller
      * Show the form for creating a new resource.
      * @return \Inertia\Response
      */
-    public function create()
-    {
+    public function create(): Response {
         $utils_array = [];
         $utils = Util::whereIn('field_type', ['Profession', 'Employer', 'Community', 'Employment Status'])
             ->where('active_flag', true)->orderBy('field_name', 'asc')->get();
@@ -45,11 +46,12 @@ class IntakeController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     * @param Request $request
+     *
+     * @param \Modules\Lfp\Http\Requests\IntakeStoreRequest $request
+     *
      * @return \Inertia\Response
      */
-    public function store(IntakeStoreRequest $request)
-    {
+    public function store(IntakeStoreRequest $request): Response {
         $intake = Intake::create($request->validated());
         $intakes = $this->paginateIntakes();
 
@@ -61,8 +63,7 @@ class IntakeController extends Controller
      * @param Intake $intake
      * @return \Inertia\Response
      */
-    public function show(Intake $intake)
-    {
+    public function show(Intake $intake): Response {
         //$intake = Intake::where('id', $intake->id)->first();
         $utils_array = [];
         $utils = Util::whereIn('field_type', ['Profession', 'Employer', 'Community', 'Employment Status', 'Remove Reason'])
@@ -78,18 +79,22 @@ class IntakeController extends Controller
 
     /**
      * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
+     *
+     * @param \Modules\Lfp\Http\Requests\IntakeEditRequest $request
+     * @param \Modules\Lfp\Entities\Intake $intake
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(IntakeEditRequest $request, Intake $intake)
-    {
+    public function update(IntakeEditRequest $request, Intake $intake): RedirectResponse {
         Intake::where('id', $intake->id)->update($request->validated());
 
         return Redirect::route('lfp.intakes.show', [$intake->id]);
     }
 
-    private function paginateIntakes()
+    /**
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator<Intake>
+     */
+    private function paginateIntakes(): LengthAwarePaginator
     {
         $intakes = new Intake();
 

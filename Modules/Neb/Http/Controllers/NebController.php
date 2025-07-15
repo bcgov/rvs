@@ -2,13 +2,16 @@
 
 namespace Modules\Neb\Http\Controllers;
 
-use Auth;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Http\Response as HttpResponse;
 use Inertia\Inertia;
 use Modules\Neb\Entities\Application;
 use Modules\Neb\Entities\BursaryPeriod;
@@ -20,17 +23,34 @@ use Modules\Neb\Entities\Neb;
 use Modules\Neb\Entities\Restriction;
 use Modules\Neb\Entities\SfasProgram;
 use Modules\Neb\Entities\Student;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class NebController extends Controller
 {
+
+    /**
+     * @var string
+     */
     public $programCodesString;
 
+    /**
+     * @var string
+     */
     public $formattedBpsd;
 
+    /**
+     * @var string
+     */
     public $formattedBped;
 
-    public function exportNeb(Request $request, $type, $id)
-    {
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param string $type
+     * @param int $id
+     *
+     * @return \Symfony\Component\HttpFoundation\StreamedResponse|Response|null
+     */
+    public function exportNeb(Request $request, string $type, int $id): StreamedResponse|Response|null {
         $bursaryPeriod = BursaryPeriod::find($id);
         if ($bursaryPeriod == null) {
             return null;
@@ -42,6 +62,7 @@ class NebController extends Controller
                 'in' => 'ineligible',
                 'aw' => 'awarded',
                 'aw_txt' => 'awarded_text',
+                default => throw new \InvalidArgumentException("Invalid export type: $type")
             };
 
             //default to exporting awarded
@@ -96,12 +117,16 @@ class NebController extends Controller
         } catch (\Exception $exception) {
             Log::error('Error generating CSV for download: '.$exception);
 
-            return Response::make('Internal server error.', 500, []);
+            return HttpResponse::make('Internal server error.', 500, []);
         }
     }
 
-    public function fetchNeb(Request $request)
-    {
+    /**
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Inertia\Response|null
+     */
+    public function fetchNeb(Request $request): ?\Inertia\Response {
         $bpId = $request->id ?? $request->input('id');
         $sortBy = $request->input('sort_by') ?? 'id';
         $sortDir = $request->input('sort_dir') ?? 'asc';
@@ -138,7 +163,12 @@ class NebController extends Controller
 
     // FINALIZE FUNCTIONS START HERE
 
-    public function finalizeNeb(Request $request)
+    /**
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Inertia\Response|null
+     */
+    public function finalizeNeb(Request $request): RedirectResponse|\Inertia\Response|null
     {
         $bursaryPeriod = BursaryPeriod::find($request->input('bursary_period_id'));
         if ($bursaryPeriod == null) {
@@ -173,7 +203,12 @@ class NebController extends Controller
         return Redirect::route('neb.bursary-periods.show', [$bursaryPeriod->id]);
     }
 
-    private function processStudents(BursaryPeriod $bP)
+    /**
+     * @param \Modules\Neb\Entities\BursaryPeriod $bP
+     *
+     * @return true
+     */
+    private function processStudents(BursaryPeriod $bP): true
     {
         $students = ElPotential::where('bursary_period_id', $bP->id)->get();
         foreach ($students as $student) {
@@ -195,8 +230,12 @@ class NebController extends Controller
         return true;
     }
 
-    private function createApplications(BursaryPeriod $bP)
-    {
+    /**
+     * @param \Modules\Neb\Entities\BursaryPeriod $bP
+     *
+     * @return true
+     */
+    private function createApplications(BursaryPeriod $bP): true {
         $now = Carbon::now();
         $potentials = ElPotential::where('bursary_period_id', $bP->id)->get();
 
@@ -240,8 +279,12 @@ class NebController extends Controller
         return true;
     }
 
-    private function cleanup(BursaryPeriod $bP)
-    {
+    /**
+     * @param \Modules\Neb\Entities\BursaryPeriod $bP
+     *
+     * @return true
+     */
+    private function cleanup(BursaryPeriod $bP): true {
 
         ElPotential::where('bursary_period_id', $bP->id)->update(['finalized' => true]);
         $bP->awarded = true;
@@ -250,8 +293,12 @@ class NebController extends Controller
         return true;
     }
 
-    public function processNeb(Request $request)
-    {
+    /**
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Inertia\Response|null
+     */
+    public function processNeb(Request $request): RedirectResponse|\Inertia\Response|null {
         ini_set('memory_limit', '512M');
 
         $bursaryPeriod = BursaryPeriod::find($request->input('bursary_period_id'));
@@ -321,10 +368,11 @@ class NebController extends Controller
      *
      * @input bp: BursaryPeriod object
      *
-     * @return \Illuminate\Database\Eloquent\Collection.json
+     * @param \Modules\Neb\Entities\BursaryPeriod $bP
+     *
+     * @return null|\Illuminate\Database\Eloquent\Collection<int, ElPotential>
      */
-    private function nebElPotentials(BursaryPeriod $bP)
-    {
+    private function nebElPotentials(BursaryPeriod $bP): null|Collection {
         if ($bP == null) {
             return null;
         }
@@ -413,8 +461,12 @@ class NebController extends Controller
         return ElPotential::all();
     }
 
-    private function monthOverlap(BursaryPeriod $bP)
-    {
+    /**
+     * @param \Modules\Neb\Entities\BursaryPeriod $bP
+     *
+     * @return array<string>|Collection<int, ElPotential>
+     */
+    private function monthOverlap(BursaryPeriod $bP): array|Collection {
         \Log::info('processing: monthOverlap');
         $potentials = ElPotential::where('bursary_period_id', $bP->id)->get();
 
@@ -454,8 +506,12 @@ class NebController extends Controller
         return $potentials;
     }
 
-    private function validInstitution(BursaryPeriod $bP)
-    {
+    /**
+     * @param \Modules\Neb\Entities\BursaryPeriod $bP
+     *
+     * @return array<ElPotential>
+     */
+    private function validInstitution(BursaryPeriod $bP): array {
         \Log::info('processing: validInstitution');
         $envQuery1 = env('VALIDATE_INSTITUTION_QUERY1');
         $strSQL3 = DB::connection('oracle')->select($envQuery1);
@@ -474,8 +530,12 @@ class NebController extends Controller
         return $strSQL3;
     }
 
-    private function restriction(BursaryPeriod $bP)
-    {
+    /**
+     * @param \Modules\Neb\Entities\BursaryPeriod $bP
+     *
+     * @return array<ElPotential>
+     */
+    private function restriction(BursaryPeriod $bP): array {
         $restrictionCodes = Restriction::select('restriction_code')->get();
         $restrictionString = $restrictionCodes->pluck('restriction_code')->map(function ($row) {
             return "'".$row."'";
@@ -528,8 +588,12 @@ class NebController extends Controller
         return $strSQL2;
     }
 
-    private function awardedInPriorYear(BursaryPeriod $bP)
-    {
+    /**
+     * @param \Modules\Neb\Entities\BursaryPeriod $bP
+     *
+     * @return mixed
+     */
+    private function awardedInPriorYear(BursaryPeriod $bP): mixed {
         $bpLastTwo = BursaryPeriod::select('id')->whereNot('id', $bP->id)->orderBy('id', 'desc')->limit(2)->get();
         $awardedApps = Application::distinct('applications.sin')
             ->join('nebs', 'nebs.application_id', '=', 'applications.id')
@@ -541,8 +605,12 @@ class NebController extends Controller
         return ElPotential::where('bursary_period_id', $bP->id)->whereIn('sin', $awardedApps)->update(['awarded_in_prior_year' => true]);
     }
 
-    private function withdrawal(BursaryPeriod $bP)
-    {
+    /**
+     * @param \Modules\Neb\Entities\BursaryPeriod $bP
+     *
+     * @return mixed
+     */
+    private function withdrawal(BursaryPeriod $bP): mixed {
         $envQuery = env('WITHDRAWALS_QUERY1');
         $qry = sprintf($envQuery, $this->programCodesString, $this->formattedBpsd, $this->formattedBped, $this->formattedBpsd, $this->formattedBped, $this->formattedBpsd, $this->formattedBped);
 
@@ -553,8 +621,12 @@ class NebController extends Controller
             ->whereIn('sin', $restrictedSinArray)->update(['withdrawal' => true]);
     }
 
-    private function nurseType(BursaryPeriod $bP)
-    {
+    /**
+     * @param \Modules\Neb\Entities\BursaryPeriod $bP
+     *
+     * @return mixed
+     */
+    private function nurseType(BursaryPeriod $bP): mixed {
         $elPot = ElPotential::where('bursary_period_id', $bP->id)
             ->select('el_potentials.id', 'sfas_programs.nurse_type')
             ->join('sfas_programs', 'sfas_programs.sfas_program_code', 'el_potentials.program_code')
@@ -567,8 +639,12 @@ class NebController extends Controller
         return $elPot;
     }
 
-    private function eligibility(BursaryPeriod $bP)
-    {
+    /**
+     * @param \Modules\Neb\Entities\BursaryPeriod $bP
+     *
+     * @return mixed
+     */
+    private function eligibility(BursaryPeriod $bP): mixed {
         $elPot = ElPotential::where('bursary_period_id', $bP->id)->get();
 
         foreach ($elPot as $item) {
@@ -602,8 +678,12 @@ class NebController extends Controller
         return $elPot;
     }
 
-    private function rank(BursaryPeriod $bP)
-    {
+    /**
+     * @param \Modules\Neb\Entities\BursaryPeriod $bP
+     *
+     * @return true
+     */
+    private function rank(BursaryPeriod $bP): true {
         // RankByUnmetNeed
         $elPot = ElPotential::where('bursary_period_id', $bP->id)
             ->where('eligibility', 'Eligible')->orderBy('weekly_unmet_need', 'desc')->get();
@@ -659,8 +739,12 @@ class NebController extends Controller
         return true;
     }
 
-    private function awardOrDeny(BursaryPeriod $bP)
-    {
+    /**
+     * @param \Modules\Neb\Entities\BursaryPeriod $bP
+     *
+     * @return true
+     */
+    private function awardOrDeny(BursaryPeriod $bP): true {
         $defaultAward = $bP->default_award ?? 0;
         $periodBudget = $bP->period_budget ?? 0;
         $rNPortion = $bP->rn_budget ?? 0;
@@ -711,16 +795,24 @@ class NebController extends Controller
         return true;
     }
 
-    public function awardAmount(BursaryPeriod $bP)
-    {
+    /**
+     * @param \Modules\Neb\Entities\BursaryPeriod $bP
+     *
+     * @return true
+     */
+    public function awardAmount(BursaryPeriod $bP): true {
         ElPotential::where('bursary_period_id', $bP->id)->where('award_or_deny', 'Award')
             ->update(['award_amount' => $bP->default_award]);
 
         return true;
     }
 
-    public function sfasAwardId(BursaryPeriod $bP)
-    {
+    /**
+     * @param \Modules\Neb\Entities\BursaryPeriod $bP
+     *
+     * @return \Modules\Neb\Entities\Neb|null
+     */
+    public function sfasAwardId(BursaryPeriod $bP): ?Neb {
         $strSQL = Neb::whereNotNull('sfas_award_id')
             ->select('sfas_award_id')
             ->orderBy('sfas_award_id', 'desc')
@@ -745,8 +837,13 @@ class NebController extends Controller
         return null;
     }
 
-    public function awardedTextLine($record, $bp)
-    {
+    /**
+     * @param ElPotential $record
+     * @param BursaryPeriod $bp
+     *
+     * @return string
+     */
+    public function awardedTextLine(ElPotential $record, BursaryPeriod $bp): string {
         $line = 'SP04';
         $line .= $this->padStringWithSpaces(date('Ymd', strtotime($bp->bursary_period_start_date)), 8);
         $line .= $this->padStringWithSpaces(date('Ymd', strtotime($bp->bursary_period_end_date)), 8);
@@ -786,8 +883,12 @@ class NebController extends Controller
         return $line;
     }
 
-    private function prepareCsvLine($record)
-    {
+    /**
+     * @param ElPotential $record
+     *
+     * @return string
+     */
+    private function prepareCsvLine(ElPotential $record): string {
         $csvValues = [
             $record->application_number,
             $record->sin,
@@ -838,8 +939,14 @@ class NebController extends Controller
         return implode(',', $csvValues);
     }
 
-    private function padStringWithSpaces($inputString, $desiredLength, $preFixWithZero = false)
-    {
+    /**
+     * @param string|float|int|null $inputString
+     * @param int $desiredLength
+     * @param bool $preFixWithZero
+     *
+     * @return string
+     */
+    private function padStringWithSpaces(string|float|int|null $inputString, int $desiredLength, bool $preFixWithZero = false): string {
         if ($inputString === null) {
             $inputString = '';
         }

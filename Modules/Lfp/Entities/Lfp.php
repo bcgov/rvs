@@ -2,6 +2,8 @@
 
 namespace Modules\Lfp\Entities;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -36,17 +38,28 @@ class Lfp extends ModuleModel
         'app_idx', 'direct_lend', 'risk_sharing_guaranteed', 'full_name_alias', 'first_name', 'last_name', 'comment',
         ];
 
-    public function payments(): \Illuminate\Database\Eloquent\Relations\HasMany
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Payment>
+     */
+    public function payments(): HasMany
     {
         return $this->hasMany('Modules\Lfp\Entities\Payment', 'lfp_id', 'id')
             ->orderBy('anniversary_date', 'desc');
     }
 
-    public function applications(): \Illuminate\Database\Eloquent\Relations\HasMany
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Application>
+     */
+    public function applications(): HasMany
     {
         return $this->hasMany('Modules\Lfp\Entities\Application', 'lfp_id', 'id');
     }
 
+    /**
+     * @param array<string> $sin
+     *
+     * @return array<object>|null
+     */
     public function sfasInd(Array $sin): array|null
     {
         if(empty($sin)) return null;
@@ -55,6 +68,11 @@ class Lfp extends ModuleModel
             ->select(env("LFP_QUERY2") . "(" . implode(",", $sin) . ")");
     }
 
+    /**
+     * @param array<string> $apps
+     *
+     * @return array<object>|null
+     */
     public function sfasApp(Array $apps): array|null
     {
         if(empty($apps)) return null;
@@ -63,7 +81,10 @@ class Lfp extends ModuleModel
             ->select(env("LFP_SFA_APPS") . "(" . implode(",", $apps) . ")");
     }
 
-    public function intake()
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne<Intake>
+     */
+    public function intake(): HasOne
     {
         return $this->hasOne(Intake::class, 'app_idx', 'app_idx');
     }

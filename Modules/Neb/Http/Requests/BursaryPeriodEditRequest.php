@@ -11,18 +11,16 @@ class BursaryPeriodEditRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
-    {
+    public function authorize(): bool {
         return true;
     }
 
     /**
      * Get the error messages for the defined validation rules.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function messages()
-    {
+    public function messages(): array {
         return [
         ];
     }
@@ -30,10 +28,9 @@ class BursaryPeriodEditRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function rules()
-    {
+    public function rules(): array {
         return [
             'bursary_period_start_date' => 'required|unique:'.env('DB_DATABASE_NEB').'.bursary_periods,bursary_period_start_date,'.$this->id,
             'bursary_period_end_date' => 'required|unique:'.env('DB_DATABASE_NEB').'.bursary_periods,bursary_period_end_date,'.$this->id,
@@ -50,8 +47,7 @@ class BursaryPeriodEditRequest extends FormRequest
      *
      * @return void
      */
-    protected function prepareForValidation()
-    {
+    protected function prepareForValidation(): void {
         if (isset($this->application_status) && $this->application_status != 'DENIED') {
             $this->merge(['denial_reason' => null]);
         }

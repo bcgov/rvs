@@ -2,12 +2,15 @@
 
 namespace Modules\Neb\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use Inertia\Response;
+use Illuminate\Support\Facades\Response as FacadeResponse;
 use Modules\Neb\Entities\Program;
 use Modules\Neb\Entities\SfasProgram;
 use Modules\Neb\Http\Requests\SfasProgramStoreRequest;
-use Response;
 
 class SfasProgramController extends Controller
 {
@@ -16,22 +19,20 @@ class SfasProgramController extends Controller
      *
      * @return \Inertia\Response
      */
-    public function index()
-    {
+    public function index(): Response {
         return Inertia::render('Neb::SfasPrograms', ['page' => 'sfas-programs']);
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @return response.json
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function fetch(\Illuminate\Http\Request $request)
-    {
+    public function fetch(\Illuminate\Http\Request $request): JsonResponse {
         if ($request->id) {
             $sfasProgram = SfasProgram::find($request->id);
 
-            return Response::json([
+            return FacadeResponse::json([
                 'page' => 'sfas-programs',
                 'sfas_programs' => $sfasProgram,
             ]);
@@ -40,7 +41,7 @@ class SfasProgramController extends Controller
         $sfasPrograms = SfasProgram::orderBy('sfas_program_code', 'asc')->get();
         $programs = Program::orderBy('program_code', 'asc')->get();
 
-        return Response::json([
+        return FacadeResponse::json([
             'page' => 'sfas-programs',
             'sfas_programs' => $sfasPrograms,
             'programs' => $programs,
@@ -50,10 +51,11 @@ class SfasProgramController extends Controller
     /**
      * Store a newly created resource in storage.
      *
+     * @param \Modules\Neb\Http\Requests\SfasProgramStoreRequest $request
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(SfasProgramStoreRequest $request)
-    {
+    public function store(SfasProgramStoreRequest $request): RedirectResponse {
         $sfasProgram = SfasProgram::create($request->validated());
 
         return Redirect::route('neb.sfas-programs.show', [$sfasProgram->id]);

@@ -11,10 +11,13 @@ use Inertia\Inertia;
 
 class MaintenanceController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response::render
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Inertia\Response
      */
     public function staffList(Request $request): \Inertia\Response
     {
@@ -37,7 +40,10 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response::render
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\User $user
+     *
+     * @return \Inertia\Response
      */
     public function staffShow(Request $request, User $user): \Inertia\Response
     {
@@ -53,7 +59,11 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\RedirectResponse::render
+     * @param \App\Http\Requests\StaffEditRequest $request
+     * @param \App\Models\User $user
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function staffEdit(StaffEditRequest $request, User $user): \Illuminate\Http\RedirectResponse
     {

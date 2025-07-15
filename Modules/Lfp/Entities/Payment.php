@@ -2,6 +2,7 @@
 
 namespace Modules\Lfp\Entities;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -33,11 +34,18 @@ class Payment extends ModuleModel
 
     ];
 
-    public function lfp()
-    {
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Lfp, Payment>
+     */
+    public function lfp(): BelongsTo {
         return $this->belongsTo('Modules\Lfp\Entities\Lfp', 'lfp_id', 'id');
     }
 
+    /**
+     * @param array<int, string> $payIds
+     *
+     * @return array<object>|null
+     */
     public function sfasPayment(Array $payIds): array|null
     {
         if(empty($payIds)) return null;
@@ -47,7 +55,9 @@ class Payment extends ModuleModel
     }
 
 
-
+    /**
+     * @return object|null
+     */
     public function getSfasPaymentAttrAttribute(): object|null
     {
         return is_null($this->pay_idx) ? null : $this->sfasPayment([$this->pay_idx])[0];

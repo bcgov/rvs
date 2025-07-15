@@ -2,11 +2,15 @@
 
 namespace Modules\Neb\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use Inertia\Response;
+use Illuminate\Support\Facades\Response as FacadeResponse;
 use Modules\Neb\Entities\Restriction;
 use Modules\Neb\Http\Requests\RestrictionStoreRequest;
-use Response;
+
 
 class RestrictionController extends Controller
 {
@@ -15,22 +19,20 @@ class RestrictionController extends Controller
      *
      * @return \Inertia\Response
      */
-    public function index()
-    {
+    public function index(): Response {
         return Inertia::render('Neb::Restrictions', ['page' => 'restrictions']);
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @return response.json
+     * @return \Illuminate\Http\JsonResponse.json
      */
-    public function fetch(\Illuminate\Http\Request $request)
-    {
+    public function fetch(\Illuminate\Http\Request $request): JsonResponse {
         if ($request->id) {
             $restriction = Restriction::find($request->id);
 
-            return Response::json([
+            return FacadeResponse::json([
                 'page' => 'restrictions',
                 'restrictions' => $restriction,
             ]);
@@ -38,7 +40,7 @@ class RestrictionController extends Controller
 
         $restrictions = Restriction::orderBy('restriction_code', 'asc')->get();
 
-        return Response::json([
+        return FacadeResponse::json([
             'page' => 'restrictions',
             'restrictions' => $restrictions,
         ]);
@@ -47,10 +49,11 @@ class RestrictionController extends Controller
     /**
      * Store a newly created resource in storage.
      *
+     * @param \Modules\Neb\Http\Requests\RestrictionStoreRequest $request
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(RestrictionStoreRequest $request)
-    {
+    public function store(RestrictionStoreRequest $request): RedirectResponse {
         $restriction = Restriction::create($request->validated());
 
         return Redirect::route('neb.restrictions.show', [$restriction->id]);

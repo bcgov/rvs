@@ -3,6 +3,7 @@
 namespace Modules\Lfp\Entities;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id
@@ -41,8 +42,10 @@ class Intake extends ModuleModel
         'proposed_registration_date', 'denial_reason', 'app_idx', 'alias_name',
     ];
 
-    public function lfp()
-    {
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Lfp, Intake>
+     */
+    public function lfp(): BelongsTo {
         return $this->belongsTo(Lfp::class, 'app_idx', 'app_idx');
     }
 }
