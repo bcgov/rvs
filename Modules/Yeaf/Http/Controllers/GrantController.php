@@ -361,9 +361,9 @@ class GrantController extends Controller
 
     private function setStatus(Grant $grant): string {
         /** @var (Grant&object{DeniedCnt: int, PendingCnt: int})|null $record */
-        $record = Grant::select('grant_id')->withCount(['grantIneligibles as PendingCnt' => function ($query) {
+        $record = Grant::select('grant_id')->withCount(['grantIneligibles as PendingCnt' => function ($query): void {
             $query->where('ineligible_code_type', 'P')->where('cleared_flag', false);
-        }], 'ineligible_code_type')->withCount(['grantIneligibles as DeniedCnt' => function ($query) {
+        }], 'ineligible_code_type')->withCount(['grantIneligibles as DeniedCnt' => function ($query): void {
             $query->where('ineligible_code_type', 'D')->where('cleared_flag', false);
         }], 'id')->where('grant_id', $grant->grant_id)->groupBy('grant_id')->orderBy('grant_id', 'ASC')->first();
 

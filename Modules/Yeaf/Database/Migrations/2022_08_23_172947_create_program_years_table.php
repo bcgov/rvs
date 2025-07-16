@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         if (! Schema::connection(env('DB_DATABASE_YEAF'))->hasTable('program_years')) {
-            Schema::connection(env('DB_DATABASE_YEAF'))->create('program_years', function (Blueprint $table) {
+            Schema::connection(env('DB_DATABASE_YEAF'))->create('program_years', function (Blueprint $table): void {
                 $table->id();
                 $table->integer('program_year_id')->unique();
                 $table->string('year_start', 4)->nullable();

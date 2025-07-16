@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::connection(env('DB_DATABASE_NEB'))->create('fy_budgets', function (Blueprint $table) {
+        Schema::connection(env('DB_DATABASE_NEB'))->create('fy_budgets', function (Blueprint $table): void {
             $table->id();
             $table->string('fiscal_year', 8)->nullable();
             $table->double('budget_amount')->nullable();

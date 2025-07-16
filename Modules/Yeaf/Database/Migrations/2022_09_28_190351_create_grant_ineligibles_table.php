@@ -15,7 +15,7 @@ return new class extends Migration
     public function up()
     {
         if (Schema::connection(env('DB_DATABASE_YEAF'))->hasTable('ineligibles')) {
-            Schema::connection(env('DB_DATABASE_YEAF'))->table('ineligibles', function (Blueprint $table) {
+            Schema::connection(env('DB_DATABASE_YEAF'))->table('ineligibles', function (Blueprint $table): void {
                 // Check if the unique index already exists
                 $indexExists = DB::connection(env('DB_DATABASE_YEAF'))->select("SELECT COUNT(*) as count FROM pg_indexes WHERE indexname = 'ineligibles_code_unique'");
 
@@ -27,7 +27,7 @@ return new class extends Migration
         }
 
         if (! Schema::connection(env('DB_DATABASE_YEAF'))->hasTable('grant_ineligibles')) {
-            Schema::connection(env('DB_DATABASE_YEAF'))->create('grant_ineligibles', function (Blueprint $table) {
+            Schema::connection(env('DB_DATABASE_YEAF'))->create('grant_ineligibles', function (Blueprint $table): void {
                 $table->id();
 
                 $table->bigInteger('grant_id')->nullable();
@@ -52,7 +52,7 @@ return new class extends Migration
     public function down()
     {
         if (Schema::connection(env('DB_DATABASE_YEAF'))->hasTable('ineligibles')) {
-            Schema::connection(env('DB_DATABASE_YEAF'))->table('ineligibles', function (Blueprint $table) {
+            Schema::connection(env('DB_DATABASE_YEAF'))->table('ineligibles', function (Blueprint $table): void {
                 $table->dropUnique('code_id');
             });
         }

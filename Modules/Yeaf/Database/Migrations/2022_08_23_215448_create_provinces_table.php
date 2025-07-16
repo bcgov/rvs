@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         if (! Schema::connection(env('DB_DATABASE_YEAF'))->hasTable('provinces')) {
-            Schema::connection(env('DB_DATABASE_YEAF'))->create('provinces', function (Blueprint $table) {
+            Schema::connection(env('DB_DATABASE_YEAF'))->create('provinces', function (Blueprint $table): void {
                 $table->id();
 
                 $table->string('country_code');

@@ -13,7 +13,7 @@ class CreateCaseFundingsTable extends Migration
      */
     public function up()
     {
-        Schema::connection(env('DB_DATABASE_VSS'))->create('case_fundings', function (Blueprint $table) {
+        Schema::connection(env('DB_DATABASE_VSS'))->create('case_fundings', function (Blueprint $table): void {
             $table->id();
 
             $table->bigInteger('incident_id')->default(1);

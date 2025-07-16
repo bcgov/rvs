@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         if (! Schema::connection(env('DB_DATABASE_PLSC'))->hasTable('institutions')) {
-            Schema::connection(env('DB_DATABASE_PLSC'))->create('institutions', function (Blueprint $table) {
+            Schema::connection(env('DB_DATABASE_PLSC'))->create('institutions', function (Blueprint $table): void {
                 $table->id();
 
                 $table->string('name')->index();

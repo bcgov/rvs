@@ -24,12 +24,12 @@ Route::middleware(['auth'])->get('/home', [App\Http\Controllers\UserController::
 
 
 
-Route::prefix('admin')->group(function () {
+Route::prefix('admin')->group(function (): void {
     Route::group(
         [
             'middleware' => ['auth', 'super_admin'],
             'as' => 'super-admin.',
-        ], function () {
+        ], function (): void {
 
         Route::get('/users', [App\Http\Controllers\AdminController::class, 'users'])->name('users');
         Route::put('/users/{user}', [App\Http\Controllers\AdminController::class, 'userEdit'])->name('user-edit');

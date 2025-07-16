@@ -13,7 +13,7 @@ class AddClmnLfp extends Migration
      */
     public function up()
     {
-        Schema::connection(env('DB_DATABASE_LFP'))->table('intakes', function (Blueprint $table) {
+        Schema::connection(env('DB_DATABASE_LFP'))->table('intakes', function (Blueprint $table): void {
             $table->string('denial_reason')->nullable()->comment('Reason why application was declined or removed.');
             $table->date('proposed_registration_date')->nullable();
         });
@@ -26,7 +26,7 @@ class AddClmnLfp extends Migration
      */
     public function down()
     {
-        Schema::connection(env('DB_DATABASE_LFP'))->table('intakes', function (Blueprint $table) {
+        Schema::connection(env('DB_DATABASE_LFP'))->table('intakes', function (Blueprint $table): void {
             $table->dropColumn('proposed_registration_date');
             $table->dropColumn('denial_reason');
         });

@@ -13,7 +13,7 @@ class CreateCaseNatureOffencesTable extends Migration
      */
     public function up()
     {
-        Schema::connection(env('DB_DATABASE_VSS'))->create('case_nature_offences', function (Blueprint $table) {
+        Schema::connection(env('DB_DATABASE_VSS'))->create('case_nature_offences', function (Blueprint $table): void {
             $table->bigInteger('incident_id')->default(1);
             $table->foreign('incident_id')->references('incident_id')->on('incidents')->onDelete('cascade');
 

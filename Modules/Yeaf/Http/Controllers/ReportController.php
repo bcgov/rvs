@@ -95,7 +95,7 @@ class ReportController extends Controller
     }
 
     public function staff(Request $request): JsonResponse {
-        $users = User::select('user_id', 'first_name', 'last_name', 'disabled', 'tele', 'email')->whereHas('roles', function ($q) {
+        $users = User::select('user_id', 'first_name', 'last_name', 'disabled', 'tele', 'email')->whereHas('roles', function ($q): void {
                 $q->whereIn('name', ['YEAF Admin', 'YEAF User']);
             })->get();
 

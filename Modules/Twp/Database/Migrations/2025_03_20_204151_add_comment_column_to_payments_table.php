@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void {
         Schema::connection(env('DB_DATABASE_TWP'))
-            ->table('payments', function (Blueprint $table) {
+            ->table('payments', function (Blueprint $table): void {
                 $table->text('comment')->nullable();
             });
     }
@@ -21,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void {
         Schema::connection(env('DB_DATABASE_TWP'))
-            ->table('payments', function (Blueprint $table) {
+            ->table('payments', function (Blueprint $table): void {
                 $table->dropColumn('comment');
             });
     }

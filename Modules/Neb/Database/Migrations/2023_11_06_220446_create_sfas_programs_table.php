@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::connection(env('DB_DATABASE_NEB'))->create('sfas_programs', function (Blueprint $table) {
+        Schema::connection(env('DB_DATABASE_NEB'))->create('sfas_programs', function (Blueprint $table): void {
             $table->id();
 
             $table->string('neb_program_code', 4)->nullable()->comment('Foreign key - NEB_PROGRAM (used for historical purposes)');

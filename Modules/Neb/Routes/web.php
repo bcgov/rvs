@@ -11,15 +11,15 @@
 |
 */
 
-Route::prefix('neb')->group(function () {
+Route::prefix('neb')->group(function (): void {
     //    Route::get('/maintenance/reports/{type}', 'ReportController@fetchReport')->name('twp.reports.type');
     Route::group(
         [
             'middleware' => ['auth', 'neb_active'],
             'as' => 'neb.',
-        ], function () {
+        ], function (): void {
             Route::get('/dashboard', 'BursaryPeriodController@index')->name('dashboard');
-            Route::group(['middleware' => 'neb_admin'], function () {
+            Route::group(['middleware' => 'neb_admin'], function (): void {
 
                 Route::post('/finalize-neb', 'NebController@finalizeNeb')->name('finalize-neb');
                 Route::post('/process-neb', 'NebController@processNeb')->name('process-neb');

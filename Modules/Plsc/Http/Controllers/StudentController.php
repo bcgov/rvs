@@ -131,7 +131,7 @@ class StudentController extends Controller
         $students = Student::with('applications');
 
         if (request()->sort === 'app_status' && request()->direction !== 'ALL') {
-            $students = $students->whereHas('applications', function ($q) {
+            $students = $students->whereHas('applications', function ($q): void {
                 $q->where('application_status', request()->direction);
             });
         }
@@ -144,8 +144,8 @@ class StudentController extends Controller
         }
 
         if (request()->filter_school !== null) {
-            $students = $students->whereHas('applications', function ($query) {
-                $query->whereHas('program', function ($q) {
+            $students = $students->whereHas('applications', function ($query): void {
+                $query->whereHas('program', function ($q): void {
                     $q->where('institution_id', request()->filter_school);
                 });
             });
@@ -173,12 +173,12 @@ class StudentController extends Controller
         }
 
         if (request()->filter_fname !== null) {
-            $apps = $apps->whereHas('student', function ($q) {
+            $apps = $apps->whereHas('student', function ($q): void {
                 $q->where('first_name', 'ILIKE', '%'.request()->filter_fname.'%');
             });
         }
         if (request()->filter_lname !== null) {
-            $apps = $apps->whereHas('student', function ($q) {
+            $apps = $apps->whereHas('student', function ($q): void {
                 $q->where('last_name', 'ILIKE', '%'.request()->filter_lname.'%');
             });
         }

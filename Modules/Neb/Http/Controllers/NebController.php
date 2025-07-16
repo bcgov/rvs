@@ -91,7 +91,7 @@ class NebController extends Controller
                         'Content-Type' => 'text/plain',
                     ];
 
-                    return Response::streamDownload(function () use ($txtRows) {
+                    return Response::streamDownload(function () use ($txtRows): void {
                         echo $txtRows;
                     }, $filename, $headers);
 
@@ -110,7 +110,7 @@ class NebController extends Controller
                 'Content-Type' => 'text/csv',
             ];
 
-            return Response::streamDownload(function () use ($csvContent) {
+            return Response::streamDownload(function () use ($csvContent): void {
                 echo $csvContent;
             }, $filename, $headers);
 
