@@ -41,7 +41,7 @@ return new class extends Migration
                 $table->date('study_period_start_date')->nullable();
                 $table->integer('program_length')->nullable();
                 $table->string('program_length_type')->nullable();
-                $table->double('total_estimated_cost', null, 2)->default(0)->nullable();
+                $table->double('total_estimated_cost')->default(0)->nullable();
                 $table->string('student_status')->nullable();
                 $table->text('comments')->nullable();
 
