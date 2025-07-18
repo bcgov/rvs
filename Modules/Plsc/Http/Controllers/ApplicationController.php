@@ -33,9 +33,9 @@ class ApplicationController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Modules\Plsc\Http\Requests\ApplicationStoreRequest $request
+     * @param ApplicationStoreRequest $request
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function store(ApplicationStoreRequest $request): RedirectResponse {
         $application = Application::create($request->validated());
@@ -64,10 +64,10 @@ class ApplicationController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Modules\Plsc\Http\Requests\ApplicationEditRequest $request
-     * @param \Modules\Plsc\Entities\Application $application
+     * @param ApplicationEditRequest $request
+     * @param Application $application
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function update(ApplicationEditRequest $request, Application $application): RedirectResponse {
         Application::where('id', $application->id)->update($request->validated());

@@ -27,7 +27,7 @@ class BursaryPeriodController extends Controller
     }
 
     /**
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function tobeAwarded(): JsonResponse {
         $bp = BursaryPeriod::where('awarded', false)->get();
@@ -42,7 +42,7 @@ class BursaryPeriodController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\JsonResponse.json
+     * @return JsonResponse .json
      */
     public function fetch(Request $request): JsonResponse {
         if ($request->id) {
@@ -66,9 +66,9 @@ class BursaryPeriodController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Modules\Neb\Http\Requests\BursaryPeriodStoreRequest $request
+     * @param BursaryPeriodStoreRequest $request
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function store(BursaryPeriodStoreRequest $request): RedirectResponse {
         $bursaryPeriod = BursaryPeriod::create($request->validated());
@@ -79,10 +79,10 @@ class BursaryPeriodController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Modules\Neb\Http\Requests\BursaryPeriodEditRequest $request
-     * @param \Modules\Neb\Entities\BursaryPeriod $bursaryPeriod
+     * @param BursaryPeriodEditRequest $request
+     * @param BursaryPeriod $bursaryPeriod
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function update(BursaryPeriodEditRequest $request, BursaryPeriod $bursaryPeriod): RedirectResponse {
         $bursaryPeriod::where('id', $bursaryPeriod->id)->update($request->validated());
@@ -93,7 +93,7 @@ class BursaryPeriodController extends Controller
     /**
      * Delete a resource.
      *
-     * @return \Illuminate\Http\RedirectResponse.redirect
+     * @return RedirectResponse .redirect
      */
     public function delete(Request $request): RedirectResponse {
         $bP = BursaryPeriod::where('id', $request->input('id'))->first();

@@ -2,6 +2,7 @@
 
 namespace Modules\Vss\Http\Requests;
 
+use Override;
 use Illuminate\Foundation\Http\FormRequest;
 
 class InstitutionStoreRequest extends FormRequest
@@ -20,6 +21,7 @@ class InstitutionStoreRequest extends FormRequest
      *
      * @return array<string, string>
      */
+    #[Override]
     public function messages(): array {
         return [
             'institution_code.required' => 'Institution Code field is required.',
@@ -61,6 +63,7 @@ class InstitutionStoreRequest extends FormRequest
      *
      * @return void
      */
+    #[Override]
     protected function prepareForValidation(): void {
         if (isset($this->institution_code)) {
             $this->merge(['institution_code' => mb_strtoupper($this->institution_code)]);

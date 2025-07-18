@@ -2,6 +2,7 @@
 
 namespace Modules\Plsc\Http\Requests;
 
+use Override;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ApplicationEditRequest extends FormRequest
@@ -20,6 +21,7 @@ class ApplicationEditRequest extends FormRequest
      *
      * @return array<string, string>
      */
+    #[Override]
     public function messages(): array {
         return [
             'id.*' => 'Application is missing fields.',
@@ -69,6 +71,7 @@ class ApplicationEditRequest extends FormRequest
      *
      * @return void
      */
+    #[Override]
     protected function prepareForValidation(): void {
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Modules\Vss\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use App\Http\Requests\AjaxRequest;
 use App\Models\Role;
 use App\Models\User;
@@ -17,13 +18,11 @@ class AdminController extends Controller
      * fetch active support users
      *
      * @param AjaxRequest $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function activeUsers(AjaxRequest $request)
     {
-        $users = User::whereHas('roles', function ($q) {
-            return $q->whereIn('name', [Role::VSS_ADMIN, Role::VSS_USER]);
-        })->where('disabled', false)->get();
+        $users = User::whereHas('roles', fn($q) => $q->whereIn('name', [Role::VSS_ADMIN, Role::VSS_USER]))->where('disabled', false)->get();
 
         return HttpResponse::json(['status' => true, 'users' => $users]);
     }
@@ -32,13 +31,11 @@ class AdminController extends Controller
      * fetch cancelled support users
      *
      * @param AjaxRequest $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function cancelledUsers(AjaxRequest $request)
     {
-        $users = User::whereHas('roles', function ($q) {
-            return $q->whereIn('name', [Role::VSS_ADMIN, Role::VSS_USER]);
-        })->where('disabled', true)->get();
+        $users = User::whereHas('roles', fn($q) => $q->whereIn('name', [Role::VSS_ADMIN, Role::VSS_USER]))->where('disabled', true)->get();
 
         return HttpResponse::json(['status' => true, 'users' => $users]);
     }

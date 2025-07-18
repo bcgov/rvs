@@ -14,7 +14,7 @@ class InstitutionController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response
+     * @return Response
      */
     public function index(): Response {
         $schools = Institution::orderBy('institution_code', 'asc')->get();
@@ -25,7 +25,7 @@ class InstitutionController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function store(InstitutionStoreRequest $request): RedirectResponse {
         Institution::create($request->validated());
@@ -36,7 +36,7 @@ class InstitutionController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function update(InstitutionStoreRequest $request, Institution $school): RedirectResponse {
         //if the school code updated

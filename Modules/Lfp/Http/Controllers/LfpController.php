@@ -25,7 +25,7 @@ class LfpController extends Controller
      * @param bool $status
      * @param int $newApp
      *
-     * @return \Inertia\Response
+     * @return Response
      */
     public function index(bool $status = true, int $newApp = 0): Response {
         $lfps = $this->paginateLfps();
@@ -39,10 +39,10 @@ class LfpController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Modules\Lfp\Http\Requests\LfpEditRequest $request
-     * @param \Modules\Lfp\Entities\Lfp $lfp
+     * @param LfpEditRequest $request
+     * @param Lfp $lfp
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function update(LfpEditRequest $request, Lfp $lfp): RedirectResponse {
         Lfp::where('id', $lfp->id)->update($request->validated());
@@ -55,7 +55,7 @@ class LfpController extends Controller
     /**
      * Show the specified resource.
      * @param Lfp $lfp
-     * @return \Inertia\Response
+     * @return Response
      */
     public function show(Lfp $lfp): Response {
         $lfp = Lfp::with('payments', 'intake')->where('id', $lfp->id)->first();
@@ -79,7 +79,7 @@ class LfpController extends Controller
     }
 
     /**
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator<Lfp>
+     * @return LengthAwarePaginator<Lfp>
      */
     private function paginateLfps(): LengthAwarePaginator
     {

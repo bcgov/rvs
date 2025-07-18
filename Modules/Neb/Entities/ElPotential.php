@@ -85,17 +85,17 @@ class ElPotential extends ModuleModel
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Student, ElPotential>
+     * @return BelongsTo<Student, ElPotential>
      */
     public function student(): BelongsTo {
-        return $this->belongsTo('Modules\Neb\Entities\Student', 'sin', 'sin');
+        return $this->belongsTo(Student::class, 'sin', 'sin');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<BursaryPeriod, ElPotential>
+     * @return BelongsTo<BursaryPeriod, ElPotential>
      */
     public function bursaryPeriod(): BelongsTo
     {
-        return $this->belongsTo('Modules\Neb\Entities\BursaryPeriod', 'bursary_period_id', 'id');
+        return $this->belongsTo(BursaryPeriod::class, 'bursary_period_id', 'id');
     }
 }

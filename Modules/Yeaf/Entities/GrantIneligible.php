@@ -2,6 +2,7 @@
 
 namespace Modules\Yeaf\Entities;
 
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -14,8 +15,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $created_by
  * @property bool $cleared_flag
  * @property string|null $ineligible_code_type
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property-read Grant|null $grant
  * @property-read Ineligible|null $ineligible
  *
@@ -36,6 +37,6 @@ class GrantIneligible extends ModuleModel
      * @return BelongsTo<Ineligible, GrantIneligible>
      */
     public function ineligible(): BelongsTo {
-        return $this->belongsTo('Modules\Yeaf\Entities\Ineligible', 'ineligible_code_id', 'code_id');
+        return $this->belongsTo(Ineligible::class, 'ineligible_code_id', 'code_id');
     }
 }

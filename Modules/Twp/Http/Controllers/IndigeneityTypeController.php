@@ -2,6 +2,7 @@
 
 namespace Modules\Twp\Http\Controllers;
 
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -15,8 +16,8 @@ class IndigeneityTypeController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @return Response
+     * @throws AuthorizationException
      */
     public function index(): Response
     {
@@ -29,10 +30,10 @@ class IndigeneityTypeController extends Controller
      * Update the specified resource in storage.
      *
      * @param \App\Http\Requests\Request $request
-     * @param \Modules\Twp\Entities\IndigeneityType $indigeneity
+     * @param IndigeneityType $indigeneity
      *
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @return RedirectResponse
+     * @throws AuthorizationException
      */
     public function update(Request $request, IndigeneityType $indigeneity): RedirectResponse
     {
@@ -46,9 +47,9 @@ class IndigeneityTypeController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @param Request $request
+     * @return RedirectResponse
+     * @throws AuthorizationException
      */
     public function store(Request $request): RedirectResponse
     {

@@ -25,14 +25,10 @@ Route::prefix('neb')->group(function (): void {
                 Route::post('/process-neb', 'NebController@processNeb')->name('process-neb');
                 Route::get('/export-neb/{type}/{id}', 'NebController@exportNeb')->name('export-neb');
 
-                Route::get('/process-neb', function () {
-                    return redirect('/neb/dashboard');
-                });
+                Route::get('/process-neb', fn() => redirect('/neb/dashboard'));
 
                 Route::post('/bursary-periods/fetch-neb', 'NebController@fetchNeb')->name('fetch-neb');
-                Route::get('/bursary-periods/fetch-neb', function () {
-                    return redirect('neb.dashboard');
-                });
+                Route::get('/bursary-periods/fetch-neb', fn() => redirect('neb.dashboard'));
 
                 Route::get('/bursary-periods/show/{id}', 'NebController@fetchNeb')->name('bursary-periods.show');
                 Route::get('/bursary-periods/tobe-awarded', 'BursaryPeriodController@tobeAwarded')->name('bursary-periods.tobe-awarded');

@@ -2,6 +2,7 @@
 
 namespace Modules\Twp\Http\Controllers;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 use Modules\Twp\Entities\Grant;
 use Modules\Twp\Http\Requests\GrantEditRequest;
@@ -12,7 +13,7 @@ class GrantController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function store(GrantStoreRequest $request)
     {
@@ -24,7 +25,7 @@ class GrantController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function update(GrantEditRequest $request, Grant $grant)
     {

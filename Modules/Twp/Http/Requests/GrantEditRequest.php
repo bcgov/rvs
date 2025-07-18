@@ -2,6 +2,7 @@
 
 namespace Modules\Twp\Http\Requests;
 
+use Override;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -23,6 +24,7 @@ class GrantEditRequest extends FormRequest
      *
      * @return array<string, string>
      */
+    #[Override]
     public function messages(): array {
         return [
             'id.*' => 'Grant ID field is not valid.',
@@ -64,6 +66,7 @@ class GrantEditRequest extends FormRequest
      *
      * @return void
      */
+    #[Override]
     protected function prepareForValidation(): void {
         $this->merge([
             'updated_by' => Str::upper(Auth::user()->user_id),

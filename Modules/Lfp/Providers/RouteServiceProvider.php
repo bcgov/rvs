@@ -2,6 +2,7 @@
 
 namespace Modules\Lfp\Providers;
 
+use Override;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
@@ -21,6 +22,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
+    #[Override]
     public function boot(): void {
         parent::boot();
     }

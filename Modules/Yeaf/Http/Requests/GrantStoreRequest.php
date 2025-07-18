@@ -2,6 +2,7 @@
 
 namespace Modules\Yeaf\Http\Requests;
 
+use Override;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -24,6 +25,7 @@ class GrantStoreRequest extends FormRequest
      *
      * @return array<string, string>
      */
+    #[Override]
     public function messages(): array {
         return [
             'student_id.*' => 'Some fields are missing!',
@@ -73,6 +75,7 @@ class GrantStoreRequest extends FormRequest
      *
      * @return void
      */
+    #[Override]
     protected function prepareForValidation(): void {
         if (isset($this->application_receive_date)) {
             $this->merge(['application_receive_date' => date('Y-m-d', strtotime($this->application_receive_date))]);

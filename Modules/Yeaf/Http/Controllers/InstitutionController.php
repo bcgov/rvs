@@ -19,7 +19,7 @@ class InstitutionController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response
+     * @return Response
      */
     public function index(Request $request): Response {
         /** @var Builder<Institution> $schools */
@@ -33,7 +33,7 @@ class InstitutionController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @return \Inertia\Response
+     * @return Response
      */
     public function store(InstitutionStoreRequest $request): Response {
         $institution = Institution::create($request->validated());
@@ -47,7 +47,7 @@ class InstitutionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @return \Inertia\Response
+     * @return Response
      */
     public function show(Institution $institution): Response {
         [$countries, $provinces] = $this->getCountriesProvinces();
@@ -58,7 +58,7 @@ class InstitutionController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @return \Inertia\Response
+     * @return Response
      */
     public function update(InstitutionUpdateRequest $request, Institution $institution): Response {
         Institution::where('id', $institution->id)->update($request->validated());
@@ -68,7 +68,7 @@ class InstitutionController extends Controller
     }
 
     /**
-     * @param \Illuminate\Database\Eloquent\Builder|\Modules\Yeaf\Entities\Institution $schools
+     * @param Builder|Institution $schools
      *
      * @return LengthAwarePaginator<Institution>
      */

@@ -52,17 +52,17 @@ class Neb extends ModuleModel
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Application, Neb>
+     * @return BelongsTo<Application, Neb>
      */
     public function application(): BelongsTo {
-        return $this->belongsTo('Modules\Neb\Entities\Application', 'application_id', 'application_id');
+        return $this->belongsTo(Application::class, 'application_id', 'application_id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<BursaryPeriod, Neb>
+     * @return BelongsTo<BursaryPeriod, Neb>
      */
     public function bursaryPeriod()
     {
-        return $this->belongsTo('Modules\Neb\Entities\BursaryPeriod', 'bursary_period_id', 'id');
+        return $this->belongsTo(BursaryPeriod::class, 'bursary_period_id', 'id');
     }
 }

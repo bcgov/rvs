@@ -2,6 +2,8 @@
 
 namespace Modules\Plsc\Http\Controllers;
 
+use Modules\Plsc\Entities\Application;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Builder;
@@ -22,7 +24,7 @@ class StudentController extends Controller
 {
     /**
      * Display a listing of the resource.
-     * @return \Inertia\Response
+     * @return Response
      */
     public function index(): Response {
         $schools = Institution::orderBy('name', 'asc')->get();
@@ -50,9 +52,9 @@ class StudentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Modules\Plsc\Http\Requests\StudentStoreRequest $request
+     * @param StudentStoreRequest $request
      *
-     * @return \Inertia\Response
+     * @return Response
      */
     public function store(StudentStoreRequest $request): Response {
         $schools = Institution::orderBy('name', 'asc')->get();
@@ -74,9 +76,9 @@ class StudentController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \Modules\Plsc\Entities\Student $student
+     * @param Student $student
      *
-     * @return \Inertia\Response
+     * @return Response
      */
     public function show(Student $student): Response {
         $student = Student::where('id', $student->id)
@@ -102,10 +104,10 @@ class StudentController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Modules\Plsc\Http\Requests\StudentUpdateRequest $request
-     * @param \Modules\Plsc\Entities\Student $student
+     * @param StudentUpdateRequest $request
+     * @param Student $student
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function update(StudentUpdateRequest $request, Student $student): RedirectResponse {
         $studentRecord = Student::where('id', $student->id)->first();
@@ -125,7 +127,7 @@ class StudentController extends Controller
 
 
     /**
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator<\Modules\Plsc\Entities\Student>
+     * @return LengthAwarePaginator<Student>
      */
     private function paginateStudents(): LengthAwarePaginator {
         $students = Student::with('applications');
@@ -161,7 +163,7 @@ class StudentController extends Controller
     }
 
     /**
-     * @param \Illuminate\Database\Eloquent\Builder<\Modules\Plsc\Entities\Application> $apps
+     * @param Builder<Application> $apps
      *
      * @return mixed
      */
@@ -200,7 +202,7 @@ class StudentController extends Controller
     }
 
     /**
-     * @return  array{0: \Illuminate\Database\Eloquent\Collection<int, \Modules\Yeaf\Entities\Country>, 1: \Illuminate\Database\Eloquent\Collection<int, \Modules\Yeaf\Entities\Province>}
+     * @return array{0: Collection<int, Country>, 1: Collection<int, Province>}
      */
     private function getCountriesProvinces(): array {
         return [Country::orderBy('country_code', 'asc')->get(), Province::orderBy('province_code', 'asc')->get()];

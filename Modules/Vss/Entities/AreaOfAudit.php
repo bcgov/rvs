@@ -2,6 +2,9 @@
 
 namespace Modules\Vss\Entities;
 
+use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -12,20 +15,20 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $id
  * @property string $area_of_audit_code
  * @property string $description
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Vss\Entities\CaseAuditType> $caseAuditTypes
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Collection<int, CaseAuditType> $caseAuditTypes
  * @property-read int|null $case_audit_types_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Vss\Entities\Incident> $incidents
+ * @property-read Collection<int, Incident> $incidents
  * @property-read int|null $incidents_count
- * @method static \Illuminate\Database\Eloquent\Builder|AreaOfAudit newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|AreaOfAudit newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|AreaOfAudit query()
- * @method static \Illuminate\Database\Eloquent\Builder|AreaOfAudit whereAreaOfAuditCode($value)
- * @method static \Illuminate\Database\Eloquent\Builder|AreaOfAudit whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|AreaOfAudit whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|AreaOfAudit whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|AreaOfAudit whereUpdatedAt($value)
+ * @method static Builder|AreaOfAudit newModelQuery()
+ * @method static Builder|AreaOfAudit newQuery()
+ * @method static Builder|AreaOfAudit query()
+ * @method static Builder|AreaOfAudit whereAreaOfAuditCode($value)
+ * @method static Builder|AreaOfAudit whereCreatedAt($value)
+ * @method static Builder|AreaOfAudit whereDescription($value)
+ * @method static Builder|AreaOfAudit whereId($value)
+ * @method static Builder|AreaOfAudit whereUpdatedAt($value)
  */
 class AreaOfAudit extends ModuleModel
 {
@@ -39,16 +42,16 @@ class AreaOfAudit extends ModuleModel
     protected $fillable = ['area_of_audit_code', 'description'];
 
     /**
-     * @return HasMany<\Modules\Vss\Entities\Incident>
+     * @return HasMany<Incident>
      */
     public function incidents(): HasMany {
-        return $this->hasMany('Modules\Vss\Entities\Incident', 'area_of_audit_code', 'area_of_audit_code');
+        return $this->hasMany(Incident::class, 'area_of_audit_code', 'area_of_audit_code');
     }
 
     /**
-     * @return HasMany<\Modules\Vss\Entities\CaseAuditType>
+     * @return HasMany<CaseAuditType>
      */
     public function caseAuditTypes(): HasMany {
-        return $this->hasMany('Modules\Vss\Entities\CaseAuditType', 'area_of_audit_code', 'area_of_audit_code');
+        return $this->hasMany(CaseAuditType::class, 'area_of_audit_code', 'area_of_audit_code');
     }
 }

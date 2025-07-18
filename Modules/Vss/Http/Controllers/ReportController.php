@@ -18,8 +18,8 @@ class ReportController extends Controller
 {
 
     /**
-     * @param \Illuminate\Http\Request $request
-     * @param \Modules\Vss\Entities\Incident $case
+     * @param Request $request
+     * @param Incident $case
      *
      * @return mixed
      */
@@ -36,9 +36,9 @@ class ReportController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      *
-     * @return \Inertia\Response
+     * @return Response
      */
     public function searchReports(Request $request): Response {
         [$results['pre'], $results['post'], $results['total']] = $this->fetchReport($request);

@@ -2,6 +2,7 @@
 
 namespace Modules\Yeaf\Http\Requests;
 
+use Override;
 use Illuminate\Foundation\Http\FormRequest;
 
 class MinistryEditRequest extends FormRequest
@@ -70,6 +71,7 @@ class MinistryEditRequest extends FormRequest
      *
      * @return void
      */
+    #[Override]
     protected function prepareForValidation(): void {
     }
 }

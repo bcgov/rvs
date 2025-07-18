@@ -2,6 +2,7 @@
 
 namespace Modules\Neb\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
@@ -26,9 +27,9 @@ class SfasProgramController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function fetch(\Illuminate\Http\Request $request): JsonResponse {
+    public function fetch(Request $request): JsonResponse {
         if ($request->id) {
             $sfasProgram = SfasProgram::find($request->id);
 
@@ -51,9 +52,9 @@ class SfasProgramController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Modules\Neb\Http\Requests\SfasProgramStoreRequest $request
+     * @param SfasProgramStoreRequest $request
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function store(SfasProgramStoreRequest $request): RedirectResponse {
         $sfasProgram = SfasProgram::create($request->validated());

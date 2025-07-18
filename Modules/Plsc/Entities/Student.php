@@ -2,6 +2,8 @@
 
 namespace Modules\Plsc\Entities;
 
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -10,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $sin
  * @property int|null $pen
  * @property int|null $individual_idx
- * @property \Carbon\Carbon|null $birth_date
+ * @property Carbon|null $birth_date
  * @property string|null $gender
  * @property string|null $first_name
  * @property string|null $last_name
@@ -26,10 +28,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string|null $citizenship
  * @property string|null $marital_status
  * @property string|null $title
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- * @property \Carbon\Carbon|null $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Application> $applications
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property Carbon|null $deleted_at
+ * @property-read Collection<int, Application> $applications
  */
 class Student extends ModuleModel
 {
@@ -45,9 +47,9 @@ class Student extends ModuleModel
         'citizenship', 'last_name', 'first_name', 'gender', 'pen', 'birth_date', 'sin', 'comment', 'individual_idx', ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Application>>
+     * @return HasMany<Application> >
      */
     public function applications(): HasMany {
-        return $this->hasMany('Modules\Plsc\Entities\Application');
+        return $this->hasMany(Application::class);
     }
 }

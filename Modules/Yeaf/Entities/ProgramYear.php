@@ -2,6 +2,7 @@
 
 namespace Modules\Yeaf\Entities;
 
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
@@ -13,8 +14,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property int $max_years_allowed
  * @property int $min_age
  * @property int $max_age
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  */
 class ProgramYear extends ModuleModel
 {

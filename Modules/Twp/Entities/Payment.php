@@ -2,6 +2,7 @@
 
 namespace Modules\Twp\Entities;
 
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -18,10 +19,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $payment_type_id
  * @property string|null $created_by
  * @property string|null $updated_by
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property string|null $comment
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property Carbon|null $deleted_at
  */
 class Payment extends ModuleModel
 {
@@ -38,17 +39,17 @@ class Payment extends ModuleModel
     protected $fillable = ['student_id', 'program_id', 'payment_type_id', 'payment_date', 'payment_amount', 'application_id', 'comment'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Student, Payment>
+     * @return BelongsTo<Student, Payment>
      */
     public function student(): BelongsTo {
-        return $this->belongsTo('Modules\Twp\Entities\Student', 'student_id', 'id');
+        return $this->belongsTo(Student::class, 'student_id', 'id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne<PaymentType>
+     * @return HasOne<PaymentType>
      */
     public function paymentType(): HasOne {
-        return $this->hasOne('Modules\Twp\Entities\PaymentType', 'id', 'payment_type_id');
+        return $this->hasOne(PaymentType::class, 'id', 'payment_type_id');
     }
 
     /**

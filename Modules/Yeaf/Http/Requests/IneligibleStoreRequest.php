@@ -2,6 +2,7 @@
 
 namespace Modules\Yeaf\Http\Requests;
 
+use Override;
 use Illuminate\Foundation\Http\FormRequest;
 
 class IneligibleStoreRequest extends FormRequest
@@ -20,6 +21,7 @@ class IneligibleStoreRequest extends FormRequest
      *
      * @return array<string, string>
      */
+    #[Override]
     public function messages(): array {
         return [
             'code_id.required' => 'Code ID field is required.',
@@ -51,6 +53,7 @@ class IneligibleStoreRequest extends FormRequest
      *
      * @return void
      */
+    #[Override]
     protected function prepareForValidation(): void {
         $this->merge(['active_flag' => $this->toBoolean($this->active_flag)]);
     }

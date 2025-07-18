@@ -27,7 +27,7 @@ class ProgramController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\JsonResponse.json
+     * @return JsonResponse .json
      */
     public function fetch(Request $request): JsonResponse {
         if ($request->id) {
@@ -51,9 +51,9 @@ class ProgramController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Modules\Neb\Http\Requests\ProgramStoreRequest $request
+     * @param ProgramStoreRequest $request
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function store(ProgramStoreRequest $request): RedirectResponse {
         $program = Program::create($request->validated());

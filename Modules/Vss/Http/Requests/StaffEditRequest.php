@@ -2,6 +2,7 @@
 
 namespace Modules\Vss\Http\Requests;
 
+use Override;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
@@ -23,6 +24,7 @@ class StaffEditRequest extends FormRequest
      * @return array<string, string>
      *
      */
+    #[Override]
     public function messages(): array {
         return [
             'disabled.boolean' => 'Status field is invalid',
@@ -49,6 +51,7 @@ class StaffEditRequest extends FormRequest
      *
      * @return void
      */
+    #[Override]
     protected function prepareForValidation(): void {
         if (isset($this->disabled)) {
             $this->merge(['disabled' => filter_var($this->disabled, FILTER_VALIDATE_BOOLEAN)]);

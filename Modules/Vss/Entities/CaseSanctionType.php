@@ -2,6 +2,7 @@
 
 namespace Modules\Vss\Entities;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -10,13 +11,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @property int $incident_id
  * @property int $sanction_code
- * @property-read \Modules\Vss\Entities\Incident $incident
- * @property-read \Modules\Vss\Entities\SanctionType $sanction
- * @method static \Illuminate\Database\Eloquent\Builder|CaseSanctionType newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|CaseSanctionType newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|CaseSanctionType query()
- * @method static \Illuminate\Database\Eloquent\Builder|CaseSanctionType whereIncidentId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CaseSanctionType whereSanctionCode($value)
+ * @property-read Incident $incident
+ * @property-read SanctionType $sanction
+ * @method static Builder|CaseSanctionType newModelQuery()
+ * @method static Builder|CaseSanctionType newQuery()
+ * @method static Builder|CaseSanctionType query()
+ * @method static Builder|CaseSanctionType whereIncidentId($value)
+ * @method static Builder|CaseSanctionType whereSanctionCode($value)
  * @mixin \Eloquent
  */
 class CaseSanctionType extends ModuleModel
@@ -37,16 +38,16 @@ class CaseSanctionType extends ModuleModel
     protected $fillable = ['incident_id', 'sanction_code'];
 
     /**
-     * @return BelongsTo<\Modules\Vss\Entities\Incident, \Modules\Vss\Entities\CaseSanctionType>
+     * @return BelongsTo<Incident, \Modules\Vss\Entities\CaseSanctionType>
      */
     public function incident(): BelongsTo {
-        return $this->belongsTo('Modules\Vss\Entities\Incident', 'incident_id', 'incident_id');
+        return $this->belongsTo(Incident::class, 'incident_id', 'incident_id');
     }
 
     /**
-     * @return BelongsTo<\Modules\Vss\Entities\SanctionType, \Modules\Vss\Entities\CaseSanctionType>
+     * @return BelongsTo<SanctionType, \Modules\Vss\Entities\CaseSanctionType>
      */
     public function sanction(): BelongsTo {
-        return $this->belongsTo('Modules\Vss\Entities\SanctionType', 'sanction_code', 'sanction_code');
+        return $this->belongsTo(SanctionType::class, 'sanction_code', 'sanction_code');
     }
 }

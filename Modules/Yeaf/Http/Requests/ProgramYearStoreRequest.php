@@ -2,6 +2,7 @@
 
 namespace Modules\Yeaf\Http\Requests;
 
+use Override;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ProgramYearStoreRequest extends FormRequest
@@ -20,6 +21,7 @@ class ProgramYearStoreRequest extends FormRequest
      *
      * @return array<string, string>
      */
+    #[Override]
     public function messages(): array {
         return [
             'year_start.required' => 'Year Start field is required.',
@@ -54,6 +56,7 @@ class ProgramYearStoreRequest extends FormRequest
      *
      * @return void
      */
+    #[Override]
     protected function prepareForValidation(): void {
         if (isset($this->year_start)) {
             $this->merge(['year_start' => preg_replace('/\D/', '', $this->year_start)]);

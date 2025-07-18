@@ -2,6 +2,7 @@
 
 namespace Modules\Vss\Entities;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -10,13 +11,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @property int $incident_id
  * @property string $nature_code
- * @property-read \Modules\Vss\Entities\Incident $incident
- * @property-read \Modules\Vss\Entities\NatureOffence $offence
- * @method static \Illuminate\Database\Eloquent\Builder|CaseNatureOffence newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|CaseNatureOffence newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|CaseNatureOffence query()
- * @method static \Illuminate\Database\Eloquent\Builder|CaseNatureOffence whereIncidentId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CaseNatureOffence whereNatureCode($value)
+ * @property-read Incident $incident
+ * @property-read NatureOffence $offence
+ * @method static Builder|CaseNatureOffence newModelQuery()
+ * @method static Builder|CaseNatureOffence newQuery()
+ * @method static Builder|CaseNatureOffence query()
+ * @method static Builder|CaseNatureOffence whereIncidentId($value)
+ * @method static Builder|CaseNatureOffence whereNatureCode($value)
  * @mixin \Eloquent
  */
 class CaseNatureOffence extends ModuleModel
@@ -37,16 +38,16 @@ class CaseNatureOffence extends ModuleModel
     protected $fillable = ['incident_id', 'nature_code'];
 
     /**
-     * @return BelongsTo<\Modules\Vss\Entities\Incident, \Modules\Vss\Entities\CaseNatureOffence>
+     * @return BelongsTo<Incident, \Modules\Vss\Entities\CaseNatureOffence>
      */
     public function incident(): BelongsTo {
-        return $this->belongsTo('Modules\Vss\Entities\Incident', 'incident_id', 'incident_id');
+        return $this->belongsTo(Incident::class, 'incident_id', 'incident_id');
     }
 
     /**
-     * @return BelongsTo<\Modules\Vss\Entities\NatureOffence, \Modules\Vss\Entities\CaseNatureOffence>
+     * @return BelongsTo<NatureOffence, \Modules\Vss\Entities\CaseNatureOffence>
      */
     public function offence(): BelongsTo {
-        return $this->belongsTo('Modules\Vss\Entities\NatureOffence', 'nature_code', 'nature_code');
+        return $this->belongsTo(NatureOffence::class, 'nature_code', 'nature_code');
     }
 }

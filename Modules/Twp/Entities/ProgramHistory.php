@@ -19,16 +19,16 @@ class ProgramHistory extends ModuleModel
         'institution_twp_id', 'program_twp_id', 'application_id', 'study_field', ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Program, ProgramHistory>
+     * @return BelongsTo<Program, ProgramHistory>
      */
     public function program(): BelongsTo {
-        return $this->belongsTo('Modules\Twp\Entities\Program', 'program_twp_id', 'id');
+        return $this->belongsTo(Program::class, 'program_twp_id', 'id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Student, ProgramHistory>
+     * @return BelongsTo<Student, ProgramHistory>
      */
     public function student(): BelongsTo {
-        return $this->belongsTo('Modules\Twp\Entities\Student', 'student_id', 'id');
+        return $this->belongsTo(Student::class, 'student_id', 'id');
     }
 }

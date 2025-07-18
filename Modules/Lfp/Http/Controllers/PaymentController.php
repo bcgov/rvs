@@ -2,6 +2,9 @@
 
 namespace Modules\Lfp\Http\Controllers;
 
+use Exception;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Barryvdh\Debugbar\Facades\Debugbar;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
@@ -37,9 +40,9 @@ class PaymentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Modules\Lfp\Http\Requests\PaymentStoreRequest $request
+     * @param PaymentStoreRequest $request
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function store(PaymentStoreRequest $request): RedirectResponse
     {
@@ -51,10 +54,10 @@ class PaymentController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Modules\Lfp\Http\Requests\PaymentEditRequest $request
-     * @param \Modules\Lfp\Entities\Payment $payment
+     * @param PaymentEditRequest $request
+     * @param Payment $payment
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function update(PaymentEditRequest $request, Payment $payment): RedirectResponse
     {
@@ -65,7 +68,7 @@ class PaymentController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @param string $type
      * @param int $range
      *
@@ -108,9 +111,7 @@ class PaymentController extends Controller
             $lfpColumns = Schema::connection(env('DB_DATABASE_LFP'))->getColumnListing('lfps');
 
             // Prefix lfp columns to avoid name collisions
-            $lfpColumns = array_map(function($col) {
-                return 'lfpApp_' . $col;
-            }, $lfpColumns);
+            $lfpColumns = array_map(fn($col) => 'lfpApp_' . $col, $lfpColumns);
 
             // Combine both payment and prefixed lfp columns for the header
             $headers = array_merge($paymentColumns, $lfpColumns);
@@ -165,7 +166,7 @@ class PaymentController extends Controller
             fclose($csvFile);
             return new \Illuminate\Http\Response();
 
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             Log::error('Error generating CSV for download: '.$exception);
 
             return Response::make('Internal server error.', 500, []);
@@ -174,8 +175,8 @@ class PaymentController extends Controller
 
     /**
      * @return mixed
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     private function paginatePayments(): mixed {
         $currentMonth = Carbon::now()->format('Y-m') . "-01";

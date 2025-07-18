@@ -2,6 +2,7 @@
 
 namespace Modules\Yeaf\Http\Requests;
 
+use Override;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,6 +22,7 @@ class GrantEditRequest extends FormRequest
      *
      * @return array<string, string>
      */
+    #[Override]
     public function messages(): array {
         return [
             'grant_id.*' => 'Grant ID number field is not valid.',
@@ -48,6 +50,7 @@ class GrantEditRequest extends FormRequest
      *
      * @return void
      */
+    #[Override]
     protected function prepareForValidation(): void {
         $form = json_decode($this->frm);
         foreach ($form as $item => $value) {

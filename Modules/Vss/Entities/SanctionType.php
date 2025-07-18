@@ -2,6 +2,9 @@
 
 namespace Modules\Vss\Entities;
 
+use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -13,20 +16,20 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $description
  * @property string $short_description
  * @property bool $disabled
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Vss\Entities\CaseSanctionType> $sanctions
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Collection<int, CaseSanctionType> $sanctions
  * @property-read int|null $sanctions_count
- * @method static \Illuminate\Database\Eloquent\Builder|SanctionType newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|SanctionType newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|SanctionType query()
- * @method static \Illuminate\Database\Eloquent\Builder|SanctionType whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SanctionType whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SanctionType whereDisabled($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SanctionType whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SanctionType whereSanctionCode($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SanctionType whereShortDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SanctionType whereUpdatedAt($value)
+ * @method static Builder|SanctionType newModelQuery()
+ * @method static Builder|SanctionType newQuery()
+ * @method static Builder|SanctionType query()
+ * @method static Builder|SanctionType whereCreatedAt($value)
+ * @method static Builder|SanctionType whereDescription($value)
+ * @method static Builder|SanctionType whereDisabled($value)
+ * @method static Builder|SanctionType whereId($value)
+ * @method static Builder|SanctionType whereSanctionCode($value)
+ * @method static Builder|SanctionType whereShortDescription($value)
+ * @method static Builder|SanctionType whereUpdatedAt($value)
  * @mixin \Eloquent
  */
 class SanctionType extends ModuleModel
@@ -44,6 +47,6 @@ class SanctionType extends ModuleModel
      * @return HasMany<CaseSanctionType>
      */
     public function sanctions(): HasMany {
-        return $this->hasMany('Modules\Vss\Entities\CaseSanctionType', 'incident_id', 'incident_id');
+        return $this->hasMany(CaseSanctionType::class, 'incident_id', 'incident_id');
     }
 }

@@ -30,9 +30,9 @@ class Grant extends ModuleModel
         'created_by', 'updated_by', ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Student, Grant>
+     * @return BelongsTo<Student, Grant>
      */
     public function student(): BelongsTo {
-        return $this->belongsTo('Modules\Twp\Entities\Student', 'student_id', 'id');
+        return $this->belongsTo(Student::class, 'student_id', 'id');
     }
 }

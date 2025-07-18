@@ -2,6 +2,7 @@
 
 namespace Modules\Lfp\Http\Requests;
 
+use Override;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -22,6 +23,7 @@ class LfpEditRequest extends FormRequest
      *
      * @return array<string, string>
      */
+    #[Override]
     public function messages(): array {
         return [
             'sin.*' => 'SIN field is not valid.',
@@ -48,6 +50,7 @@ class LfpEditRequest extends FormRequest
      *
      * @return void
      */
+    #[Override]
     protected function prepareForValidation(): void {
         if (isset($this->sin)) {
             //\D means "anything that isn't a digit":

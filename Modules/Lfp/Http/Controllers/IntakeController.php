@@ -21,7 +21,7 @@ class IntakeController extends Controller
 {
     /**
      * Display a listing of the resource.
-     * @return \Inertia\Response
+     * @return Response
      */
     public function index(): Response {
         $intakes = $this->paginateIntakes();
@@ -31,7 +31,7 @@ class IntakeController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     * @return \Inertia\Response
+     * @return Response
      */
     public function create(): Response {
         $utils_array = [];
@@ -47,9 +47,9 @@ class IntakeController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Modules\Lfp\Http\Requests\IntakeStoreRequest $request
+     * @param IntakeStoreRequest $request
      *
-     * @return \Inertia\Response
+     * @return Response
      */
     public function store(IntakeStoreRequest $request): Response {
         $intake = Intake::create($request->validated());
@@ -61,7 +61,7 @@ class IntakeController extends Controller
     /**
      * Show the specified resource.
      * @param Intake $intake
-     * @return \Inertia\Response
+     * @return Response
      */
     public function show(Intake $intake): Response {
         //$intake = Intake::where('id', $intake->id)->first();
@@ -80,10 +80,10 @@ class IntakeController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Modules\Lfp\Http\Requests\IntakeEditRequest $request
-     * @param \Modules\Lfp\Entities\Intake $intake
+     * @param IntakeEditRequest $request
+     * @param Intake $intake
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function update(IntakeEditRequest $request, Intake $intake): RedirectResponse {
         Intake::where('id', $intake->id)->update($request->validated());
@@ -92,7 +92,7 @@ class IntakeController extends Controller
     }
 
     /**
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator<Intake>
+     * @return LengthAwarePaginator<Intake>
      */
     private function paginateIntakes(): LengthAwarePaginator
     {

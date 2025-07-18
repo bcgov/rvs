@@ -2,6 +2,7 @@
 
 namespace Modules\Lfp\Http\Requests;
 
+use Override;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 
@@ -21,6 +22,7 @@ class UtilEditRequest extends FormRequest
      *
      * @return array<string, string>
      */
+    #[Override]
     public function messages(): array {
         return [
             'id.*' => 'Utility ID field is not valid.',
@@ -51,6 +53,7 @@ class UtilEditRequest extends FormRequest
      *
      * @return void
      */
+    #[Override]
     protected function prepareForValidation(): void {
         $this->merge(['active_flag' => $this->toBoolean($this->active_flag)]);
     }

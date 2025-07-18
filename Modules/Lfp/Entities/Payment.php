@@ -2,6 +2,7 @@
 
 namespace Modules\Lfp\Entities;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
 
@@ -10,13 +11,13 @@ use Illuminate\Support\Facades\DB;
  * @property int|null $lfp_id
  * @property string|null $app_idx
  * @property string|null $pay_idx
- * @property \Carbon\Carbon|null $anniversary_date
+ * @property Carbon|null $anniversary_date
  * @property float|null $proposed_pay_amount
  * @property int|null $proposed_hrs_of_service
  * @property string|null $sfas_pay_status
  * @property string|null $oc_pay_status
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  */
 class Payment extends ModuleModel
 {
@@ -35,10 +36,10 @@ class Payment extends ModuleModel
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Lfp, Payment>
+     * @return BelongsTo<Lfp, Payment>
      */
     public function lfp(): BelongsTo {
-        return $this->belongsTo('Modules\Lfp\Entities\Lfp', 'lfp_id', 'id');
+        return $this->belongsTo(Lfp::class, 'lfp_id', 'id');
     }
 
     /**

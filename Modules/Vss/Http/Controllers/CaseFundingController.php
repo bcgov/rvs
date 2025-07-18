@@ -19,7 +19,7 @@ class CaseFundingController extends Controller
      * Display the specified resource.
      *
      * @param string $id
-     * @return \Inertia\Response|\Inertia\ResponseFactory
+     * @return Response|ResponseFactory
      */
     public function show(string $id): Response|ResponseFactory {
         $case = Incident::with('funds.fundingType', 'institution')->findOrFail($id);
@@ -32,7 +32,7 @@ class CaseFundingController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @return \Inertia\Response|\Inertia\ResponseFactory
+     * @return Response|ResponseFactory
      */
     public function update(Request $request, Incident $caseFunding): Response|ResponseFactory {
         foreach ($request->old_rows as $row) {
@@ -67,7 +67,7 @@ class CaseFundingController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function destroy(CaseFunding $caseFunding): RedirectResponse {
         $incident_id = $caseFunding->incident_id;

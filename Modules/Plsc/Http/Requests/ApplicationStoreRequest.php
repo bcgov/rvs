@@ -2,6 +2,7 @@
 
 namespace Modules\Plsc\Http\Requests;
 
+use Override;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ApplicationStoreRequest extends FormRequest
@@ -20,6 +21,7 @@ class ApplicationStoreRequest extends FormRequest
      *
      * @return array<string, string>
      */
+    #[Override]
     public function messages(): array {
         return [
             'student_id.*' => 'Student field is not valid.',
@@ -67,6 +69,7 @@ class ApplicationStoreRequest extends FormRequest
      *
      * @return void
      */
+    #[Override]
     protected function prepareForValidation(): void {
     }
 }

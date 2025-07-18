@@ -2,6 +2,7 @@
 
 namespace Modules\Plsc\Entities;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -16,9 +17,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string|null $program_of_study
  * @property string|null $status_code
  * @property string|null $comment
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- * @property \Carbon\Carbon|null $deleted_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property Carbon|null $deleted_at
  * @property-read Student $student
  * @property-read Institution $institution
  * @property-read object|null $sfas_app
@@ -46,18 +47,18 @@ class Application extends ModuleModel
 
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Student, Application>
+     * @return BelongsTo<Student, Application>
      */
     public function student(): BelongsTo {
-        return $this->belongsTo('Modules\Plsc\Entities\Student');
+        return $this->belongsTo(Student::class);
     }
 
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Institution, Application>
+     * @return BelongsTo<Institution, Application>
      */
     public function institution(): BelongsTo {
-        return $this->belongsTo('Modules\Plsc\Entities\Institution');
+        return $this->belongsTo(Institution::class);
     }
 
     /**

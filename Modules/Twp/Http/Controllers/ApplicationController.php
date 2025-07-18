@@ -2,6 +2,8 @@
 
 namespace Modules\Twp\Http\Controllers;
 
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\Response;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -22,9 +24,9 @@ class ApplicationController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Modules\Twp\Http\Requests\ApplicationStoreRequest $request
+     * @param ApplicationStoreRequest $request
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function store(ApplicationStoreRequest $request): RedirectResponse {
         $application = Application::create($request->validated());
@@ -34,10 +36,10 @@ class ApplicationController extends Controller
 
     /**
      * Update the specified resource in storage.
-     * @param \Modules\Twp\Http\Requests\ApplicationEditRequest $request
-     * @param \Modules\Twp\Entities\Application $application
+     * @param ApplicationEditRequest $request
+     * @param Application $application
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function update(ApplicationEditRequest $request, Application $application): RedirectResponse {
         Application::where('id', $application->id)->update($request->validated());
@@ -58,7 +60,7 @@ class ApplicationController extends Controller
      * Soft delete the application
      * @param Application $application
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function destroy(Application $application): RedirectResponse {
         // Update Comment column
@@ -73,10 +75,10 @@ class ApplicationController extends Controller
 
     /**
      * Update the specified resource in storage.
-     * @param \Illuminate\Http\Request $request
-     * @param \Modules\Twp\Entities\Application $application
+     * @param Request $request
+     * @param Application $application
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function applicationStatus(Request $request, Application $application): RedirectResponse {
         $application = Application::find($application->id);
@@ -90,13 +92,12 @@ class ApplicationController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @param string $type
-     * @param mixed $extra
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|ResponseFactory|\Illuminate\Foundation\Application|Response
      */
-    public function downloadLetter(Request $request, string $type, mixed $extra): \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response {
+    public function downloadLetter(Request $request, string $type, mixed $extra): \Illuminate\Contracts\Foundation\Application|ResponseFactory|\Illuminate\Foundation\Application|Response {
         $admin = Admin::first();
         $now_d = date('F d, Y');
         $app = Application::where('id', $extra)->with('student', 'reasons', 'program.institution', 'payments')->first();
@@ -125,12 +126,11 @@ class ApplicationController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     * @param mixed $extra
+     * @param Request $request
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|ResponseFactory|\Illuminate\Foundation\Application|Response
      */
-    public function downloadSchoolLetter(Request $request, mixed $extra): \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response {
+    public function downloadSchoolLetter(Request $request, mixed $extra): \Illuminate\Contracts\Foundation\Application|ResponseFactory|\Illuminate\Foundation\Application|Response {
         $admin = Admin::first();
         $now_d = date('F d, Y');
         $app = Application::where('id', $extra)->with('student', 'reasons', 'program.institution', 'payments')->first();
@@ -152,10 +152,9 @@ class ApplicationController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     * @param mixed $extra
+     * @param Request $request
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|ResponseFactory|\Illuminate\Foundation\Application|Response
      */
     public function downloadStudentTransferLetter(Request $request, mixed $extra)
     {

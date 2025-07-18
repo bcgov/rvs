@@ -14,7 +14,7 @@ class NatureOffenceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response
+     * @return Response
      */
     public function index(): Response {
         $offences = NatureOffence::orderBy('nature_code', 'asc')->get();
@@ -25,7 +25,7 @@ class NatureOffenceController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function store(NatureOffenceStoreRequest $request): RedirectResponse {
         NatureOffence::create($request->validated());
@@ -36,7 +36,7 @@ class NatureOffenceController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function update(NatureOffenceStoreRequest $request, NatureOffence $natureOffence): RedirectResponse {
         //if the nature offence code updated

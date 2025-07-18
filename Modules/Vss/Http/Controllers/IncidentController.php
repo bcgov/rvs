@@ -59,9 +59,9 @@ class IncidentController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      *
-     * @return \Inertia\Response|\Inertia\ResponseFactory
+     * @return Response|ResponseFactory
      */
     public function archived(Request $request)
     {
@@ -73,7 +73,7 @@ class IncidentController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Inertia\ResponseFactory|\Inertia\Response
+     * @return ResponseFactory|Response
      */
     public function create(): Response|ResponseFactory {
         $areaOfAudits = AreaOfAudit::get();
@@ -96,7 +96,7 @@ class IncidentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function store(CaseStoreRequest $request): RedirectResponse
     {
@@ -109,10 +109,10 @@ class IncidentController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     * @param \Modules\Vss\Entities\Incident  $case
-     * @return \Inertia\ResponseFactory|\Inertia\Response
+     * @param Incident $case
+     * @return ResponseFactory|Response
      */
-    public function show(\Modules\Vss\Entities\Incident $case): Response|ResponseFactory
+    public function show(Incident $case): Response|ResponseFactory
     {
         $case = Incident::where('id', $case->id)->with('audits', 'offences.offence', 'sanctions.sanction', 'institution')->withTrashed()->first();
         $areaOfAudits = AreaOfAudit::get();
@@ -136,8 +136,8 @@ class IncidentController extends Controller
      * Update the specified resource in storage.
      *
      * @param  CaseStoreRequest $request
-     * @param  \Modules\Vss\Entities\Incident  $case
-     * @return \Illuminate\Http\RedirectResponse
+     * @param Incident $case
+     * @return RedirectResponse
      */
     public function update(CaseStoreRequest $request, Incident $case): RedirectResponse {
         $case->update($request->validated());
@@ -148,12 +148,12 @@ class IncidentController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request  $request
-     * @param \Modules\Vss\Entities\Incident $case
+     * @param Request $request
+     * @param Incident $case
      *
      * @return void
      */
-    private function addAttachedRecords(Request $request, \Modules\Vss\Entities\Incident $case): void {
+    private function addAttachedRecords(Request $request, Incident $case): void {
         $case->audits()->delete();
         foreach ($request->old_audit_codes as $row) {
             $audit = AreaOfAudit::where('area_of_audit_code', $row['area_of_audit_code'])->first();
@@ -209,8 +209,8 @@ class IncidentController extends Controller
     }
 
     /**
-     * @param Builder<\Modules\Vss\Entities\Incident> $cases
-     * @return LengthAwarePaginator<\Modules\Vss\Entities\Incident>
+     * @param Builder<Incident> $cases
+     * @return LengthAwarePaginator<Incident>
      */
     private function paginateCases(Builder $cases): LengthAwarePaginator
     {

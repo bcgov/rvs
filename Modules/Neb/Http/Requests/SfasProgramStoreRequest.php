@@ -2,6 +2,7 @@
 
 namespace Modules\Neb\Http\Requests;
 
+use Override;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SfasProgramStoreRequest extends FormRequest
@@ -20,6 +21,7 @@ class SfasProgramStoreRequest extends FormRequest
      *
      * @return array<string, string>
      */
+    #[Override]
     public function messages(): array {
         return [
         ];
@@ -46,6 +48,7 @@ class SfasProgramStoreRequest extends FormRequest
      *
      * @return void
      */
+    #[Override]
     protected function prepareForValidation(): void {
     }
 }

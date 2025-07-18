@@ -2,6 +2,7 @@
 
 namespace Modules\Lfp\Entities;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\DB;
@@ -22,8 +23,8 @@ use Illuminate\Support\Facades\DB;
  * @property string|null $first_name
  * @property string|null $last_name
  * @property string|null $comment
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  */
 class Lfp extends ModuleModel
 {
@@ -39,20 +40,20 @@ class Lfp extends ModuleModel
         ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Payment>
+     * @return HasMany<Payment>
      */
     public function payments(): HasMany
     {
-        return $this->hasMany('Modules\Lfp\Entities\Payment', 'lfp_id', 'id')
+        return $this->hasMany(Payment::class, 'lfp_id', 'id')
             ->orderBy('anniversary_date', 'desc');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Application>
+     * @return HasMany<Application>
      */
     public function applications(): HasMany
     {
-        return $this->hasMany('Modules\Lfp\Entities\Application', 'lfp_id', 'id');
+        return $this->hasMany(Application::class, 'lfp_id', 'id');
     }
 
     /**
@@ -82,7 +83,7 @@ class Lfp extends ModuleModel
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne<Intake>
+     * @return HasOne<Intake>
      */
     public function intake(): HasOne
     {

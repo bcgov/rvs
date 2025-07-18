@@ -2,6 +2,7 @@
 
 namespace Modules\Neb\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
@@ -26,9 +27,9 @@ class RestrictionController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\JsonResponse.json
+     * @return JsonResponse .json
      */
-    public function fetch(\Illuminate\Http\Request $request): JsonResponse {
+    public function fetch(Request $request): JsonResponse {
         if ($request->id) {
             $restriction = Restriction::find($request->id);
 
@@ -49,9 +50,9 @@ class RestrictionController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Modules\Neb\Http\Requests\RestrictionStoreRequest $request
+     * @param RestrictionStoreRequest $request
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function store(RestrictionStoreRequest $request): RedirectResponse {
         $restriction = Restriction::create($request->validated());

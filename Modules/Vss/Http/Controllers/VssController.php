@@ -29,8 +29,7 @@ class VssController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     *
+     * @param Request $request
      */
     public function store(Request $request): void {
         //
