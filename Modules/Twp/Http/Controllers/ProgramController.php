@@ -2,6 +2,7 @@
 
 namespace Modules\Twp\Http\Controllers;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 use Modules\Twp\Entities\Program;
 use Modules\Twp\Entities\ProgramHistory;
@@ -13,7 +14,7 @@ class ProgramController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function store(ProgramStoreRequest $request)
     {
@@ -25,7 +26,7 @@ class ProgramController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function update(ProgramEditRequest $request, Program $program)
     {

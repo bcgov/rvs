@@ -2,6 +2,7 @@
 
 namespace Modules\Lfp\Http\Controllers;
 
+use Illuminate\Auth\Access\AuthorizationException;
 use App\Http\Requests\StaffEditRequest;
 use App\Models\Role;
 use App\Models\User;
@@ -19,14 +20,12 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response
+     * @return Response
      */
     public function staffList(Request $request): Response
     {
         $staff = User::with('roles')
-            ->whereHas('roles', function ($q) {
-                return $q->whereIn('name', [Role::LFP_ADMIN, Role::LFP_USER, Role::LFP_GUEST]);
-            })->orderBy('created_at', 'desc')->get();
+            ->whereHas('roles', fn($q) => $q->whereIn('name', [Role::LFP_ADMIN, Role::LFP_USER, Role::LFP_GUEST]))->orderBy('created_at', 'desc')->get();
 
         foreach ($staff as $user) {
             if ($user->roles->contains('name', Role::LFP_ADMIN)) {
@@ -44,10 +43,10 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\User $user
+     * @param Request $request
+     * @param User $user
      *
-     * @return \Inertia\Response
+     * @return Response
      */
     public function staffShow(Request $request, User $user): Response
     {
@@ -65,11 +64,11 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param \App\Http\Requests\StaffEditRequest $request
-     * @param \App\Models\User $user
+     * @param StaffEditRequest $request
+     * @param User $user
      *
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @return RedirectResponse
+     * @throws AuthorizationException
      */
     public function staffEdit(StaffEditRequest $request, User $user): RedirectResponse
     {
@@ -102,9 +101,9 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      *
-     * @return \Inertia\Response
+     * @return Response
      */
     public function utilList(Request $request): Response
     {
@@ -127,10 +126,10 @@ class MaintenanceController extends Controller
     /**
      * Update a utility resource.
      *
-     * @param \Modules\Lfp\Http\Requests\UtilEditRequest $request
-     * @param \Modules\Lfp\Entities\Util $util
+     * @param UtilEditRequest $request
+     * @param Util $util
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function utilUpdate(UtilEditRequest $request, Util $util): RedirectResponse
     {
@@ -143,9 +142,9 @@ class MaintenanceController extends Controller
     /**
      * Store a utility resource.
      *
-     * @param \Modules\Lfp\Http\Requests\UtilStoreRequest $request
+     * @param UtilStoreRequest $request
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function utilStore(UtilStoreRequest $request): RedirectResponse
     {

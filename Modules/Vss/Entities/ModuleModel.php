@@ -2,14 +2,15 @@
 
 namespace Modules\Vss\Entities;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  *
  *
- * @method static \Illuminate\Database\Eloquent\Builder|ModuleModel newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|ModuleModel newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|ModuleModel query()
+ * @method static Builder|ModuleModel newModelQuery()
+ * @method static Builder|ModuleModel newQuery()
+ * @method static Builder|ModuleModel query()
  * @mixin \Eloquent
  */
 class ModuleModel extends Model

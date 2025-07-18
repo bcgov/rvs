@@ -135,7 +135,7 @@
 import BreezeAuthenticatedLayout from '../Layouts/Authenticated.vue';
 import SchoolSearchBox from '../Components/SchoolSearch.vue';
 import SchoolsHeader from '../Components/SchoolsHeader.vue';
-import {Head, Link, useForm, computed} from '@inertiajs/vue3';
+import { Head, Link, useForm, usePage, router } from '@inertiajs/vue3';
 import BreezeInput from "../Components/Input";
 import BreezeSelect from "../Components/Select";
 import BreezeLabel from "../Components/Label";
@@ -174,7 +174,7 @@ export default {
                 onSuccess: (response) => {
                     $("#newSchoolModal").modal('hide');
                     this.newSchoolForm.reset(this.newSchoolFormData);
-                    this.$inertia.visit('institutions/' + response.props.school.id);
+                    router.visit('institutions/' + response.props.school.id);
                 },
                 onFailure: () => {
                 },

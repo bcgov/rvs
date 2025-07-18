@@ -2,6 +2,7 @@
 
 namespace Modules\Vss\Http\Requests;
 
+use Override;
 use Illuminate\Foundation\Http\FormRequest;
 use Modules\Vss\Entities\Incident;
 
@@ -21,6 +22,7 @@ class CaseStoreRequest extends FormRequest
      *
      * @return array<string, string>
      */
+    #[Override]
     public function messages(): array {
         return [
             'institution_code.required' => 'School field is required.',
@@ -91,6 +93,7 @@ class CaseStoreRequest extends FormRequest
      *
      * @return void
      */
+    #[Override]
     protected function prepareForValidation(): void {
         //Store won't have it, only Update
         if (! isset($this->incident_id)) {

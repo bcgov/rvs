@@ -2,14 +2,15 @@
 
 namespace Modules\Twp\Entities;
 
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * @property int $id
  * @property string|null $title
  * @property bool $active_flag
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  */
 class IndigeneityType extends ModuleModel
 {
@@ -17,11 +18,11 @@ class IndigeneityType extends ModuleModel
     protected $fillable = ['title', 'is_active'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Student>
+     * @return BelongsToMany<Student>
      */
     public function students(): BelongsToMany {
         return $this->belongsToMany(
-            'Modules\Twp\Entities\Student', 'indigeneity_type_student');
+            Student::class, 'indigeneity_type_student');
     }
 
 }

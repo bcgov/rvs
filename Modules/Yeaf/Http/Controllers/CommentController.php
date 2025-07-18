@@ -14,9 +14,9 @@ class CommentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Modules\Yeaf\Http\Requests\CommentStoreRequest $request
+     * @param CommentStoreRequest $request
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function store(CommentStoreRequest $request): RedirectResponse {
         $comment = Comment::create($request->validated());

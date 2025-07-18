@@ -27,8 +27,8 @@
                                 TWP Applications
                             </div>
                             <div class="card-body">
-                                <div v-if="$page.props.flash.message" class="alert alert-success">
-                                    {{ $page.props.flash.message }}
+                                <div v-if="page.props.flash.message" class="alert alert-success">
+                                    {{ page.props.flash.message }}
                                 </div>
                                 <div v-if="results != null && results.data.length > 0" class="table-responsive pb-3">
                                     <table class="table table-striped">
@@ -46,7 +46,7 @@
                                             <td>
                                                 <span v-if="row.application_status === 'DENIED'">Denied</span>
                                                 <BreezeSelect v-else @change="updateStatus(row, $event)" class="form-select" :id="'inputStudentAppStatus'+i" v-model="row.application_status">
-                                                    <option v-for="status in $attrs.utils['Application Status']" :key="status.id" :value="status.field_name">
+                                                    <option v-for="status in (utils['Application Status'] || [])" :key="status.id" :value="status.field_name">
                                                         {{ toTitleCase(status.field_name) }}
                                                     </option>
                                                 </BreezeSelect>
@@ -72,12 +72,13 @@
 import BreezeAuthenticatedLayout from '../Layouts/Authenticated.vue';
 import StudentSearchBox from '../Components/StudentSearch.vue';
 import ApplicationsHeader from '../Components/ApplicationsHeader.vue';
-import {Head, Link, useForm} from '@inertiajs/vue3';
+import {Head, Link, useForm, usePage} from '@inertiajs/vue3';
 import BreezeInput from "@/Components/Input";
 import BreezeSelect from "@/Components/Select";
 import BreezeLabel from "@/Components/Label";
 import BreezePagination from "@/Components/Pagination";
 import FormSubmitAlert from "@/Components/FormSubmitAlert";
+import {computed} from "vue";
 
 export default {
     name: 'Applications',
@@ -94,6 +95,15 @@ export default {
         return {
 
         }
+    },
+    setup() {
+        const page = usePage();
+        const utils = computed(() => page.props.utils || {});
+
+        return {
+            page,
+            utils
+        };
     },
     methods: {
         toTitleCase(str) {

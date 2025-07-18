@@ -14,7 +14,7 @@ class AreaOfAuditController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response
+     * @return Response
      */
     public function index(): Response {
         $areas = AreaOfAudit::orderBy('area_of_audit_code', 'asc')->get();
@@ -25,7 +25,7 @@ class AreaOfAuditController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function store(AreaOfAuditStoreRequest $request): RedirectResponse {
         AreaOfAudit::create($request->validated());
@@ -36,10 +36,10 @@ class AreaOfAuditController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Modules\Vss\Http\Requests\AreaOfAuditStoreRequest $request $request
-     * @param \Modules\Vss\Entities\AreaOfAudit $areaOfAudit
+     * @param AreaOfAuditStoreRequest $request $request
+     * @param AreaOfAudit $areaOfAudit
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function update(AreaOfAuditStoreRequest $request, AreaOfAudit $areaOfAudit): RedirectResponse {
         //if the area code updated

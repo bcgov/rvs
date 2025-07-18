@@ -183,7 +183,7 @@ import { Head, Link, useForm } from '@inertiajs/vue3';
 import CaseSearchBox from '../Components/CaseSearch.vue';
 import BreezeInput from '@/Components/Input.vue';
 import BreezeSelect from '@/Components/Select.vue';
-import {Inertia} from "@inertiajs/inertia";
+import { router } from '@inertiajs/vue3';
 
 export default {
     name: 'CaseFunding',
@@ -238,7 +238,7 @@ export default {
             setTimeout(function (){
                 vm.showSuccessMsg = false;
                 vm.noChanges = true;
-                Inertia.get('/vss/case-funding/' + vm.result.id, {preserveState: true});
+                router.get('/vss/case-funding/' + vm.result.id, {preserveState: true});
 
             }, 5000);
         },

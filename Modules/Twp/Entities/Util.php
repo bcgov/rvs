@@ -2,6 +2,7 @@
 
 namespace Modules\Twp\Entities;
 
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -11,8 +12,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $field_type
  * @property string|null $field_description
  * @property bool $active_flag
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  */
 class Util extends Model
 {

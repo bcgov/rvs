@@ -25,7 +25,7 @@ class StudentController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response
+     * @return Response
      */
     public function index(): Response {
         $students = $this->paginateStudents();
@@ -37,7 +37,7 @@ class StudentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @return \Inertia\Response
+     * @return Response
      */
     public function store(StudentStoreRequest $request): Response {
         $student = Student::create($request->validated());
@@ -50,7 +50,7 @@ class StudentController extends Controller
     /**
      * Display the specified resource.
      *
-     * @return \Inertia\Response
+     * @return Response
      */
     public function show(Student $student): Response {
         $student = Student::where('id', $student->id)->with('grants.school', 'grants.grantPendingIneligibles', 'grants.grantDeniedIneligibles', 'grants.appeals', 'comments')->first();
@@ -79,7 +79,7 @@ class StudentController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function update(StudentUpdateRequest $request, Student $student): RedirectResponse {
         Student::where('id', $student->id)->update($request->validated());

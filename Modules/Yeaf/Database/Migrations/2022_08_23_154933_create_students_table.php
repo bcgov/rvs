@@ -29,10 +29,10 @@ return new class extends Migration
                 $table->string('tele', 20)->nullable();
                 $table->string('email')->nullable();
                 $table->string('gender', 1)->nullable();
-                $table->double('life', null, 2)->default(0)->nullable();
-                $table->double('overaward_amount', null, 2)->default(0)->nullable();
+                $table->double('life')->default(0)->nullable();
+                $table->double('overaward_amount')->default(0)->nullable();
                 $table->boolean('overaward_flag')->default(false);
-                $table->double('overaward_deducted_amount', null, 2)->default(0)->nullable();
+                $table->double('overaward_deducted_amount')->default(0)->nullable();
                 $table->boolean('investigate')->default(false);
                 $table->string('pen', 9)->nullable();
                 $table->boolean('pd')->default(false);

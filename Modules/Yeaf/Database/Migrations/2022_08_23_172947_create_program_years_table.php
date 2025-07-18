@@ -19,7 +19,7 @@ return new class extends Migration
                 $table->integer('program_year_id')->unique();
                 $table->string('year_start', 4)->nullable();
                 $table->string('year_end', 4)->nullable();
-                $table->double('grant_amount', null, 2)->default(0);
+                $table->double('grant_amount')->default(0);
 
                 $table->integer('max_years_allowed')->default(4)->comment('Maximum number of years a student is allowed to be in the program');
                 $table->integer('min_age')->comment('Minimum age required to apply');

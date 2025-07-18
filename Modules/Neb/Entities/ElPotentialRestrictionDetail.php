@@ -19,24 +19,24 @@ class ElPotentialRestrictionDetail extends ModuleModel
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Student, ElPotentialRestrictionDetail>
+     * @return BelongsTo<Student, ElPotentialRestrictionDetail>
      */
     public function student(): BelongsTo {
-        return $this->belongsTo('Modules\Neb\Entities\Student', 'sin', 'sin');
+        return $this->belongsTo(Student::class, 'sin', 'sin');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<BursaryPeriod, ElPotentialRestrictionDetail>
+     * @return BelongsTo<BursaryPeriod, ElPotentialRestrictionDetail>
      */
     public function bursaryPeriod(): BelongsTo
     {
-        return $this->belongsTo('Modules\Neb\Entities\BursaryPeriod', 'bursary_period_id', 'id');
+        return $this->belongsTo(BursaryPeriod::class, 'bursary_period_id', 'id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Restriction, ElPotentialRestrictionDetail>
+     * @return BelongsTo<Restriction, ElPotentialRestrictionDetail>
      */
     public function restriction(): BelongsTo {
-        return $this->belongsTo('Modules\Neb\Entities\Restriction', 'restriction_code', 'restriction_code');
+        return $this->belongsTo(Restriction::class, 'restriction_code', 'restriction_code');
     }
 }

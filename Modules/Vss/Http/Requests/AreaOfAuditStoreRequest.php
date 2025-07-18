@@ -2,6 +2,7 @@
 
 namespace Modules\Vss\Http\Requests;
 
+use Override;
 use Illuminate\Foundation\Http\FormRequest;
 
 class AreaOfAuditStoreRequest extends FormRequest
@@ -20,6 +21,7 @@ class AreaOfAuditStoreRequest extends FormRequest
      *
      * @return array<string, string>
      */
+    #[Override]
     public function messages(): array {
         return [
             'area_of_audit_code.required' => 'Audit Code field is required.',
@@ -52,6 +54,7 @@ class AreaOfAuditStoreRequest extends FormRequest
      *
      * @return void
      */
+    #[Override]
     protected function prepareForValidation(): void {
         if (isset($this->area_of_audit_code)) {
             $this->merge(['area_of_audit_code' => mb_strtoupper($this->area_of_audit_code)]);

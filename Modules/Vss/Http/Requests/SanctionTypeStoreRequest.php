@@ -3,6 +3,7 @@
 namespace Modules\Vss\Http\Requests;
 
 
+use Override;
 use Illuminate\Foundation\Http\FormRequest;
 use Modules\Vss\Entities\SanctionType;
 
@@ -22,6 +23,7 @@ class SanctionTypeStoreRequest extends FormRequest
      *
      * @return array<string, string>
      */
+    #[Override]
     public function messages(): array {
         return [
             'sanction_code.required' => 'Sanction Code field is required.',
@@ -59,6 +61,7 @@ class SanctionTypeStoreRequest extends FormRequest
      *
      * @return void
      */
+    #[Override]
     protected function prepareForValidation(): void {
         //if we are creating new record
         if (! isset($this->id)) {

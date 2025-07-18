@@ -58,7 +58,7 @@
 </template>
 <script>
 
-import {Inertia} from "@inertiajs/inertia";
+import { router } from '@inertiajs/vue3';
 import BreezeSelect from "@/Components/Select";
 
 export default {
@@ -104,7 +104,7 @@ export default {
                 }
             });
 
-            Inertia.get(this.path, data, {
+            router.get(this.path, data, {
                 preserveState: true
             });
         },

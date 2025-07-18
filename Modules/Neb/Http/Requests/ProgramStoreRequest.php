@@ -2,6 +2,7 @@
 
 namespace Modules\Neb\Http\Requests;
 
+use Override;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ProgramStoreRequest extends FormRequest
@@ -20,6 +21,7 @@ class ProgramStoreRequest extends FormRequest
      *
      * @return array<string, string>
      */
+    #[Override]
     public function messages(): array {
         return [
         ];
@@ -42,6 +44,7 @@ class ProgramStoreRequest extends FormRequest
      *
      * @return void
      */
+    #[Override]
     protected function prepareForValidation(): void {
     }
 }

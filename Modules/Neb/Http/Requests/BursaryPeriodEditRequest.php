@@ -2,6 +2,7 @@
 
 namespace Modules\Neb\Http\Requests;
 
+use Override;
 use Illuminate\Foundation\Http\FormRequest;
 
 class BursaryPeriodEditRequest extends FormRequest
@@ -20,6 +21,7 @@ class BursaryPeriodEditRequest extends FormRequest
      *
      * @return array<string, string>
      */
+    #[Override]
     public function messages(): array {
         return [
         ];
@@ -47,6 +49,7 @@ class BursaryPeriodEditRequest extends FormRequest
      *
      * @return void
      */
+    #[Override]
     protected function prepareForValidation(): void {
         if (isset($this->application_status) && $this->application_status != 'DENIED') {
             $this->merge(['denial_reason' => null]);

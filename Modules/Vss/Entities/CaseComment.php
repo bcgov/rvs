@@ -2,6 +2,8 @@
 
 namespace Modules\Vss\Entities;
 
+use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -14,26 +16,26 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $staff_user_id
  * @property string|null $comment_date
  * @property string|null $comment_text
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property string|null $deleted_by_user_id
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read \Modules\Vss\Entities\Incident $incident
- * @method static \Illuminate\Database\Eloquent\Builder|CaseComment newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|CaseComment newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|CaseComment onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|CaseComment query()
- * @method static \Illuminate\Database\Eloquent\Builder|CaseComment whereCommentDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CaseComment whereCommentText($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CaseComment whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CaseComment whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CaseComment whereDeletedByUserId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CaseComment whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CaseComment whereIncidentId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CaseComment whereStaffUserId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CaseComment whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CaseComment withTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|CaseComment withoutTrashed()
+ * @property Carbon|null $deleted_at
+ * @property-read Incident $incident
+ * @method static Builder|CaseComment newModelQuery()
+ * @method static Builder|CaseComment newQuery()
+ * @method static Builder|CaseComment onlyTrashed()
+ * @method static Builder|CaseComment query()
+ * @method static Builder|CaseComment whereCommentDate($value)
+ * @method static Builder|CaseComment whereCommentText($value)
+ * @method static Builder|CaseComment whereCreatedAt($value)
+ * @method static Builder|CaseComment whereDeletedAt($value)
+ * @method static Builder|CaseComment whereDeletedByUserId($value)
+ * @method static Builder|CaseComment whereId($value)
+ * @method static Builder|CaseComment whereIncidentId($value)
+ * @method static Builder|CaseComment whereStaffUserId($value)
+ * @method static Builder|CaseComment whereUpdatedAt($value)
+ * @method static Builder|CaseComment withTrashed()
+ * @method static Builder|CaseComment withoutTrashed()
  * @mixin \Eloquent
  */
 class CaseComment extends ModuleModel
@@ -49,9 +51,9 @@ class CaseComment extends ModuleModel
     protected $fillable = ['incident_id', 'staff_user_id', 'comment_date', 'comment_text', 'deleted_by_user_id'];
 
     /**
-     * @return BelongsTo<\Modules\Vss\Entities\Incident, \Modules\Vss\Entities\CaseComment>
+     * @return BelongsTo<Incident, \Modules\Vss\Entities\CaseComment>
      */
     public function incident(): BelongsTo {
-        return $this->belongsTo('Modules\Vss\Entities\Incident', 'incident_id', 'incident_id');
+        return $this->belongsTo(Incident::class, 'incident_id', 'incident_id');
     }
 }

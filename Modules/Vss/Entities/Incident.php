@@ -2,6 +2,8 @@
 
 namespace Modules\Vss\Entities;
 
+use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -45,26 +47,26 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property bool $conviction_flag
  * @property string|null $sentence_comment
  * @property bool $archived
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
  *
  * // Appended attributes
  * @property float|null $total_award
  * @property float|null $total_prevented_funding
  * @property float|null $total_over_award
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Vss\Entities\CaseAuditType> $audits
+ * @property-read Collection<int, CaseAuditType> $audits
  * @property-read int|null $audits_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Vss\Entities\CaseComment> $comments
+ * @property-read Collection<int, CaseComment> $comments
  * @property-read int|null $comments_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Vss\Entities\CaseFunding> $funds
+ * @property-read Collection<int, CaseFunding> $funds
  * @property-read int|null $funds_count
- * @property-read \Modules\Vss\Entities\Institution|null $institution
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Vss\Entities\CaseNatureOffence> $offences
+ * @property-read Institution|null $institution
+ * @property-read Collection<int, CaseNatureOffence> $offences
  * @property-read int|null $offences_count
- * @property-read \Modules\Vss\Entities\AreaOfAudit $primaryAudit
- * @property-read \Modules\Vss\Entities\ReferralSource $referral
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Vss\Entities\CaseSanctionType> $sanctions
+ * @property-read AreaOfAudit $primaryAudit
+ * @property-read ReferralSource $referral
+ * @property-read Collection<int, CaseSanctionType> $sanctions
  * @property-read int|null $sanctions_count
  * @method static Builder|Incident active()
  * @method static Builder|Incident newModelQuery()
@@ -132,59 +134,59 @@ class Incident extends ModuleModel
     ];
 
     /**
-     * @return HasMany<\Modules\Vss\Entities\CaseFunding>
+     * @return HasMany<CaseFunding>
      */
     public function funds(): HasMany {
-        return $this->hasMany('Modules\Vss\Entities\CaseFunding', 'incident_id', 'incident_id');
+        return $this->hasMany(CaseFunding::class, 'incident_id', 'incident_id');
     }
 
     /**
-     * @return HasMany<\Modules\Vss\Entities\CaseComment>
+     * @return HasMany<CaseComment>
      */
     public function comments(): HasMany {
-        return $this->hasMany('Modules\Vss\Entities\CaseComment', 'incident_id', 'incident_id')->orderByDesc('comment_date');
+        return $this->hasMany(CaseComment::class, 'incident_id', 'incident_id')->orderByDesc('comment_date');
     }
 
     /**
-     * @return HasMany<\Modules\Vss\Entities\CaseAuditType>
+     * @return HasMany<CaseAuditType>
      */
     public function audits(): HasMany {
-        return $this->hasMany('Modules\Vss\Entities\CaseAuditType', 'incident_id', 'incident_id');
+        return $this->hasMany(CaseAuditType::class, 'incident_id', 'incident_id');
     }
 
     /**
-     * @return HasMany<\Modules\Vss\Entities\CaseNatureOffence>
+     * @return HasMany<CaseNatureOffence>
      */
     public function offences(): HasMany {
-        return $this->hasMany('Modules\Vss\Entities\CaseNatureOffence', 'incident_id', 'incident_id');
+        return $this->hasMany(CaseNatureOffence::class, 'incident_id', 'incident_id');
     }
 
     /**
-     * @return HasMany<\Modules\Vss\Entities\CaseSanctionType>
+     * @return HasMany<CaseSanctionType>
      */
     public function sanctions(): HasMany {
-        return $this->hasMany('Modules\Vss\Entities\CaseSanctionType', 'incident_id', 'incident_id');
+        return $this->hasMany(CaseSanctionType::class, 'incident_id', 'incident_id');
     }
 
     /**
-     * @return HasOne<\Modules\Vss\Entities\Institution>
+     * @return HasOne<Institution>
      */
     public function institution(): HasOne {
-        return $this->hasOne('Modules\Vss\Entities\Institution', 'institution_code', 'institution_code');
+        return $this->hasOne(Institution::class, 'institution_code', 'institution_code');
     }
 
     /**
-     * @return BelongsTo<\Modules\Vss\Entities\AreaOfAudit, \Modules\Vss\Entities\Incident>
+     * @return BelongsTo<AreaOfAudit, \Modules\Vss\Entities\Incident>
      */
     public function primaryAudit(): BelongsTo {
-        return $this->belongsTo('Modules\Vss\Entities\AreaOfAudit', 'area_of_audit_code', 'area_of_audit_code');
+        return $this->belongsTo(AreaOfAudit::class, 'area_of_audit_code', 'area_of_audit_code');
     }
 
     /**
-     * @return BelongsTo<\Modules\Vss\Entities\ReferralSource, \Modules\Vss\Entities\Incident>
+     * @return BelongsTo<ReferralSource, \Modules\Vss\Entities\Incident>
      */
     public function referral(): BelongsTo {
-        return $this->belongsTo('Modules\Vss\Entities\ReferralSource', 'referral_source_id', 'id');
+        return $this->belongsTo(ReferralSource::class, 'referral_source_id', 'id');
     }
 
     /**

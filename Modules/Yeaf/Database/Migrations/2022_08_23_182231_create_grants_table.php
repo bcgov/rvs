@@ -41,15 +41,15 @@ return new class extends Migration
 
                 $table->bigInteger('application_number')->nullable()->comment('eg)  2002 - 836483 takes only straight numbers    2002836483');
                 $table->integer('age')->nullable();
-                $table->double('eligible_need', null, 2)->default(0)->nullable()->comment('Eligible need = total award + unmet need');
-                $table->double('total_award', null, 2)->default(0)->nullable();
-                $table->double('unmet_need', null, 2)->default(0)->nullable();
-                $table->double('total_bcsl_award', null, 2)->default(0)->nullable();
-                $table->double('total_yeaf_award', null, 2)->default(0)->nullable()->comment('Award amount student actually recieves.  This field + overaward deduction = total award student could have received this year.');
-                $table->double('total_yeaf_award_remit', null, 2)->default(0)->nullable()->comment('total YEAF award to remit to BCSL     **Contract Neg.');
-                $table->double('overaward', null, 2)->default(0)->nullable()->comment('If the student withdrew, then the original amount of the award would now be an over award.');
-                $table->double('overaward_calc', null, 2)->default(0)->nullable();
-                $table->double('overaward_deducted_amount', null, 2)->default(0)->nullable()->comment('Amount of overaward that has been deducted from this application.  Total_YEAF_Award + this field = total amount awarded');
+                $table->double('eligible_need')->default(0)->nullable()->comment('Eligible need = total award + unmet need');
+                $table->double('total_award')->default(0)->nullable();
+                $table->double('unmet_need')->default(0)->nullable();
+                $table->double('total_bcsl_award')->default(0)->nullable();
+                $table->double('total_yeaf_award')->default(0)->nullable()->comment('Award amount student actually recieves.  This field + overaward deduction = total award student could have received this year.');
+                $table->double('total_yeaf_award_remit')->default(0)->nullable()->comment('total YEAF award to remit to BCSL     **Contract Neg.');
+                $table->double('overaward')->default(0)->nullable()->comment('If the student withdrew, then the original amount of the award would now be an over award.');
+                $table->double('overaward_calc')->default(0)->nullable();
+                $table->double('overaward_deducted_amount')->default(0)->nullable()->comment('Amount of overaward that has been deducted from this application.  Total_YEAF_Award + this field = total amount awarded');
 
                 $table->string('reason_for_ineligibility')->nullable();
                 $table->string('program_name')->nullable();

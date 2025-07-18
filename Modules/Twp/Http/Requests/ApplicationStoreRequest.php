@@ -2,6 +2,7 @@
 
 namespace Modules\Twp\Http\Requests;
 
+use Override;
 use Illuminate\Foundation\Http\FormRequest;
 use Modules\Twp\Entities\Util;
 
@@ -21,6 +22,7 @@ class ApplicationStoreRequest extends FormRequest
      *
      * @return array<string, string>
      */
+    #[Override]
     public function messages(): array {
         return [
             'received_date.*' => 'Application Received Date field is not valid.',
@@ -54,6 +56,7 @@ class ApplicationStoreRequest extends FormRequest
      *
      * @return void
      */
+    #[Override]
     protected function prepareForValidation(): void {
     }
 }

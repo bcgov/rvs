@@ -2,6 +2,7 @@
 
 namespace Modules\Vss\Http\Requests;
 
+use Override;
 use Illuminate\Foundation\Http\FormRequest;
 
 class NatureOffenceStoreRequest extends FormRequest
@@ -20,6 +21,7 @@ class NatureOffenceStoreRequest extends FormRequest
      *
      * @return array<string, string>
      */
+    #[Override]
     public function messages(): array {
         return [
             'nature_code.required' => 'Nature Offence Code field is required.',
@@ -51,6 +53,7 @@ class NatureOffenceStoreRequest extends FormRequest
      *
      * @return void
      */
+    #[Override]
     protected function prepareForValidation(): void {
     }
 }

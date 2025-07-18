@@ -27,7 +27,7 @@ return new class extends Migration
                 $table->foreign('application_id')->references('id')->on('applications')->onDelete('cascade');
 
                 $table->date('payment_date');
-                $table->double('payment_amount', null, 2)->default(0)->nullable();
+                $table->double('payment_amount')->default(0)->nullable();
 
                 $table->bigInteger('payment_type_id')->default(1);
 

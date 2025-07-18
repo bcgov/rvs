@@ -2,6 +2,8 @@
 
 namespace Modules\Yeaf\Entities;
 
+use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -54,8 +56,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string|null $withdrawal_date
  * @property string|null $last_letter_produced_date
  * @property string|null $cheque_batch_number
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  *
  * @property-read false $formSubmitting
  * @property-read Student $student
@@ -63,10 +65,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read User|null $officer
  * @property-read ProgramYear $py
  * @property-read Institution|null $school
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Appeal> $appeals
- * @property-read \Illuminate\Database\Eloquent\Collection<int, GrantIneligible> $grantIneligibles
- * @property-read \Illuminate\Database\Eloquent\Collection<int, GrantIneligible> $grantPendingIneligibles
- * @property-read \Illuminate\Database\Eloquent\Collection<int, GrantIneligible> $grantDeniedIneligibles
+ * @property-read Collection<int, Appeal> $appeals
+ * @property-read Collection<int, GrantIneligible> $grantIneligibles
+ * @property-read Collection<int, GrantIneligible> $grantPendingIneligibles
+ * @property-read Collection<int, GrantIneligible> $grantDeniedIneligibles
  */
 class Grant extends ModuleModel
 {
@@ -131,14 +133,14 @@ class Grant extends ModuleModel
      * @return BelongsTo<Student, Grant>
      */
     public function student(): BelongsTo {
-        return $this->belongsTo('Modules\Yeaf\Entities\Student', 'student_id', 'student_id');
+        return $this->belongsTo(Student::class, 'student_id', 'student_id');
     }
 
     /**
      * @return BelongsTo<Batch, Grant>
      */
     public function batch(): BelongsTo {
-        return $this->belongsTo('Modules\Yeaf\Entities\Batch', 'cheque_batch_number', 'batch_number');
+        return $this->belongsTo(Batch::class, 'cheque_batch_number', 'batch_number');
     }
 
     /**
@@ -154,42 +156,42 @@ class Grant extends ModuleModel
      * @return BelongsTo<ProgramYear, Grant>
      */
     public function py(): BelongsTo {
-        return $this->belongsTo('Modules\Yeaf\Entities\ProgramYear', 'program_year_id', 'program_year_id');
+        return $this->belongsTo(ProgramYear::class, 'program_year_id', 'program_year_id');
     }
 
     /**
      * @return BelongsTo<Institution, Grant>
      */
     public function school(): BelongsTo {
-        return $this->belongsTo('Modules\Yeaf\Entities\Institution', 'institution_id', 'institution_id');
+        return $this->belongsTo(Institution::class, 'institution_id', 'institution_id');
     }
 
     /**
      * @return HasMany<Appeal>
      */
     public function appeals(): HasMany {
-        return $this->hasMany('Modules\Yeaf\Entities\Appeal', 'grant_id', 'grant_id');
+        return $this->hasMany(Appeal::class, 'grant_id', 'grant_id');
     }
 
     /**
      * @return HasMany<GrantIneligible>
      */
     public function grantIneligibles(): HasMany {
-        return $this->hasMany('Modules\Yeaf\Entities\GrantIneligible', 'grant_id', 'grant_id');
+        return $this->hasMany(GrantIneligible::class, 'grant_id', 'grant_id');
     }
 
     /**
      * @return HasMany<GrantIneligible>
      */
     public function grantPendingIneligibles(): HasMany {
-        return $this->hasMany('Modules\Yeaf\Entities\GrantIneligible', 'grant_id', 'grant_id')->where('ineligible_code_type', 'P');
+        return $this->hasMany(GrantIneligible::class, 'grant_id', 'grant_id')->where('ineligible_code_type', 'P');
     }
 
     /**
      * @return HasMany<GrantIneligible>
      */
     public function grantDeniedIneligibles(): HasMany {
-        return $this->hasMany('Modules\Yeaf\Entities\GrantIneligible', 'grant_id', 'grant_id')->where('ineligible_code_type', 'D');
+        return $this->hasMany(GrantIneligible::class, 'grant_id', 'grant_id')->where('ineligible_code_type', 'D');
     }
 
     public function getFormSubmittingAttribute(): false {

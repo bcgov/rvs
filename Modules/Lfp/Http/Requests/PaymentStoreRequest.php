@@ -2,6 +2,7 @@
 
 namespace Modules\Lfp\Http\Requests;
 
+use Override;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -22,6 +23,7 @@ class PaymentStoreRequest extends FormRequest
      *
      * @return array<string, string>
      */
+    #[Override]
     public function messages(): array {
         return [
             'lfp_id.*' => 'LFP ID field is not valid.',

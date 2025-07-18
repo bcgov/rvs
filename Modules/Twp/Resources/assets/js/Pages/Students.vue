@@ -28,8 +28,8 @@
                                 <button type="button" class="btn btn-success btn-sm float-end" data-bs-toggle="modal" data-bs-target="#newStudentModal">New Student</button>
                             </div>
                             <div class="card-body">
-                                <div v-if="$page.props.flash.message" class="alert alert-success">
-                                    {{ $page.props.flash.message }}
+                                <div v-if="page.props.flash.message" class="alert alert-success">
+                                    {{ page.props.flash.message }}
                                 </div>
                                 <div v-if="results != null && results.data.length > 0" class="table-responsive pb-3">
                                     <table class="table table-striped">
@@ -105,7 +105,7 @@
                                     <div class="col-md-4">
                                         <BreezeLabel for="inputCitizenship" class="form-label" value="Citizenship" />
                                         <BreezeSelect class="form-select" id="inputCitizenship" v-model="newStudentForm.citizenship">
-                                            <option v-for="citizenship in $attrs.utils['Citizenship']" :key="citizenship.id" :value="citizenship.field_name">
+                                            <option v-for="citizenship in (utils?.Citizenship || [])" :key="citizenship.id" :value="citizenship.field_name">
                                                 {{ citizenship.field_name }}
                                             </option>
                                         </BreezeSelect>
@@ -172,12 +172,13 @@
 import BreezeAuthenticatedLayout from '../Layouts/Authenticated.vue';
 import StudentSearchBox from '../Components/StudentSearch.vue';
 import StudentsHeader from '../Components/StudentsHeader.vue';
-import {Head, Link, useForm} from '@inertiajs/vue3';
+import { Head, Link, useForm, usePage, router } from '@inertiajs/vue3';
 import BreezeInput from "@/Components/Input";
 import BreezeSelect from "@/Components/Select";
 import BreezeLabel from "@/Components/Label";
 import BreezePagination from "@/Components/Pagination";
 import FormSubmitAlert from "@/Components/FormSubmitAlert";
+import {computed} from "vue";
 
 export default {
     name: 'Students',
@@ -190,6 +191,15 @@ export default {
         provinces: Object,
         schools: Object,
         indigeneity_types: Object
+    },
+    setup() {
+        const page = usePage();
+        const utils = computed(() => page.props.utils || {});
+
+        return {
+            page,
+            utils
+        };
     },
     data() {
         return {
@@ -224,7 +234,7 @@ export default {
                 onSuccess: (response) => {
                     $("#newStudentModal").modal('hide');
                     this.newStudentForm.reset(this.newStudentFormData);
-                    this.$inertia.visit('/twp/students/' + response.props.student.id);
+                    router.visit('/twp/students/' + response.props.student.id);
                 },
                 onFailure: () => {
                 },

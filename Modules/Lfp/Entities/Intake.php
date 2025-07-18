@@ -2,6 +2,7 @@
 
 namespace Modules\Lfp\Entities;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -16,17 +17,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $community
  * @property string $repayment_status
  * @property bool $in_good_standing
- * @property \Carbon\Carbon $repayment_start_date
+ * @property Carbon $repayment_start_date
  * @property float $amount_owing
  * @property string $intake_status
- * @property \Carbon\Carbon $receive_date
+ * @property Carbon $receive_date
  * @property string $comment
- * @property \Carbon\Carbon $proposed_registration_date
+ * @property Carbon $proposed_registration_date
  * @property string $denial_reason
  * @property string $app_idx
  * @property string $alias_name
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  */
 class Intake extends ModuleModel
 {
@@ -43,7 +44,7 @@ class Intake extends ModuleModel
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Lfp, Intake>
+     * @return BelongsTo<Lfp, Intake>
      */
     public function lfp(): BelongsTo {
         return $this->belongsTo(Lfp::class, 'app_idx', 'app_idx');

@@ -2,6 +2,8 @@
 
 namespace Modules\Plsc\Entities;
 
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
@@ -10,9 +12,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string|null $contact_name
  * @property string|null $contact_email
  * @property bool $active_flag
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Application> $applications
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property-read Collection<int, Application> $applications
  */
 class Institution extends ModuleModel
 {
@@ -25,9 +27,9 @@ class Institution extends ModuleModel
     protected $fillable = ['name', 'contact_name', 'contact_email', 'active_flag'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Application>
+     * @return HasMany<Application>
      */
     public function applications(): HasMany {
-        return $this->hasMany('Modules\Plsc\Entities\Application');
+        return $this->hasMany(Application::class);
     }
 }

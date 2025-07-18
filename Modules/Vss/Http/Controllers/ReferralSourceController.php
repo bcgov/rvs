@@ -14,7 +14,7 @@ class ReferralSourceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response
+     * @return Response
      */
     public function index(): Response {
         $referrals = ReferralSource::orderBy('referral_code', 'asc')->get();

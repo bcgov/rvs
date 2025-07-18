@@ -2,6 +2,7 @@
 
 namespace Modules\Twp\Http\Requests;
 
+use Override;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 
@@ -21,6 +22,7 @@ class InstitutionStoreRequest extends FormRequest
      *
      * @return array<string, string>
      */
+    #[Override]
     public function messages(): array {
         return [
             'name.required' => 'Institution Name field is required.',
@@ -50,6 +52,7 @@ class InstitutionStoreRequest extends FormRequest
      *
      * @return void
      */
+    #[Override]
     protected function prepareForValidation(): void {
         if (isset($this->contact_name)) {
             $this->merge(['contact_name' => Str::title($this->contact_name)]);
@@ -63,7 +66,6 @@ class InstitutionStoreRequest extends FormRequest
 
     /**
      * Convert to boolean
-     * @param mixed $booleable
      * @return bool
      */
     private function toBoolean(mixed $booleable): bool {

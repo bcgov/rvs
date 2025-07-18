@@ -16,9 +16,9 @@ class Institution extends ModuleModel
     protected $fillable = ['name', 'contact_name', 'contact_email', 'active_flag'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Program>
+     * @return HasMany<Program>
      */
     public function programs(): HasMany {
-        return $this->hasMany('Modules\Twp\Entities\Program', 'institution_twp_id', 'id');
+        return $this->hasMany(Program::class, 'institution_twp_id', 'id');
     }
 }

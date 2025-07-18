@@ -19,17 +19,17 @@ class Application extends ModuleModel
         'effective_date', 'process_date', 'comment', 'program_code', 'bursary_period_id', ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Student, Application>
+     * @return BelongsTo<Student, Application>
      */
     public function student(): BelongsTo {
-        return $this->belongsTo('Modules\Neb\Entities\Student', 'sin', 'sin');
+        return $this->belongsTo(Student::class, 'sin', 'sin');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<BursaryPeriod, Application>
+     * @return BelongsTo<BursaryPeriod, Application>
      */
     public function bursaryPeriod(): BelongsTo
     {
-        return $this->belongsTo('Modules\Neb\Entities\BursaryPeriod', 'bursary_period_id', 'id');
+        return $this->belongsTo(BursaryPeriod::class, 'bursary_period_id', 'id');
     }
 }

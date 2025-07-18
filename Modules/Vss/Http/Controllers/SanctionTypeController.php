@@ -14,7 +14,7 @@ class SanctionTypeController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response
+     * @return Response
      */
     public function index(): Response {
         $sanctions = SanctionType::orderBy('sanction_code', 'asc')->get();
@@ -25,7 +25,7 @@ class SanctionTypeController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function store(SanctionTypeStoreRequest $request): RedirectResponse {
         SanctionType::create($request->validated());
@@ -36,7 +36,7 @@ class SanctionTypeController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function update(SanctionTypeStoreRequest $request, SanctionType $sanctionType): RedirectResponse {
         SanctionType::where('id', $sanctionType->id)->update($request->validated());

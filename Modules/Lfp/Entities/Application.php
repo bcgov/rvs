@@ -18,10 +18,10 @@ class Application extends ModuleModel
         'lfp_id', 'application_number', ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Lfp, Application>
+     * @return BelongsTo<Lfp, Application>
      */
     public function payment(): BelongsTo {
-        return $this->belongsTo('Modules\Lfp\Entities\Lfp', 'lfp_id', 'id');
+        return $this->belongsTo(Lfp::class, 'lfp_id', 'id');
     }
 
 }

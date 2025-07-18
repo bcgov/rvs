@@ -71,9 +71,7 @@ class MaintenanceController extends Controller
     public function staffList(Request $request): Response
     {
         $staff = User::with('roles')
-            ->whereHas('roles', function ($q) {
-                return $q->whereIn('name', [Role::YEAF_ADMIN, Role::YEAF_USER, Role::YEAF_GUEST]);
-            })->orderBy('created_at', 'desc')->get();
+            ->whereHas('roles', fn($q) => $q->whereIn('name', [Role::YEAF_ADMIN, Role::YEAF_USER, Role::YEAF_GUEST]))->orderBy('created_at', 'desc')->get();
 
         foreach ($staff as $user) {
             if ($user->roles->contains('name', Role::YEAF_ADMIN)) {
@@ -105,7 +103,7 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function staffEdit(StaffEditRequest $request, User $user): RedirectResponse
     {
@@ -147,7 +145,7 @@ class MaintenanceController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function ineligibleEdit(IneligibleEditRequest $request, Ineligible $ineligible): RedirectResponse
     {
@@ -165,7 +163,7 @@ class MaintenanceController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function ineligibleStore(IneligibleStoreRequest $request): RedirectResponse
     {
@@ -190,7 +188,7 @@ class MaintenanceController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function programYearEdit(ProgramYearEditRequest $request, ProgramYear $programYear): RedirectResponse
     {
@@ -203,7 +201,7 @@ class MaintenanceController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function programYearStore(ProgramYearStoreRequest $request): RedirectResponse
     {
@@ -228,7 +226,7 @@ class MaintenanceController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function batchEdit(BatchEditRequest $request, Batch $batch): RedirectResponse
     {
@@ -241,7 +239,7 @@ class MaintenanceController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function batchStore(BatchStoreRequest $request): RedirectResponse
     {
@@ -254,7 +252,7 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      *
      * @return \Inertia\Response
      */
@@ -269,7 +267,7 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function ministryUpdate(MinistryEditRequest $request, Admin $admin): RedirectResponse
     {
@@ -282,7 +280,7 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      *
      * @return \Inertia\Response
      */

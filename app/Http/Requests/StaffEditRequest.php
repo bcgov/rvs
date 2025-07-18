@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Override;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StaffEditRequest extends FormRequest
@@ -20,6 +21,7 @@ class StaffEditRequest extends FormRequest
      *
      * @return array<string, string>
      */
+    #[Override]
     public function messages(): array {
         return [
             'tele.*' => 'Telephone number field is not valid.',
@@ -44,6 +46,7 @@ class StaffEditRequest extends FormRequest
      *
      * @return void
      */
+    #[Override]
     protected function prepareForValidation(): void {
         if (isset($this->tele)) {
             $this->merge(['tele' => preg_replace('/\D/', '', $this->tele)]);

@@ -13,6 +13,4 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/neb', function (Request $request) {
-    return $request->user();
-});
+Route::middleware('auth:api')->get('/neb', fn(Request $request) => $request->user());

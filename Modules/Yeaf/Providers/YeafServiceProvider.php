@@ -2,6 +2,8 @@
 
 namespace Modules\Yeaf\Providers;
 
+use Override;
+use Config;
 use Illuminate\Support\ServiceProvider;
 
 class YeafServiceProvider extends ServiceProvider
@@ -33,6 +35,7 @@ class YeafServiceProvider extends ServiceProvider
      *
      * @return void
      */
+    #[Override]
     public function register(): void {
         $this->app->register(RouteServiceProvider::class);
     }
@@ -89,7 +92,7 @@ class YeafServiceProvider extends ServiceProvider
     private function getPublishableViewPaths(): array
     {
         $paths = [];
-        foreach (\Config::get('view.paths') as $path) {
+        foreach (Config::get('view.paths') as $path) {
             if (is_dir($path.'/modules/'.$this->moduleNameLower)) {
                 $paths[] = $path.'/modules/'.$this->moduleNameLower;
             }

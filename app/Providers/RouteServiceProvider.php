@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Override;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
@@ -33,6 +34,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
+    #[Override]
     public function boot()
     {
         $this->configureRateLimiting();
@@ -65,11 +67,7 @@ class RouteServiceProvider extends ServiceProvider
 //            return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
 //        });
 
-        RateLimiter::for('api', function (Request $request) {
-            return Limit::perMinute(1000)->by(optional($request->user())->id ?: $request->ip())
-                ->response(function (Request $request, array $headers) {
-                    return response()->json(['status' => false, 'body' => "Please wait a minute. "], 429, $headers);
-                });
-        });
+        RateLimiter::for('api', fn(Request $request) => Limit::perMinute(1000)->by(optional($request->user())->id ?: $request->ip())
+            ->response(fn(Request $request, array $headers) => response()->json(['status' => false, 'body' => "Please wait a minute. "], 429, $headers)));
     }
 }

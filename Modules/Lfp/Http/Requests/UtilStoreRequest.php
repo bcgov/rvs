@@ -2,6 +2,7 @@
 
 namespace Modules\Lfp\Http\Requests;
 
+use Override;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UtilStoreRequest extends FormRequest
@@ -20,6 +21,7 @@ class UtilStoreRequest extends FormRequest
      *
      * @return array<string, string>
      */
+    #[Override]
     public function messages(): array {
         return [
             'field_name.*' => 'Title is not valid.',
@@ -46,6 +48,7 @@ class UtilStoreRequest extends FormRequest
      *
      * @return void
      */
+    #[Override]
     protected function prepareForValidation(): void {
         $this->merge(['active_flag' => $this->toBoolean($this->active_flag)]);
     }

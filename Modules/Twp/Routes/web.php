@@ -1,5 +1,7 @@
 <?php
 
+use Modules\Twp\Http\Middleware\HandleInertiaRequests;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -10,8 +12,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::prefix('twp')->middleware(['web', \Modules\Twp\Http\Middleware\HandleInertiaRequests::class])->group(function (): void {
+Route::prefix('twp')->middleware(['web', 'twp_inertia'])->group(function (): void {
     Route::get('/maintenance/reports/{type}', 'ReportController@fetchReport')->name('twp.reports.type');
     Route::group(
         [

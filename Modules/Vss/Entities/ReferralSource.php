@@ -2,6 +2,9 @@
 
 namespace Modules\Vss\Entities;
 
+use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -11,18 +14,18 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $id
  * @property string $referral_code
  * @property string $description
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Modules\Vss\Entities\Incident> $incidents
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Collection<int, Incident> $incidents
  * @property-read int|null $incidents_count
- * @method static \Illuminate\Database\Eloquent\Builder|ReferralSource newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|ReferralSource newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|ReferralSource query()
- * @method static \Illuminate\Database\Eloquent\Builder|ReferralSource whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ReferralSource whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ReferralSource whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ReferralSource whereReferralCode($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ReferralSource whereUpdatedAt($value)
+ * @method static Builder|ReferralSource newModelQuery()
+ * @method static Builder|ReferralSource newQuery()
+ * @method static Builder|ReferralSource query()
+ * @method static Builder|ReferralSource whereCreatedAt($value)
+ * @method static Builder|ReferralSource whereDescription($value)
+ * @method static Builder|ReferralSource whereId($value)
+ * @method static Builder|ReferralSource whereReferralCode($value)
+ * @method static Builder|ReferralSource whereUpdatedAt($value)
  * @mixin \Eloquent
  */
 class ReferralSource extends ModuleModel
@@ -40,6 +43,6 @@ class ReferralSource extends ModuleModel
      * @return HasMany<Incident>
      */
     public function incidents(): HasMany {
-        return $this->hasMany('Modules\Vss\Entities\Incident', 'referral_source_id', 'id');
+        return $this->hasMany(Incident::class, 'referral_source_id', 'id');
     }
 }

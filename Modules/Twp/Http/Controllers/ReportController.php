@@ -2,6 +2,7 @@
 
 namespace Modules\Twp\Http\Controllers;
 
+use Inertia\Response;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -23,7 +24,7 @@ class ReportController extends Controller
      * Display a listing of the resource.
      *
      */
-    public function reportsShow(Request $request): \Inertia\Response
+    public function reportsShow(Request $request): Response
     {
         return Inertia::render('Twp::Maintenance', ['status' => true, 'page' => 'reports']);
     }
@@ -34,7 +35,7 @@ class ReportController extends Controller
         $traffic_light = true;
 
         // Store traffic light value in cache for 60 seconds
-        Cache::put('twp_traffic_light', $traffic_light, 60);
+        Cache::put('twp_traffic_light', $traffic_light, 60 * 60);
 
         return response()->json([
             'status' => 'success',
@@ -138,13 +139,13 @@ class ReportController extends Controller
     /**
      * Display first page after login (dashboard page)
      */
-    public function index(Request $request): \Inertia\Response {
+    public function index(Request $request): Response {
         $schools = Institution::orderBy('name', 'asc')->get();
 
         return Inertia::render('Twp::Reports', ['results' => null, 'schools' => $schools]);
     }
 
-    public function searchReports(Request $request): \Inertia\Response {
+    public function searchReports(Request $request): Response {
         $schools = Institution::orderBy('name', 'asc')->get();
         $results = Institution::where('id', $request->institutionId)->with('programs.student')->first();
 

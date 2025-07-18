@@ -2,6 +2,8 @@
 
 namespace Modules\Vss\Entities;
 
+use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -16,29 +18,29 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property float $over_award
  * @property float $prevented_funding
  * @property string|null $fund_entry_date
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property string|null $deleted_by_user_id
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read \Modules\Vss\Entities\FundingType $fundingType
- * @property-read \Modules\Vss\Entities\Incident $incident
- * @method static \Illuminate\Database\Eloquent\Builder|CaseFunding newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|CaseFunding newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|CaseFunding onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|CaseFunding query()
- * @method static \Illuminate\Database\Eloquent\Builder|CaseFunding whereApplicationNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CaseFunding whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CaseFunding whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CaseFunding whereDeletedByUserId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CaseFunding whereFundEntryDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CaseFunding whereFundingType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CaseFunding whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CaseFunding whereIncidentId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CaseFunding whereOverAward($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CaseFunding wherePreventedFunding($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CaseFunding whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|CaseFunding withTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|CaseFunding withoutTrashed()
+ * @property Carbon|null $deleted_at
+ * @property-read FundingType $fundingType
+ * @property-read Incident $incident
+ * @method static Builder|CaseFunding newModelQuery()
+ * @method static Builder|CaseFunding newQuery()
+ * @method static Builder|CaseFunding onlyTrashed()
+ * @method static Builder|CaseFunding query()
+ * @method static Builder|CaseFunding whereApplicationNumber($value)
+ * @method static Builder|CaseFunding whereCreatedAt($value)
+ * @method static Builder|CaseFunding whereDeletedAt($value)
+ * @method static Builder|CaseFunding whereDeletedByUserId($value)
+ * @method static Builder|CaseFunding whereFundEntryDate($value)
+ * @method static Builder|CaseFunding whereFundingType($value)
+ * @method static Builder|CaseFunding whereId($value)
+ * @method static Builder|CaseFunding whereIncidentId($value)
+ * @method static Builder|CaseFunding whereOverAward($value)
+ * @method static Builder|CaseFunding wherePreventedFunding($value)
+ * @method static Builder|CaseFunding whereUpdatedAt($value)
+ * @method static Builder|CaseFunding withTrashed()
+ * @method static Builder|CaseFunding withoutTrashed()
  * @mixin \Eloquent
  */
 class CaseFunding extends ModuleModel
@@ -54,16 +56,16 @@ class CaseFunding extends ModuleModel
     protected $fillable = ['incident_id', 'application_number', 'funding_type', 'fund_entry_date', 'over_award', 'prevented_funding', 'deleted_by_user_id'];
 
     /**
-     * @return BelongsTo<\Modules\Vss\Entities\Incident, \Modules\Vss\Entities\CaseFunding>
+     * @return BelongsTo<Incident, \Modules\Vss\Entities\CaseFunding>
      */
     public function incident(): BelongsTo {
-        return $this->belongsTo('Modules\Vss\Entities\Incident', 'incident_id', 'incident_id');
+        return $this->belongsTo(Incident::class, 'incident_id', 'incident_id');
     }
 
     /**
-     * @return BelongsTo<\Modules\Vss\Entities\FundingType, \Modules\Vss\Entities\CaseFunding>
+     * @return BelongsTo<FundingType, \Modules\Vss\Entities\CaseFunding>
      */
     public function fundingType(): BelongsTo {
-        return $this->belongsTo('Modules\Vss\Entities\FundingType', 'funding_type', 'funding_type');
+        return $this->belongsTo(FundingType::class, 'funding_type', 'funding_type');
     }
 }

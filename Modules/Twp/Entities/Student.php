@@ -41,32 +41,32 @@ class Student extends ModuleModel
         'bc_resident', 'address', 'comment', 'sin', ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Application>
+     * @return HasMany<Application>
      */
     public function applications(): HasMany {
-        return $this->hasMany('Modules\Twp\Entities\Application', 'student_id', 'id');
+        return $this->hasMany(Application::class, 'student_id', 'id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Program>
+     * @return HasMany<Program>
      */
     public function programs(): HasMany {
-        return $this->hasMany('Modules\Twp\Entities\Program', 'student_id', 'id');
+        return $this->hasMany(Program::class, 'student_id', 'id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne<Application>
+     * @return HasOne<Application>
      */
     public function application(): HasOne {
-        return $this->hasOne('Modules\Twp\Entities\Application', 'student_id', 'id');
+        return $this->hasOne(Application::class, 'student_id', 'id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<IndigeneityType>
+     * @return BelongsToMany<IndigeneityType>
      */
     public function indigeneity(): BelongsToMany {
         return $this->belongsToMany(
-            'Modules\Twp\Entities\IndigeneityType', 'indigeneity_type_student');
+            IndigeneityType::class, 'indigeneity_type_student');
     }
 
     /**

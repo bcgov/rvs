@@ -22,9 +22,9 @@ class Student extends ModuleModel
         'gender', 'pen', 'date_of_birth', 'sin', ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Application>
+     * @return HasMany<Application>
      */
     public function applications(): HasMany {
-        return $this->hasMany('Modules\Neb\Entities\Application', 'sin', 'sin');
+        return $this->hasMany(Application::class, 'sin', 'sin');
     }
 }

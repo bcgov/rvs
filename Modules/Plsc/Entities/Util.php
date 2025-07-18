@@ -2,13 +2,15 @@
 
 namespace Modules\Plsc\Entities;
 
+use Carbon\Carbon;
+
 /**
  * @property int $id
  * @property string $field_name
  * @property string $field_type
  * @property bool $active_flag
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  */
 class Util extends ModuleModel
 {

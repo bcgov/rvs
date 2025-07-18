@@ -2,6 +2,8 @@
 
 namespace Modules\Twp\Http\Controllers;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Log;
@@ -27,7 +29,7 @@ class StudentController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response
+     * @return Response
      */
     public function index(): Response {
         $schools = Institution::orderBy('name', 'asc')->get();
@@ -48,7 +50,7 @@ class StudentController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response
+     * @return Response
      */
     public function apps(): Response {
         $schools = Institution::orderBy('name', 'asc')->get();
@@ -62,7 +64,7 @@ class StudentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @return \Inertia\Response
+     * @return Response
      */
     public function store(StudentStoreRequest $request): Response {
         $schools = Institution::orderBy('name', 'asc')->get();
@@ -86,7 +88,7 @@ class StudentController extends Controller
     /**
      * Display the specified resource.
      *
-     * @return \Inertia\Response
+     * @return Response
      */
     public function show(Student $student): Response {
         $student = Student::where('id', $student->id)
@@ -111,10 +113,10 @@ class StudentController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Modules\Twp\Http\Requests\StudentUpdateRequest $request
-     * @param \Modules\Twp\Entities\Student $student
+     * @param StudentUpdateRequest $request
+     * @param Student $student
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function update(StudentUpdateRequest $request, Student $student): RedirectResponse {
         $studentRecord = Student::where('id', $student->id)->first();
@@ -127,9 +129,9 @@ class StudentController extends Controller
     /**
      * Soft delete the student
      *
-     * @param \Modules\Twp\Entities\Student $student
+     * @param Student $student
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function delete (Student $student): RedirectResponse {
         // Update Comment column
@@ -143,7 +145,7 @@ class StudentController extends Controller
     }
 
     /**
-     * @return \Illuminate\Pagination\LengthAwarePaginator<Student>
+     * @return LengthAwarePaginator<Student>
      */
     private function paginateStudents(): LengthAwarePaginator {
         $students = Student::with('applications');
@@ -182,10 +184,10 @@ class StudentController extends Controller
     }
 
     /**
-     * @param \Illuminate\Database\Eloquent\Builder<Application> $apps
+     * @param Builder<Application> $apps
      * @return LengthAwarePaginator<Application>
      */
-    private function paginateApps(\Illuminate\Database\Eloquent\Builder $apps): LengthAwarePaginator
+    private function paginateApps(Builder $apps): LengthAwarePaginator
     {
         $apps = $apps->with('student');
 
@@ -228,7 +230,7 @@ class StudentController extends Controller
     }
 
     /**
-     * @return array{\Illuminate\Database\Eloquent\Collection<int, Country>, \Illuminate\Database\Eloquent\Collection<int, Province>}
+     * @return array{Collection<int, Country>, Collection<int, Province>}
      */
     private function getCountriesProvinces(): array {
         return [Country::orderBy('country_code', 'asc')->get(), Province::orderBy('province_code', 'asc')->get()];

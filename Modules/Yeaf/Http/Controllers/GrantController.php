@@ -2,6 +2,7 @@
 
 namespace Modules\Yeaf\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Barryvdh\DomPDF\Facade\Pdf;
 use DateTime;
 use Illuminate\Http\RedirectResponse;
@@ -24,7 +25,7 @@ class GrantController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function store(GrantStoreRequest $request): RedirectResponse {
         $grant = Grant::create($request->validated());
@@ -36,8 +37,8 @@ class GrantController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Modules\Yeaf\Http\Requests\GrantEditRequest $request
-     * @param \Modules\Yeaf\Entities\Grant $grant
+     * @param GrantEditRequest $request
+     * @param Grant $grant
      *
      * @return Grant
      */
@@ -78,11 +79,11 @@ class GrantController extends Controller
     /**
      * validate to export or to show errors on letter export request.
      *
-     * @param \Modules\Yeaf\Entities\Grant $grant
+     * @param Grant $grant
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function validateLetter(Grant $grant): \Illuminate\Http\JsonResponse {
+    public function validateLetter(Grant $grant): JsonResponse {
         $msg = '';
         $stDocname = null;
 
@@ -124,7 +125,7 @@ class GrantController extends Controller
     /**
      * validate to export or to show errors on letter export request.
      *
-     * @param \Modules\Yeaf\Entities\Grant $grant
+     * @param Grant $grant
      * @param null $docName
      *
      * @return \Illuminate\Http\Response
@@ -183,9 +184,9 @@ class GrantController extends Controller
     /**
      * update and evaluate a grant.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function evaluateApp(GrantEditRequest $request, Grant $grant): \Illuminate\Http\JsonResponse {
+    public function evaluateApp(GrantEditRequest $request, Grant $grant): JsonResponse {
         $grant = $this->update($request, $grant);
         $this->updatePendingIneligibles($grant, $request);
         $this->updateDeniedIneligibles($grant, $request);

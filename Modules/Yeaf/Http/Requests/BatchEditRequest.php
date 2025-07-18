@@ -2,6 +2,7 @@
 
 namespace Modules\Yeaf\Http\Requests;
 
+use Override;
 use Illuminate\Foundation\Http\FormRequest;
 
 class BatchEditRequest extends FormRequest
@@ -20,6 +21,7 @@ class BatchEditRequest extends FormRequest
      *
      * @return array<string, string>
      */
+    #[Override]
     public function messages(): array {
         return [
             'batch_number.required' => 'Batch Number field is required.',
@@ -46,6 +48,7 @@ class BatchEditRequest extends FormRequest
      *
      * @return void
      */
+    #[Override]
     protected function prepareForValidation(): void {
         if (isset($this->batch_number)) {
             $this->merge(['batch_number' => preg_replace('/\D/', '', $this->batch_number)]);

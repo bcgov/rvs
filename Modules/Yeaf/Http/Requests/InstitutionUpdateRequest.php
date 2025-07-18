@@ -2,6 +2,7 @@
 
 namespace Modules\Yeaf\Http\Requests;
 
+use Override;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 
@@ -21,6 +22,7 @@ class InstitutionUpdateRequest extends FormRequest
      *
      * @return array<string, string>
      */
+    #[Override]
     public function messages(): array {
         return [
             'name.required' => 'School Name field is required.',
@@ -56,6 +58,7 @@ class InstitutionUpdateRequest extends FormRequest
      *
      * @return void
      */
+    #[Override]
     protected function prepareForValidation(): void {
         if (isset($this->postal_code)) {
             $this->merge(['postal_code' => Str::upper(preg_replace('/\s/', '', $this->postal_code))]);

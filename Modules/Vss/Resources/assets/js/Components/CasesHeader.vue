@@ -54,7 +54,7 @@
 </template>
 <script>
 
-import {Inertia} from "@inertiajs/inertia";
+import { router } from '@inertiajs/vue3';
 
 export default {
     name: 'CasesHeader',
@@ -108,7 +108,7 @@ export default {
                 }
             });
 
-            Inertia.get('/vss/' + this.path, data, {
+            router.get('/vss/' + this.path, data, {
                 preserveState: true
             });
 

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,14 +15,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/logout', [App\Http\Controllers\UserController::class, 'logout'])->name('get-logout');
-Route::post('/logout', [App\Http\Controllers\UserController::class, 'logout'])->name('logout');
-Route::get('/', function () {
-    return redirect('/login');
-});
-Route::get('/login', [App\Http\Controllers\UserController::class, 'login'])->name('login');
-Route::get('/applogin', [App\Http\Controllers\UserController::class, 'appLogin'])->name('app-login');
-Route::middleware(['auth'])->get('/home', [App\Http\Controllers\UserController::class, 'home'])->name('home');
+Route::get('/logout', [UserController::class, 'logout'])->name('get-logout');
+Route::post('/logout', [UserController::class, 'logout'])->name('logout');
+Route::get('/', fn() => redirect('/login'));
+Route::get('/login', [UserController::class, 'login'])->name('login');
+Route::get('/applogin', [UserController::class, 'appLogin'])->name('app-login');
+Route::middleware(['auth'])->get('/home', [UserController::class, 'home'])->name('home');
 
 
 
@@ -31,11 +31,11 @@ Route::prefix('admin')->group(function (): void {
             'as' => 'super-admin.',
         ], function (): void {
 
-        Route::get('/users', [App\Http\Controllers\AdminController::class, 'users'])->name('users');
-        Route::put('/users/{user}', [App\Http\Controllers\AdminController::class, 'userEdit'])->name('user-edit');
+        Route::get('/users', [AdminController::class, 'users'])->name('users');
+        Route::put('/users/{user}', [AdminController::class, 'userEdit'])->name('user-edit');
 
-        Route::get('/ministry', [App\Http\Controllers\AdminController::class, 'ministry'])->name('ministry');
-        Route::put('/ministry', [App\Http\Controllers\AdminController::class, 'ministryEdit'])->name('ministry-edit');
+        Route::get('/ministry', [AdminController::class, 'ministry'])->name('ministry');
+        Route::put('/ministry', [AdminController::class, 'ministryEdit'])->name('ministry-edit');
 
     });
 

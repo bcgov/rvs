@@ -23,7 +23,7 @@ class PlscController extends Controller
      * @param bool $status
      * @param int $newApp
      *
-     * @return \Inertia\Response
+     * @return Response
      */
     public function index($status = true, $newApp = 0): Response {
         $plscs = $this->paginatePlscs();
@@ -54,7 +54,7 @@ class PlscController extends Controller
      * @param bool $status
      * @param int $newApp
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function sync(bool $status = true, int $newApp = 0): RedirectResponse {
         $qry = env("PLSC_APP_SYNC") . "0";
@@ -81,7 +81,7 @@ class PlscController extends Controller
     /**
      * Show the specified resource.
      * @param Application $plsc
-     * @return \Inertia\Response
+     * @return Response
      */
     public function show(Application $plsc): Response {
         $plsc = Application::where('id', $plsc->id)->first();

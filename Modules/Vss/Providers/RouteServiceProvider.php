@@ -2,6 +2,7 @@
 
 namespace Modules\Vss\Providers;
 
+use Override;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +22,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
+    #[Override]
     public function boot()
     {
         parent::boot();
