@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Override;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -29,15 +30,6 @@ class User extends Authenticatable
     protected $hidden = ['password', 'remember_token'];
 
     /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
-
-    /**
      * @param array<string, mixed> $attributes
      */
     public function __construct(array $attributes = [])
@@ -52,7 +44,7 @@ class User extends Authenticatable
      * @return BelongsToMany<Role>
      */
     public function roles(): BelongsToMany {
-        return $this->belongsToMany('App\Models\Role', 'role_user');
+        return $this->belongsToMany(Role::class, 'role_user');
     }
 
     /**
@@ -72,5 +64,17 @@ class User extends Authenticatable
     public function scopeIsActive(Builder $query): Builder
     {
         return $query->where('disabled', '=', false);
+    }
+    /**
+     * The attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    #[Override]
+    protected function casts() : array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+        ];
     }
 }

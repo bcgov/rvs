@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -16,11 +17,11 @@ class ServiceAccountController extends Controller
         $app = $request->input('app');
         $where = $request->input('q');
         $orderBy = $request->input('order');
-        $perPage = $request->input('per_page') ?? 5000;
-        $connection = env('DB_DATABASE_' . strtoupper($app));
+        $perPage = $request->input('per_page', 5000);
+        $connection = env('DB_DATABASE_' . strtoupper((string) $app));
 
         // Base query with parameter placeholders
-        $query = DB::connection($connection)->table(strtolower($tableName));
+        $query = DB::connection($connection)->table(strtolower((string) $tableName));
 
         // Add WHERE clause if provided
         if(isset($where)) {
@@ -37,7 +38,7 @@ class ServiceAccountController extends Controller
 
         // Add ORDER BY clause if provided
         if(isset($orderBy)) {
-            $orderBy = explode("~", $orderBy);
+            $orderBy = explode("~", (string) $orderBy);
             if(sizeof($orderBy) === 2) {
                 $query->orderBy($orderBy[0], $orderBy[1]);
             }
@@ -53,12 +54,12 @@ class ServiceAccountController extends Controller
         // Execute the query with parameter bindings
         try {
             $data = $query->get();
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             return response()->json(['status' => false, 'body' => $exception->getMessage()]);
         }
 
         // Fetch total count for pagination
-        $totalCountQuery = "SELECT COUNT(*) AS total FROM " . strtolower($tableName);
+        $totalCountQuery = "SELECT COUNT(*) AS total FROM " . strtolower((string) $tableName);
         $totalCount = DB::connection($connection)->selectOne($totalCountQuery);
 
         // Create pagination object
@@ -74,9 +75,9 @@ class ServiceAccountController extends Controller
         $app = $request->input('app');
 
         try {
-            $tables = DB::connection(env('DB_DATABASE_' . strtoupper($app)))
+            $tables = DB::connection(env('DB_DATABASE_' . strtoupper((string) $app)))
                 ->select("SELECT table_name FROM information_schema.tables WHERE table_type = 'BASE TABLE' AND table_schema='public'");
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             return response()->json(['status' => false, 'body' => $exception->getMessage()]);
         }
 
@@ -87,9 +88,9 @@ class ServiceAccountController extends Controller
         $tableName = $request->input('table');
         $app = $request->input('app');
         try {
-            $columns = Schema::connection(env('DB_DATABASE_' . strtoupper($app)))
-                ->getColumns(strtolower($tableName));
-        } catch (\Exception $exception) {
+            $columns = Schema::connection(env('DB_DATABASE_' . strtoupper((string) $app)))
+                ->getColumns(strtolower((string) $tableName));
+        } catch (Exception $exception) {
             return response()->json(['status' => false, 'body' => $exception->getMessage()]);
         }
 

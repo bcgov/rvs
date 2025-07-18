@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use Exception;
 use Closure;
 use Firebase\JWT\ExpiredException;
 use Firebase\JWT\JWT;
@@ -16,9 +17,9 @@ class ApiAuth
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
+     * @param Closure(Request):((Response | RedirectResponse)) $next
      * @param  string|null  ...$roles
-     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     * @return Response|RedirectResponse
      */
     public function handle(Request $request, Closure $next, ...$roles): Response|RedirectResponse|JsonResponse
     {
@@ -44,14 +45,14 @@ class ApiAuth
             }
         }
 
-        $wrappedPk = wordwrap($matchingKey['x5c'][0], 64, "\n", true);
+        $wrappedPk = wordwrap((string) $matchingKey['x5c'][0], 64, "\n", true);
         $pk = "-----BEGIN CERTIFICATE-----\n" . $wrappedPk . "\n-----END CERTIFICATE-----";
 
         try {
             $decoded = JWT::decode($token, new Key($pk, 'RS256'));
-        } catch (ExpiredException $e) {
+        } catch (ExpiredException) {
             return Response::json(['status' => false, 'error' => 'Token has expired.'], 401);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return Response::json(['status' => false, 'error' => "An error occurred: " . $e->getMessage()], 401);
         }
             //only validate for accounts that we have registered

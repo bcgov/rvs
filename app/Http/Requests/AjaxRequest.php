@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use Override;
+
 class AjaxRequest extends Request
 {
     /**
@@ -28,6 +30,7 @@ class AjaxRequest extends Request
         ];
     }
 
+    #[Override]
     public function ajax()
     {
         if ($this->isXmlHttpRequest()) {
