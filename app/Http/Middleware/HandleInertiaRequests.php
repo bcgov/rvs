@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use Override;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tightenco\Ziggy\Ziggy;
@@ -22,6 +23,7 @@ class HandleInertiaRequests extends Middleware
      *
      * @see https://inertiajs.com/asset-versioning
      */
+    #[Override]
     public function version(Request $request): ?string
     {
         return parent::version($request);
@@ -33,16 +35,21 @@ class HandleInertiaRequests extends Middleware
      * @return array<string, mixed>
      * @see https://inertiajs.com/shared-data
      */
+    #[Override]
     public function share(Request $request): array
     {
         return array_merge(parent::share($request), [
             'auth' => [
-                'user' => $request->user(),
-                'roles' => is_null($request->user()) ? null : $request->user()->roles,
+                'user' => $request->user() ? [
+                    'id' => $request->user()->id,
+                    'user_id' => $request->user()->user_id,
+                    'first_name' => $request->user()->first_name,
+                    'last_name' => $request->user()->last_name,
+                    'email' => $request->user()->email,
+                ] : null,
+                'roles' => $request->user() ? $request->user()->roles()->get() : [],
             ],
-            'ziggy' => function () {
-                return (new Ziggy)->toArray();
-            },
+            'ziggy' => fn() => (new Ziggy)->toArray(),
         ]);
     }
 }

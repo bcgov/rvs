@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use RuntimeException;
+use Exception;
+use Illuminate\Routing\Redirector;
+use Illuminate\Contracts\Foundation\Application;
 use App\Http\Requests\AjaxRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -49,10 +53,16 @@ class UserController extends Controller
             $request->session()->forget('oauth2state');
 
             //Invalid state, make sure HTTP sessions are enabled
-            return Inertia::render('Auth/Login', [
-                'loginAttempt' => true,
-                'hasAccess' => false,
-                'status' => 'We could not log you in. Please contact RequestIT.',
+            return Inertia::render('Home', [
+                'auth' => [
+                    'user' => auth()->user() ? [
+                        'id' => auth()->user()->id,
+                        'first_name' => auth()->user()->first_name,
+                        'last_name' => auth()->user()->last_name,
+                        'email' => auth()->user()->email,
+                    ] : null,
+                    'roles' => auth()->user() ? auth()->user()->roles()->get() : [],
+                ],
             ]);
         } else {
             // Try to get an access token (using the authorization coe grant)
@@ -63,10 +73,10 @@ class UserController extends Controller
                 ]);
 
                 if (!$token instanceof AccessToken) {
-                    throw new \RuntimeException('Expected AccessToken instance');
+                    throw new RuntimeException('Expected AccessToken instance');
                 }
 
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 return Inertia::render('Auth/Login', [
                     'loginAttempt' => true,
                     'hasAccess' => false,
@@ -79,7 +89,7 @@ class UserController extends Controller
                 // We got an access token, let's now get the user's details
                 $idir_user = $provider->getResourceOwner($token);
                 $idir_user = $idir_user->toArray();
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 return Inertia::render('Auth/Login', [
                     'loginAttempt' => true,
                     'hasAccess' => false,
@@ -145,7 +155,7 @@ class UserController extends Controller
     /**
      * Display the login view.
      *
-     * @return \Inertia\Response
+     * @return Response
      */
     public function login(Request $request): Response {
         return Inertia::render('Auth/Login', [
@@ -158,9 +168,9 @@ class UserController extends Controller
     /**
      * Log the user out of the application.
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return Application|RedirectResponse|Redirector
      */
-    public function logout(Request $request): \Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse {
+    public function logout(Request $request): Redirector|Application|RedirectResponse {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
