@@ -21,7 +21,7 @@
 </template>
 <script>
 
-import {Inertia} from "@inertiajs/inertia";
+import { router } from '@inertiajs/vue3';
 
 export default {
     name: 'SchoolsHeader',
@@ -67,7 +67,7 @@ export default {
                 }
             });
 
-            Inertia.get(this.path, data, {
+            router.get(this.path, data, {
                 preserveState: true
             });
 

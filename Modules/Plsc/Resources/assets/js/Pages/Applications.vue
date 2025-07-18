@@ -107,7 +107,7 @@ import FormSubmitAlert from "@/Components/FormSubmitAlert";
 import BreezePagination from "@/Components/Pagination";
 import ApplicationSearchBox from "../Components/ApplicationSearch";
 import ApplicationsHeader from "../Components/ApplicationsHeader";
-import {Inertia} from "@inertiajs/inertia";
+import { router } from '@inertiajs/vue3';
 
 export default {
     name: 'Applications',
@@ -147,7 +147,7 @@ export default {
                 'filter_period': range
             };
 
-            Inertia.get('/plsc/dashboard', data, {
+            router.get('/plsc/dashboard', data, {
                 preserveState: true
             });
         },

@@ -178,7 +178,7 @@
 import BreezeAuthenticatedLayout from '../Layouts/Authenticated.vue';
 import StudentSearchBox from '../Components/StudentSearch.vue';
 import StudentsHeader from '../Components/StudentsHeader.vue';
-import {Head, Link, useForm} from '@inertiajs/vue3';
+import {Head, Link, useForm, router} from '@inertiajs/vue3';
 import BreezeInput from "../Components/Input";
 import BreezeSelect from "../Components/Select";
 import BreezeLabel from "../Components/Label";
@@ -244,7 +244,7 @@ export default {
                 onSuccess: (response) => {
                     $("#newStudentModal").modal('hide');
                     this.newStudentForm.reset(this.newStudentFormData);
-                    this.$inertia.visit('/yeaf/students/' + response.props.student.id);
+                    router.visit('/yeaf/students/' + response.props.student.id);
                 },
                 onFailure: () => {
                 },

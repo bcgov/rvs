@@ -141,7 +141,7 @@ import { Head, Link, useForm } from '@inertiajs/vue3';
 import CaseSearchBox from '../Components/CaseSearch.vue';
 import BreezeInput from '@/Components/Input.vue';
 import BreezeSelect from '@/Components/Select.vue';
-import { Inertia } from '@inertiajs/inertia';
+import { router } from '@inertiajs/vue3';
 
 export default {
     name: 'CaseComment',

@@ -108,7 +108,7 @@ import FormSubmitAlert from "@/Components/FormSubmitAlert";
 import BreezePagination from "@/Components/Pagination";
 import ApplicationSearchBox from "../Components/ApplicationSearch";
 import ApplicationsHeader from "../Components/ApplicationsHeader";
-import {Inertia} from "@inertiajs/inertia";
+import { router } from '@inertiajs/vue3';
 
 export default {
     name: 'Applications',
@@ -122,6 +122,15 @@ export default {
             type: Object,
             default: () => ({})
         }
+    },
+    setup() {
+        const page = usePage();
+        const utils = computed(() => page.props.utils || {});
+
+        return {
+            page,
+            utils
+        };
     },
     data() {
         return {
@@ -148,7 +157,7 @@ export default {
                 'filter_period': range
             };
 
-            Inertia.get('/lfp/dashboard', data, {
+            router.get('/lfp/dashboard', data, {
                 preserveState: true
             });
         },
@@ -167,7 +176,7 @@ export default {
                             if(response.props.app === -1)
                                 vm.newApplicationForm.formFailMsg = "There is no SABC Applications for that SIN.";
                             if(response.props.app > 0)
-                                vm.$inertia.visit('/lfp/applications/show/' + response.props.app);
+                                router.visit('/lfp/applications/show/' + response.props.app);
                             vm.newApplicationForm.formState = response.props.status;
                         });
                 },

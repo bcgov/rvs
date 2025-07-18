@@ -114,7 +114,7 @@ import AuthenticatedLayout from '../Layouts/Authenticated.vue';
 import BreezePagination from "@/Components/Pagination";
 import ApplicationSearchBox from "../Components/ApplicationSearch";
 import PaymentsHeader from "../Components/PaymentsHeader";
-import {Inertia} from "@inertiajs/inertia";
+import { router } from '@inertiajs/vue3';
 
 export default {
     name: 'Payments',
@@ -152,7 +152,7 @@ export default {
                 'filter_status': this.filterType
             };
 
-            Inertia.get('/lfp/payments', data, {
+            router.get('/lfp/payments', data, {
                 preserveState: true
             });
         },
