@@ -43,90 +43,95 @@ tr {
                                             <div class="row">
                                                 <div class="col-lg-4">
                                                     <table>
-                                                        <tr>
-                                                            <th scope="row">SIN:</th>
-                                                            <td class="ps-1">{{ editForm.sin }}</td>
-                                                        </tr>
+                                                        <tbody>
+                                                            <tr>
+                                                                <th scope="row">SIN:</th>
+                                                                <td class="ps-1">{{ editForm.sin }}</td>
+                                                            </tr>
 
-                                                        <tr>
-                                                            <th scope="row">Year of Audit:</th>
-                                                            <td class="ps-1">
-                                                                <BreezeInput class="form-control" type="text" placeholder="i.e 21/22" maxlength="5" v-model="editForm.year_of_audit" aria-required="true" />
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th scope="row">Date Opened:</th>
-                                                            <td class="ps-1">
-                                                                <BreezeInput class="form-control" type="date" min="1019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" v-model="editForm.open_date" />
-                                                            </td>
-                                                        </tr>
+                                                            <tr>
+                                                                <th scope="row">Year of Audit:</th>
+                                                                <td class="ps-1">
+                                                                    <BreezeInput class="form-control" type="text" placeholder="i.e 21/22" maxlength="5" v-model="editForm.year_of_audit" aria-required="true" />
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">Date Opened:</th>
+                                                                <td class="ps-1">
+                                                                    <BreezeInput class="form-control" type="date" min="1019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" v-model="editForm.open_date" />
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
                                                     </table>
                                                 </div>
                                                 <div class="col-lg-4">
 
                                                     <table>
-                                                        <tr>
-                                                            <th scope="row">Last Name:</th>
-                                                            <td class="ps-1">
-                                                                <BreezeInput class="form-control" type="text" v-model="editForm.last_name" />
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th scope="row">Application:</th>
-                                                            <td class="ps-1">
-                                                                <BreezeInput class="form-control" type="number" v-model="editForm.application_number" />
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th scope="row">Reactivate Date:</th>
-                                                            <td class="ps-1">
-                                                                <BreezeInput class="form-control" type="date" min="1019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" v-model="editForm.reactivate_date" />
-                                                            </td>
-                                                        </tr>
-
+                                                        <tbody>
+                                                            <tr>
+                                                                <th scope="row">Last Name:</th>
+                                                                <td class="ps-1">
+                                                                    <BreezeInput class="form-control" type="text" v-model="editForm.last_name" />
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">Application:</th>
+                                                                <td class="ps-1">
+                                                                    <BreezeInput class="form-control" type="number" v-model="editForm.application_number" />
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">Reactivate Date:</th>
+                                                                <td class="ps-1">
+                                                                    <BreezeInput class="form-control" type="date" min="1019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" v-model="editForm.reactivate_date" />
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
                                                     </table>
 
                                                 </div>
                                                 <div class="col-lg-4">
 
                                                     <table>
-                                                        <tr>
-                                                            <th scope="row">First Name:</th>
-                                                            <td class="ps-1">
-                                                                <BreezeInput class="form-control" type="text" v-model="editForm.first_name" />
-                                                            </td>
-                                                        </tr>
+                                                        <tbody>
+                                                            <tr>
+                                                                <th scope="row">First Name:</th>
+                                                                <td class="ps-1">
+                                                                    <BreezeInput class="form-control" type="text" v-model="editForm.first_name" />
+                                                                </td>
+                                                            </tr>
 
-                                                        <tr>
-                                                            <th scope="row">School:</th>
-                                                            <td class="ps-1">
-<!--                                                                <BreezeSelect class="form-select" v-model="editForm.institution_code">-->
-<!--                                                                    <option v-for="(school,j) in schools" :value="school.institution_code">{{ school.institution_name }} | {{ school.institution_code }}</option>-->
-<!--                                                                </BreezeSelect>-->
-                                                                <BreezeInput @focusout="resetSchoolFilter" @keyup="filterActiveSchools($event)" type="text" class="form-control" id="inputInstitution" v-model="editForm.institution.institution_name" />
-                                                                <input type="hidden" v-model="editForm.institution_code" />
-                                                                <ul class="dropdown-menu" :class="editForm.schoolsListHidden === false ? 'show' : 'hidden'" data-popper-placement="top-start" style="
-    position: absolute;
-    right: 0;
-    overflow-y: scroll;
-    height: 400px;
-">
-                                                                    <template v-for="(school,j) in schoolsList">
-                                                                        <li @click="assignSchool(school, j)" :value="school.institution_code" class="dropdown-item">{{ school.institution_code }} | {{ school.institution_name }}</li>
-                                                                    </template>
-                                                                </ul>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th scope="row">Status Code:</th>
-                                                            <td class="ps-1">
-                                                                <BreezeSelect class="form-select" v-model="editForm.incident_status">
-                                                                    <option value="Active">Active</option>
-                                                                    <option value="Re-activated">Re-activated</option>
-                                                                    <option value="Inactive">Inactive</option>
-                                                                </BreezeSelect>
-                                                            </td>
-                                                        </tr>
+                                                            <tr>
+                                                                <th scope="row">School:</th>
+                                                                <td class="ps-1">
+    <!--                                                                <BreezeSelect class="form-select" v-model="editForm.institution_code">-->
+    <!--                                                                    <option v-for="(school,j) in schools" :value="school.institution_code">{{ school.institution_name }} | {{ school.institution_code }}</option>-->
+    <!--                                                                </BreezeSelect>-->
+                                                                    <BreezeInput @focusout="resetSchoolFilter" @keyup="filterActiveSchools($event)" type="text" class="form-control" id="inputInstitution" v-model="editForm.institution.institution_name" />
+                                                                    <input type="hidden" v-model="editForm.institution_code" />
+                                                                    <ul class="dropdown-menu" :class="editForm.schoolsListHidden === false ? 'show' : 'hidden'" data-popper-placement="top-start" style="
+        position: absolute;
+        right: 0;
+        overflow-y: scroll;
+        height: 400px;
+    ">
+                                                                        <template v-for="(school,j) in schoolsList">
+                                                                            <li @click="assignSchool(school, j)" :value="school.institution_code" class="dropdown-item">{{ school.institution_code }} | {{ school.institution_name }}</li>
+                                                                        </template>
+                                                                    </ul>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">Status Code:</th>
+                                                                <td class="ps-1">
+                                                                    <BreezeSelect class="form-select" v-model="editForm.incident_status">
+                                                                        <option value="Active">Active</option>
+                                                                        <option value="Re-activated">Re-activated</option>
+                                                                        <option value="Inactive">Inactive</option>
+                                                                    </BreezeSelect>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
                                                     </table>
 
                                                 </div>
@@ -139,67 +144,71 @@ tr {
                                             <div class="row">
                                                 <div class="col-lg-4">
                                                     <table>
-                                                        <tr>
-                                                            <th scope="row">Referral:</th>
-                                                            <td class="ps-1">
-                                                                <BreezeSelect class="form-select" v-model="editForm.referral_source_id">
-                                                                    <option v-for="(ref,j) in referrals" :value="ref.id">{{ ref.description }}</option>
-                                                                </BreezeSelect>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th scope="row">Severity:</th>
-                                                            <td class="ps-1">
-                                                                <BreezeSelect class="form-select" v-model="editForm.severity">
-                                                                    <option value="A">Audit</option>
-                                                                    <option value="I">Investigation</option>
-                                                                </BreezeSelect>
-                                                            </td>
-                                                        </tr>
-
+                                                        <tbody>
+                                                            <tr>
+                                                                <th scope="row">Referral:</th>
+                                                                <td class="ps-1">
+                                                                    <BreezeSelect class="form-select" v-model="editForm.referral_source_id">
+                                                                        <option v-for="(ref,j) in referrals" :value="ref.id">{{ ref.description }}</option>
+                                                                    </BreezeSelect>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">Severity:</th>
+                                                                <td class="ps-1">
+                                                                    <BreezeSelect class="form-select" v-model="editForm.severity">
+                                                                        <option value="A">Audit</option>
+                                                                        <option value="I">Investigation</option>
+                                                                    </BreezeSelect>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
                                                     </table>
                                                 </div>
                                                 <div class="col-lg-4">
 
                                                     <table>
-                                                        <tr>
-                                                            <th scope="row">Auditor:</th>
-                                                            <td class="ps-1">
-                                                                <BreezeSelect class="form-select" v-model="editForm.auditor_user_id">
-                                                                    <option value=""></option>
-                                                                    <option v-for="(u,j) in staff" :value="u.user_id">{{ u.first_name }} {{ u.last_name }} | {{ u.user_id }}</option>
-                                                                </BreezeSelect>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th scope="row">Aud. Date:</th>
-                                                            <td class="ps-1">
-                                                                <BreezeInput class="form-control" type="date" min="1019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" v-model="editForm.audit_date" />
-                                                            </td>
-                                                        </tr>
-
+                                                        <tbody>
+                                                            <tr>
+                                                                <th scope="row">Auditor:</th>
+                                                                <td class="ps-1">
+                                                                    <BreezeSelect class="form-select" v-model="editForm.auditor_user_id">
+                                                                        <option value=""></option>
+                                                                        <option v-for="(u,j) in staff" :value="u.user_id">{{ u.first_name }} {{ u.last_name }} | {{ u.user_id }}</option>
+                                                                    </BreezeSelect>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">Aud. Date:</th>
+                                                                <td class="ps-1">
+                                                                    <BreezeInput class="form-control" type="date" min="1019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" v-model="editForm.audit_date" />
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
                                                     </table>
 
                                                 </div>
                                                 <div class="col-lg-4">
 
                                                     <table>
-                                                        <tr>
-                                                            <th scope="row">Investigator:</th>
-                                                            <td class="ps-1">
-                                                                <BreezeSelect class="form-select" v-model="editForm.investigator_user_id">
-                                                                    <option value=""></option>
-                                                                    <option v-for="(u,j) in staff" :value="u.user_id">{{ u.first_name }} {{ u.last_name }} | {{ u.user_id }}</option>
-                                                                </BreezeSelect>
-                                                            </td>
-                                                        </tr>
+                                                        <tbody>
+                                                            <tr>
+                                                                <th scope="row">Investigator:</th>
+                                                                <td class="ps-1">
+                                                                    <BreezeSelect class="form-select" v-model="editForm.investigator_user_id">
+                                                                        <option value=""></option>
+                                                                        <option v-for="(u,j) in staff" :value="u.user_id">{{ u.first_name }} {{ u.last_name }} | {{ u.user_id }}</option>
+                                                                    </BreezeSelect>
+                                                                </td>
+                                                            </tr>
 
-                                                        <tr>
-                                                            <th scope="row">Inv. Date:</th>
-                                                            <td class="ps-1">
-                                                                <BreezeInput class="form-control" type="date" min="1019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" v-model="editForm.investigation_date" />
-                                                            </td>
-                                                        </tr>
+                                                            <tr>
+                                                                <th scope="row">Inv. Date:</th>
+                                                                <td class="ps-1">
+                                                                    <BreezeInput class="form-control" type="date" min="1019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" v-model="editForm.investigation_date" />
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
                                                     </table>
 
                                                 </div>
@@ -214,30 +223,32 @@ tr {
                                             <div class="row">
                                                 <div class="col-lg-8">
                                                     <table>
-                                                        <tr>
-                                                            <th scope="row">Primary Area of Audit:</th>
-                                                            <td class="ps-1">
-                                                                <BreezeSelect class="form-select" v-model="editForm.area_of_audit_code">
-                                                                    <option v-for="area in areaOfAudits" :value="area.area_of_audit_code">{{ area.description }}</option>
-                                                                </BreezeSelect>
-                                                            </td>
-                                                        </tr>
-
+                                                        <tbody>
+                                                            <tr>
+                                                                <th scope="row">Primary Area of Audit:</th>
+                                                                <td class="ps-1">
+                                                                    <BreezeSelect class="form-select" v-model="editForm.area_of_audit_code">
+                                                                        <option v-for="area in areaOfAudits" :value="area.area_of_audit_code">{{ area.description }}</option>
+                                                                    </BreezeSelect>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
                                                     </table>
                                                 </div>
                                                 <div class="col-lg-4">
 
                                                     <table>
-                                                        <tr>
-                                                            <th scope="row">Audit Type:</th>
-                                                            <td class="ps-1">
-                                                                <BreezeSelect class="form-select" v-model="editForm.audit_type">
-                                                                    <option value="A">Pre-Audit</option>
-                                                                    <option value="P">Post-Audit</option>
-                                                                </BreezeSelect>
-                                                            </td>
-                                                        </tr>
-
+                                                        <tbody>
+                                                            <tr>
+                                                                <th scope="row">Audit Type:</th>
+                                                                <td class="ps-1">
+                                                                    <BreezeSelect class="form-select" v-model="editForm.audit_type">
+                                                                        <option value="A">Pre-Audit</option>
+                                                                        <option value="P">Post-Audit</option>
+                                                                    </BreezeSelect>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
                                                     </table>
 
                                                 </div>
@@ -252,31 +263,34 @@ tr {
                                                     <div v-for="(aud, i) in editForm.audits" class="row">
                                                         <div class="col-lg-8">
                                                             <table>
-                                                                <tr>
-                                                                    <th scope="row">Area of Audit:</th>
-                                                                    <td class="ps-1">
-                                                                        <BreezeSelect class="form-select" v-model="aud.area_of_audit_code">
-                                                                            <option v-for="area in areaOfAudits" :value="area.area_of_audit_code">{{ area.description }}</option>
-                                                                        </BreezeSelect>
-                                                                    </td>
-                                                                </tr>
-
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <th scope="row">Area of Audit:</th>
+                                                                        <td class="ps-1">
+                                                                            <BreezeSelect class="form-select" v-model="aud.area_of_audit_code">
+                                                                                <option v-for="area in areaOfAudits" :value="area.area_of_audit_code">{{ area.description }}</option>
+                                                                            </BreezeSelect>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
                                                             </table>
                                                         </div>
                                                         <div class="col-lg-4">
 
                                                             <table>
-                                                                <tr>
-                                                                    <th scope="row">Audit Type:</th>
-                                                                    <td class="ps-1">
-                                                                        <BreezeSelect class="form-select" v-model="aud.audit_type">
-                                                                            <option value="A">Pre-Audit</option>
-                                                                            <option value="P">Post-Audit</option>
-                                                                        </BreezeSelect>
-                                                                    </td>
-                                                                    <td><button @click="removeAreaOfAuditRow(aud.area_of_audit_code, aud.audit_type)" type="button" class="btn-close m-auto" aria-label="Close"></button></td>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <th scope="row">Audit Type:</th>
+                                                                        <td class="ps-1">
+                                                                            <BreezeSelect class="form-select" v-model="aud.audit_type">
+                                                                                <option value="A">Pre-Audit</option>
+                                                                                <option value="P">Post-Audit</option>
+                                                                            </BreezeSelect>
+                                                                        </td>
+                                                                        <td><button @click="removeAreaOfAuditRow(aud.area_of_audit_code, aud.audit_type)" type="button" class="btn-close m-auto" aria-label="Close"></button></td>
 
-                                                                </tr>
+                                                                    </tr>
+                                                                </tbody>
                                                             </table>
 
                                                         </div>
@@ -286,28 +300,32 @@ tr {
                                                     <div v-for="(aud, i) in newAreaOfAuditRows" class="row">
                                                         <div class="col-lg-8">
                                                             <table>
-                                                                <tr>
-                                                                    <th scope="row">Area of Audit:</th>
-                                                                    <td class="ps-1">
-                                                                        <BreezeSelect class="form-select" v-model="aud.area_of_audit_code">
-                                                                            <option v-for="area in areaOfAudits" :value="area.area_of_audit_code">{{ area.description }}</option>
-                                                                        </BreezeSelect>
-                                                                    </td>
-                                                                </tr>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <th scope="row">Area of Audit:</th>
+                                                                        <td class="ps-1">
+                                                                            <BreezeSelect class="form-select" v-model="aud.area_of_audit_code">
+                                                                                <option v-for="area in areaOfAudits" :value="area.area_of_audit_code">{{ area.description }}</option>
+                                                                            </BreezeSelect>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
                                                             </table>
                                                         </div>
                                                         <div class="col-lg-4">
                                                             <table>
-                                                                <tr>
-                                                                    <th scope="row">Audit Type:</th>
-                                                                    <td class="ps-1">
-                                                                        <BreezeSelect class="form-select" v-model="aud.audit_type">
-                                                                            <option value="A">Pre-Audit</option>
-                                                                            <option value="P">Post-Audit</option>
-                                                                        </BreezeSelect>
-                                                                    </td>
-                                                                    <td class="ps-1"><button @click="removeNewAreaOfAuditRow(i)" type="button" class="btn-close m-auto" aria-label="Close"></button></td>
-                                                                </tr>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <th scope="row">Audit Type:</th>
+                                                                        <td class="ps-1">
+                                                                            <BreezeSelect class="form-select" v-model="aud.audit_type">
+                                                                                <option value="A">Pre-Audit</option>
+                                                                                <option value="P">Post-Audit</option>
+                                                                            </BreezeSelect>
+                                                                        </td>
+                                                                        <td class="ps-1"><button @click="removeNewAreaOfAuditRow(i)" type="button" class="btn-close m-auto" aria-label="Close"></button></td>
+                                                                    </tr>
+                                                                </tbody>
                                                             </table>
                                                         </div>
                                                     </div><!-- end of additional new row -->
@@ -327,32 +345,36 @@ tr {
                                                     <div class="row">
                                                         <div class="col-auto">
                                                             <table>
-                                                                <tr v-for="(row, i) in editForm.offences">
-                                                                    <th scope="row">Nature of Offense:</th>
-                                                                    <td class="ps-1">
-                                                                        <BreezeSelect class="form-select" v-model="row.nature_code">
-                                                                            <option v-for="offence in natureOffences" :value="offence.nature_code">{{ offence.description }}</option>
-                                                                        </BreezeSelect>
-                                                                    </td>
-                                                                    <td><button @click="removeOffenceRow(row.nature_code)" type="button" class="btn-close m-auto" aria-label="Close"></button></td>
+                                                                <tbody>
+                                                                    <tr v-for="(row, i) in editForm.offences">
+                                                                        <th scope="row">Nature of Offense:</th>
+                                                                        <td class="ps-1">
+                                                                            <BreezeSelect class="form-select" v-model="row.nature_code">
+                                                                                <option v-for="offence in natureOffences" :value="offence.nature_code">{{ offence.description }}</option>
+                                                                            </BreezeSelect>
+                                                                        </td>
+                                                                        <td><button @click="removeOffenceRow(row.nature_code)" type="button" class="btn-close m-auto" aria-label="Close"></button></td>
 
-                                                                </tr>
+                                                                    </tr>
+                                                                </tbody>
                                                             </table>
                                                         </div>
                                                     </div>
                                                     <div v-for="(row, i) in newOffenceRows" class="row">
                                                         <div class="col-auto">
                                                             <table>
-                                                                <tr>
-                                                                    <th scope="row">Nature of Offense:</th>
-                                                                    <td class="ps-1">
-                                                                        <BreezeSelect class="form-select" v-model="row.nature_code">
-                                                                            <option v-for="offence in natureOffences" :value="offence.nature_code">{{ offence.description }}</option>
-                                                                        </BreezeSelect>
-                                                                    </td>
-                                                                    <td class="ps-1"><button @click="removeNewOffenceRow(i)" type="button" class="btn-close m-auto" aria-label="Close"></button></td>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <th scope="row">Nature of Offense:</th>
+                                                                        <td class="ps-1">
+                                                                            <BreezeSelect class="form-select" v-model="row.nature_code">
+                                                                                <option v-for="offence in natureOffences" :value="offence.nature_code">{{ offence.description }}</option>
+                                                                            </BreezeSelect>
+                                                                        </td>
+                                                                        <td class="ps-1"><button @click="removeNewOffenceRow(i)" type="button" class="btn-close m-auto" aria-label="Close"></button></td>
 
-                                                                </tr>
+                                                                    </tr>
+                                                                </tbody>
                                                             </table>
                                                         </div>
                                                     </div><!-- end of additional new row -->
@@ -374,32 +396,36 @@ tr {
                                                     <div class="row">
                                                         <div class="col-auto">
                                                             <table>
-                                                                <tr v-for="(row, i) in editForm.sanctions">
-                                                                    <th scope="row">Sanction Type:</th>
-                                                                    <td class="ps-1">
-                                                                        <BreezeSelect class="form-select" v-model="row.sanction_code">
-                                                                            <option v-for="sanction in sanctions" :value="sanction.sanction_code">{{ sanction.short_description }} | {{ sanction.description }}</option>
-                                                                        </BreezeSelect>
-                                                                    </td>
-                                                                    <td><button @click="removeOldSanctionRow(row.sanction_code)" type="button" class="btn-close m-auto" aria-label="Close"></button></td>
+                                                                <tbody>
+                                                                    <tr v-for="(row, i) in editForm.sanctions">
+                                                                        <th scope="row">Sanction Type:</th>
+                                                                        <td class="ps-1">
+                                                                            <BreezeSelect class="form-select" v-model="row.sanction_code">
+                                                                                <option v-for="sanction in sanctions" :value="sanction.sanction_code">{{ sanction.short_description }} | {{ sanction.description }}</option>
+                                                                            </BreezeSelect>
+                                                                        </td>
+                                                                        <td><button @click="removeOldSanctionRow(row.sanction_code)" type="button" class="btn-close m-auto" aria-label="Close"></button></td>
 
-                                                                </tr>
+                                                                    </tr>
+                                                                </tbody>
                                                             </table>
                                                         </div>
                                                     </div>
                                                     <div v-for="(row, i) in newSanctionRows" class="row">
                                                         <div class="col-auto">
                                                             <table>
-                                                                <tr>
-                                                                    <th scope="row">Sanction Type:</th>
-                                                                    <td class="ps-1">
-                                                                        <BreezeSelect class="form-select" v-model="row.sanction_code">
-                                                                            <option v-for="sanction in sanctions" :value="sanction.sanction_code">{{ sanction.short_description }} | {{ sanction.description }}</option>
-                                                                        </BreezeSelect>
-                                                                    </td>
-                                                                    <td class="ps-1"><button @click="removeNewSanctionRow(i)" type="button" class="btn-close m-auto" aria-label="Close"></button></td>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <th scope="row">Sanction Type:</th>
+                                                                        <td class="ps-1">
+                                                                            <BreezeSelect class="form-select" v-model="row.sanction_code">
+                                                                                <option v-for="sanction in sanctions" :value="sanction.sanction_code">{{ sanction.short_description }} | {{ sanction.description }}</option>
+                                                                            </BreezeSelect>
+                                                                        </td>
+                                                                        <td class="ps-1"><button @click="removeNewSanctionRow(i)" type="button" class="btn-close m-auto" aria-label="Close"></button></td>
 
-                                                                </tr>
+                                                                    </tr>
+                                                                </tbody>
                                                             </table>
                                                         </div>
                                                     </div><!-- end of additional new row -->
@@ -418,125 +444,132 @@ tr {
 
                                                 <div class="col-lg-3">
                                                     <table>
-                                                        <tr>
-                                                            <th scope="row">Bring Forward</th>
-                                                            <td class="ps-1">
-                                                                <div class="form-check form-switch">
-                                                                    <input class="form-check-input" type="checkbox" role="switch" id="bringForwardSwitch" v-model="editForm.bring_forward">
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ps-1">
-                                                                <BreezeLabel for="bring_forward_date">Date</BreezeLabel>
-                                                                <BreezeInput id="bring_forward_date" class="form-control" type="date" min="1019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" v-model="editForm.bring_forward_date" :disabled="!editForm.bring_forward" />
-                                                            </td>
-                                                        </tr>
+                                                        <tbody>
+                                                            <tr>
+                                                                <th scope="row">Bring Forward</th>
+                                                                <td class="ps-1">
+                                                                    <div class="form-check form-switch">
+                                                                        <input class="form-check-input" type="checkbox" role="switch" id="bringForwardSwitch" v-model="editForm.bring_forward">
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ps-1">
+                                                                    <BreezeLabel for="bring_forward_date">Date</BreezeLabel>
+                                                                    <BreezeInput id="bring_forward_date" class="form-control" type="date" min="1019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" v-model="editForm.bring_forward_date" :disabled="!editForm.bring_forward" />
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
                                                     </table>
                                                 </div><!-- end of col-lg-3 -->
                                                 <div class="col-lg-3">
                                                     <table>
-                                                        <tr>
-                                                            <th scope="row">Appealed</th>
-                                                            <td class="ps-1">
-                                                                <div class="form-check form-switch">
-                                                                    <input class="form-check-input" type="checkbox" role="switch" id="appealedSwitch" v-model="editForm.appeal_flag">
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ps-1">
-                                                                <BreezeLabel for="appeal_outcome">Appeal Outcome</BreezeLabel>
-                                                                <BreezeSelect id="appeal_outcome" class="form-select" v-model="editForm.appeal_outcome" :disabled="!editForm.appeal_flag">
-                                                                    <option value=""></option>
-                                                                    <option value="A">Approved</option>
-                                                                    <option value="D">Denied</option>
-                                                                    <option value="P">Approved in Part</option>
-                                                                </BreezeSelect>
-                                                            </td>
-                                                        </tr>
+                                                        <tbody>
+                                                            <tr>
+                                                                <th scope="row">Appealed</th>
+                                                                <td class="ps-1">
+                                                                    <div class="form-check form-switch">
+                                                                        <input class="form-check-input" type="checkbox" role="switch" id="appealedSwitch" v-model="editForm.appeal_flag">
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ps-1">
+                                                                    <BreezeLabel for="appeal_outcome">Appeal Outcome</BreezeLabel>
+                                                                    <BreezeSelect id="appeal_outcome" class="form-select" v-model="editForm.appeal_outcome" :disabled="!editForm.appeal_flag">
+                                                                        <option value=""></option>
+                                                                        <option value="A">Approved</option>
+                                                                        <option value="D">Denied</option>
+                                                                        <option value="P">Approved in Part</option>
+                                                                    </BreezeSelect>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
                                                     </table>
                                                 </div><!-- end of col-lg-3 -->
                                                 <div class="col-lg-3">
                                                     <table>
-                                                        <tr>
-                                                            <th scope="row">Case Closed</th>
-                                                            <td class="ps-1">
-                                                                <div class="form-check form-switch">
-                                                                    <input class="form-check-input" type="checkbox" role="switch" id="caseClosedSwitch" v-model="editForm.case_close">
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ps-1">
-                                                                <BreezeLabel for="case_date">Date</BreezeLabel>
-                                                                <BreezeInput id="case_date" class="form-control" type="date" min="1019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" v-model="editForm.close_date" :disabled="!editForm.case_close" />
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ps-1">
-                                                                <BreezeLabel for="case_reason">Reason</BreezeLabel>
-                                                                <BreezeSelect id="case_reason" class="form-select" v-model="editForm.reason_for_closing" :disabled="!editForm.case_close">
-                                                                    <option value=""></option>
-                                                                    <option value="C">Complete</option>
-                                                                    <option value="D">Deceased</option>
-                                                                    <option value="N">No Response</option>
-                                                                </BreezeSelect>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ps-1">
-                                                                <BreezeLabel for="case_outcome">Case Outcome</BreezeLabel>
-                                                                <BreezeSelect id="case_outcome" class="form-select" v-model="editForm.case_outcome" :disabled="!editForm.case_close">
-                                                                    <option value=""></option>
-                                                                    <option value="S">Substantiated</option>
-                                                                    <option value="U">Unsubstantiated</option>
-                                                                </BreezeSelect>
-                                                            </td>
-                                                        </tr>
+                                                        <tbody>
+                                                            <tr>
+                                                                <th scope="row">Case Closed</th>
+                                                                <td class="ps-1">
+                                                                    <div class="form-check form-switch">
+                                                                        <input class="form-check-input" type="checkbox" role="switch" id="caseClosedSwitch" v-model="editForm.case_close">
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ps-1">
+                                                                    <BreezeLabel for="case_date">Date</BreezeLabel>
+                                                                    <BreezeInput id="case_date" class="form-control" type="date" min="1019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" v-model="editForm.close_date" :disabled="!editForm.case_close" />
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ps-1">
+                                                                    <BreezeLabel for="case_reason">Reason</BreezeLabel>
+                                                                    <BreezeSelect id="case_reason" class="form-select" v-model="editForm.reason_for_closing" :disabled="!editForm.case_close">
+                                                                        <option value=""></option>
+                                                                        <option value="C">Complete</option>
+                                                                        <option value="D">Deceased</option>
+                                                                        <option value="N">No Response</option>
+                                                                    </BreezeSelect>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ps-1">
+                                                                    <BreezeLabel for="case_outcome">Case Outcome</BreezeLabel>
+                                                                    <BreezeSelect id="case_outcome" class="form-select" v-model="editForm.case_outcome" :disabled="!editForm.case_close">
+                                                                        <option value=""></option>
+                                                                        <option value="S">Substantiated</option>
+                                                                        <option value="U">Unsubstantiated</option>
+                                                                    </BreezeSelect>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
                                                     </table>
                                                 </div><!-- end of col-lg-3 -->
 
 
                                                 <div class="col-lg-3">
                                                     <table>
-                                                        <tr>
-                                                            <th scope="row">Referred to RCMP</th>
-                                                            <td class="ps-1">
-                                                                <div class="form-check form-switch">
-                                                                    <input class="form-check-input" type="checkbox" role="switch" id="referredToRcmpSwitch" v-model="editForm.rcmp_referral_flag">
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ps-1">
-                                                                <BreezeLabel for="date_referred_to_rcmp">Date referred to RCMP</BreezeLabel>
-                                                                <BreezeInput id="date_referred_to_rcmp" class="form-control" type="date" min="1019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" v-model="editForm.rcmp_referral_date" :disabled="!editForm.rcmp_referral_flag" />
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ps-1">
-                                                                <BreezeLabel for="date_closed_by_rcmp">Date closed by RCMP</BreezeLabel>
-                                                                <BreezeInput id="date_closed_by_rcmp" class="form-control" type="date" min="1019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" v-model="editForm.rcmp_closure_date" :disabled="!editForm.rcmp_referral_flag" />
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th scope="row">Charges laid</th>
-                                                            <td class="ps-1">
-                                                                <div class="form-check form-switch">
-                                                                    <input class="form-check-input" type="checkbox" role="switch" id="chargesLaidSwitch" v-model="editForm.charges_laid_flag">
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th scope="row">Convicted</th>
-                                                            <td class="ps-1">
-                                                                <div class="form-check form-switch">
-                                                                    <input class="form-check-input" type="checkbox" role="switch" id="convictedSwitch" v-model="editForm.conviction_flag">
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-
+                                                        <tbody>
+                                                            <tr>
+                                                                <th scope="row">Referred to RCMP</th>
+                                                                <td class="ps-1">
+                                                                    <div class="form-check form-switch">
+                                                                        <input class="form-check-input" type="checkbox" role="switch" id="referredToRcmpSwitch" v-model="editForm.rcmp_referral_flag">
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ps-1">
+                                                                    <BreezeLabel for="date_referred_to_rcmp">Date referred to RCMP</BreezeLabel>
+                                                                    <BreezeInput id="date_referred_to_rcmp" class="form-control" type="date" min="1019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" v-model="editForm.rcmp_referral_date" :disabled="!editForm.rcmp_referral_flag" />
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ps-1">
+                                                                    <BreezeLabel for="date_closed_by_rcmp">Date closed by RCMP</BreezeLabel>
+                                                                    <BreezeInput id="date_closed_by_rcmp" class="form-control" type="date" min="1019-01-01" max="2040-12-31" placeholder="YYYY-MM-DD" v-model="editForm.rcmp_closure_date" :disabled="!editForm.rcmp_referral_flag" />
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">Charges laid</th>
+                                                                <td class="ps-1">
+                                                                    <div class="form-check form-switch">
+                                                                        <input class="form-check-input" type="checkbox" role="switch" id="chargesLaidSwitch" v-model="editForm.charges_laid_flag">
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">Convicted</th>
+                                                                <td class="ps-1">
+                                                                    <div class="form-check form-switch">
+                                                                        <input class="form-check-input" type="checkbox" role="switch" id="convictedSwitch" v-model="editForm.conviction_flag">
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
                                                     </table>
                                                 </div><!-- end of col-lg-3 -->
 
