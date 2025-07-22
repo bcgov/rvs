@@ -82,6 +82,7 @@ export default {
         results: Object,
     },
     data() {
+        return {};
     },
     methods: {
     },

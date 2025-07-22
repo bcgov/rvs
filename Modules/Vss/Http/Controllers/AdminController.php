@@ -17,27 +17,27 @@ class AdminController extends Controller
     /**
      * fetch active support users
      *
-     * @param AjaxRequest $request
+     * @param Request $request
      * @return JsonResponse
      */
-    public function activeUsers(AjaxRequest $request)
+    public function activeUsers(Request $request)
     {
         $users = User::whereHas('roles', fn($q) => $q->whereIn('name', [Role::VSS_ADMIN, Role::VSS_USER]))->where('disabled', false)->get();
 
-        return HttpResponse::json(['status' => true, 'users' => $users]);
+        return response()->json(['status' => true, 'users' => $users]);
     }
 
     /**
      * fetch cancelled support users
      *
-     * @param AjaxRequest $request
+     * @param Request $request
      * @return JsonResponse
      */
-    public function cancelledUsers(AjaxRequest $request)
+    public function cancelledUsers(Request $request)
     {
         $users = User::whereHas('roles', fn($q) => $q->whereIn('name', [Role::VSS_ADMIN, Role::VSS_USER]))->where('disabled', true)->get();
 
-        return HttpResponse::json(['status' => true, 'users' => $users]);
+        return response()->json(['status' => true, 'users' => $users]);
     }
 
     /**
