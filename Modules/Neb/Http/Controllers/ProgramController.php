@@ -44,7 +44,7 @@ class ProgramController extends Controller
 
         return FacadeResponse::json([
             'page' => 'programs',
-            'programs' => $nebPrograms,
+            'neb_programs' => $nebPrograms,
         ]);
     }
 

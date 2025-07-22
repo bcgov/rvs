@@ -67,9 +67,8 @@ class AdminController extends Controller
      * Display first page after login (dashboard page)
      */
     public function ministry(Request $request): Response {
-        $this->authorize('adminUpdate', Ministry::class);
-
         $ministry = Ministry::first();
+        $this->authorize('adminUpdate', $ministry);
         $users = User::with('roles')->get();
         $roles = Role::orderBy('name')->get();
         return Inertia::render('Admin/Home', ['users' => $users, 'roles' => $roles, 'ministry' => $ministry,
