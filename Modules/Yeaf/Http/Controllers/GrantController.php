@@ -215,7 +215,7 @@ class GrantController extends Controller
 
         $grant = Grant::find($grant->id);
         $msg = $this->setStatus($grant);
-        if ($msg != '') {
+        if ($msg !== '') {
             $overall_messages[] = $msg;
         }
         $grant = Grant::find($grant->id);
