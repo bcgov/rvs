@@ -196,7 +196,7 @@ class GrantController extends Controller
 
         $overall_app_ineligible = false;
         $overall_messages = [];
-        [$msg, $app_ineligible, $appeal_status, $age] = $this->checkAge(true,  $grant);
+        [$msg, $app_ineligible, $appeal_status, $age] = $this->checkAge(true, $grant);
         $grant->age = $age;
         $grant->save();
         $grant = Grant::find($grant->id);
@@ -286,7 +286,7 @@ class GrantController extends Controller
 
     }
 
-    private function updateDeniedIneligibles(Grant $grant, GrantEditRequest $request): null {
+    private function updateDeniedIneligibles(Grant $grant, GrantEditRequest $request): void {
         //update existing records
         if (isset($request->grant_denied_ineligibles)) {
             foreach ($request->grant_denied_ineligibles as $denied) {
@@ -316,10 +316,9 @@ class GrantController extends Controller
             }
         }
 
-        return null;
     }
 
-    private function updateAppeals(Grant $grant, GrantEditRequest $request): null {
+    private function updateAppeals(Grant $grant, GrantEditRequest $request): void {
         //update existing records
         if (isset($request->appeals)) {
             foreach ($request->input('appeals') as $appeal) {
@@ -357,7 +356,6 @@ class GrantController extends Controller
             }
         }
 
-        return null;
     }
 
     private function setStatus(Grant $grant): string {

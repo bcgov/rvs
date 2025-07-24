@@ -11,7 +11,7 @@ class IneligiblePolicy
 {
     use HandlesAuthorization;
 
-    public function before(User $user): bool {
+    public function before(User $user, $ability): bool {
         return $user->hasRole(Role::SUPER_ADMIN) || $user->hasRole(Role::YEAF_ADMIN);
     }
 
