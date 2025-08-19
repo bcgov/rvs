@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::connection(env('DB_DATABASE_NEB'))->create('el_potentials', function (Blueprint $table) {
+        Schema::connection(env('DB_DATABASE_NEB'))->create('el_potentials', function (Blueprint $table): void {
             $table->id();
             $table->bigInteger('application_number')->nullable();
             $table->bigInteger('sin')->nullable();

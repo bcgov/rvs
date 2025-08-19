@@ -2,6 +2,7 @@
 
 namespace Modules\Twp\Http\Controllers;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 use Modules\Twp\Entities\Application;
 use Modules\Twp\Entities\Payment;
@@ -13,7 +14,7 @@ class PaymentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function store(PaymentStoreRequest $request)
     {
@@ -25,7 +26,7 @@ class PaymentController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function update(PaymentEditRequest $request, Payment $payment)
     {
@@ -38,7 +39,7 @@ class PaymentController extends Controller
     /**
      * Soft delete the payment
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function destroy(Payment $payment) {
         // Update Comment column

@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::connection(env('DB_DATABASE_NEB'))->create('bursary_periods', function (Blueprint $table) {
+        Schema::connection(env('DB_DATABASE_NEB'))->create('bursary_periods', function (Blueprint $table): void {
             $table->id();
             $table->date('bursary_period_start_date')->unique()->nullable();
             $table->date('bursary_period_end_date')->unique()->nullable();

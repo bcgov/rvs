@@ -13,7 +13,7 @@ class CreateIncidentsTable extends Migration
      */
     public function up()
     {
-        Schema::connection(env('DB_DATABASE_VSS'))->create('incidents', function (Blueprint $table) {
+        Schema::connection(env('DB_DATABASE_VSS'))->create('incidents', function (Blueprint $table): void {
             $table->id();
             $table->bigInteger('incident_id')->unique();
 

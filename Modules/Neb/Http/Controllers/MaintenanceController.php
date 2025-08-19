@@ -2,6 +2,9 @@
 
 namespace Modules\Neb\Http\Controllers;
 
+use Inertia\Response;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Auth\Access\AuthorizationException;
 use App\Http\Requests\StaffEditRequest;
 use App\Models\Role;
 use App\Models\User;
@@ -11,17 +14,18 @@ use Inertia\Inertia;
 
 class MaintenanceController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response::render
+     * @param Request $request
+     *
+     * @return Response
      */
-    public function staffList(Request $request): \Inertia\Response
+    public function staffList(Request $request): Response
     {
         $staff = User::with('roles')
-            ->whereHas('roles', function ($q) {
-                return $q->whereIn('name', [Role::NEB_ADMIN, Role::NEB_USER, Role::NEB_GUEST]);
-            })->orderBy('created_at', 'desc')->get();
+            ->whereHas('roles', fn($q) => $q->whereIn('name', [Role::NEB_ADMIN, Role::NEB_USER, Role::NEB_GUEST]))->orderBy('created_at', 'desc')->get();
 
         foreach ($staff as $user) {
             if ($user->roles->contains('name', Role::NEB_ADMIN)) {
@@ -37,9 +41,12 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response::render
+     * @param Request $request
+     * @param User $user
+     *
+     * @return Response
      */
-    public function staffShow(Request $request, User $user): \Inertia\Response
+    public function staffShow(Request $request, User $user): Response
     {
         if ($user->roles->contains('name', Role::NEB_ADMIN)) {
             $user->access_type = 'A';
@@ -53,9 +60,13 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\RedirectResponse::render
+     * @param StaffEditRequest $request
+     * @param User $user
+     *
+     * @return RedirectResponse
+     * @throws AuthorizationException
      */
-    public function staffEdit(StaffEditRequest $request, User $user): \Illuminate\Http\RedirectResponse
+    public function staffEdit(StaffEditRequest $request, User $user): RedirectResponse
     {
         $this->authorize('update', $user);
 

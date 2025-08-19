@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         if (! Schema::connection(env('DB_DATABASE_YEAF'))->hasTable('admins')) {
-            Schema::connection(env('DB_DATABASE_YEAF'))->create('admins', function (Blueprint $table) {
+            Schema::connection(env('DB_DATABASE_YEAF'))->create('admins', function (Blueprint $table): void {
                 $table->id();
                 $table->string('contact_fname')->nullable();
                 $table->string('contact_lname')->nullable();

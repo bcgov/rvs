@@ -9,12 +9,11 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redirect;
 use Modules\Lfp\Entities\Intake;
 use Modules\Lfp\Entities\Lfp;
 use Modules\Lfp\Entities\Payment;
 use Modules\Lfp\Entities\Util;
-use Modules\Lfp\Http\Controllers\LfpController;
+use Illuminate\Support\Facades\Log;
 
 class MidnightJob implements ShouldQueue
 {
@@ -33,10 +32,9 @@ class MidnightJob implements ShouldQueue
      */
     public function handle(): void
     {
-        \Log::info('LFP Midnight Job Started');
+        Log::info('LFP Midnight Job Started');
 
         $last_sync = Util::where('field_type', 'Last Sync')->first();
-
 
         // Call the function sync from LfpController
         $this->sync();
@@ -44,13 +42,11 @@ class MidnightJob implements ShouldQueue
         $last_sync->field_name = Carbon::now();
         $last_sync->save();
 
-        \Log::info('LFP Midnight Job Finished');
+        Log::info('LFP Midnight Job Finished');
 
     }
 
-
-    private function sync($status = true, $newApp = 0)
-    {
+    private function sync(bool $status = true, int $newApp = 0): null {
         \Log::info('Starting Sync');
         ini_set('memory_limit', '-1');
         ini_set('max_execution_time', 600); // 10 minutes

@@ -3,26 +3,31 @@
 namespace Modules\Lfp\Http\Controllers;
 
 use Carbon\Carbon;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use Inertia\Response;
 use Modules\Lfp\Entities\Intake;
 use Modules\Lfp\Entities\Lfp;
 use Modules\Lfp\Entities\Payment;
 use Modules\Lfp\Entities\Util;
 use Modules\Lfp\Http\Requests\LfpEditRequest;
-use Response;
 
 class LfpController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response
+     * @param bool $status
+     * @param int $newApp
+     *
+     * @return Response
      */
-    public function index($status = true, $newApp = 0)
-    {
+    public function index(bool $status = true, int $newApp = 0): Response {
         $lfps = $this->paginateLfps();
         $last_sync = Util::where('field_type', 'Last Sync')->first();
 
@@ -34,10 +39,12 @@ class LfpController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @param LfpEditRequest $request
+     * @param Lfp $lfp
+     *
+     * @return RedirectResponse
      */
-    public function update(LfpEditRequest $request, Lfp $lfp)
-    {
+    public function update(LfpEditRequest $request, Lfp $lfp): RedirectResponse {
         Lfp::where('id', $lfp->id)->update($request->validated());
         $lfp = Lfp::find($lfp->id);
 
@@ -48,10 +55,9 @@ class LfpController extends Controller
     /**
      * Show the specified resource.
      * @param Lfp $lfp
-     * @return \Inertia\Response
+     * @return Response
      */
-    public function show(Lfp $lfp)
-    {
+    public function show(Lfp $lfp): Response {
         $lfp = Lfp::with('payments', 'intake')->where('id', $lfp->id)->first();
 
         $qry = env('LFP_QUERY1').$lfp->sin;
@@ -72,7 +78,10 @@ class LfpController extends Controller
             'student' => $student, 'app' => $application, 'utils' => $utils_array]);
     }
 
-    private function paginateLfps()
+    /**
+     * @return LengthAwarePaginator<Lfp>
+     */
+    private function paginateLfps(): LengthAwarePaginator
     {
         $lfps = Lfp::where('app_idx', '!=', null);
         if (request()->filter_fname !== null) {

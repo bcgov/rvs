@@ -2,24 +2,26 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\ServiceAccount;
+use Exception;
 use Closure;
 use Firebase\JWT\ExpiredException;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Response;
 
 class ApiAuth
 {
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
+     * @param Closure(Request):((Response | RedirectResponse)) $next
      * @param  string|null  ...$roles
-     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     * @return Response|RedirectResponse
      */
-    public function handle(Request $request, Closure $next, ...$roles)
+    public function handle(Request $request, Closure $next, ...$roles): Response|RedirectResponse|JsonResponse
     {
         $forwardedHost = $request->headers->get('X-Forwarded-Host');
 
@@ -43,28 +45,23 @@ class ApiAuth
             }
         }
 
-        $wrappedPk = wordwrap($matchingKey['x5c'][0], 64, "\n", true);
+        $wrappedPk = wordwrap((string) $matchingKey['x5c'][0], 64, "\n", true);
         $pk = "-----BEGIN CERTIFICATE-----\n" . $wrappedPk . "\n-----END CERTIFICATE-----";
 
         try {
             $decoded = JWT::decode($token, new Key($pk, 'RS256'));
-        } catch (ExpiredException $e) {
+        } catch (ExpiredException) {
             return Response::json(['status' => false, 'error' => 'Token has expired.'], 401);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return Response::json(['status' => false, 'error' => "An error occurred: " . $e->getMessage()], 401);
         }
-
-        if(is_null($decoded)) {
-            return Response::json(['status' => false, 'error' => "Invalid token."], 401);
-        }else{
             //only validate for accounts that we have registered
-            if($decoded->iss === env('KEYCLOAK_APS_ISS')){
+        if (isset($decoded->iss) && $decoded->iss === env('KEYCLOAK_APS_ISS')) {
 //                $user = ServiceAccount::where('client_id', $decoded->clientId)->first();
 //                if(!is_null($user)){
 //                    if($user->active)
                         return $next($request);
 //                }
-            }
         }
 
         return Response::json(['status' => false, 'error' => "Generic error."], 403);

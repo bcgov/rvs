@@ -2,6 +2,7 @@
 
 namespace Modules\Vss\Http\Requests;
 
+use Override;
 use Illuminate\Foundation\Http\FormRequest;
 
 class NatureOffenceStoreRequest extends FormRequest
@@ -11,18 +12,17 @@ class NatureOffenceStoreRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
-    {
+    public function authorize(): bool {
         return true;
     }
 
     /**
      * Get the error messages for the defined validation rules.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function messages()
-    {
+    #[Override]
+    public function messages(): array {
         return [
             'nature_code.required' => 'Nature Offence Code field is required.',
             'nature_code.unique' => 'Nature Offence Code is already in use.',
@@ -34,10 +34,9 @@ class NatureOffenceStoreRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function rules()
-    {
+    public function rules(): array {
         $nature_code_rule = 'required|unique:'.env('DB_DATABASE_VSS').'.nature_offences,nature_code';
         if (isset($this->id)) {
             $nature_code_rule = 'required|unique:'.env('DB_DATABASE_VSS').'.nature_offences,nature_code,'.$this->id.',id';
@@ -54,7 +53,7 @@ class NatureOffenceStoreRequest extends FormRequest
      *
      * @return void
      */
-    protected function prepareForValidation()
-    {
+    #[Override]
+    protected function prepareForValidation(): void {
     }
 }

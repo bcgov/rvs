@@ -2,6 +2,8 @@
 
 namespace Modules\Vss\Providers;
 
+use Override;
+use Config;
 use Illuminate\Support\ServiceProvider;
 
 class VssServiceProvider extends ServiceProvider
@@ -34,8 +36,8 @@ class VssServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
-    {
+    #[Override]
+    public function register(): void {
         $this->app->register(RouteServiceProvider::class);
     }
 
@@ -44,8 +46,7 @@ class VssServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function registerConfig()
-    {
+    protected function registerConfig(): void {
         $this->publishes([
             module_path($this->moduleName, 'Config/config.php') => config_path($this->moduleNameLower.'.php'),
         ], 'config');
@@ -59,8 +60,7 @@ class VssServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function registerViews()
-    {
+    public function registerViews(): void {
         $viewPath = resource_path('views/modules/'.$this->moduleNameLower);
 
         $sourcePath = module_path($this->moduleName, 'Resources/views');
@@ -77,8 +77,7 @@ class VssServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function registerTranslations()
-    {
+    public function registerTranslations(): void {
         $langPath = resource_path('lang/modules/'.$this->moduleNameLower);
 
         if (is_dir($langPath)) {
@@ -89,19 +88,12 @@ class VssServiceProvider extends ServiceProvider
     }
 
     /**
-     * Get the services provided by the provider.
-     *
-     * @return array
+     * @return string[]
      */
-    public function provides()
-    {
-        return [];
-    }
-
     private function getPublishableViewPaths(): array
     {
         $paths = [];
-        foreach (\Config::get('view.paths') as $path) {
+        foreach (Config::get('view.paths') as $path) {
             if (is_dir($path.'/modules/'.$this->moduleNameLower)) {
                 $paths[] = $path.'/modules/'.$this->moduleNameLower;
             }

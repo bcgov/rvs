@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Role extends Model
 {
@@ -39,8 +40,9 @@ class Role extends Model
     public const LFP_GUEST = 'LFP Guest';
     public const PLSC_GUEST = 'PLSC Guest';
 
-
-
+    /**
+     * @param array<string, mixed> $attributes
+     */
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
@@ -49,9 +51,11 @@ class Role extends Model
 
     /**
      * The roles that belong to the user.
+     *
+     * @return BelongsToMany<User>
      */
-    public function users()
+    public function users(): BelongsToMany
     {
-        return $this->belongsToMany('App\Models\User', 'role_user');
+        return $this->belongsToMany(User::class, 'role_user');
     }
 }

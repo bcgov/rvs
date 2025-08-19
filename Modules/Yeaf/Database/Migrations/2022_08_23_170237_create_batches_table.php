@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         if (! Schema::connection(env('DB_DATABASE_YEAF'))->hasTable('batches')) {
-            Schema::connection(env('DB_DATABASE_YEAF'))->create('batches', function (Blueprint $table) {
+            Schema::connection(env('DB_DATABASE_YEAF'))->create('batches', function (Blueprint $table): void {
                 $table->id();
                 $table->string('batch_number')->unique();
                 $table->date('batch_date')->nullable()->comment('Date the batch closed');

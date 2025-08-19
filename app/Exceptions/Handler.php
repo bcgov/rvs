@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Override;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
@@ -32,9 +33,10 @@ class Handler extends ExceptionHandler
      *
      * @return void
      */
+    #[Override]
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
+        $this->reportable(function (Throwable $e): void {
             //
         });
     }

@@ -2,6 +2,8 @@
 
 namespace Modules\Twp\Http\Middleware;
 
+use Illuminate\Http\Response;
+use Illuminate\Http\RedirectResponse;
 use App\Models\Role;
 use App\Providers\RouteServiceProvider;
 use Closure;
@@ -13,9 +15,9 @@ class IsAdmin
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
+     * @param Closure(Request):((Response | RedirectResponse)) $next
      * @param  string|null  ...$roles
-     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     * @return Response|RedirectResponse
      */
     public function handle(Request $request, Closure $next, ...$roles)
     {

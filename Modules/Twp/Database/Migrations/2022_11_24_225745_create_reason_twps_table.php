@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         if (! Schema::connection(env('DB_DATABASE_TWP'))->hasTable('reasons')) {
-            Schema::connection(env('DB_DATABASE_TWP'))->create('reasons', function (Blueprint $table) {
+            Schema::connection(env('DB_DATABASE_TWP'))->create('reasons', function (Blueprint $table): void {
                 $table->id();
                 $table->string('reason_status')->nullable()->comment('Approved, Denied, In Progress, Approval on Appeal, Withdrawn');
                 $table->string('title')->nullable();

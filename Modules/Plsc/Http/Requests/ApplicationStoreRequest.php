@@ -2,6 +2,7 @@
 
 namespace Modules\Plsc\Http\Requests;
 
+use Override;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ApplicationStoreRequest extends FormRequest
@@ -11,18 +12,17 @@ class ApplicationStoreRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
-    {
+    public function authorize(): bool {
         return true;
     }
 
     /**
      * Get the error messages for the defined validation rules.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function messages()
-    {
+    #[Override]
+    public function messages(): array {
         return [
             'student_id.*' => 'Student field is not valid.',
             'institution_id.*' => 'Institution field is not valid.',
@@ -37,10 +37,9 @@ class ApplicationStoreRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function rules()
-    {
+    public function rules(): array {
         return [
             'student_id' => 'required',
             'institution_id' => 'required',
@@ -70,7 +69,7 @@ class ApplicationStoreRequest extends FormRequest
      *
      * @return void
      */
-    protected function prepareForValidation()
-    {
+    #[Override]
+    protected function prepareForValidation(): void {
     }
 }

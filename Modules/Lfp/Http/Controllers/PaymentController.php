@@ -2,8 +2,12 @@
 
 namespace Modules\Lfp\Http\Controllers;
 
+use Exception;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Barryvdh\Debugbar\Facades\Debugbar;
 use Carbon\Carbon;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
@@ -22,10 +26,12 @@ class PaymentController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param bool $status
+     * @param int $newApp
+     *
      * @return \Inertia\Response
      */
-    public function index($status = true, $newApp = 0)
-    {
+    public function index($status = true, $newApp = 0): \Inertia\Response {
         $payments = $this->paginatePayments();
 
         return Inertia::render('Lfp::Payments', ['page' => 'applications', 'status' => $status, 'results' => $payments, 'app' => $newApp]);
@@ -34,9 +40,11 @@ class PaymentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @param PaymentStoreRequest $request
+     *
+     * @return RedirectResponse
      */
-    public function store(PaymentStoreRequest $request)
+    public function store(PaymentStoreRequest $request): RedirectResponse
     {
         $payment = Payment::create($request->validated());
 
@@ -46,9 +54,12 @@ class PaymentController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @param PaymentEditRequest $request
+     * @param Payment $payment
+     *
+     * @return RedirectResponse
      */
-    public function update(PaymentEditRequest $request, Payment $payment)
+    public function update(PaymentEditRequest $request, Payment $payment): RedirectResponse
     {
         Payment::where('id', $payment->id)->update($request->validated());
         $payment = Payment::find($payment->id);
@@ -56,7 +67,14 @@ class PaymentController extends Controller
         return Redirect::route('lfp.applications.show', [$payment->lfp_id]);
     }
 
-    public function downloadPayments(Request $request, $type, $range)
+    /**
+     * @param Request $request
+     * @param string $type
+     * @param int $range
+     *
+     * @return \Illuminate\Http\Response|null
+     */
+    public function downloadPayments(Request $request, string $type, int $range): \Illuminate\Http\Response|null
     {
         // Disable the Debugbar for this specific response
         Debugbar::disable();
@@ -93,9 +111,7 @@ class PaymentController extends Controller
             $lfpColumns = Schema::connection(env('DB_DATABASE_LFP'))->getColumnListing('lfps');
 
             // Prefix lfp columns to avoid name collisions
-            $lfpColumns = array_map(function($col) {
-                return 'lfpApp_' . $col;
-            }, $lfpColumns);
+            $lfpColumns = array_map(fn($col) => 'lfpApp_' . $col, $lfpColumns);
 
             // Combine both payment and prefixed lfp columns for the header
             $headers = array_merge($paymentColumns, $lfpColumns);
@@ -148,16 +164,21 @@ class PaymentController extends Controller
 
             // Close the CSV file
             fclose($csvFile);
+            return new \Illuminate\Http\Response();
 
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             Log::error('Error generating CSV for download: '.$exception);
 
             return Response::make('Internal server error.', 500, []);
         }
     }
 
-    private function paginatePayments()
-    {
+    /**
+     * @return mixed
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    private function paginatePayments(): mixed {
         $currentMonth = Carbon::now()->format('Y-m') . "-01";
         //$lastMonth = Carbon::now()->subMonth()->format('Y-m') . "-01";
         $monthBeforeLast = Carbon::now()->subMonths(2)->format('Y-m') . "-01";
@@ -225,7 +246,12 @@ class PaymentController extends Controller
         return $payments;
     }
 
-    private function prepareCsvLine($record)
+    /**
+     * @param object $record
+     *
+     * @return string
+     */
+    private function prepareCsvLine(object $record): string
     {
         $csvValues = [
             $record->application_number,

@@ -2,8 +2,33 @@
 
 namespace Modules\Lfp\Entities;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property int $id
+ * @property string $sin
+ * @property string $first_name
+ * @property string $last_name
+ * @property string $profession
+ * @property string $employer
+ * @property string $employment_status
+ * @property string $community
+ * @property string $repayment_status
+ * @property bool $in_good_standing
+ * @property Carbon $repayment_start_date
+ * @property float $amount_owing
+ * @property string $intake_status
+ * @property Carbon $receive_date
+ * @property string $comment
+ * @property Carbon $proposed_registration_date
+ * @property string $denial_reason
+ * @property string $app_idx
+ * @property string $alias_name
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ */
 class Intake extends ModuleModel
 {
 
@@ -19,8 +44,10 @@ class Intake extends ModuleModel
         'both_eligibility_status',
     ];
 
-    public function lfp()
-    {
+    /**
+     * @return BelongsTo<Lfp, Intake>
+     */
+    public function lfp(): BelongsTo {
         return $this->belongsTo(Lfp::class, 'app_idx', 'app_idx');
     }
 }

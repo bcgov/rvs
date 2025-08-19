@@ -47,7 +47,7 @@
             <BreezeSelect @change="switchStatusSort($event)" class="form-select" v-model="appStatusSort">
                 <option value="ALL">App Status - All</option>
                 <option value="APPROVED ON APPEAL">App Status - Approved on Appeal (legacy)</option>
-                <option v-for="status in $attrs.utils['Application Status']" :key="status.id" :value="status.field_name">
+                <option v-for="status in (utils['Application Status'] || [])" :key="status.id" :value="status.field_name">
                     {{ toTitleCase(status.field_name) }}
                 </option>
             </BreezeSelect>
@@ -57,8 +57,9 @@
 </template>
 <script>
 
-import {Inertia} from "@inertiajs/inertia";
+import {router, usePage} from '@inertiajs/vue3';
 import BreezeSelect from "@/Components/Select";
+import {computed} from "vue";
 
 export default {
     name: 'ApplicationsHeader',
@@ -74,6 +75,15 @@ export default {
             path: '/twp/application-list',
             appStatusSort: 'ALL',
         }
+    },
+    setup() {
+        const page = usePage();
+        const utils = computed(() => page.props.utils || {});
+
+        return {
+            page,
+            utils
+        };
     },
     mounted() {
         this.url = new URL(document.location);
@@ -106,7 +116,7 @@ export default {
                 }
             });
 
-            Inertia.get(this.path, data, {
+            router.get(this.path, data, {
                 preserveState: true
             });
 
@@ -131,7 +141,7 @@ export default {
                 }
             });
 
-            Inertia.get(this.path, data, {
+            router.get(this.path, data, {
                 preserveState: true
             });
 

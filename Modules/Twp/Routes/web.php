@@ -1,5 +1,7 @@
 <?php
 
+use Modules\Twp\Http\Middleware\HandleInertiaRequests;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -10,14 +12,13 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::prefix('twp')->middleware(['web', \Modules\Twp\Http\Middleware\HandleInertiaRequests::class])->group(function () {
+Route::prefix('twp')->middleware(['web', 'twp_inertia'])->group(function (): void {
     Route::get('/maintenance/reports/{type}', 'ReportController@fetchReport')->name('twp.reports.type');
     Route::group(
         [
             'middleware' => ['auth', 'twp_active'],
             'as' => 'twp.',
-        ], function () {
+        ], function (): void {
             Route::resource('students', 'StudentController');
             Route::delete('students/{student}', 'StudentController@delete');
             Route::get('/application-list', 'StudentController@apps')->name('application-list');
@@ -34,7 +35,7 @@ Route::prefix('twp')->middleware(['web', \Modules\Twp\Http\Middleware\HandleIner
                 [
                     'prefix' => 'maintenance',
                     'as' => 'maintenance.',
-                ], function () {
+                ], function (): void {
                     Route::get('/staff', 'MaintenanceController@staffList')->name('staff.list');
                     Route::get('/staff/{user}', 'MaintenanceController@staffShow')->name('staff.show');
                     Route::post('/staff/{user}', 'MaintenanceController@staffEdit')->name('staff.edit');

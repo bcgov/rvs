@@ -13,7 +13,7 @@ class CreateInstitutionsTable extends Migration
      */
     public function up()
     {
-        Schema::connection(env('DB_DATABASE_VSS'))->create('institutions', function (Blueprint $table) {
+        Schema::connection(env('DB_DATABASE_VSS'))->create('institutions', function (Blueprint $table): void {
             $table->id();
             $table->string('institution_code')->unique();
             $table->string('institution_name');

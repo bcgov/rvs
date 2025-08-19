@@ -81,8 +81,6 @@ export default {
     props: {
         results: Object,
     },
-    data() {
-    },
     methods: {
     },
     watch: {

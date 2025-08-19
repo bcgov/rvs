@@ -24,8 +24,7 @@ class DispatchMidnightJob extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
-    {
+    public function handle(): void {
         MidnightJob::dispatch()->onQueue('midnight');
         $this->info('MidnightJob has been dispatched to the midnight queue.');
     }

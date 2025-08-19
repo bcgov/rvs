@@ -2,12 +2,15 @@
 
 namespace Modules\Lfp\Http\Controllers;
 
+use Illuminate\Auth\Access\AuthorizationException;
 use App\Http\Requests\StaffEditRequest;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use Inertia\Response;
 use Modules\Lfp\Entities\Util;
 use Modules\Lfp\Http\Requests\UtilEditRequest;
 use Modules\Lfp\Http\Requests\UtilStoreRequest;
@@ -17,14 +20,12 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response::render
+     * @return Response
      */
-    public function staffList(Request $request): \Inertia\Response
+    public function staffList(Request $request): Response
     {
         $staff = User::with('roles')
-            ->whereHas('roles', function ($q) {
-                return $q->whereIn('name', [Role::LFP_ADMIN, Role::LFP_USER, Role::LFP_GUEST]);
-            })->orderBy('created_at', 'desc')->get();
+            ->whereHas('roles', fn($q) => $q->whereIn('name', [Role::LFP_ADMIN, Role::LFP_USER, Role::LFP_GUEST]))->orderBy('created_at', 'desc')->get();
 
         foreach ($staff as $user) {
             if ($user->roles->contains('name', Role::LFP_ADMIN)) {
@@ -42,9 +43,12 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response::render
+     * @param Request $request
+     * @param User $user
+     *
+     * @return Response
      */
-    public function staffShow(Request $request, User $user): \Inertia\Response
+    public function staffShow(Request $request, User $user): Response
     {
         if ($user->roles->contains('name', Role::LFP_ADMIN)) {
             $user->access_type = 'A';
@@ -60,9 +64,13 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\RedirectResponse::render
+     * @param StaffEditRequest $request
+     * @param User $user
+     *
+     * @return RedirectResponse
+     * @throws AuthorizationException
      */
-    public function staffEdit(StaffEditRequest $request, User $user): \Illuminate\Http\RedirectResponse
+    public function staffEdit(StaffEditRequest $request, User $user): RedirectResponse
     {
         $this->authorize('update', $user);
 
@@ -93,9 +101,11 @@ class MaintenanceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response::render
+     * @param Request $request
+     *
+     * @return Response
      */
-    public function utilList(Request $request): \Inertia\Response
+    public function utilList(Request $request): Response
     {
         $utils = Util::orderBy('field_name', 'asc')->get();
 
@@ -116,9 +126,12 @@ class MaintenanceController extends Controller
     /**
      * Update a utility resource.
      *
-     * @return \Illuminate\Http\RedirectResponse::render
+     * @param UtilEditRequest $request
+     * @param Util $util
+     *
+     * @return RedirectResponse
      */
-    public function utilUpdate(UtilEditRequest $request, Util $util): \Illuminate\Http\RedirectResponse
+    public function utilUpdate(UtilEditRequest $request, Util $util): RedirectResponse
     {
         $util->update($request->validated());
 
@@ -129,9 +142,11 @@ class MaintenanceController extends Controller
     /**
      * Store a utility resource.
      *
-     * @return \Illuminate\Http\RedirectResponse::render
+     * @param UtilStoreRequest $request
+     *
+     * @return RedirectResponse
      */
-    public function utilStore(UtilStoreRequest $request): \Illuminate\Http\RedirectResponse
+    public function utilStore(UtilStoreRequest $request): RedirectResponse
     {
         Util::create($request->validated());
 

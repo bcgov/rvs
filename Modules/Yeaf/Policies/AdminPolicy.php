@@ -11,7 +11,7 @@ class AdminPolicy
 {
     use HandlesAuthorization;
 
-    public function before(User $user, $ability)
+    public function before(User $user): bool
     {
         return $user->hasRole(Role::SUPER_ADMIN);
     }
@@ -19,7 +19,7 @@ class AdminPolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
+    public function viewAny(User $user): void
     {
         //
     }
@@ -27,7 +27,7 @@ class AdminPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Admin $model): bool
+    public function view(User $user, Admin $model): void
     {
         //
     }
@@ -43,7 +43,7 @@ class AdminPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Admin $model): bool
+    public function update(User $user): bool
     {
         return $user->hasRole(Role::YEAF_ADMIN) && $user->disabled === false;
     }
@@ -51,7 +51,7 @@ class AdminPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Admin $model): bool
+    public function delete(User $user, Admin $model): void
     {
         //
     }
@@ -59,7 +59,7 @@ class AdminPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Admin $model): bool
+    public function restore(User $user, Admin $model): void
     {
         //
     }
@@ -67,7 +67,7 @@ class AdminPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Admin $model): bool
+    public function forceDelete(User $user, Admin $model): void
     {
         //
     }

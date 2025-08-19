@@ -2,8 +2,10 @@
 
 namespace Modules\Vss\Http\Controllers;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use Inertia\Response;
 use Modules\Vss\Entities\AreaOfAudit;
 use Modules\Vss\Http\Requests\AreaOfAuditStoreRequest;
 
@@ -12,10 +14,9 @@ class AreaOfAuditController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response
+     * @return Response
      */
-    public function index()
-    {
+    public function index(): Response {
         $areas = AreaOfAudit::orderBy('area_of_audit_code', 'asc')->get();
 
         return Inertia::render('Vss::Maintenance', ['status' => true, 'results' => $areas, 'page' => 'area-of-audit']);
@@ -24,10 +25,9 @@ class AreaOfAuditController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function store(AreaOfAuditStoreRequest $request)
-    {
+    public function store(AreaOfAuditStoreRequest $request): RedirectResponse {
         AreaOfAudit::create($request->validated());
 
         return Redirect::route('vss.maintenance.area-of-audit.index');
@@ -36,11 +36,12 @@ class AreaOfAuditController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\AreaOfAuditStoreRequest  $request  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param AreaOfAuditStoreRequest $request $request
+     * @param AreaOfAudit $areaOfAudit
+     *
+     * @return RedirectResponse
      */
-    public function update(AreaOfAuditStoreRequest $request, AreaOfAudit $areaOfAudit)
-    {
+    public function update(AreaOfAuditStoreRequest $request, AreaOfAudit $areaOfAudit): RedirectResponse {
         //if the area code updated
         if ($request->area_of_audit_code !== $areaOfAudit->area_of_audit_code) {
             //create new area

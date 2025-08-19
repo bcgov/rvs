@@ -2,6 +2,7 @@
 
 namespace Modules\Yeaf\Http\Requests;
 
+use Override;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ProgramYearStoreRequest extends FormRequest
@@ -11,18 +12,17 @@ class ProgramYearStoreRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
-    {
+    public function authorize(): bool {
         return true;
     }
 
     /**
      * Get the error messages for the defined validation rules.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function messages()
-    {
+    #[Override]
+    public function messages(): array {
         return [
             'year_start.required' => 'Year Start field is required.',
             'year_start.unique' => 'The provided Year Start is already in-use.',
@@ -38,10 +38,9 @@ class ProgramYearStoreRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function rules()
-    {
+    public function rules(): array {
         return [
             'year_start' => 'required|numeric|unique:'.env('DB_DATABASE_YEAF').'.program_years,year_start',
             'year_end' => 'required|numeric|unique:'.env('DB_DATABASE_YEAF').'.program_years,year_end',
@@ -57,8 +56,8 @@ class ProgramYearStoreRequest extends FormRequest
      *
      * @return void
      */
-    protected function prepareForValidation()
-    {
+    #[Override]
+    protected function prepareForValidation(): void {
         if (isset($this->year_start)) {
             $this->merge(['year_start' => preg_replace('/\D/', '', $this->year_start)]);
         }

@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         if (! Schema::connection(env('DB_DATABASE_YEAF'))->hasTable('appeals')) {
-            Schema::connection(env('DB_DATABASE_YEAF'))->create('appeals', function (Blueprint $table) {
+            Schema::connection(env('DB_DATABASE_YEAF'))->create('appeals', function (Blueprint $table): void {
                 $table->id();
 
                 $table->integer('appeal_id')->unique();

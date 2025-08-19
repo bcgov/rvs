@@ -2,15 +2,18 @@
 
 namespace Modules\Neb\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use Inertia\Response;
+use Illuminate\Support\Facades\Response as FacadeResponse;
 use Modules\Neb\Entities\Application;
 use Modules\Neb\Entities\BursaryPeriod;
 use Modules\Neb\Entities\Neb;
 use Modules\Neb\Http\Requests\BursaryPeriodEditRequest;
 use Modules\Neb\Http\Requests\BursaryPeriodStoreRequest;
-use Response;
 
 class BursaryPeriodController extends Controller
 {
@@ -19,16 +22,17 @@ class BursaryPeriodController extends Controller
      *
      * @return \Inertia\Response
      */
-    public function index()
-    {
+    public function index(): Response {
         return Inertia::render('Neb::BursaryPeriods', ['page' => 'bursary-periods']);
     }
 
-    public function tobeAwarded()
-    {
+    /**
+     * @return JsonResponse
+     */
+    public function tobeAwarded(): JsonResponse {
         $bp = BursaryPeriod::where('awarded', false)->get();
 
-        return Response::json([
+        return FacadeResponse::json([
             'status' => 'success',
             'bp' => $bp,
         ]);
@@ -38,14 +42,13 @@ class BursaryPeriodController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return response.json
+     * @return JsonResponse .json
      */
-    public function fetch(Request $request)
-    {
+    public function fetch(Request $request): JsonResponse {
         if ($request->id) {
             $bp = BursaryPeriod::find($request->id);
 
-            return Response::json([
+            return FacadeResponse::json([
                 'id' => $request->id,
                 'page' => 'bursary-periods',
                 'bp' => $bp,
@@ -54,7 +57,7 @@ class BursaryPeriodController extends Controller
 
         $bursaryPeriods = BursaryPeriod::orderBy('bursary_period_start_date', 'desc')->get();
 
-        return Response::json([
+        return FacadeResponse::json([
             'page' => 'bursary-periods',
             'bp' => $bursaryPeriods,
         ]);
@@ -63,10 +66,11 @@ class BursaryPeriodController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @param BursaryPeriodStoreRequest $request
+     *
+     * @return RedirectResponse
      */
-    public function store(BursaryPeriodStoreRequest $request)
-    {
+    public function store(BursaryPeriodStoreRequest $request): RedirectResponse {
         $bursaryPeriod = BursaryPeriod::create($request->validated());
 
         return Redirect::route('neb.bursary-periods.show', [$bursaryPeriod->id]);
@@ -75,10 +79,12 @@ class BursaryPeriodController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @param BursaryPeriodEditRequest $request
+     * @param BursaryPeriod $bursaryPeriod
+     *
+     * @return RedirectResponse
      */
-    public function update(BursaryPeriodEditRequest $request, BursaryPeriod $bursaryPeriod)
-    {
+    public function update(BursaryPeriodEditRequest $request, BursaryPeriod $bursaryPeriod): RedirectResponse {
         $bursaryPeriod::where('id', $bursaryPeriod->id)->update($request->validated());
 
         return Redirect::route('neb.bursary-periods.show', [$bursaryPeriod->id]);
@@ -87,10 +93,9 @@ class BursaryPeriodController extends Controller
     /**
      * Delete a resource.
      *
-     * @return \Illuminate\Http\RedirectResponse.redirect
+     * @return RedirectResponse .redirect
      */
-    public function delete(Request $request)
-    {
+    public function delete(Request $request): RedirectResponse {
         $bP = BursaryPeriod::where('id', $request->input('id'))->first();
         if ($bP != null) {
             //remove all records entered for the same bursary period from previous runs

@@ -27,10 +27,14 @@ class PlscStudentsTableSeeder extends Seeder
                     'first_name' => $faker->firstName,
                     'last_name' => $faker->lastName,
                     'address1' => $faker->streetAddress,
-                    'address2' => $faker->optional()->secondaryAddress,
+                    'address2' => $faker->optional()->streetAddress,
                     'city' => substr($faker->city,0,40),
                     'postal_code' => substr($faker->postcode, 0, 7),
-                    'province' => substr($faker->state,0,40),
+                    'province' => $faker->randomElement([
+                        'Alberta', 'British Columbia', 'Manitoba', 'New Brunswick',
+                        'Newfoundland and Labrador', 'Nova Scotia', 'Ontario',
+                        'Prince Edward Island', 'Quebec', 'Saskatchewan'
+                    ]),
                     'country' => substr($faker->country,0,40),
                     'phone_number' => substr($faker->phoneNumber, 0, 10),
                     'email' => $faker->safeEmail,

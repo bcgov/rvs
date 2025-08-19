@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         if (! Schema::connection(env('DB_DATABASE_TWP'))->hasTable('programs')) {
-            Schema::connection(env('DB_DATABASE_TWP'))->create('programs', function (Blueprint $table) {
+            Schema::connection(env('DB_DATABASE_TWP'))->create('programs', function (Blueprint $table): void {
                 $table->id();
 
                 $table->bigInteger('student_id');
@@ -34,7 +34,7 @@ return new class extends Migration
                 $table->string('credential')->nullable();
                 $table->integer('program_length')->nullable();
                 $table->string('program_length_type')->nullable();
-                $table->double('total_estimated_cost', null, 2)->default(0)->nullable();
+                $table->double('total_estimated_cost')->default(0)->nullable();
                 $table->string('student_status')->nullable();
                 $table->text('comments')->nullable();
                 $table->bigInteger('institution_twp_id')->nullable();

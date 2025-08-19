@@ -2,6 +2,7 @@
 
 namespace Modules\Yeaf\Http\Requests;
 
+use Override;
 use Illuminate\Foundation\Http\FormRequest;
 
 class BatchEditRequest extends FormRequest
@@ -11,18 +12,17 @@ class BatchEditRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
-    {
+    public function authorize(): bool {
         return true;
     }
 
     /**
      * Get the error messages for the defined validation rules.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function messages()
-    {
+    #[Override]
+    public function messages(): array {
         return [
             'batch_number.required' => 'Batch Number field is required.',
             'batch_number.unique' => 'The provided Batch Number is already in-use.',
@@ -34,10 +34,9 @@ class BatchEditRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function rules()
-    {
+    public function rules(): array {
         return [
             'batch_number' => 'required|between:2002080,2052080|numeric|unique:'.env('DB_DATABASE_YEAF').'.batches,batch_number,'.$this->id,
             'batch_date' => 'required|date|date_format:Y-m-d|unique:'.env('DB_DATABASE_YEAF').'.batches,batch_date,'.$this->id,
@@ -49,8 +48,8 @@ class BatchEditRequest extends FormRequest
      *
      * @return void
      */
-    protected function prepareForValidation()
-    {
+    #[Override]
+    protected function prepareForValidation(): void {
         if (isset($this->batch_number)) {
             $this->merge(['batch_number' => preg_replace('/\D/', '', $this->batch_number)]);
         }

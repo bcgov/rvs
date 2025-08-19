@@ -29,36 +29,39 @@
                                             <div class="row">
                                                 <div class="col-lg-4">
                                                     <table>
-                                                        <tr>
-                                                            <th scope="row">SIN:</th>
-                                                            <td class="ps-1">{{ result.sin }}</td>
-                                                        </tr>
+                                                        <tbody>
+                                                            <tr>
+                                                                <th scope="row">SIN:</th>
+                                                                <td class="ps-1">{{ result.sin }}</td>
+                                                            </tr>
 
-                                                        <tr>
-                                                            <th scope="row">Year of Audit:</th>
-                                                            <td class="ps-1">{{ result.year_of_audit }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th scope="row">Date Opened:</th>
-                                                            <td class="ps-1">{{ result.open_date }}</td>
-                                                        </tr>
+                                                            <tr>
+                                                                <th scope="row">Year of Audit:</th>
+                                                                <td class="ps-1">{{ result.year_of_audit }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">Date Opened:</th>
+                                                                <td class="ps-1">{{ result.open_date }}</td>
+                                                            </tr>
+                                                        </tbody>
                                                     </table>
                                                 </div>
                                                 <div class="col-lg-8">
                                                     <table>
-                                                        <tr>
-                                                            <th scope="row">Last Name:</th>
-                                                            <td class="ps-1">{{ result.last_name }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th scope="row">First Name:</th>
-                                                            <td class="ps-1">{{ result.first_name }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th scope="row">School:</th>
-                                                            <td class="ps-1">{{ result.institution.institution_name }}</td>
-                                                        </tr>
-
+                                                        <tbody>
+                                                            <tr>
+                                                                <th scope="row">Last Name:</th>
+                                                                <td class="ps-1">{{ result.last_name }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">First Name:</th>
+                                                                <td class="ps-1">{{ result.first_name }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">School:</th>
+                                                                <td class="ps-1">{{ result.institution.institution_name }}</td>
+                                                            </tr>
+                                                        </tbody>
                                                     </table>
                                                 </div>
                                             </div>
@@ -141,7 +144,7 @@ import { Head, Link, useForm } from '@inertiajs/vue3';
 import CaseSearchBox from '../Components/CaseSearch.vue';
 import BreezeInput from '@/Components/Input.vue';
 import BreezeSelect from '@/Components/Select.vue';
-import { Inertia } from '@inertiajs/inertia';
+import { router } from '@inertiajs/vue3';
 
 export default {
     name: 'CaseComment',

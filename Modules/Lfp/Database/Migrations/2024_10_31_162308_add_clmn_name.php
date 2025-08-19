@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::connection(env('DB_DATABASE_LFP'))->table('lfps', function (Blueprint $table) {
+        Schema::connection(env('DB_DATABASE_LFP'))->table('lfps', function (Blueprint $table): void {
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
         });
@@ -26,7 +26,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::connection(env('DB_DATABASE_LFP'))->table('lfps', function (Blueprint $table) {
+        Schema::connection(env('DB_DATABASE_LFP'))->table('lfps', function (Blueprint $table): void {
             $table->dropColumn('last_name');
             $table->dropColumn('first_name');
         });

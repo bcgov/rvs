@@ -3,10 +3,10 @@ import { ref } from 'vue';
 import BreezeApplicationLogo from '@/Components/ApplicationLogo.vue';
 import BreezeNavLink from '@/Components/NavLink.vue';
 import BreezeResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import { Link } from '@inertiajs/vue3';
+import {Link, usePage} from '@inertiajs/vue3';
 
 const showingNavigationDropdown = ref(false);
-
+const page = usePage();
 </script>
 <style scoped>
 nav.navbar{
@@ -30,37 +30,37 @@ nav.navbar{
             <div class="collapse navbar-collapse" id="navbarScroll">
                 <ul class="navbar-nav flex-row flex-wrap ms-md-auto" style="--bs-scroll-height: 100px;">
                     <li class="nav-item">
-                        <BreezeNavLink class="nav-link" :href="'/vss/dashboard'" :active="$page.url.indexOf('dashboard') > -1">
+                        <BreezeNavLink class="nav-link" :href="'/vss/dashboard'" :active="page.url.indexOf('dashboard') > -1">
                             Dashboard
                         </BreezeNavLink>
                     </li>
                     <li class="nav-item">
-                        <BreezeNavLink class="nav-link" :href="'/vss/cases'" :active="$page.url.indexOf('cases') > -1">
+                        <BreezeNavLink class="nav-link" :href="'/vss/cases'" :active="page.url.indexOf('cases') > -1">
                             Cases
                         </BreezeNavLink>
                     </li>
                     <li class="nav-item">
-                        <BreezeNavLink class="nav-link" :href="'/vss/reports'" :active="$page.url.indexOf('reports') > -1">
+                        <BreezeNavLink class="nav-link" :href="'/vss/reports'" :active="page.url.indexOf('reports') > -1">
                             Reports
                         </BreezeNavLink>
                     </li>
                     <li class="nav-item">
-                        <BreezeNavLink class="nav-link" :href="'/vss/maintenance/area-of-audit'" :active="$page.url.indexOf('maintenance') > -1">
+                        <BreezeNavLink class="nav-link" :href="'/vss/maintenance/area-of-audit'" :active="page.url.indexOf('maintenance') > -1">
                             Maintenance
                         </BreezeNavLink>
                     </li>
                     <li class="nav-item">
-                        <BreezeNavLink class="nav-link" :href="'/vss/archive/cases'" :active="$page.url.indexOf('archive') > -1">
+                        <BreezeNavLink class="nav-link" :href="'/vss/archive/cases'" :active="page.url.indexOf('archive') > -1">
                             Archive
                         </BreezeNavLink>
                     </li>
                     <li class="nav-item dropdown">
                         <BreezeNavLink class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            {{ $page.props.auth.user.user_id }}
+                            {{ page.props.auth.user.user_id }}
                         </BreezeNavLink>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarScrollingDropdown">
                             <li class="dropdown-item px-4">
-                                <div class="font-medium text-sm text-gray-500">{{ $page.props.auth.user.email }}</div>
+                                <div class="font-medium text-sm text-gray-500">{{ page.props.auth.user.email }}</div>
                             </li>
                             <li><hr class="dropdown-divider"></li>
 

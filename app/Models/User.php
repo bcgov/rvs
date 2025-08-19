@@ -2,7 +2,10 @@
 
 namespace App\Models;
 
+use Override;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -27,14 +30,8 @@ class User extends Authenticatable
     protected $hidden = ['password', 'remember_token'];
 
     /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
+     * @param array<string, mixed> $attributes
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
-
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
@@ -43,28 +40,41 @@ class User extends Authenticatable
 
     /**
      * The roles that belong to the user.
+     *
+     * @return BelongsToMany<Role>
      */
-    public function roles()
-    {
-        return $this->belongsToMany('App\Models\Role', 'role_user');
+    public function roles(): BelongsToMany {
+        return $this->belongsToMany(Role::class, 'role_user');
     }
 
     /**
      * The roles that belong to the user.
      */
-    public function hasRole($role)
+    public function hasRole(string $role): bool
     {
         return $this->roles->contains('name', $role);
     }
 
     /**
-     * Scope a query to only include admin users.
+     * Scope a query to only include active users.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param Builder<User> $query
+     * @return Builder<User>
      */
-    public function scopeIsActive($query)
+    public function scopeIsActive(Builder $query): Builder
     {
         return $query->where('disabled', '=', false);
+    }
+    /**
+     * The attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    #[Override]
+    protected function casts() : array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+        ];
     }
 }

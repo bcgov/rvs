@@ -14,7 +14,7 @@ class NebFyBudgetsTableSeeder extends Seeder {
         $currentYear = date('Y');
 
         for ($i = 0; $i < 5; $i++) {
-            $fiscalYear = ($currentYear + $i) . '-' . substr(($currentYear + $i + 1), -2);
+            $fiscalYear = ($currentYear + $i) . '-' . substr((string)($currentYear + $i + 1), -2);
 
             DB::connection('neb')->table('fy_budgets')->updateOrInsert(
                 ['fiscal_year' => $fiscalYear],

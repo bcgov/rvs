@@ -13,7 +13,7 @@ class CreateReferralSourcesTable extends Migration
      */
     public function up()
     {
-        Schema::connection(env('DB_DATABASE_VSS'))->create('referral_sources', function (Blueprint $table) {
+        Schema::connection(env('DB_DATABASE_VSS'))->create('referral_sources', function (Blueprint $table): void {
             $table->id();
             $table->string('referral_code')->unique();
             $table->text('description');

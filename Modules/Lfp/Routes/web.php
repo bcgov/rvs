@@ -14,12 +14,12 @@
 
 use Modules\Lfp\Http\Controllers\LfpController;
 
-Route::prefix('lfp')->group(function () {
+Route::prefix('lfp')->group(function (): void {
     Route::group(
         [
             'middleware' => ['auth', 'lfp_active'],
             'as' => 'lfp.',
-        ], function () {
+        ], function (): void {
         Route::get('/dashboard', 'LfpController@index')->name('dashboard');
         Route::get('/applications', 'LfpController@index')->name('applications.index');
         Route::get('/applications/show/{lfp}', 'LfpController@show')->name('applications.show');
@@ -35,12 +35,12 @@ Route::prefix('lfp')->group(function () {
         Route::put('/payments/{payment}', 'PaymentController@update')->name('payments.update');
         Route::get('/payments/download/{type}/{range}', 'PaymentController@downloadPayments')->name('payments.download');
 
-        Route::group(['middleware' => 'lfp_admin'], function () {
+        Route::group(['middleware' => 'lfp_admin'], function (): void {
             Route::group(
                 [
                     'prefix' => 'maintenance',
                     'as' => 'maintenance.',
-                ], function () {
+                ], function (): void {
 
                 Route::get('/staff', 'MaintenanceController@staffList')->name('staff.list');
                 Route::get('/staff/{user}', 'MaintenanceController@staffShow')->name('staff.show');

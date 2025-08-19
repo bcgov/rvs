@@ -3,6 +3,7 @@
 namespace Modules\Neb\Entities;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ElPotentialRestrictionDetail extends ModuleModel
 {
@@ -17,18 +18,25 @@ class ElPotentialRestrictionDetail extends ModuleModel
         'sin', 'bursary_period_id', 'restriction_code', 'restriction_description', 'applied_date',
     ];
 
-    public function student()
-    {
-        return $this->belongsTo('Modules\Neb\Entities\Student', 'sin', 'sin');
+    /**
+     * @return BelongsTo<Student, ElPotentialRestrictionDetail>
+     */
+    public function student(): BelongsTo {
+        return $this->belongsTo(Student::class, 'sin', 'sin');
     }
 
-    public function bursaryPeriod()
+    /**
+     * @return BelongsTo<BursaryPeriod, ElPotentialRestrictionDetail>
+     */
+    public function bursaryPeriod(): BelongsTo
     {
-        return $this->belongsTo('Modules\Neb\Entities\BursaryPeriod', 'bursary_period_id', 'id');
+        return $this->belongsTo(BursaryPeriod::class, 'bursary_period_id', 'id');
     }
 
-    public function restriction()
-    {
-        return $this->belongsTo('Modules\Neb\Entities\Restriction', 'restriction_code', 'restriction_code');
+    /**
+     * @return BelongsTo<Restriction, ElPotentialRestrictionDetail>
+     */
+    public function restriction(): BelongsTo {
+        return $this->belongsTo(Restriction::class, 'restriction_code', 'restriction_code');
     }
 }

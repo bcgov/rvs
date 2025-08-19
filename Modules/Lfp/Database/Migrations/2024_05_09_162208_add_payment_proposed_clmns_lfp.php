@@ -13,10 +13,10 @@ class AddPaymentProposedClmnsLfp extends Migration
      */
     public function up()
     {
-        Schema::connection(env('DB_DATABASE_LFP'))->table('payments', function (Blueprint $table) {
+        Schema::connection(env('DB_DATABASE_LFP'))->table('payments', function (Blueprint $table): void {
             $table->date('anniversary_date')->nullable()->index();
             $table->date('proposed_pay_date')->nullable();
-            $table->double('proposed_pay_amount', null, 2)->default(0)->nullable();
+            $table->double('proposed_pay_amount')->default(0)->nullable();
             $table->integer('proposed_hrs_of_service')->nullable();
             $table->string('sfas_pay_status', 10)->nullable()->comment('SFAS payment status')->index();
             $table->string('oc_pay_status', 10)->nullable()->comment('Openshift payment status')->index();
@@ -30,7 +30,7 @@ class AddPaymentProposedClmnsLfp extends Migration
      */
     public function down()
     {
-        Schema::connection(env('DB_DATABASE_LFP'))->table('payments', function (Blueprint $table) {
+        Schema::connection(env('DB_DATABASE_LFP'))->table('payments', function (Blueprint $table): void {
             $table->dropColumn('oc_pay_status');
             $table->dropColumn('sfas_pay_status');
             $table->dropColumn('proposed_hrs_of_service');

@@ -13,7 +13,7 @@ class CreateFundingTypesTable extends Migration
      */
     public function up()
     {
-        Schema::connection(env('DB_DATABASE_VSS'))->create('funding_types', function (Blueprint $table) {
+        Schema::connection(env('DB_DATABASE_VSS'))->create('funding_types', function (Blueprint $table): void {
             $table->id();
             $table->string('funding_type')->unique();
             $table->text('description')->nullable();

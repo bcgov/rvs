@@ -2,6 +2,8 @@
 
 namespace Modules\Neb\Http\Middleware;
 
+use Illuminate\Http\Response;
+use Illuminate\Http\RedirectResponse;
 use App\Models\Role;
 use Closure;
 use Illuminate\Http\Request;
@@ -13,9 +15,9 @@ class IsActive
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
+     * @param Closure(Request):((Response | RedirectResponse)) $next
      * @param  string|null  ...$roles
-     * @return \Inertia\Response|\Illuminate\Http\RedirectResponse
+     * @return \Inertia\Response|RedirectResponse
      */
     public function handle(Request $request, Closure $next, ...$roles)
     {

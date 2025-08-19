@@ -9,7 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
-use Response;
+use Inertia\Response;
 
 class AdminController extends Controller
 {
@@ -17,8 +17,7 @@ class AdminController extends Controller
     /**
      * Display first page after login (dashboard page)
      */
-    public function dashboard(Request $request)
-    {
+    public function dashboard(Request $request): Response {
         return Inertia::render('Admin/Home');
     }
 
@@ -26,8 +25,7 @@ class AdminController extends Controller
     /**
      * Display first page after login (dashboard page)
      */
-    public function users(Request $request)
-    {
+    public function users(Request $request): Response {
         $this->authorize('adminUpdate', Auth::user());
 
         $ministry = Ministry::first();
@@ -39,10 +37,8 @@ class AdminController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
-     * @return \Inertia\Response::render
      */
-    public function userEdit(Request $request, User $user): \Inertia\Response
+    public function userEdit(Request $request, User $user): Response
     {
         $this->authorize('update', $user);
         $user->first_name = $request->input('first_name');
@@ -70,11 +66,9 @@ class AdminController extends Controller
     /**
      * Display first page after login (dashboard page)
      */
-    public function ministry(Request $request)
-    {
-        $this->authorize('adminUpdate', Ministry::class);
-
+    public function ministry(Request $request): Response {
         $ministry = Ministry::first();
+        $this->authorize('adminUpdate', $ministry);
         $users = User::with('roles')->get();
         $roles = Role::orderBy('name')->get();
         return Inertia::render('Admin/Home', ['users' => $users, 'roles' => $roles, 'ministry' => $ministry,
@@ -84,13 +78,11 @@ class AdminController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
-     * @return \Inertia\Response::render
      */
-    public function ministryEdit(MinistryEditRequest $request, User $user): \Inertia\Response
+    public function ministryEdit(MinistryEditRequest $request, User $user): Response
     {
         $this->authorize('update', Ministry::class);
-        Ministry::update($request->validated());
+        Ministry::query()->update($request->validated());
 
         $ministry = Ministry::first();
         $users = User::with('roles')->get();

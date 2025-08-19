@@ -23,22 +23,22 @@ nav.navbar {
 
                     <li class="nav-item">
                         <NavLink class="nav-link" href="/plsc/students"
-                                 :class="{ 'active': $page.url.indexOf('/student') > -1 ||
-                            $page.url.indexOf('/student') > -1 }">
+                                 :class="{ 'active': page.url.indexOf('/student') > -1 ||
+                            page.url.indexOf('/student') > -1 }">
                             Students
                         </NavLink>
                     </li>
                     <li class="nav-item">
                         <NavLink class="nav-link" href="/plsc/applications"
-                                 :class="{ 'active': $page.url.indexOf('/application') > -1 ||
-                            $page.url.indexOf('/application') > -1 }">
+                                 :class="{ 'active': page.url.indexOf('/application') > -1 ||
+                            page.url.indexOf('/application') > -1 }">
                             Applications
                         </NavLink>
                     </li>
 
                     <li v-if="isAdmin" class="nav-item">
                         <NavLink class="nav-link" href="/plsc/maintenance/staff"
-                                 :class="{ 'active': $page.url.indexOf('maintenance') > -1 }">
+                                 :class="{ 'active': page.url.indexOf('maintenance') > -1 }">
                             Maintenance
                         </NavLink>
                     </li>
@@ -46,12 +46,12 @@ nav.navbar {
                     <li class="nav-item dropdown">
                         <NavLink class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button"
                                  data-bs-toggle="dropdown" aria-expanded="false">
-                            {{ $page.props.auth.user.user_id }}
+                            {{ page.props.auth.user.user_id }}
 
                         </NavLink>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarScrollingDropdown">
                             <li class="dropdown-item px-4">
-                                <div class="font-medium text-sm text-gray-500">{{ $page.props.auth.user.email }}</div>
+                                <div class="font-medium text-sm text-gray-500">{{ page.props.auth.user.email }}</div>
                             </li>
                             <li>
                                 <hr class="dropdown-divider">
@@ -72,11 +72,11 @@ nav.navbar {
     </nav>
 </template>
 <script>
-import { ref } from 'vue';
+import {computed, ref} from 'vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import { Link } from '@inertiajs/vue3';
+import {Link, usePage} from '@inertiajs/vue3';
 
 
 export default {
@@ -93,21 +93,20 @@ export default {
             isAdmin: ref(false),
         }
     },
+    setup() {
+        const page = usePage();
+        const utils = computed(() => page.props.utils || {});
+
+        return {
+            page,
+            utils
+        };
+    },
     methods: {
     },
     mounted() {
-        if(this.$attrs.auth.user.roles != undefined){
-            for(let i=0; i<this.$attrs.auth.user.roles.length; i++)
-            {
-                //console.log(this.$attrs.auth.user.roles[i].name.indexOf('Admin'));
-                if(this.$attrs.auth.user.roles[i].name.indexOf('Admin') > -1)
-                {
-                    this.isAdmin = true;
-                    break;
-                }
-            }
-        }
-
+        const roles = this.page?.props?.auth?.roles || [];
+        this.isAdmin = roles.some(role => role?.name?.includes('Admin'));
     },
 }
 </script>
