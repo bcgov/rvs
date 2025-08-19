@@ -99,31 +99,41 @@ class LfpController extends Controller
             $lfps = $lfps->where('sin', request()->filter_sin);
         }
 
-        if (request()->filter_period !== null && request()->filter_period != 'all') {
+
+        // $lfps = $lfps->where('created_at', '>=', Carbon::now()->subMonths(12));
+        if (request()->filter_period !== null) {
             switch (request()->filter_period){
                 case 'current':
                     // Filter for the current month
                     $lfps = $lfps->whereMonth('created_at', now()->month);
+                    \Log::info('Filtering LFPs for the current month');
                     break;
 
                 case '3':
                     // Filter for the last 3 months
                     $lfps = $lfps->where('created_at', '>=', Carbon::now()->subMonths(3));
+                    \Log::info('Filtering LFPs for the last 3 months');
                     break;
 
                 case '6':
                     // Filter for the last 6 months
                     $lfps = $lfps->where('created_at', '>=', Carbon::now()->subMonths(6));
+                    \Log::info('Filtering LFPs for the last 6 months');
                     break;
 
-                case '12':
-                    // Filter for the last 12 months
-                    $lfps = $lfps->where('created_at', '>=', Carbon::now()->subMonths(12));
+                case 'all':
+                    // Filter for all time
+                    $lfps = $lfps->where('created_at', '<', Carbon::now());
+                    \Log::info('Filtering LFPs for all time');
                     break;
 
                 default:
                     break;
             }
+        }else{
+            // Filter for the last 12 months
+            $lfps = $lfps->where('created_at', '>=', Carbon::now()->subMonths(12));
+            \Log::info('Filtering LFPs for the last 12 months');
         }
 
         $lfps = $lfps->orderBy('sin')->paginate(25)->onEachSide(1)->appends(request()->query());

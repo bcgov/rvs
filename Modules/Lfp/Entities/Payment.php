@@ -30,8 +30,9 @@ class Payment extends ModuleModel
      */
     protected $fillable = [
         'lfp_id', 'reconciled_with_payment_report_date', 'reconciled_with_galaxy_date', 'comment', 'pay_idx', 'app_idx',
-        'profession', 'employer', 'employment_status', 'community',
-        'anniversary_date', 'proposed_pay_date', 'proposed_pay_amount', 'proposed_hrs_of_service', 'sfas_pay_status', 'oc_pay_status',
+        'profession', 'employer', 'employment_status', 'community', 'both_eligibility_status',
+        'anniversary_date', 'proposed_pay_date', 'proposed_pay_amount', 'proposed_hrs_of_service', 
+        'sfas_pay_status', 'oc_pay_status',
 
     ];
 
