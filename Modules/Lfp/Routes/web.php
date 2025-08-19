@@ -30,6 +30,7 @@ Route::prefix('lfp')->group(function () {
         Route::post('/intakes', 'IntakeController@store')->name('intakes.store');
         Route::get('/intakes/{intake}', 'IntakeController@show')->name('intakes.show');
         Route::put('/intakes/{intake}', 'IntakeController@update')->name('intakes.update');
+        Route::get('/intakes/export/{filterType}', 'IntakeController@export')->name('intakes.export');
         Route::get('/payments', 'PaymentController@index')->name('payments.index');
         Route::put('/payments/{payment}', 'PaymentController@update')->name('payments.update');
         Route::get('/payments/download/{type}/{range}', 'PaymentController@downloadPayments')->name('payments.download');

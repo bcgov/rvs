@@ -89,6 +89,61 @@ class IntakeController extends Controller
         return Redirect::route('lfp.intakes.show', [$intake->id]);
     }
 
+    /**
+     * Export intake applications.
+     * @return \Symfony\Component\HttpFoundation\StreamedResponse
+     */
+    public function export(Request $request, $filterType = 'All')
+    {
+        if($filterType !== 'All') {
+            $intakes = Intake::where('intake_status', $filterType)->get();
+        } else {
+            $intakes = Intake::all();
+        }
+
+
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="intakes.csv"',
+        ];
+
+        $callback = function() use ($intakes) {
+            $file = fopen('php://output', 'w');
+            // Add CSV header
+            // All the columns from the intake model
+            $header = ['First Name', 'Last Name', 'Profession', 'Employer', 'Employment Status', 'Community', 'Repayment Status',
+                'In Good Standing', 'Repayment Start Date', 'Amount Owing', 'Intake Status', 'Receive Date', 'Comment',
+                'Proposed Registration Date', 'Denial Reason', 'App Index', 'Alias Name'];
+            fputcsv($file, $header);
+
+            foreach ($intakes as $intake) {
+                fputcsv($file, [
+                    $intake->first_name,
+                    $intake->last_name,
+                    $intake->profession,
+                    $intake->employer,
+                    $intake->employment_status,
+                    $intake->community,
+                    $intake->repayment_status,
+                    $intake->in_good_standing,
+                    $intake->repayment_start_date,
+                    $intake->amount_owing,
+                    $intake->intake_status,
+                    $intake->receive_date,
+                    $intake->comment,
+                    $intake->proposed_registration_date,
+                    $intake->denial_reason,
+                    $intake->app_idx,
+                    $intake->alias_name,
+                ]);
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
+
     private function paginateIntakes()
     {
         $intakes = new Intake();
