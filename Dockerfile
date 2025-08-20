@@ -62,9 +62,26 @@ RUN apt-get -y update --fix-missing \
     && docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/  \
     && docker-php-ext-install -j$(nproc) gd && a2enmod rewrite
 
+# --- Oracle runtime deps & compat symlink for libaio SONAME change ------------
+RUN set -eux; \
+    apt-get update; \
+    if apt-cache show libaio1 >/dev/null 2>&1; then \
+        apt-get install -y --no-install-recommends libaio1 libaio-dev; \
+    else \
+        apt-get install -y --no-install-recommends libaio1t64 libaio-dev; \
+    fi; \
+    apt-get install -y --no-install-recommends libnsl2; \
+    # provide legacy SONAME expected by Instant Client/oci8
+    if [ -f /lib/x86_64-linux-gnu/libaio.so.1t64 ] && [ ! -e /lib/x86_64-linux-gnu/libaio.so.1 ]; then \
+        ln -s /lib/x86_64-linux-gnu/libaio.so.1t64 /lib/x86_64-linux-gnu/libaio.so.1; \
+    fi; \
+    echo "/usr/lib/oracle/12.2/client64/lib" > /etc/ld.so.conf.d/oracle-instantclient.conf; \
+    ldconfig; \
+    rm -rf /var/lib/apt/lists/*
+
 # Installing Oracle instant client
 WORKDIR /opt/oracle
-RUN apt-get install -y libaio1 wget unzip \
+RUN apt-get install -y wget unzip \
   && wget https://download.oracle.com/otn_software/linux/instantclient/213000/instantclient-basiclite-linux.x64-21.3.0.0.0.zip \
   && wget https://download.oracle.com/otn_software/linux/instantclient/213000/instantclient-sqlplus-linux.x64-21.3.0.0.0.zip \
   && wget https://download.oracle.com/otn_software/linux/instantclient/213000/instantclient-sdk-linux.x64-21.3.0.0.0.zip \
