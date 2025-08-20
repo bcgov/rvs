@@ -103,7 +103,8 @@
     </AuthenticatedLayout>
 </template>
 <script>
-import { Link, useForm, Head } from '@inertiajs/vue3';
+import { computed } from 'vue';
+import { Link, useForm, Head, usePage, router } from '@inertiajs/vue3';
 import AuthenticatedLayout from '../Layouts/Authenticated.vue';
 import Input from '@/Components/Input.vue';
 import Label from '@/Components/Label.vue';
@@ -112,7 +113,6 @@ import FormSubmitAlert from "@/Components/FormSubmitAlert";
 import BreezePagination from "@/Components/Pagination";
 import ApplicationSearchBox from "../Components/ApplicationSearch";
 import ApplicationsHeader from "../Components/ApplicationsHeader";
-import { router } from '@inertiajs/vue3';
 
 export default {
     name: 'Applications',
