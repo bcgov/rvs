@@ -201,7 +201,7 @@ USER ${USER_ID}
 
 #composer install
 RUN composer install && npm install --prefix /var/www/html/ \
-    && npm run --prefix /var/www/html/ ${DEVENV} && npm run prod
+    && npm run --prefix /var/www/html/ ${DEVENV}
 
 ENTRYPOINT ["/sbin/entrypoint.sh"]
 # Start!
