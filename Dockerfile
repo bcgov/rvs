@@ -134,7 +134,7 @@ RUN printf "instantclient,$ORACLE_HOME" \
 
 # ---- Node.js (optional, if you need it) --------------------------------------
 RUN curl -fsSL https://deb.nodesource.com/setup_21.x | bash - \
- && apt-get update && apt-get install -y nodejs npm \
+ && apt-get update && apt-get install -y nodejs \
  && rm -rf /var/lib/apt/lists/*
 
 RUN apt-get autoclean && apt-get autoremove && apt-get clean && rm -rf /var/lib/apt/lists/* \
