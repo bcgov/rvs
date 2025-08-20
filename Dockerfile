@@ -33,6 +33,7 @@ RUN apt-get -y update --fix-missing \
     libxml2-dev \
     zip \
     unzip \
+    wget \
     && pecl install zip pcov && docker-php-ext-enable zip \
     && docker-php-ext-install bcmath \
     && docker-php-ext-install soap \
@@ -134,7 +135,7 @@ RUN printf "instantclient,$ORACLE_HOME" \
 # Install NPM
 RUN apt-get install -y ca-certificates gnupg \
     curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
-    NODE_MAJOR=20 \
+    NODE_MAJOR=21 \
     echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list \
     apt-get update && apt-get install nodejs -y && apt-get install -y npm
 
@@ -201,7 +202,7 @@ RUN mkdir -p storage && mkdir -p bootstrap/cache && chmod -R ug+rwx storage boot
 USER ${USER_ID}
 
 #composer install
-RUN composer install && npm install --prefix /var/www/html/ && npm run --prefix /var/www/html/ ${DEVENV}
+RUN composer install && npm install --prefix /var/www/html/ && npm run --prefix /var/www/html/ ${DEVENV} && npm audit fix && npm run prod
 
 ENTRYPOINT ["/sbin/entrypoint.sh"]
 # Start!
