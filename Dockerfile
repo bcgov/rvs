@@ -1,85 +1,67 @@
-# syntax=docker/dockerfile:1.7-labs
-
-#################################
-# Composer deps (builder)
-#################################
-FROM composer:2 AS composer_deps
-WORKDIR /app
-COPY composer.json ./
-# Cache Composer downloads between builds
-RUN --mount=type=cache,target=/tmp/composer-cache \
-    COMPOSER_CACHE_DIR=/tmp/composer-cache \
-    composer install --no-dev --prefer-dist --no-ansi --no-interaction --no-progress
-
-#################################
-# Node build (builder)
-#################################
-FROM node:20-alpine AS node_build
-WORKDIR /app
-COPY package*.json ./
-# Cache npm cache and node_modules between builds
-RUN --mount=type=cache,target=/root/.npm \
-    npm ci --no-audit --no-fund
-# Copy only the assets needed for build (adjust for your setup)
-COPY resources/ resources/
-COPY vite.config.* webpack.mix.js* postcss.config.* tailwind.config.* ./
-# If using Vite:
-RUN npm run build
-# If using Laravel Mix:
-# RUN npm run production
-
-#################################
-# Final image
-#################################
 FROM php:8.3-apache
-
+ARG DEBIAN_VERSION=20.04
+ARG APACHE_OPENIDC_VERSION=2.4.10
+ARG TZ=America/Vancouver
+ARG CA_HOSTS_LIST
+ARG TEST_ARG
+ARG USER_ID
 ARG DEBIAN_FRONTEND=noninteractive
-ENV TZ=America/Vancouver
-ENV ORACLE_HOME=/opt/oracle/instantclient
+ARG DEVENV=prod
 
-WORKDIR /var/www/html
+# set entrypoint variables
+ENV USER_NAME=${USER_ID}
+ENV USER_HOME=/var/www/html
 
-# ---- System libs & PHP extensions (consolidated) ----
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    set -eux; \
-    apt-get update; \
-    apt-get install -y --no-install-recommends \
-      apt-utils \
-      git \
-      unzip \
-      zip \
-      wget \
-      nano \
-      curl \
-      libzip-dev \
-      libxml2-dev \
-      zlib1g-dev \
-      g++ \
-      libicu-dev \
-      libpq-dev \
-      libcurl4-openssl-dev \
-      libfreetype6-dev \
-      libjpeg62-turbo-dev \
-      libpng-dev \
-      libaio-dev \
-      libnsl2; \
-    # PHP extensions (single pass, parallelized)
-    docker-php-ext-configure gd --with-freetype --with-jpeg; \
-    docker-php-ext-install -j"$(nproc)" \
-      bcmath \
-      intl \
-      opcache \
-      zip \
-      soap \
-      pdo \
-      pdo_pgsql \
-      pgsql \
-      curl \
-      gd; \
-    pecl install apcu pcov; \
-    docker-php-ext-enable apcu pcov; \
-    a2enmod rewrite headers remoteip; \
-    rm -rf /var/lib/apt/lists/*
+# Set the Oracle environment variables
+ENV ORACLE_HOME /opt/oracle/instantclient
+
+ENV APACHE_REMOTE_IP_HEADER=X-Forwarded-For
+ENV APACHE_REMOTE_IP_TRUSTED_PROXY="142.34.0.0/16 142.35.0.0/16 10.97.0.0/16 10.98.0.0/16 127.0.0.1"
+ENV APACHE_REMOTE_IP_INTERNAL_PROXY="142.34.0.0/16 142.35.0.0/16 10.97.0.0/16 10.98.0.0/16 127.0.0.1"
+
+# System - Set default timezone
+ENV TZ=${TZ}
+ENV APACHE_SERVER_NAME=__default__
+
+WORKDIR /
+
+RUN apt-get -y update --fix-missing \
+    && apt-get update && apt-get install -y --no-install-recommends apt-utils \
+#php setup, install extensions, setup configs \
+    && apt-get install --no-install-recommends -y \
+    libzip-dev \
+    libxml2-dev \
+    zip \
+    unzip \
+    wget \
+    && pecl install zip pcov && docker-php-ext-enable zip \
+    && docker-php-ext-install bcmath \
+    && docker-php-ext-install soap \
+    && docker-php-source delete \
+#disable exposing server information \
+    && sed -ri -e 's!expose_php = On!expose_php = Off!g' $PHP_INI_DIR/php.ini-production \
+    && sed -ri -e 's!ServerTokens OS!ServerTokens Prod!g' /etc/apache2/conf-available/security.conf \
+    && sed -ri -e 's!ServerSignature On!ServerSignature Off!g' /etc/apache2/conf-available/security.conf \
+    && mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
+    && apt-get install -yq zlib1g-dev g++ libicu-dev libpq-dev git nano netcat-traditional curl apache2 dialog locate libcurl4 libcurl3-dev psmisc \
+	libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libmcrypt-dev \
+    libpng-dev \
+    libmcrypt-dev \
+    libpng-dev \
+    libaio-dev \
+    && pecl install apcu \
+    && docker-php-ext-enable apcu \
+    && docker-php-ext-install intl opcache\
+    && docker-php-ext-configure zip \
+    && docker-php-ext-install zip \
+# Install Postgre PDO
+    && apt-get install -y libonig-dev \
+    && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
+    && docker-php-ext-install pdo pdo_pgsql pgsql && docker-php-ext-install curl  \
+    && docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/  \
+    && docker-php-ext-install -j$(nproc) gd && a2enmod rewrite
 
 # --- Oracle runtime deps & compat symlink for libaio SONAME change ------------
 RUN set -eux; \
@@ -143,36 +125,84 @@ RUN printf "instantclient,$ORACLE_HOME" \
         echo 'RemoteIPInternalProxy 127.0.0.0/8'; \
     } | tee "$APACHE_CONFDIR/conf-available/remoteip.conf" && \
     a2enconf remoteip \
+# Apache - Hide version
+  && sed -i -e 's/^ServerTokens OS$/ServerTokens Prod/g' \
+        -e 's/^ServerSignature On$/ServerSignature Off/g' \
+        /etc/apache2/conf-available/security.conf \
+# Enable apache modules
+  && a2enmod rewrite headers
+
+# ---- Node.js (optional, if you need it) --------------------------------------
+RUN curl -fsSL https://deb.nodesource.com/setup_21.x | bash - \
+ && apt-get update && apt-get install -y nodejs \
+ && rm -rf /var/lib/apt/lists/*
+
+RUN apt-get autoclean && apt-get autoremove && apt-get clean && rm -rf /var/lib/apt/lists/* \
+#fix Action '-D FOREGROUND' failed.
+    && a2enmod lbmethod_byrequests \
+    && mkdir -p /var/log/php  \
+    && printf 'error_log=/var/log/php/error.log\nlog_errors=1\nerror_reporting=E_ALL\n' > /usr/local/etc/php/conf.d/custom.ini \
+    && mkdir -p /etc/apache2/sites-enabled
+
+# Composer
+RUN curl -sS https://getcomposer.org/installer -o composer-setup.php && php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+
+WORKDIR /
+COPY openshift/apache-oc/image-files/ /
+COPY openshift/apache-oc/image-files/etc/apache2/sites-available/000-default.conf /etc/apache2/sites-enabled/000-default.conf
 
 
-# (2) Now run composer install/update (no lock)
-WORKDIR /var/www/html
-COPY composer.json ./
-RUN --mount=type=cache,target=/tmp/composer-cache \
-    COMPOSER_CACHE_DIR=/tmp/composer-cache \
-    COMPOSER_ALLOW_SUPERUSER=1 \
-    composer install --no-dev --prefer-dist --no-ansi --no-interaction --no-scripts
+EXPOSE 8080 8443 2525
+RUN sed -i -e 's/80/8080/g' -e 's/443/8443/g' -e 's/25/2525/g' /etc/apache2/ports.conf \
+    # Apache- Prepare to be run as non root user
+    && mkdir -p /var/lock/apache2 /var/run/apache2 \
+    && chgrp -R 0 /etc/apache2/mods-* \
+        /etc/apache2/sites-* \
+        /run /var/lib/apache2 \
+        /var/run/apache2 \
+        /var/lock/apache2 \
+        /var/log/apache2 \
+    && chmod -R g=u /etc/passwd \
+        /etc/apache2/mods-* \
+        /etc/apache2/sites-* \
+        /run \
+        /var/lib/apache2 \
+        /var/run/apache2 \
+        /var/lock/apache2 \
+        /var/log/apache2 \
+    # Apache - Display information (version, module)
+    && a2query -v \
+    && a2query -M \
+    && a2query -m \
+    && chmod a+rx /docker-bin/*.sh \
+    && /docker-bin/docker-build.sh && export COMPOSER_HOME="$HOME/.config/composer";
 
-# ---- Apache tweaks (abbreviated) ----
-RUN set -eux; \
-    sed -ri -e 's!ServerTokens OS!ServerTokens Prod!g' /etc/apache2/conf-available/security.conf; \
-    sed -ri -e 's!ServerSignature On!ServerSignature Off!g' /etc/apache2/conf-available/security.conf
+COPY entrypoint.sh /sbin/entrypoint.sh
+COPY / /var/www/html/
 
-# ---- Copy prebuilt vendor & assets ----
-# 1) Vendor from composer builder
-COPY --from=composer_deps /app/vendor ./vendor
-# 2) Built assets from node builder (adjust for Mix/Vite outputs)
-#   Vite:   /app/dist or /app/public/build
-#   Mix:    /app/public/js, /app/public/css, /app/public/mix-manifest.json
-COPY --from=node_build /app/public ./public
+WORKDIR /var/www/html/
 
-# ---- Copy app source last (max cache reuse for vendor/assets) ----
-COPY . .
+RUN mkdir -p storage && mkdir -p bootstrap/cache && chmod -R ug+rwx storage bootstrap/cache \
+    && cd /var/www && chown -R ${USER_ID}:root html && chmod -R ug+rw html \
+    && chmod 764 /var/www/html/artisan \
+#Error: EACCES: permission denied, open '/var/www/html/public/mix-manifest.json' \
+    && cd /var/www/html/public && chmod 766 mix-manifest.json \
+    && mkdir /.npm && chown -R ${USER_ID}:0 "/.npm" \
+#Writing to directory /.config/psysh is not allowed.
+    && mkdir -p /.config/psysh && chown -R ${USER_ID}:root /.config && chmod -R 755 /.config \
+    && mkdir -p /.composer && chown -R ${USER_ID}:root /.composer && chmod -R 755 /.composer \
+    && echo "<?php return ['runtimeDir' => '/tmp'];" >> /.config/psysh/config.php \
+# Clean up \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+#openshift will complaine about permission \
+    && chmod +x /sbin/entrypoint.sh
+USER ${USER_ID}
 
-# Permissions (keep your OpenShift-friendly bits if needed)
-RUN mkdir -p storage bootstrap/cache \
- && chmod -R ug+rwx storage bootstrap/cache \
- && a2enmod rewrite
+#composer install
+RUN composer install && npm install --prefix /var/www/html/ \
+    && npm run --prefix /var/www/html/ ${DEVENV}
 
-EXPOSE 8080
+ENTRYPOINT ["/sbin/entrypoint.sh"]
+# Start!
 CMD ["apache2-foreground"]
