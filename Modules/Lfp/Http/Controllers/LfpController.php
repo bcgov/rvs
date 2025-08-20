@@ -121,6 +121,12 @@ class LfpController extends Controller
                     \Log::info('Filtering LFPs for the last 6 months');
                     break;
 
+                case '12':
+                    // Filter for the last 12 months
+                    $lfps = $lfps->where('created_at', '>=', Carbon::now()->subMonths(12));
+                    \Log::info('Filtering LFPs for the last 12 monthsss');
+                    break;
+
                 case 'all':
                     // Filter for all time
                     $lfps = $lfps->where('created_at', '<', Carbon::now());
