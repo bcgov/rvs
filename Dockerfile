@@ -132,12 +132,10 @@ RUN printf "instantclient,$ORACLE_HOME" \
 # Enable apache modules
   && a2enmod rewrite headers
 
-# Install NPM
-RUN apt-get install -y ca-certificates gnupg \
-    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
-    NODE_MAJOR=21 \
-    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list \
-    apt-get update && apt-get install nodejs -y && apt-get install -y npm
+# ---- Node.js (optional, if you need it) --------------------------------------
+RUN curl -fsSL https://deb.nodesource.com/setup_21.x | bash - \
+ && apt-get update && apt-get install -y --no-install-recommends nodejs && apt-get install -y npm \
+ && rm -rf /var/lib/apt/lists/*
 
 RUN apt-get autoclean && apt-get autoremove && apt-get clean && rm -rf /var/lib/apt/lists/* \
 #fix Action '-D FOREGROUND' failed.
