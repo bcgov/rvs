@@ -9,7 +9,7 @@ COPY composer.json ./
 # Cache Composer downloads between builds
 RUN --mount=type=cache,target=/tmp/composer-cache \
     COMPOSER_CACHE_DIR=/tmp/composer-cache \
-    composer install --no-dev --prefer-dist --no-ansi --no-interaction --no-scripts
+    composer install --no-dev --prefer-dist --no-ansi --no-interaction --no-progress
 
 #################################
 # Node build (builder)
