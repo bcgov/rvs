@@ -82,30 +82,56 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     rm -rf /var/lib/apt/lists/*
 
 # ---- Oracle Instant Client + oci8 (keep only one path) ----
-WORKDIR /opt/oracle
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    set -eux; \
-    apt-get update; \
-    apt-get install -y --no-install-recommends wget unzip; \
-    wget https://download.oracle.com/otn_software/linux/instantclient/213000/instantclient-basiclite-linux.x64-21.3.0.0.0.zip; \
-    wget https://download.oracle.com/otn_software/linux/instantclient/213000/instantclient-sqlplus-linux.x64-21.3.0.0.0.zip; \
-    wget https://download.oracle.com/otn_software/linux/instantclient/213000/instantclient-sdk-linux.x64-21.3.0.0.0.zip; \
-    unzip instantclient-basiclite-linux.x64-21.3.0.0.0.zip; \
-    unzip instantclient-sqlplus-linux.x64-21.3.0.0.0.zip; \
-    unzip instantclient-sdk-linux.x64-21.3.0.0.0.zip; \
-    mv /opt/oracle/instantclient_21_3 /opt/oracle/instantclient; \
-    echo /opt/oracle/instantclient > /etc/ld.so.conf.d/oracle-instantclient.conf; \
-    ldconfig; \
-    rm -f *.zip
+# WORKDIR /opt/oracle
+# RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+#     set -eux; \
+#     apt-get update; \
+#     apt-get install -y --no-install-recommends wget unzip; \
+#     wget https://download.oracle.com/otn_software/linux/instantclient/213000/instantclient-basiclite-linux.x64-21.3.0.0.0.zip; \
+#     wget https://download.oracle.com/otn_software/linux/instantclient/213000/instantclient-sqlplus-linux.x64-21.3.0.0.0.zip; \
+#     wget https://download.oracle.com/otn_software/linux/instantclient/213000/instantclient-sdk-linux.x64-21.3.0.0.0.zip; \
+#     unzip instantclient-basiclite-linux.x64-21.3.0.0.0.zip; \
+#     unzip instantclient-sqlplus-linux.x64-21.3.0.0.0.zip; \
+#     unzip instantclient-sdk-linux.x64-21.3.0.0.0.zip; \
+#     mv /opt/oracle/instantclient_21_3 /opt/oracle/instantclient; \
+#     echo /opt/oracle/instantclient > /etc/ld.so.conf.d/oracle-instantclient.conf; \
+#     ldconfig; \
+#     rm -f *.zip
+
+# ENV LD_LIBRARY_PATH=/opt/oracle/instantclient:${LD_LIBRARY_PATH}
+
+# # Build a specific oci8 (only once)
+# WORKDIR /tmp/oci8
+# RUN pecl download oci8-3.2.1 && \
+#     tar xzf oci8-3.2.1.tgz && cd oci8-3.2.1 && \
+#     phpize && ./configure --with-oci8=instantclient,$ORACLE_HOME && \
+#     make -j"$(nproc)" install && docker-php-ext-enable oci8
+
+
+# (1) Instant Client + oci8 first
+RUN apt-get update && apt-get install -y --no-install-recommends libaio1 libnsl2 wget unzip \
+ && wget https://download.oracle.com/otn_software/linux/instantclient/213000/instantclient-basiclite-linux.x64-21.3.0.0.0.zip \
+ && wget https://download.oracle.com/otn_software/linux/instantclient/213000/instantclient-sdk-linux.x64-21.3.0.0.0.zip \
+ && unzip instantclient-basiclite-linux.x64-21.3.0.0.0.zip \
+ && unzip instantclient-sdk-linux.x64-21.3.0.0.0.zip \
+ && mv instantclient_21_3 /opt/oracle/instantclient \
+ && echo /opt/oracle/instantclient > /etc/ld.so.conf.d/oracle-instantclient.conf && ldconfig \
+ && pecl download oci8-3.2.1 \
+ && tar xzf oci8-3.2.1.tgz && cd oci8-3.2.1 && phpize \
+ && ./configure --with-oci8=instantclient,/opt/oracle/instantclient \
+ && make -j"$(nproc)" install \
+ && docker-php-ext-enable oci8 \
+ && rm -rf /var/lib/apt/lists/* /tmp/*
 
 ENV LD_LIBRARY_PATH=/opt/oracle/instantclient:${LD_LIBRARY_PATH}
 
-# Build a specific oci8 (only once)
-WORKDIR /tmp/oci8
-RUN pecl download oci8-3.2.1 && \
-    tar xzf oci8-3.2.1.tgz && cd oci8-3.2.1 && \
-    phpize && ./configure --with-oci8=instantclient,$ORACLE_HOME && \
-    make -j"$(nproc)" install && docker-php-ext-enable oci8
+# (2) Now run composer install/update (no lock)
+WORKDIR /var/www/html
+COPY composer.json ./
+RUN --mount=type=cache,target=/tmp/composer-cache \
+    COMPOSER_CACHE_DIR=/tmp/composer-cache \
+    COMPOSER_ALLOW_SUPERUSER=1 \
+    composer install --no-dev --prefer-dist --no-ansi --no-interaction --no-scripts
 
 # ---- Apache tweaks (abbreviated) ----
 RUN set -eux; \
