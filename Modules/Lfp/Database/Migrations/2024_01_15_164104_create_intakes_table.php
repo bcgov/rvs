@@ -13,7 +13,7 @@ class CreateIntakesTable extends Migration
      */
     public function up()
     {
-        Schema::connection(env('DB_DATABASE_LFP'))->create('intakes', function (Blueprint $table) {
+        Schema::connection(env('DB_DATABASE_LFP'))->create('intakes', function (Blueprint $table): void {
             $table->id();
             $table->bigInteger('sin')->nullable()->comment('Social insurance number.');
             $table->string('first_name', 30)->nullable();
@@ -23,7 +23,7 @@ class CreateIntakesTable extends Migration
             $table->string('community', 100)->nullable()->comment('Underserved community.');
             $table->string('in_good_standing')->nullable();
             $table->date('repayment_start_date')->nullable();
-            $table->double('amount_owing', null, 2)->default(0)->nullable();
+            $table->double('amount_owing')->default(0)->nullable();
             $table->date('receive_date')->default(now());
             $table->string('employment_status', 30)->nullable()->comment('Casual/Part-time/Full-time.');
             $table->string('intake_status', 30)->nullable()->comment('Ready/Pending.');

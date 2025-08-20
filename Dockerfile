@@ -1,4 +1,4 @@
-FROM php:8.1-apache
+FROM php:8.3-apache
 ARG DEBIAN_VERSION=20.04
 ARG APACHE_OPENIDC_VERSION=2.4.10
 ARG TZ=America/Vancouver
@@ -16,8 +16,8 @@ ENV USER_HOME=/var/www/html
 ENV ORACLE_HOME /opt/oracle/instantclient
 
 ENV APACHE_REMOTE_IP_HEADER=X-Forwarded-For
-ENV APACHE_REMOTE_IP_TRUSTED_PROXY="10.0.0.0/8 172.16.0.0/12 192.168.0.0/16 10.97.6.0/16 10.97.6.1"
-ENV APACHE_REMOTE_IP_INTERNAL_PROXY="10.0.0.0/8 172.16.0.0/12 192.168.0.0/16 10.97.6.0/16 10.97.6.1"
+ENV APACHE_REMOTE_IP_TRUSTED_PROXY="142.34.0.0/16 142.35.0.0/16 10.97.0.0/16 10.98.0.0/16 127.0.0.1"
+ENV APACHE_REMOTE_IP_INTERNAL_PROXY="142.34.0.0/16 142.35.0.0/16 10.97.0.0/16 10.98.0.0/16 127.0.0.1"
 
 # System - Set default timezone
 ENV TZ=${TZ}
@@ -33,6 +33,7 @@ RUN apt-get -y update --fix-missing \
     libxml2-dev \
     zip \
     unzip \
+    wget \
     && pecl install zip pcov && docker-php-ext-enable zip \
     && docker-php-ext-install bcmath \
     && docker-php-ext-install soap \
@@ -62,9 +63,26 @@ RUN apt-get -y update --fix-missing \
     && docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/  \
     && docker-php-ext-install -j$(nproc) gd && a2enmod rewrite
 
+# --- Oracle runtime deps & compat symlink for libaio SONAME change ------------
+RUN set -eux; \
+    apt-get update; \
+    if apt-cache show libaio1 >/dev/null 2>&1; then \
+        apt-get install -y --no-install-recommends libaio1 libaio-dev; \
+    else \
+        apt-get install -y --no-install-recommends libaio1t64 libaio-dev; \
+    fi; \
+    apt-get install -y --no-install-recommends libnsl2; \
+    # provide legacy SONAME expected by Instant Client/oci8
+    if [ -f /lib/x86_64-linux-gnu/libaio.so.1t64 ] && [ ! -e /lib/x86_64-linux-gnu/libaio.so.1 ]; then \
+        ln -s /lib/x86_64-linux-gnu/libaio.so.1t64 /lib/x86_64-linux-gnu/libaio.so.1; \
+    fi; \
+    echo "/usr/lib/oracle/12.2/client64/lib" > /etc/ld.so.conf.d/oracle-instantclient.conf; \
+    ldconfig; \
+    rm -rf /var/lib/apt/lists/*
+
 # Installing Oracle instant client
 WORKDIR /opt/oracle
-RUN apt-get install -y libaio1 wget unzip \
+RUN apt-get install -y wget unzip \
   && wget https://download.oracle.com/otn_software/linux/instantclient/213000/instantclient-basiclite-linux.x64-21.3.0.0.0.zip \
   && wget https://download.oracle.com/otn_software/linux/instantclient/213000/instantclient-sqlplus-linux.x64-21.3.0.0.0.zip \
   && wget https://download.oracle.com/otn_software/linux/instantclient/213000/instantclient-sdk-linux.x64-21.3.0.0.0.zip \
@@ -114,12 +132,10 @@ RUN printf "instantclient,$ORACLE_HOME" \
 # Enable apache modules
   && a2enmod rewrite headers
 
-# Install NPM
-RUN apt-get install -y ca-certificates gnupg \
-    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
-    NODE_MAJOR=20 \
-    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list \
-    apt-get update && apt-get install nodejs -y && apt-get install -y npm
+# ---- Node.js (optional, if you need it) --------------------------------------
+RUN curl -fsSL https://deb.nodesource.com/setup_21.x | bash - \
+ && apt-get update && apt-get install -y nodejs \
+ && rm -rf /var/lib/apt/lists/*
 
 RUN apt-get autoclean && apt-get autoremove && apt-get clean && rm -rf /var/lib/apt/lists/* \
 #fix Action '-D FOREGROUND' failed.
@@ -184,7 +200,8 @@ RUN mkdir -p storage && mkdir -p bootstrap/cache && chmod -R ug+rwx storage boot
 USER ${USER_ID}
 
 #composer install
-RUN composer install && npm install --prefix /var/www/html/ && npm run --prefix /var/www/html/ ${DEVENV}
+RUN composer install && npm install --prefix /var/www/html/ \
+    && npm run --prefix /var/www/html/ ${DEVENV}
 
 ENTRYPOINT ["/sbin/entrypoint.sh"]
 # Start!

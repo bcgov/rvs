@@ -2,9 +2,14 @@
 
 namespace Modules\Twp\Http\Controllers;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use Inertia\Response;
 use Modules\Twp\Entities\Application;
 use Modules\Twp\Entities\IndigeneityType;
 use Modules\Twp\Entities\Institution;
@@ -16,15 +21,17 @@ use Modules\Twp\Http\Requests\StudentUpdateRequest;
 use Modules\Yeaf\Entities\Country;
 use Modules\Yeaf\Entities\Province;
 
+/**
+ *
+ */
 class StudentController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response
+     * @return Response
      */
-    public function index()
-    {
+    public function index(): Response {
         $schools = Institution::orderBy('name', 'asc')->get();
         $students = $this->paginateStudents();
         [$countries, $provinces] = $this->getCountriesProvinces();
@@ -43,12 +50,11 @@ class StudentController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response
+     * @return Response
      */
-    public function apps()
-    {
+    public function apps(): Response {
         $schools = Institution::orderBy('name', 'asc')->get();
-        $apps = new Application();
+        $apps = Application::query();
         $apps = $this->paginateApps($apps);
         [$countries, $provinces] = $this->getCountriesProvinces();
 
@@ -58,10 +64,9 @@ class StudentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @return \Inertia\Response
+     * @return Response
      */
-    public function store(StudentStoreRequest $request)
-    {
+    public function store(StudentStoreRequest $request): Response {
         $schools = Institution::orderBy('name', 'asc')->get();
         $student = Student::create($request->validated());
         $student->indigeneity()->sync($request->safe()['indigeneity']);
@@ -83,10 +88,9 @@ class StudentController extends Controller
     /**
      * Display the specified resource.
      *
-     * @return \Inertia\Response
+     * @return Response
      */
-    public function show(Student $student)
-    {
+    public function show(Student $student): Response {
         $student = Student::where('id', $student->id)
             ->with(
                 'applications.reasons',
@@ -109,11 +113,12 @@ class StudentController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param StudentUpdateRequest $request
+     * @param Student $student
+     *
+     * @return RedirectResponse
      */
-    public function update(StudentUpdateRequest $request, Student $student)
-    {
+    public function update(StudentUpdateRequest $request, Student $student): RedirectResponse {
         $studentRecord = Student::where('id', $student->id)->first();
         $studentRecord->update($request->validated());
         $studentRecord->indigeneity()->sync($request->safe()['indigeneity']);
@@ -124,11 +129,11 @@ class StudentController extends Controller
     /**
      * Soft delete the student
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Student $student
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function delete (Student $student) {
+    public function delete (Student $student): RedirectResponse {
         // Update Comment column
         $comment = request('comment');
         $student->update([
@@ -139,12 +144,14 @@ class StudentController extends Controller
         return redirect()->route('twp.students.index')->with('message', 'Student deleted successfully.');
     }
 
-    private function paginateStudents()
-    {
+    /**
+     * @return LengthAwarePaginator<Student>
+     */
+    private function paginateStudents(): LengthAwarePaginator {
         $students = Student::with('applications');
 
         if (request()->sort === 'app_status' && request()->direction !== 'ALL') {
-            $students = $students->whereHas('applications', function ($q) {
+            $students = $students->whereHas('applications', function ($q): void {
                 $q->where('application_status', request()->direction);
             });
         }
@@ -160,8 +167,8 @@ class StudentController extends Controller
         }
 
         if (request()->filter_school !== null) {
-            $students = $students->whereHas('applications', function ($query) {
-                $query->whereHas('program', function ($q) {
+            $students = $students->whereHas('applications', function ($query): void {
+                $query->whereHas('program', function ($q): void {
                     $q->where('institution_twp_id', request()->filter_school);
                 });
             });
@@ -176,7 +183,11 @@ class StudentController extends Controller
         return $students->paginate(25)->onEachSide(1)->appends(request()->query());
     }
 
-    private function paginateApps($apps)
+    /**
+     * @param Builder<Application> $apps
+     * @return LengthAwarePaginator<Application>
+     */
+    private function paginateApps(Builder $apps): LengthAwarePaginator
     {
         $apps = $apps->with('student');
 
@@ -185,23 +196,23 @@ class StudentController extends Controller
         }
 
         if (request()->filter_fname !== null) {
-            $apps = $apps->whereHas('student', function ($q) {
+            $apps = $apps->whereHas('student', function ($q): void {
                 $q->where('first_name', 'ILIKE', '%'.request()->filter_fname.'%');
             });
         }
         if (request()->filter_lname !== null) {
-            $apps = $apps->whereHas('student', function ($q) {
+            $apps = $apps->whereHas('student', function ($q): void {
                 $q->where('last_name', 'ILIKE', '%'.request()->filter_lname.'%');
             });
         }
         if (request()->filter_aname !== null) {
-            $apps = $apps->whereHas('student', function ($q) {
+            $apps = $apps->whereHas('student', function ($q): void {
                 $q->where('alias_name', 'ILIKE', '%'.request()->filter_aname.'%');
             });
         }
 
         if (request()->filter_school !== null) {
-            $apps = $apps->whereHas('program', function ($q) {
+            $apps = $apps->whereHas('program', function ($q): void {
                 $q->where('institution_twp_id', request()->filter_school);
             });
         }
@@ -218,8 +229,10 @@ class StudentController extends Controller
         return $apps->paginate(25)->onEachSide(1)->appends(request()->query());
     }
 
-    private function getCountriesProvinces()
-    {
+    /**
+     * @return array{Collection<int, Country>, Collection<int, Province>}
+     */
+    private function getCountriesProvinces(): array {
         return [Country::orderBy('country_code', 'asc')->get(), Province::orderBy('province_code', 'asc')->get()];
     }
 

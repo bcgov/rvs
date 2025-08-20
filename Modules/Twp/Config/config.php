@@ -1,8 +1,10 @@
 <?php
 
+use Modules\Twp\Http\Middleware\HandleInertiaRequests;
+
 return [
     'name' => 'Twp',
     'middleware' => [
-        \Modules\Twp\Http\Middleware\HandleInertiaRequests::class,
+        HandleInertiaRequests::class,
     ],
 ];

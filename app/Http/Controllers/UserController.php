@@ -2,15 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use RuntimeException;
+use Exception;
+use Illuminate\Routing\Redirector;
+use Illuminate\Contracts\Foundation\Application;
 use App\Http\Requests\AjaxRequest;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
-use Response;
+use Inertia\Response;
+use League\OAuth2\Client\Token\AccessToken;
+use League\OAuth2\Client\Token\AccessTokenInterface;
 use Stevenmaguire\OAuth2\Client\Provider\Keycloak;
 
 class UserController extends Controller
@@ -18,13 +26,11 @@ class UserController extends Controller
     /**
      * Display first page after login (dashboard page)
      */
-    public function home(Request $request)
-    {
+    public function home(Request $request): Response {
         return Inertia::render('Home');
     }
 
-    public function appLogin(Request $request)
-    {
+    public function appLogin(Request $request): Response|RedirectResponse {
         $provider = new Keycloak([
             'authServerUrl' => env('KEYCLOAK_SERVER_URL'),
             'realm' => env('KEYCLOAK_REALM'),
@@ -47,18 +53,30 @@ class UserController extends Controller
             $request->session()->forget('oauth2state');
 
             //Invalid state, make sure HTTP sessions are enabled
-            return Inertia::render('Auth/Login', [
-                'loginAttempt' => true,
-                'hasAccess' => false,
-                'status' => 'We could not log you in. Please contact RequestIT.',
+            return Inertia::render('Home', [
+                'auth' => [
+                    'user' => auth()->user() ? [
+                        'id' => auth()->user()->id,
+                        'first_name' => auth()->user()->first_name,
+                        'last_name' => auth()->user()->last_name,
+                        'email' => auth()->user()->email,
+                    ] : null,
+                    'roles' => auth()->user() ? auth()->user()->roles()->get() : [],
+                ],
             ]);
         } else {
             // Try to get an access token (using the authorization coe grant)
             try {
+                /** @var AccessTokenInterface $token */
                 $token = $provider->getAccessToken('authorization_code', [
                     'code' => $request->code,
                 ]);
-            } catch (\Exception $e) {
+
+                if (!$token instanceof AccessToken) {
+                    throw new RuntimeException('Expected AccessToken instance');
+                }
+
+            } catch (Exception $e) {
                 return Inertia::render('Auth/Login', [
                     'loginAttempt' => true,
                     'hasAccess' => false,
@@ -71,7 +89,7 @@ class UserController extends Controller
                 // We got an access token, let's now get the user's details
                 $idir_user = $provider->getResourceOwner($token);
                 $idir_user = $idir_user->toArray();
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 return Inertia::render('Auth/Login', [
                     'loginAttempt' => true,
                     'hasAccess' => false,
@@ -110,38 +128,36 @@ class UserController extends Controller
     /**
      * fetch active support users
      */
-    public function activeUsers(AjaxRequest $request)
+    public function activeUsers(AjaxRequest $request): JsonResponse
     {
         $users = User::whereEndDate(null)->whereDisabled(false)->get();
 
-        return Response::json(['status' => true, 'users' => $users]);
+        return response()->json(['status' => true, 'users' => $users]);
     }
 
     /**
      * fetch cancelled support users
      */
-    public function cancelledUsers(AjaxRequest $request)
+    public function cancelledUsers(AjaxRequest $request): JsonResponse
     {
         $users = User::where('end_date', '!=', null)->whereDisabled(true)->get();
 
-        return Response::json(['status' => true, 'users' => $users]);
+        return response()->json(['status' => true, 'users' => $users]);
     }
 
     /**
      * Display first page after login (dashboard page)
      */
-    public function dashboard(Request $request)
-    {
+    public function dashboard(Request $request): Response {
         return Inertia::render('Yeaf/Students');
     }
 
     /**
      * Display the login view.
      *
-     * @return \Inertia\Response
+     * @return Response
      */
-    public function login(Request $request)
-    {
+    public function login(Request $request): Response {
         return Inertia::render('Auth/Login', [
             'loginAttempt' => false,
             'hasAccess' => false,
@@ -152,10 +168,9 @@ class UserController extends Controller
     /**
      * Log the user out of the application.
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return Application|RedirectResponse|Redirector
      */
-    public function logout(Request $request)
-    {
+    public function logout(Request $request): Redirector|Application|RedirectResponse {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
@@ -163,8 +178,10 @@ class UserController extends Controller
         return redirect('/');
     }
 
-    private function newUser($idir_user)
-    {
+    /**
+     * @param array<string, mixed> $idir_user
+     */
+    private function newUser(array $idir_user): void {
         $user = User::where('user_id', 'ilike', $idir_user['idir_username'])->first();
         if (is_null($user)) {
             $user = new User();

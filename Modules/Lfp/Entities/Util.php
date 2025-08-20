@@ -2,6 +2,11 @@
 
 namespace Modules\Lfp\Entities;
 
+/**
+ * @property string $field_name
+ * @property string $field_type
+ * @property bool $active_flag
+ */
 class Util extends ModuleModel
 {
 

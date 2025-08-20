@@ -1,21 +1,24 @@
 <script setup>
 
-import {Head} from '@inertiajs/vue3';
+import {Head, usePage} from '@inertiajs/vue3';
 import {defineComponent, computed, useAttrs} from "vue";
 defineComponent( {
     Head
 });
-defineProps({
+const props = defineProps({
     loginAttempt: Boolean,
     hasAccess: Boolean,
     status: String,
 });
-// Access roles from $attrs
-const userRoles = useAttrs().auth?.roles || [];
+const page = usePage();
+
+const auth = computed(() => page.props.auth || {});
+const authUser = computed(() => page.props.auth?.user || null);
+const userRoles = computed(() => page.props.auth?.roles || []);
 
 // Define computed property
 const isSuper = computed(() => {
-    return userRoles.some(role => role.name === 'Super Admin');
+    return userRoles.value.some(role => role.name === 'Super Admin');
 });
 
 </script>

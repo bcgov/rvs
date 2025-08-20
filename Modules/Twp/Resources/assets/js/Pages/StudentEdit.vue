@@ -24,7 +24,7 @@
                                     </Link> Student Info
                                 </div>
                                 <div v-if="editForm != null" class="card-body">
-                                    <StudentEditStudentTab :utils="$attrs.utils" :result="editForm" :indigeneity_types="indigeneity_types"></StudentEditStudentTab>
+                                    <StudentEditStudentTab :utils="utils" :result="editForm" :indigeneity_types="indigeneity_types"></StudentEditStudentTab>
                                 </div>
                             </div>
                             <div class="card mb-2">
@@ -89,16 +89,16 @@
                                     </ul>
                                     <div class="tab-content" id="myStudentTabContent">
                                         <div class="tab-pane fade" :class="activeTab==='twp-app' ? 'active show':''" id="twp-app-tab-pane" role="tabpanel" aria-labelledby="twp-app-tab" tabindex="1">
-                                            <StudentEditTwpAppTab v-if="activeTab==='twp-app'" :utils="$attrs.utils" :reasons="reasons" :twpStudentId="activeApp.student_id" :result="activeApp" :toTitleCase="toTitleCase"></StudentEditTwpAppTab>
+                                            <StudentEditTwpAppTab v-if="activeTab==='twp-app'" :utils="utils" :reasons="reasons" :twpStudentId="activeApp.student_id" :result="activeApp" :toTitleCase="toTitleCase"></StudentEditTwpAppTab>
                                         </div>
                                         <div class="tab-pane fade" :class="activeTab==='grant-app' ? 'active show':''" id="grant-app-tab-pane" role="tabpanel" aria-labelledby="grant-app-tab" tabindex="2">
-                                            <StudentEditGrantAppTab v-if="activeTab==='grant-app'" :utils="$attrs.utils" :twpStudentId="activeApp.student_id" :result="activeApp.grants" :toTitleCase="toTitleCase"></StudentEditGrantAppTab>
+                                            <StudentEditGrantAppTab v-if="activeTab==='grant-app'" :utils="utils" :twpStudentId="activeApp.student_id" :result="activeApp.grants" :toTitleCase="toTitleCase"></StudentEditGrantAppTab>
                                         </div>
                                         <div class="tab-pane fade" :class="activeTab==='program' ? 'active show':''" id="program-tab-pane" role="tabpanel" aria-labelledby="program-tab" tabindex="3">
-                                            <StudentEditProgramTab v-if="activeTab==='program'" :utils="$attrs.utils" :twpStudentId="activeApp.student_id" :twpApplicationId="activeApp.id" :result="activeApp.program" :schools="schools"></StudentEditProgramTab>
+                                            <StudentEditProgramTab v-if="activeTab==='program'" :utils="utils" :twpStudentId="activeApp.student_id" :twpApplicationId="activeApp.id" :result="activeApp.program" :schools="schools"></StudentEditProgramTab>
                                         </div>
                                         <div v-if="activeApp.program != null" class="tab-pane fade" :class="activeTab==='payments' ? 'active show':''" id="payments-tab-pane" role="tabpanel" aria-labelledby="payments-tab" tabindex="4">
-                                            <StudentEditPaymentTab v-if="activeTab==='payments'" :utils="$attrs.utils" :twpStudentId="activeApp.student_id" :pTypes="p_types" :result="activeApp.payments" :program="activeApp.program"></StudentEditPaymentTab>
+                                            <StudentEditPaymentTab v-if="activeTab==='payments'" :utils="utils" :twpStudentId="activeApp.student_id" :pTypes="p_types" :result="activeApp.payments" :program="activeApp.program"></StudentEditPaymentTab>
                                         </div>
                                     </div>
 
@@ -130,7 +130,7 @@
                                         <div class="col-md-4">
                                             <BreezeLabel for="inputApplicationStatus" class="form-label" value="Application Status" />
                                             <BreezeSelect class="form-select" id="inputApplicationStatus" v-model="newTwpForm.application_status">
-                                                <option v-for="status in $attrs.utils['Application Status']" :key="status.id" :value="status.field_name">
+                                                <option v-for="status in utils['Application Status']" :key="status.id" :value="status.field_name">
                                                     {{ toTitleCase(status.field_name) }}
                                                 </option>
                                             </BreezeSelect>
@@ -181,7 +181,7 @@
                                         <div class="col-md-4">
                                             <BreezeLabel for="inputApplicationStatus" class="form-label" value="Application Status" />
                                             <BreezeSelect class="form-select" id="inputApplicationStatus" v-model="newGrantForm.grant_status">
-                                                <option v-for="status in $attrs.utils['Application Status']" :key="status.id" :value="status.field_name">
+                                                <option v-for="status in (utils?.['Application Status'] || [])" :key="status.id" :value="status.field_name">
                                                     {{ toTitleCase(status.field_name) }}
                                                 </option>
                                             </BreezeSelect>
@@ -277,7 +277,7 @@
 <script>
 
 import BreezeAuthenticatedLayout from '../Layouts/Authenticated.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import {Head, Link, useForm, usePage} from '@inertiajs/vue3';
 import StudentEditStudentTab from "../Components/StudentEditStudentTab.vue";
 import StudentEditProgramTab from "../Components/StudentEditProgramTab.vue";
 import StudentEditTwpAppTab from "../Components/StudentEditTwpAppTab.vue";
@@ -287,6 +287,7 @@ import BreezeInput from '@/Components/Input.vue';
 import BreezeLabel from '@/Components/Label.vue';
 import BreezeSelect from "@/Components/Select";
 import FormSubmitAlert from "@/Components/FormSubmitAlert";
+import {computed} from "vue";
 
 export default {
     name: 'StudentEdit',
@@ -361,6 +362,15 @@ export default {
             }),
             lettersEnabled: false,
         }
+    },
+    setup() {
+        const page = usePage();
+        const utils = computed(() => page.props.utils || {});
+
+        return {
+            page,
+            utils
+        };
     },
     methods: {
         toTitleCase(str) {

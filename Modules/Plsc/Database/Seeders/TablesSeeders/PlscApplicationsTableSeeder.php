@@ -38,12 +38,20 @@ class PlscApplicationsTableSeeder extends Seeder
                     'parent_department_id' => $faker->bothify('DEPT###'),
                     'parent_address' => $faker->streetAddress,
                     'parent_city' => substr($faker->city, 0, 40),
-                    'parent_province' => substr($faker->state, 0, 40),
+                    'parent_province' => $faker->randomElement([
+                        'Alberta', 'British Columbia', 'Manitoba', 'New Brunswick',
+                        'Newfoundland and Labrador', 'Nova Scotia', 'Ontario',
+                        'Prince Edward Island', 'Quebec', 'Saskatchewan'
+                    ]),
                     'parent_postal_code' => substr($faker->postcode, 0, 7),
                     'parent_phone_number' => substr($faker->phoneNumber, 0, 15),
                     'parent_email' => $faker->safeEmail,
                     'parent_ministry' => $faker->company,
-                    'parent_branch' => $faker->bs,
+                    'parent_branch' => $faker->randomElement([
+                        'Policy and Planning', 'Operations Division', 'Finance Branch',
+                        'Human Resources', 'Communications', 'Legal Services',
+                        'Strategic Planning', 'Program Delivery', 'Corporate Services'
+                    ]),
                     'parent_job_title' => substr($faker->jobTitle, 0, 40),
                     'parent_three_years_in_gov' => $faker->boolean(80),
                     'high_school_average' => $faker->numberBetween(60, 100) . '%',

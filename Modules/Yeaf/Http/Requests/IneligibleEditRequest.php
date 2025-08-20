@@ -2,6 +2,7 @@
 
 namespace Modules\Yeaf\Http\Requests;
 
+use Override;
 use Illuminate\Foundation\Http\FormRequest;
 
 class IneligibleEditRequest extends FormRequest
@@ -11,18 +12,17 @@ class IneligibleEditRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
-    {
+    public function authorize(): bool {
         return true;
     }
 
     /**
      * Get the error messages for the defined validation rules.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function messages()
-    {
+    #[Override]
+    public function messages(): array {
         return [
             'code_id.required' => 'Code ID field is required.',
             'code_id.unique' => 'The provided Code ID is already in-use.',
@@ -36,10 +36,9 @@ class IneligibleEditRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function rules()
-    {
+    public function rules(): array {
         return [
             'code_id' => 'required|unique:'.env('DB_DATABASE_YEAF').'.ineligibles,code_id,'.$this->id,
             'active_flag' => 'required|boolean',
@@ -54,8 +53,8 @@ class IneligibleEditRequest extends FormRequest
      *
      * @return void
      */
-    protected function prepareForValidation()
-    {
+    #[Override]
+    protected function prepareForValidation(): void {
         $this->merge(['active_flag' => $this->toBoolean($this->active_flag)]);
     }
 
@@ -64,8 +63,7 @@ class IneligibleEditRequest extends FormRequest
      *
      * @return bool
      */
-    private function toBoolean($booleable)
-    {
+    private function toBoolean(mixed $booleable): bool {
         return filter_var($booleable, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
     }
 }

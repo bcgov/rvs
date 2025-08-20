@@ -2,6 +2,7 @@
 
 namespace Modules\Vss\Http\Requests;
 
+use Override;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ReferralSourceStoreRequest extends FormRequest
@@ -11,18 +12,17 @@ class ReferralSourceStoreRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
-    {
+    public function authorize(): bool {
         return true;
     }
 
     /**
      * Get the error messages for the defined validation rules.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function messages()
-    {
+    #[Override]
+    public function messages(): array {
         return [
             'referral_code.required' => 'Referral Source Code field is required.',
             'referral_code.unique' => 'Referral Source Code is already in use.',
@@ -34,10 +34,9 @@ class ReferralSourceStoreRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function rules()
-    {
+    public function rules(): array {
         $referral_code_rule = 'required|unique:'.env('DB_DATABASE_VSS').'.referral_sources,referral_code';
         if (isset($this->id)) {
             $referral_code_rule = 'required|unique:'.env('DB_DATABASE_VSS').'.referral_sources,referral_code,'.$this->id.',id';
@@ -54,7 +53,7 @@ class ReferralSourceStoreRequest extends FormRequest
      *
      * @return void
      */
-    protected function prepareForValidation()
-    {
+    #[Override]
+    protected function prepareForValidation(): void {
     }
 }

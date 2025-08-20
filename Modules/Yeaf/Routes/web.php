@@ -11,13 +11,13 @@
 |
 */
 
-Route::prefix('yeaf')->group(function () {
+Route::prefix('yeaf')->group(function (): void {
     Route::get('/maintenance/reports/{type}', 'ReportController@index')->name('reports.type');
     Route::group(
         [
             'middleware' => ['auth', 'yeaf_active'],
             'as' => 'yeaf.',
-        ], function () {
+        ], function (): void {
 
             Route::resource('students', 'StudentController');
             Route::resource('institutions', 'InstitutionController');
@@ -27,7 +27,7 @@ Route::prefix('yeaf')->group(function () {
                 [
                     'prefix' => 'grants',
                     'as' => 'grants.',
-                ], function () {
+                ], function (): void {
                     Route::get('/validate-letter/{grant}', 'GrantController@validateLetter')->name('validate-letter');
                     Route::get('/export-letter/{grant}/{docName?}', 'GrantController@exportLetter')->name('export-letter');
                     Route::get('/export-withdrawal-letter/{grant}/{docName?}', 'GrantController@exportWithdrawalLetter')->name('export-withdrawal-letter');
@@ -40,7 +40,7 @@ Route::prefix('yeaf')->group(function () {
                     'prefix' => 'maintenance',
                     'middleware' => 'yeaf_admin',
                     'as' => 'maintenance.',
-                ], function () {
+                ], function (): void {
                     Route::get('/staff', 'MaintenanceController@staffList')->name('staff.list');
                     Route::get('/staff/{user}', 'MaintenanceController@staffShow')->name('staff.show');
                     Route::post('/staff/{user}', 'MaintenanceController@staffEdit')->name('staff.edit');

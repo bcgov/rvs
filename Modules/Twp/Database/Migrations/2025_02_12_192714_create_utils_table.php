@@ -11,7 +11,7 @@ return new class extends Migration {
      */
     public function up(): void {
         Schema::connection(env('DB_DATABASE_TWP'))
-            ->create('utils', function (Blueprint $table) {
+            ->create('utils', function (Blueprint $table): void {
                 $table->id();
                 $table->string('field_name');
                 $table->string('field_type');

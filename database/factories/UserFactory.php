@@ -2,10 +2,14 @@
 
 namespace Database\Factories;
 
+use Override;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
+/**
+ * @extends Factory<User>
+ */
 class UserFactory extends Factory
 {
     protected $model = User::class;
@@ -15,23 +19,24 @@ class UserFactory extends Factory
      *
      * @return array
      */
+    #[Override]
     public function definition()
     {
         return [
-            'user_id' => $this->faker->unique()->userName,
-            'first_name' => $this->faker->firstName,
-            'last_name' => $this->faker->lastName,
-            'disabled' => $this->faker->boolean,
-            'tele' => $this->faker->phoneNumber,
-            'email' => $this->faker->unique()->safeEmail,
-            'password' => $this->faker->password,
-            'idir_user_guid' => $this->faker->uuid,
+            'user_id' => fake()->unique()->userName,
+            'first_name' => fake()->firstName,
+            'last_name' => fake()->lastName,
+            'disabled' => fake()->boolean,
+            'tele' => fake()->phoneNumber,
+            'email' => fake()->unique()->safeEmail,
+            'password' => fake()->password,
+            'idir_user_guid' => fake()->uuid,
             'remember_token' => Str::random(10),
-            'deleted_at' => $this->faker->optional()->dateTimeThisYear,
-            'created_at' => $this->faker->dateTimeThisYear,
-            'updated_at' => $this->faker->dateTimeThisYear,
-            'start_date' => $this->faker->date(),
-            'end_date' => $this->faker->optional()->date(),
+            'deleted_at' => fake()->optional()->dateTimeThisYear,
+            'created_at' => fake()->dateTimeThisYear,
+            'updated_at' => fake()->dateTimeThisYear,
+            'start_date' => fake()->date(),
+            'end_date' => fake()->optional()->date(),
         ];
     }
 }

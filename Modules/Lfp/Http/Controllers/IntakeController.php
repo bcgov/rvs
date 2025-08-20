@@ -4,11 +4,14 @@ namespace Modules\Lfp\Http\Controllers;
 
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use Inertia\Response;
 use Modules\Lfp\Entities\Intake;
 use Modules\Lfp\Entities\Util;
 use Modules\Lfp\Http\Requests\IntakeEditRequest;
@@ -18,10 +21,9 @@ class IntakeController extends Controller
 {
     /**
      * Display a listing of the resource.
-     * @return \Inertia\Response
+     * @return Response
      */
-    public function index()
-    {
+    public function index(): Response {
         $intakes = $this->paginateIntakes();
 
         return Inertia::render('Lfp::Intakes', ['page' => 'intakes', 'results' => $intakes]);
@@ -29,10 +31,9 @@ class IntakeController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     * @return \Inertia\Response
+     * @return Response
      */
-    public function create()
-    {
+    public function create(): Response {
         $utils_array = [];
         $utils = Util::whereIn('field_type', ['Profession', 'Employer', 'Community', 'Employment Status'])
             ->where('active_flag', true)->orderBy('field_name', 'asc')->get();
@@ -45,11 +46,12 @@ class IntakeController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     * @param Request $request
-     * @return \Inertia\Response
+     *
+     * @param IntakeStoreRequest $request
+     *
+     * @return Response
      */
-    public function store(IntakeStoreRequest $request)
-    {
+    public function store(IntakeStoreRequest $request): Response {
         $intake = Intake::create($request->validated());
         $intakes = $this->paginateIntakes();
 
@@ -59,10 +61,9 @@ class IntakeController extends Controller
     /**
      * Show the specified resource.
      * @param Intake $intake
-     * @return \Inertia\Response
+     * @return Response
      */
-    public function show(Intake $intake)
-    {
+    public function show(Intake $intake): Response {
         //$intake = Intake::where('id', $intake->id)->first();
         $utils_array = [];
         $utils = Util::whereIn('field_type', ['Profession', 'Employer', 'Community', 'Employment Status', 'Remove Reason'])
@@ -78,18 +79,22 @@ class IntakeController extends Controller
 
     /**
      * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return \Illuminate\Http\RedirectResponse
+     *
+     * @param IntakeEditRequest $request
+     * @param Intake $intake
+     *
+     * @return RedirectResponse
      */
-    public function update(IntakeEditRequest $request, Intake $intake)
-    {
+    public function update(IntakeEditRequest $request, Intake $intake): RedirectResponse {
         Intake::where('id', $intake->id)->update($request->validated());
 
         return Redirect::route('lfp.intakes.show', [$intake->id]);
     }
 
-    private function paginateIntakes()
+    /**
+     * @return LengthAwarePaginator<Intake>
+     */
+    private function paginateIntakes(): LengthAwarePaginator
     {
         $intakes = new Intake();
 
@@ -115,5 +120,59 @@ class IntakeController extends Controller
         }
 
         return $intakes->paginate(25)->onEachSide(1)->appends(request()->query());
+    }
+  
+    /* Export intake applications.
+     * @return \Symfony\Component\HttpFoundation\StreamedResponse
+     */
+    public function export(Request $request, $filterType = 'All')
+    {
+        if($filterType !== 'All') {
+            $intakes = Intake::where('intake_status', $filterType)->get();
+        } else {
+            $intakes = Intake::all();
+        }
+
+
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="intakes.csv"',
+        ];
+
+        $callback = function() use ($intakes) {
+            $file = fopen('php://output', 'w');
+            // Add CSV header
+            // All the columns from the intake model
+            $header = ['First Name', 'Last Name', 'Profession', 'Employer', 'Employment Status', 'Community', 'Repayment Status',
+                'In Good Standing', 'Repayment Start Date', 'Amount Owing', 'Intake Status', 'Receive Date', 'Comment',
+                'Proposed Registration Date', 'Denial Reason', 'App Index', 'Alias Name'];
+            fputcsv($file, $header);
+
+            foreach ($intakes as $intake) {
+                fputcsv($file, [
+                    $intake->first_name,
+                    $intake->last_name,
+                    $intake->profession,
+                    $intake->employer,
+                    $intake->employment_status,
+                    $intake->community,
+                    $intake->repayment_status,
+                    $intake->in_good_standing,
+                    $intake->repayment_start_date,
+                    $intake->amount_owing,
+                    $intake->intake_status,
+                    $intake->receive_date,
+                    $intake->comment,
+                    $intake->proposed_registration_date,
+                    $intake->denial_reason,
+                    $intake->app_idx,
+                    $intake->alias_name,
+                ]);
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 }

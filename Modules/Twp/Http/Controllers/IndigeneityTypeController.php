@@ -2,19 +2,24 @@
 
 namespace Modules\Twp\Http\Controllers;
 
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 use Modules\Twp\Entities\IndigeneityType;
 use Illuminate\Support\Facades\Redirect;
 
 class IndigeneityTypeController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response::render
+     * @return Response
+     * @throws AuthorizationException
      */
-    public function index(): \Inertia\Response
+    public function index(): Response
     {
         $this->authorize('viewAny', IndigeneityType::class);
         $indigeneityTypes = IndigeneityType::get();
@@ -24,11 +29,13 @@ class IndigeneityTypeController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\Request  $request
-     * @param  IndigeneityType  $indigeneityType
-     * @return \Illuminate\Http\RedirectResponse::render
+     * @param \App\Http\Requests\Request $request
+     * @param IndigeneityType $indigeneity
+     *
+     * @return RedirectResponse
+     * @throws AuthorizationException
      */
-    public function update(Request $request, IndigeneityType $indigeneity): \Illuminate\Http\RedirectResponse
+    public function update(Request $request, IndigeneityType $indigeneity): RedirectResponse
     {
         $this->authorize('update', IndigeneityType::class);
         $indigeneity->title = $request->title;
@@ -40,10 +47,11 @@ class IndigeneityTypeController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @return \Illuminate\Http\RedirectResponse::render
+     * @param Request $request
+     * @return RedirectResponse
+     * @throws AuthorizationException
      */
-    public function store(Request $request): \Illuminate\Http\RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         $this->authorize('create', IndigeneityType::class);
         IndigeneityType::create($request->all());

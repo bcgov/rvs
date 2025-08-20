@@ -3,8 +3,12 @@
 namespace Modules\Yeaf\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use Inertia\Response;
 use Modules\Yeaf\Entities\Batch;
 use Modules\Yeaf\Entities\Country;
 use Modules\Yeaf\Entities\Ineligible;
@@ -21,10 +25,9 @@ class StudentController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response
+     * @return Response
      */
-    public function index()
-    {
+    public function index(): Response {
         $students = $this->paginateStudents();
         [$countries, $provinces] = $this->getCountriesProvinces();
 
@@ -34,10 +37,9 @@ class StudentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @return \Inertia\Response
+     * @return Response
      */
-    public function store(StudentStoreRequest $request)
-    {
+    public function store(StudentStoreRequest $request): Response {
         $student = Student::create($request->validated());
         $students = $this->paginateStudents();
         [$countries, $provinces] = $this->getCountriesProvinces();
@@ -48,10 +50,9 @@ class StudentController extends Controller
     /**
      * Display the specified resource.
      *
-     * @return \Inertia\Response
+     * @return Response
      */
-    public function show(Student $student)
-    {
+    public function show(Student $student): Response {
         $student = Student::where('id', $student->id)->with('grants.school', 'grants.grantPendingIneligibles', 'grants.grantDeniedIneligibles', 'grants.appeals', 'comments')->first();
         $countries = Country::orderBy('country_code', 'asc')->get();
         $provinces = Province::orderBy('province_code', 'asc')->get();
@@ -78,16 +79,18 @@ class StudentController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function update(StudentUpdateRequest $request, Student $student)
-    {
+    public function update(StudentUpdateRequest $request, Student $student): RedirectResponse {
         Student::where('id', $student->id)->update($request->validated());
 
         return Redirect::route('yeaf.students.show', [$student->id]);
     }
 
-    private function paginateStudents()
+    /**
+     * @return LengthAwarePaginator<Student>
+     */
+    private function paginateStudents(): LengthAwarePaginator
     {
         if (request()->sort !== null) {
             $students = Student::orderBy(request()->sort, request()->direction);
@@ -108,8 +111,10 @@ class StudentController extends Controller
         return $students->paginate(25)->onEachSide(1)->appends(request()->query());
     }
 
-    private function getCountriesProvinces()
-    {
+    /**
+     * @return array{0: Collection<int, Country>, 1: Collection<int, Province>}
+     */
+    private function getCountriesProvinces(): array {
         return [Country::orderBy('country_code', 'asc')->get(), Province::orderBy('province_code', 'asc')->get()];
     }
 }

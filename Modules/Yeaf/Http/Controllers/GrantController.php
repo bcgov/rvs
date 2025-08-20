@@ -2,13 +2,16 @@
 
 namespace Modules\Yeaf\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
+use Barryvdh\DomPDF\Facade\Pdf;
 use DateTime;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
-use Inertia\Inertia;
+use Inertia\Response;
+use Illuminate\Http\Response as HttpResponse;
 use Modules\Yeaf\Entities\Admin;
 use Modules\Yeaf\Entities\Appeal;
 use Modules\Yeaf\Entities\Grant;
@@ -16,31 +19,15 @@ use Modules\Yeaf\Entities\GrantIneligible;
 use Modules\Yeaf\Entities\Student;
 use Modules\Yeaf\Http\Requests\GrantEditRequest;
 use Modules\Yeaf\Http\Requests\GrantStoreRequest;
-use PDF;
-use Response;
 
 class GrantController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Inertia\Response
-     */
-    public function index()
-    {
-        $grants = new Grant();
-        $grants = $this->paginateGrants($grants);
-
-        return Inertia::render('Yeaf::Grants', ['status' => true, 'results' => $grants]);
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function store(GrantStoreRequest $request)
-    {
+    public function store(GrantStoreRequest $request): RedirectResponse {
         $grant = Grant::create($request->validated());
         $student = Student::where('student_id', $grant->student_id)->first();
 
@@ -50,10 +37,12 @@ class GrantController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @return \Illuminate\Http\Response
+     * @param GrantEditRequest $request
+     * @param Grant $grant
+     *
+     * @return Grant
      */
-    public function update(GrantEditRequest $request, Grant $grant)
-    {
+    public function update(GrantEditRequest $request, Grant $grant): Grant {
         $grant = Grant::find($grant->id);
         $grant->institution_id = $request->institution_id;
         $grant->program_name = $request->program_name;
@@ -90,10 +79,11 @@ class GrantController extends Controller
     /**
      * validate to export or to show errors on letter export request.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @param Grant $grant
+     *
+     * @return JsonResponse
      */
-    public function validateLetter(Request $request, Grant $grant)
-    {
+    public function validateLetter(Grant $grant): JsonResponse {
         $msg = '';
         $stDocname = null;
 
@@ -129,17 +119,18 @@ class GrantController extends Controller
             }
         }
 
-        return Response::json(['status' => true, 'msg' => $msg, 'docName' => $stDocname]);
+        return response()->json(['status' => true, 'msg' => $msg, 'docName' => $stDocname]);
     }
 
     /**
      * validate to export or to show errors on letter export request.
      *
-     * @param  null  $docName
-     * @return \Illuminate\Http\RedirectResponse
+     * @param Grant $grant
+     * @param null $docName
+     *
+     * @return \Illuminate\Http\Response
      */
-    public function exportLetter(Grant $grant, $docName = null)
-    {
+    public function exportLetter(Grant $grant, $docName = null): HttpResponse {
         if (! is_null($docName)) {
             $doc = $docName;
             $admin = Admin::first();
@@ -150,24 +141,28 @@ class GrantController extends Controller
             $user = Auth::user();
             $pdf = PDF::loadView('yeaf::pdf', compact('grant', 'admin', 'user', 'doc', 'student', 'officer', 'now_d', 'now_t'));
 
-            $file_name = $student->first_name.'-'.$student->last_name.'-'.match ($grant->status_code) {
-                'A' => 'approval-letter',
-                'D' => 'denial-letter',
-                'P' => 'pending-letter',
-            };
+            $file_name = $student->first_name . '-' . $student->last_name . '-' . match ($grant->status_code) {
+                    'A' => 'approval-letter',
+                    'D' => 'denial-letter',
+                    'P' => 'pending-letter',
+                    NULL => 'unknown-letter',
+                    default => 'general-letter',
+                };
 
             return $pdf->download($file_name.'.pdf');
         }
+
+        abort(400, 'Document name is required');
     }
 
     /**
      * validate to export or to show errors on letter export request.
      *
      * @param  null  $docName
-     * @return \Illuminate\Http\RedirectResponse
+     *
+     * @return \Illuminate\Http\Response
      */
-    public function exportWithdrawalLetter(Grant $grant, $docName = null)
-    {
+    public function exportWithdrawalLetter(Grant $grant, $docName = NULL): HttpResponse {
         if (! is_null($docName)) {
             $doc = $docName;
             $admin = Admin::first();
@@ -182,25 +177,26 @@ class GrantController extends Controller
 
             return $pdf->download($file_name.'.pdf');
         }
+
+        abort(400, 'Document name is required');
     }
 
     /**
      * update and evaluate a grant.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return JsonResponse
      */
-    public function evaluateApp(GrantEditRequest $request, Grant $grant)
-    {
+    public function evaluateApp(GrantEditRequest $request, Grant $grant): JsonResponse {
         $grant = $this->update($request, $grant);
         $this->updatePendingIneligibles($grant, $request);
         $this->updateDeniedIneligibles($grant, $request);
         $this->updateAppeals($grant, $request);
 
-        $this->clearFlags($request, $grant);
+        $this->clearFlags($grant);
 
         $overall_app_ineligible = false;
         $overall_messages = [];
-        [$msg, $app_ineligible, $appeal_status, $age] = $this->checkAge(true, true, $grant);
+        [$msg, $app_ineligible, $appeal_status, $age] = $this->checkAge(true, $grant);
         $grant->age = $age;
         $grant->save();
         $grant = Grant::find($grant->id);
@@ -220,21 +216,31 @@ class GrantController extends Controller
         $grant = Grant::find($grant->id);
         $msg = $this->setStatus($grant);
         if ($msg != '') {
-            if (! is_null($msg)) {
-                $overall_messages[] = $msg;
-            }
+            $overall_messages[] = $msg;
         }
         $grant = Grant::find($grant->id);
         $return_grant = Grant::where('id', $grant->id)->with('school', 'grantPendingIneligibles', 'grantDeniedIneligibles', 'appeals')->first();
 
-        return Response::json(['status' => true, 'msg' => $overall_messages, 'app_ineligible' => $overall_app_ineligible,
+        return response()->json(['status' => true, 'msg' => $overall_messages, 'app_ineligible' => $overall_app_ineligible,
             'appeal_status' => $appeal_status, 'grant' => $return_grant, ]);
     }
 
-    private function getOverallMsgAndIneligible($msg, $app_ineligible, &$overall_messages, $overall_app_ineligible)
+    /**
+     * Aggregates a message and ineligibility status into the overall results.
+     *
+     * If the provided message is not empty and not already present in the overall_messages array,
+     * it is added to the array. If the application is ineligible, the overall_app_ineligible flag is set to true.
+     *
+     * @param string $msg The message to aggregate.
+     * @param bool $app_ineligible Whether the current check found the application ineligible.
+     * @param array<string, string> $overall_messages Reference to the array of all messages collected so far.
+     * @param bool $overall_app_ineligible Reference to the overall ineligibility flag.
+     * @return bool The updated overall ineligibility flag.
+     */
+    private function getOverallMsgAndIneligible(string $msg, bool $app_ineligible, array &$overall_messages, bool $overall_app_ineligible): bool
     {
         if ($msg != '' || $app_ineligible == true) {
-            if (! is_null($msg) && ! in_array($msg, $overall_messages)) {
+            if (!in_array($msg, $overall_messages)) {
                 $overall_messages[] = $msg;
             }
             if ($app_ineligible == true) {
@@ -245,8 +251,7 @@ class GrantController extends Controller
         return $overall_app_ineligible;
     }
 
-    private function updatePendingIneligibles(Grant $grant, $request)
-    {
+    private function updatePendingIneligibles(Grant $grant, GrantEditRequest $request): void {
         //update existing records
         if (isset($request->grant_pending_ineligibles)) {
             foreach ($request->grant_pending_ineligibles as $pending) {
@@ -279,11 +284,9 @@ class GrantController extends Controller
             }
         }
 
-        return null;
     }
 
-    private function updateDeniedIneligibles(Grant $grant, $request)
-    {
+    private function updateDeniedIneligibles(Grant $grant, GrantEditRequest $request): void {
         //update existing records
         if (isset($request->grant_denied_ineligibles)) {
             foreach ($request->grant_denied_ineligibles as $denied) {
@@ -313,11 +316,9 @@ class GrantController extends Controller
             }
         }
 
-        return null;
     }
 
-    private function updateAppeals(Grant $grant, $request)
-    {
+    private function updateAppeals(Grant $grant, GrantEditRequest $request): void {
         //update existing records
         if (isset($request->appeals)) {
             foreach ($request->input('appeals') as $appeal) {
@@ -341,7 +342,7 @@ class GrantController extends Controller
                     $grant_appeal = new Appeal();
                     $grant_appeal->grant_id = $grant->grant_id;
                     $grant_appeal->appeal_id = $last_appeal_id->appeal_id + 1;
-                    $grant_appeal->student_id = $grant->student_id;
+                    $grant_appeal->student_id = (string) $grant->student_id;
                     $grant_appeal->program_year_id = $grant->program_year_id;
                     $grant_appeal->adjudicated_by_user_id = $appeal->adjudicated_by_user_id;
                     $grant_appeal->updated_by_user_id = Str::upper(Auth::user()->user_id);
@@ -355,14 +356,13 @@ class GrantController extends Controller
             }
         }
 
-        return null;
     }
 
-    private function setStatus(Grant $grant)
-    {
-        $record = Grant::select('grant_id')->withCount(['grantIneligibles as PendingCnt' => function ($query) {
+    private function setStatus(Grant $grant): string {
+        /** @var (Grant&object{DeniedCnt: int, PendingCnt: int})|null $record */
+        $record = Grant::select('grant_id')->withCount(['grantIneligibles as PendingCnt' => function ($query): void {
             $query->where('ineligible_code_type', 'P')->where('cleared_flag', false);
-        }], 'ineligible_code_type')->withCount(['grantIneligibles as DeniedCnt' => function ($query) {
+        }], 'ineligible_code_type')->withCount(['grantIneligibles as DeniedCnt' => function ($query): void {
             $query->where('ineligible_code_type', 'D')->where('cleared_flag', false);
         }], 'id')->where('grant_id', $grant->grant_id)->groupBy('grant_id')->orderBy('grant_id', 'ASC')->first();
 
@@ -389,8 +389,19 @@ class GrantController extends Controller
         return $msg;
     }
 
-    private function checkProgramYear($messageFlag, $createIneligibleFlag, Grant $grant, $msg = '', $app_ineligible = false)
-    {
+    /**
+     * Checks if the student has other grant applications with awards for the same program year.
+     *
+     * If such applications exist, optionally adds an ineligible reason and/or message.
+     *
+     * @param bool $messageFlag Whether to add a message if a duplicate is found.
+     * @param bool $createIneligibleFlag Whether to add an ineligible reason if a duplicate is found.
+     * @param Grant $grant The grant being evaluated.
+     * @param string $msg The current message string (optional).
+     * @param bool $app_ineligible The current ineligibility flag (optional).
+     * @return array{0: string, 1: bool} Updated message and ineligibility flag.
+     */
+    private function checkProgramYear(bool $messageFlag, bool $createIneligibleFlag, Grant $grant, string $msg = '', bool $app_ineligible = false): array {
         //if existing app start date is greater than this end date or existing app end date is less than this start date,
         //then this app is okay, otherwise it overlaps an existing app
         $same_program_year = Grant::where('student_id', $grant->student_id)
@@ -411,8 +422,20 @@ class GrantController extends Controller
         return [$msg, $app_ineligible];
     }
 
-    private function datewatch($messageFlag, $createIneligibleFlag, Grant $grant, $msg = '', $app_ineligible = false)
-    {
+    /**
+     * Checks for program period overlaps and minimum program length for a grant application.
+     *
+     * If the program period is less than 6 weeks, or if there are overlapping program periods with other awarded applications,
+     * optionally adds an ineligible reason and/or message.
+     *
+     * @param bool $messageFlag Whether to add a message if an issue is found.
+     * @param bool $createIneligibleFlag Whether to add an ineligible reason if an issue is found.
+     * @param Grant $grant The grant being evaluated.
+     * @param string $msg The current message string (optional).
+     * @param bool $app_ineligible The current ineligibility flag (optional).
+     * @return array{0: string, 1: bool} Updated message and ineligibility flag.
+     */
+    private function datewatch(bool $messageFlag, bool $createIneligibleFlag, Grant $grant, string $msg = '', bool $app_ineligible = false): array {
         $date1 = '';
         $date2 = '';
         $dateprogram = 0;
@@ -453,8 +476,20 @@ class GrantController extends Controller
         return [$msg, $app_ineligible];
     }
 
-    private function checkMaxYears($messageFlag, $createIneligibleFlag, Grant $grant, $msg = '', $app_ineligible = false)
-    {
+    /**
+     * Checks if the student has exceeded the maximum allowed years of funding for the program.
+     *
+     * If the student has received funding for as many or more years than allowed, optionally adds an ineligible reason and/or message.
+     * If a previously cleared ineligible reason exists for max years, the message and ineligibility flag are reset.
+     *
+     * @param bool $messageFlag Whether to add a message if the max years is exceeded.
+     * @param bool $createIneligibleFlag Whether to add an ineligible reason if the max years is exceeded.
+     * @param Grant $grant The grant being evaluated.
+     * @param string $msg The current message string (optional).
+     * @param bool $app_ineligible The current ineligibility flag (optional).
+     * @return array{0: string, 1: bool} Updated message and ineligibility flag.
+     */
+    private function checkMaxYears(bool $messageFlag, bool $createIneligibleFlag, Grant $grant, string $msg = '', bool $app_ineligible = false): array {
         $results = Student::select('program_year_id')
             ->join('grants', 'students.student_id', '=', 'grants.student_id')
             ->where('total_yeaf_award', '>', 0)
@@ -463,7 +498,7 @@ class GrantController extends Controller
             ->groupBy('program_year_id')
             ->get();
 
-        if (! is_null($results) && count($results) >= $grant->py->max_years_allowed) {
+        if (count($results) >= $grant->py->max_years_allowed) {
             if ($messageFlag) {
                 $msg = 'This student has received funding for '.count($results).'.';
             }
@@ -484,8 +519,7 @@ class GrantController extends Controller
         return [$msg, $app_ineligible];
     }
 
-    private function clearFlags(Request $request, Grant $grant)
-    {
+    private function clearFlags(Grant $grant): void {
         $grantIneligibles = GrantIneligible::where('grant_id', $grant->id)->where('created_by', 'ilike', 'SYS:%')->get();
         foreach ($grantIneligibles as $g) {
             $g->cleared_flag = true;
@@ -493,8 +527,17 @@ class GrantController extends Controller
         }
     }
 
-    private function checkAge($messageFlag, $createIneligibleFlag, Grant $grant)
-    {
+    /**
+     * Checks if the student's age is within the allowed range for the program year and handles age-related appeals.
+     *
+     * If the student's age is outside the allowed range, checks for an age-related appeal and its status.
+     * Optionally adds an ineligible reason and/or message if the age is not within range and no approved appeal exists.
+     *
+     * @param bool $createIneligibleFlag Whether to add an ineligible reason if the age is not within range and no approved appeal exists.
+     * @param Grant $grant The grant being evaluated.
+     * @return array{0: string, 1: bool, 2: string|null, 3: int} Message, ineligibility flag, appeal status, and calculated age.
+     */
+    private function checkAge(bool $createIneligibleFlag, Grant $grant): array {
         $age_within_range = null;
         $appeal_status = null;
         $app_ineligible = false;
@@ -530,6 +573,7 @@ class GrantController extends Controller
                     //                    'A' => 'Approved',
                     'P' => 'Pending',
                     'D' => 'Denied',
+                    default => 'Unknown'
                 };
             }
         }
@@ -537,8 +581,7 @@ class GrantController extends Controller
         return [$msg, $app_ineligible, $appeal_status, $age];
     }
 
-    private function ageCalc(Grant $grant)
-    {
+    private function ageCalc(Grant $grant): int {
         $yDate = new DateTime(date('Ymd', strtotime('now')));
         if (! is_null($grant->study_start_date)) {
             $yDate = new DateTime(date('Ymd', strtotime($grant->study_start_date)));
@@ -550,8 +593,7 @@ class GrantController extends Controller
 
     }
 
-    private function addIneligibleReason(Grant $grant, $ineligible_code_id)
-    {
+    private function addIneligibleReason(Grant $grant, string $ineligible_code_id): void {
         $grant_ineligibles = GrantIneligible::where('grant_id', $grant->grant_id)
             ->where('ineligible_code_id', $ineligible_code_id)
             ->first();
@@ -560,8 +602,7 @@ class GrantController extends Controller
         }
     }
 
-    private function createGrantIneligible(Grant $grant, $ineligible_code_id, $ineligible_code_type)
-    {
+    private function createGrantIneligible(Grant $grant, string $ineligible_code_id, string $ineligible_code_type): void {
         $check = GrantIneligible::where(['grant_id' => $grant->grant_id, 'ineligible_code_id' => $ineligible_code_id,
             'ineligible_code_type' => $ineligible_code_type, ])->first();
 

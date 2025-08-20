@@ -2,6 +2,7 @@
 
 namespace Modules\Plsc\Http\Requests;
 
+use Override;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ApplicationEditRequest extends FormRequest
@@ -11,18 +12,17 @@ class ApplicationEditRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
-    {
+    public function authorize(): bool {
         return true;
     }
 
     /**
      * Get the error messages for the defined validation rules.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function messages()
-    {
+    #[Override]
+    public function messages(): array {
         return [
             'id.*' => 'Application is missing fields.',
             'student_id.*' => 'Student field is not valid.',
@@ -38,10 +38,9 @@ class ApplicationEditRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function rules()
-    {
+    public function rules(): array {
         return [
             'id' => 'required',
             'student_id' => 'required',
@@ -72,7 +71,7 @@ class ApplicationEditRequest extends FormRequest
      *
      * @return void
      */
-    protected function prepareForValidation()
-    {
+    #[Override]
+    protected function prepareForValidation(): void {
     }
 }

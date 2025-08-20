@@ -43,7 +43,7 @@
 </template>
 <script>
 
-import {Inertia} from "@inertiajs/inertia";
+import { router } from '@inertiajs/vue3';
 
 export default {
     name: 'StudentsHeader',
@@ -88,7 +88,7 @@ export default {
                 }
             });
 
-            Inertia.get(/yeaf/ + this.path, data, {
+            router.get(/yeaf/ + this.path, data, {
                 preserveState: true
             });
 

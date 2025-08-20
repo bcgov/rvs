@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         if (! Schema::connection(env('DB_DATABASE_YEAF'))->hasTable('ineligibles')) {
-            Schema::connection(env('DB_DATABASE_YEAF'))->create('ineligibles', function (Blueprint $table) {
+            Schema::connection(env('DB_DATABASE_YEAF'))->create('ineligibles', function (Blueprint $table): void {
                 $table->id();
                 $table->string('code_id', 2);
                 $table->string('description')->nullable();

@@ -51,7 +51,7 @@
 </template>
 <script>
 import BreezeSelect from "@/Components/Select";
-import {Inertia} from "@inertiajs/inertia";
+import { router } from '@inertiajs/vue3';
 
 export default {
     name: 'IntakesHeader',
@@ -103,7 +103,7 @@ export default {
                 }
             });
 
-            Inertia.get(this.path, data, {
+            router.get(this.path, data, {
                 preserveState: true
             });
 
@@ -123,7 +123,7 @@ export default {
                 }
             });
 
-            Inertia.get(this.path, data, {
+            router.get(this.path, data, {
                 preserveState: true
             });
 

@@ -2,6 +2,7 @@
 
 namespace Modules\Vss\Http\Requests;
 
+use Override;
 use Illuminate\Foundation\Http\FormRequest;
 use Modules\Vss\Entities\Incident;
 
@@ -12,18 +13,17 @@ class CaseStoreRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
-    {
+    public function authorize(): bool {
         return true;
     }
 
     /**
      * Get the error messages for the defined validation rules.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function messages()
-    {
+    #[Override]
+    public function messages(): array {
         return [
             'institution_code.required' => 'School field is required.',
             'institution_code.size' => 'School field is invalid',
@@ -44,10 +44,9 @@ class CaseStoreRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function rules()
-    {
+    public function rules(): array {
         return [
             'sin' => 'required|digits:9',
             'incident_id' => 'required',
@@ -94,8 +93,8 @@ class CaseStoreRequest extends FormRequest
      *
      * @return void
      */
-    protected function prepareForValidation()
-    {
+    #[Override]
+    protected function prepareForValidation(): void {
         //Store won't have it, only Update
         if (! isset($this->incident_id)) {
             $last_incident = Incident::select('incident_id')->orderBy('incident_id', 'desc')->withTrashed()->first();

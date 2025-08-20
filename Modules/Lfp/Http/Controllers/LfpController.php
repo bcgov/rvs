@@ -3,26 +3,31 @@
 namespace Modules\Lfp\Http\Controllers;
 
 use Carbon\Carbon;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use Inertia\Response;
 use Modules\Lfp\Entities\Intake;
 use Modules\Lfp\Entities\Lfp;
 use Modules\Lfp\Entities\Payment;
 use Modules\Lfp\Entities\Util;
 use Modules\Lfp\Http\Requests\LfpEditRequest;
-use Response;
 
 class LfpController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response
+     * @param bool $status
+     * @param int $newApp
+     *
+     * @return Response
      */
-    public function index($status = true, $newApp = 0)
-    {
+    public function index(bool $status = true, int $newApp = 0): Response {
         $lfps = $this->paginateLfps();
         $last_sync = Util::where('field_type', 'Last Sync')->first();
 
@@ -34,10 +39,12 @@ class LfpController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @param LfpEditRequest $request
+     * @param Lfp $lfp
+     *
+     * @return RedirectResponse
      */
-    public function update(LfpEditRequest $request, Lfp $lfp)
-    {
+    public function update(LfpEditRequest $request, Lfp $lfp): RedirectResponse {
         Lfp::where('id', $lfp->id)->update($request->validated());
         $lfp = Lfp::find($lfp->id);
 
@@ -48,10 +55,9 @@ class LfpController extends Controller
     /**
      * Show the specified resource.
      * @param Lfp $lfp
-     * @return \Inertia\Response
+     * @return Response
      */
-    public function show(Lfp $lfp)
-    {
+    public function show(Lfp $lfp): Response {
         $lfp = Lfp::with('payments', 'intake')->where('id', $lfp->id)->first();
 
         $qry = env('LFP_QUERY1').$lfp->sin;
@@ -72,7 +78,10 @@ class LfpController extends Controller
             'student' => $student, 'app' => $application, 'utils' => $utils_array]);
     }
 
-    private function paginateLfps()
+    /**
+     * @return LengthAwarePaginator<Lfp>
+     */
+    private function paginateLfps(): LengthAwarePaginator
     {
         $lfps = Lfp::where('app_idx', '!=', null);
         if (request()->filter_fname !== null) {
@@ -90,31 +99,41 @@ class LfpController extends Controller
             $lfps = $lfps->where('sin', request()->filter_sin);
         }
 
-        if (request()->filter_period !== null && request()->filter_period != 'all') {
+
+        // $lfps = $lfps->where('created_at', '>=', Carbon::now()->subMonths(12));
+        if (request()->filter_period !== null) {
             switch (request()->filter_period){
                 case 'current':
                     // Filter for the current month
                     $lfps = $lfps->whereMonth('created_at', now()->month);
+                    \Log::info('Filtering LFPs for the current month');
                     break;
 
                 case '3':
                     // Filter for the last 3 months
                     $lfps = $lfps->where('created_at', '>=', Carbon::now()->subMonths(3));
+                    \Log::info('Filtering LFPs for the last 3 months');
                     break;
 
                 case '6':
                     // Filter for the last 6 months
                     $lfps = $lfps->where('created_at', '>=', Carbon::now()->subMonths(6));
+                    \Log::info('Filtering LFPs for the last 6 months');
                     break;
 
-                case '12':
-                    // Filter for the last 12 months
-                    $lfps = $lfps->where('created_at', '>=', Carbon::now()->subMonths(12));
+                case 'all':
+                    // Filter for all time
+                    $lfps = $lfps->where('created_at', '<', Carbon::now());
+                    \Log::info('Filtering LFPs for all time');
                     break;
 
                 default:
                     break;
             }
+        }else{
+            // Filter for the last 12 months
+            $lfps = $lfps->where('created_at', '>=', Carbon::now()->subMonths(12));
+            \Log::info('Filtering LFPs for the last 12 months');
         }
 
         $lfps = $lfps->orderBy('sin')->paginate(25)->onEachSide(1)->appends(request()->query());

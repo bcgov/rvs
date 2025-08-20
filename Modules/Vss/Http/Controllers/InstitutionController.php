@@ -2,8 +2,10 @@
 
 namespace Modules\Vss\Http\Controllers;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use Inertia\Response;
 use Modules\Vss\Entities\Institution;
 use Modules\Vss\Http\Requests\InstitutionStoreRequest;
 
@@ -12,10 +14,9 @@ class InstitutionController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response
+     * @return Response
      */
-    public function index()
-    {
+    public function index(): Response {
         $schools = Institution::orderBy('institution_code', 'asc')->get();
 
         return Inertia::render('Vss::Maintenance', ['status' => true, 'results' => $schools, 'page' => 'school']);
@@ -24,10 +25,9 @@ class InstitutionController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function store(InstitutionStoreRequest $request)
-    {
+    public function store(InstitutionStoreRequest $request): RedirectResponse {
         Institution::create($request->validated());
 
         return Redirect::route('vss.maintenance.school.index');
@@ -36,10 +36,9 @@ class InstitutionController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function update(InstitutionStoreRequest $request, Institution $school)
-    {
+    public function update(InstitutionStoreRequest $request, Institution $school): RedirectResponse {
         //if the school code updated
         if ($request->institution_code !== $school->institution_code) {
             //create new school

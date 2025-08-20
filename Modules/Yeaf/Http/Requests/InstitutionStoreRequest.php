@@ -2,6 +2,7 @@
 
 namespace Modules\Yeaf\Http\Requests;
 
+use Override;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 use Modules\Yeaf\Entities\Institution;
@@ -13,18 +14,17 @@ class InstitutionStoreRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
-    {
+    public function authorize(): bool {
         return true;
     }
 
     /**
      * Get the error messages for the defined validation rules.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function messages()
-    {
+    #[Override]
+    public function messages(): array {
         return [
             'name.required' => 'School Name field is required.',
             'name.string' => 'School Name field is not valid.',
@@ -38,10 +38,9 @@ class InstitutionStoreRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function rules()
-    {
+    public function rules(): array {
         return [
             'institution_id' => 'required',
             'name' => 'required|string|unique:'.env('DB_DATABASE_YEAF').'.institutions,name',
@@ -60,8 +59,8 @@ class InstitutionStoreRequest extends FormRequest
      *
      * @return void
      */
-    protected function prepareForValidation()
-    {
+    #[Override]
+    protected function prepareForValidation(): void {
         if (isset($this->postal_code)) {
             $this->merge(['postal_code' => Str::upper(preg_replace('/\s/', '', $this->postal_code))]);
         }

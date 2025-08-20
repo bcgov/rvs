@@ -13,11 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::connection(env('DB_DATABASE_NEB'))->create('programs', function (Blueprint $table): void {
-            $table->id();
-            $table->string('program_code')->unique();
-            $table->string('program_description')->nullable();
-            $table->timestamps();
+        Schema::connection(env('DB_DATABASE_LFP'))->table('payments', function (Blueprint $table) {
+            $table->boolean('both_eligibility_status')->default(false);
         });
     }
 
@@ -28,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::connection(env('DB_DATABASE_NEB'))->dropIfExists('programs');
+        Schema::connection(env('DB_DATABASE_LFP'))->table('payments', function (Blueprint $table) {
+            $table->dropColumn('both_eligibility_status');
+        });
     }
 };

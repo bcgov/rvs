@@ -2,6 +2,7 @@
 
 namespace Modules\Twp\Http\Requests;
 
+use Override;
 use Modules\Twp\Entities\Util;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -12,18 +13,17 @@ class UtilStoreRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
-    {
+    public function authorize(): bool {
         return true;
     }
 
     /**
      * Get the error messages for the defined validation rules.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function messages()
-    {
+    #[Override]
+    public function messages(): array {
         return [
             'field_name.*' => 'Title is not valid.',
             'field_type.*' => 'Type is not valid.',
@@ -34,10 +34,9 @@ class UtilStoreRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function rules()
-    {
+    public function rules(): array {
         return [
             'field_name' => 'required',
             'field_type' => 'required',
@@ -51,8 +50,8 @@ class UtilStoreRequest extends FormRequest
      *
      * @return void
      */
-    protected function prepareForValidation()
-    {
+    #[Override]
+    protected function prepareForValidation(): void {
         $this->merge(['active_flag' => $this->toBoolean($this->active_flag)]);
 
         // Program Length Type values must be stored all in lower cases
@@ -71,11 +70,9 @@ class UtilStoreRequest extends FormRequest
 
     /**
      * Convert to boolean
-     *
      * @return bool
      */
-    private function toBoolean($booleable)
-    {
+    private function toBoolean(mixed $booleable): bool {
         return filter_var($booleable, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
     }
 }

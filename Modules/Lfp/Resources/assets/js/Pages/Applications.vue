@@ -48,6 +48,10 @@
                                         <td><span v-if="row.sfas_ind != null">{{ cleanDate(row.sfas_ind.birth_dte) }}</span></td>
                                         <td><span v-if="row.sfas_app != null">{{ cleanDate(row.sfas_app.pl_app_received_dte) }}</span></td>
                                         <td><span v-if="row.sfas_app != null">{{ row.sfas_app.pl_app_status_code }}</span></td>
+                                        <td>
+                                            <span class="badge bg-danger" v-if="row.sfas_app != null && (row.sfas_app.pl_app_status_code == 'INTF' && row.declined_removed_reason != null)">{{ 'inactive' }}</span>
+                                            <span class="badge bg-success" v-if="row.sfas_app != null && (row.sfas_app.pl_app_status_code == 'INTF' && row.declined_removed_reason == null)">{{ 'active' }}</span>
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -99,7 +103,8 @@
     </AuthenticatedLayout>
 </template>
 <script>
-import { Link, useForm, Head } from '@inertiajs/vue3';
+import { computed } from 'vue';
+import { Link, useForm, Head, usePage, router } from '@inertiajs/vue3';
 import AuthenticatedLayout from '../Layouts/Authenticated.vue';
 import Input from '@/Components/Input.vue';
 import Label from '@/Components/Label.vue';
@@ -108,7 +113,6 @@ import FormSubmitAlert from "@/Components/FormSubmitAlert";
 import BreezePagination from "@/Components/Pagination";
 import ApplicationSearchBox from "../Components/ApplicationSearch";
 import ApplicationsHeader from "../Components/ApplicationsHeader";
-import {Inertia} from "@inertiajs/inertia";
 
 export default {
     name: 'Applications',
@@ -122,6 +126,15 @@ export default {
             type: Object,
             default: () => ({})
         }
+    },
+    setup() {
+        const page = usePage();
+        const utils = computed(() => page.props.utils || {});
+
+        return {
+            page,
+            utils
+        };
     },
     data() {
         return {
@@ -148,7 +161,7 @@ export default {
                 'filter_period': range
             };
 
-            Inertia.get('/lfp/dashboard', data, {
+            router.get('/lfp/dashboard', data, {
                 preserveState: true
             });
         },
@@ -167,7 +180,7 @@ export default {
                             if(response.props.app === -1)
                                 vm.newApplicationForm.formFailMsg = "There is no SABC Applications for that SIN.";
                             if(response.props.app > 0)
-                                vm.$inertia.visit('/lfp/applications/show/' + response.props.app);
+                                router.visit('/lfp/applications/show/' + response.props.app);
                             vm.newApplicationForm.formState = response.props.status;
                         });
                 },

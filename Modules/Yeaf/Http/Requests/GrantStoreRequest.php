@@ -2,8 +2,10 @@
 
 namespace Modules\Yeaf\Http\Requests;
 
-use Auth;
+use Override;
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Modules\Yeaf\Entities\Grant;
 
@@ -14,18 +16,17 @@ class GrantStoreRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
-    {
+    public function authorize(): bool {
         return true;
     }
 
     /**
      * Get the error messages for the defined validation rules.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function messages()
-    {
+    #[Override]
+    public function messages(): array {
         return [
             'student_id.*' => 'Some fields are missing!',
             'institution_id.*' => 'Institution field is required.',
@@ -40,10 +41,9 @@ class GrantStoreRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function rules()
-    {
+    public function rules(): array {
         return [
             'student_id' => 'required',
             'institution_id' => 'required',
@@ -75,8 +75,8 @@ class GrantStoreRequest extends FormRequest
      *
      * @return void
      */
-    protected function prepareForValidation()
-    {
+    #[Override]
+    protected function prepareForValidation(): void {
         if (isset($this->application_receive_date)) {
             $this->merge(['application_receive_date' => date('Y-m-d', strtotime($this->application_receive_date))]);
         }
@@ -90,27 +90,21 @@ class GrantStoreRequest extends FormRequest
             $this->merge(['age' => preg_replace('/\D/', '', $this->age)]);
         }
 
-        if (! isset($this->officer_user_id) || is_null($this->officer_user_id)) {
-            $this->merge(['officer_user_id' => Auth::user()->user_id]);
+        /** @var User|null $user */
+        $user = Auth::user();
+
+        if (empty($this->officer_user_id) && $user) {
+            $this->merge(['officer_user_id' => $user->user_id]);
         }
+
         $this->merge(['last_evaluation_date' => date('Y-m-d', strtotime('now'))]);
 
         $last_grant = Grant::select('grant_id')->orderBy('grant_id', 'desc')->first();
         $this->merge([
-            'grant_id' => intval($last_grant->grant_id) + 1,
-            'creator_user_id' => Str::upper(Auth::user()->user_id),
-            'update_user_id' => Str::upper(Auth::user()->user_id),
+            'grant_id' => (int) $last_grant->grant_id + 1,
+            'creator_user_id' => Str::upper($user->user_id),
+            'update_user_id' => Str::upper($user->user_id),
         ]);
 
-    }
-
-    /**
-     * Convert to boolean
-     *
-     * @return bool
-     */
-    private function toBoolean($booleable)
-    {
-        return filter_var($booleable, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
     }
 }

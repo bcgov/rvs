@@ -3,6 +3,8 @@
 namespace Modules\Twp\Entities;
 
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 class Institution extends ModuleModel
 {
 
@@ -13,8 +15,10 @@ class Institution extends ModuleModel
      */
     protected $fillable = ['name', 'contact_name', 'contact_email', 'active_flag'];
 
-    public function programs()
-    {
-        return $this->hasMany('Modules\Twp\Entities\Program', 'institution_twp_id', 'id');
+    /**
+     * @return HasMany<Program>
+     */
+    public function programs(): HasMany {
+        return $this->hasMany(Program::class, 'institution_twp_id', 'id');
     }
 }

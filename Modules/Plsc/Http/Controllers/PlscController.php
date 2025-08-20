@@ -4,23 +4,28 @@ namespace Modules\Plsc\Http\Controllers;
 
 use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use Inertia\Response;
 use Modules\Plsc\Entities\Application;
 use Modules\Plsc\Entities\Util;
 
 class PlscController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response
+     * @param bool $status
+     * @param int $newApp
+     *
+     * @return Response
      */
-    public function index($status = true, $newApp = 0)
-    {
+    public function index($status = true, $newApp = 0): Response {
         $plscs = $this->paginatePlscs();
         $last_sync = Application::select('id', 'sin', 'app_idx', 'created_at')->where('created_at', '!=', null)
             ->orderBy('created_at', 'desc')->first();
@@ -45,8 +50,13 @@ class PlscController extends Controller
             'status' => $status, 'results' => $plscs, 'app' => $newApp]);
     }
 
-    public function sync($status = true, $newApp = 0)
-    {
+    /**
+     * @param bool $status
+     * @param int $newApp
+     *
+     * @return RedirectResponse
+     */
+    public function sync(bool $status = true, int $newApp = 0): RedirectResponse {
         $qry = env("PLSC_APP_SYNC") . "0";
         //select last app entered
         $plsc = Application::select('id', 'app_idx', 'sin')->whereNotNull('app_idx')->orderBy('created_at', 'desc')->first();
@@ -71,13 +81,12 @@ class PlscController extends Controller
     /**
      * Show the specified resource.
      * @param Application $plsc
-     * @return \Inertia\Response
+     * @return Response
      */
-    public function show(Application $plsc)
-    {
+    public function show(Application $plsc): Response {
         $plsc = Application::where('id', $plsc->id)->first();
 
-        $qry = env('LFP_QUERY1').$plsc->sin;
+        $qry = env('LFP_QUERY1').$plsc->student->sin;
         $student = DB::connection('oracle')->select($qry);
 
         $application = [];
@@ -94,8 +103,10 @@ class PlscController extends Controller
             'student' => $student, 'app' => $application, 'utils' => $utils_array]);
     }
 
-    private function paginatePlscs()
-    {
+    /**
+     * @return mixed
+     */
+    private function paginatePlscs(): mixed {
         $plscs = Application::where('app_idx', '!=', null);
         if (request()->filter_fname !== null) {
             $plscs = $plscs->where('first_name', 'ILIKE', '%'.request()->filter_fname.'%');

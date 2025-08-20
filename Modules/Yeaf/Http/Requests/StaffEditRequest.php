@@ -2,6 +2,7 @@
 
 namespace Modules\Yeaf\Http\Requests;
 
+use Override;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StaffEditRequest extends FormRequest
@@ -11,18 +12,17 @@ class StaffEditRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
-    {
+    public function authorize(): bool {
         return true;
     }
 
     /**
      * Get the error messages for the defined validation rules.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function messages()
-    {
+    #[Override]
+    public function messages(): array {
         return [
             'tele.*' => 'Telephone number field is not valid.',
             'access_type.*' => 'Access Type field is not valid.',
@@ -34,10 +34,9 @@ class StaffEditRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function rules()
-    {
+    public function rules(): array {
         return [
             'disabled' => 'required|boolean',
             'access_type' => 'required|in:A,U',
@@ -50,8 +49,8 @@ class StaffEditRequest extends FormRequest
      *
      * @return void
      */
-    protected function prepareForValidation()
-    {
+    #[Override]
+    protected function prepareForValidation(): void {
         if (isset($this->tele)) {
             $this->merge(['tele' => preg_replace('/\D/', '', $this->tele)]);
         }
@@ -64,8 +63,7 @@ class StaffEditRequest extends FormRequest
      *
      * @return bool
      */
-    private function toBoolean($booleable)
-    {
+    private function toBoolean(mixed $booleable): bool {
         return filter_var($booleable, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
     }
 }

@@ -18,31 +18,31 @@
                                 <div class="col-lg-6">
                                     <BreezeLabel for="ministry" value="Ministry Name"/>
                                     <BreezeInput id="ministry" class="form-control" type="text"
-                                                 v-model="editForm.ministry" :disabled="editForm.processing"/>
+                                                 v-model="editForm.name" :disabled="editForm.processing"/>
                                 </div>
                                 <div class="col-lg-6">
                                     <BreezeLabel for="ministry_branch" value="Ministry Branch"/>
                                     <BreezeInput id="ministry_branch" class="form-control" type="text"
-                                                 v-model="editForm.ministry_branch" :disabled="editForm.processing"/>
+                                                 v-model="editForm.branch" :disabled="editForm.processing"/>
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-lg-12">
                                     <BreezeLabel for="ministry_address" value="Address"/>
                                     <BreezeInput id="ministry_address" class="form-control" type="text"
-                                                 v-model="editForm.ministry_address" :disabled="editForm.processing"/>
+                                                 v-model="editForm.address" :disabled="editForm.processing"/>
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-lg-4">
                                     <BreezeLabel for="ministry_city" value="City"/>
                                     <BreezeInput id="ministry_city" class="form-control" type="text"
-                                                 v-model="editForm.ministry_city" :disabled="editForm.processing"/>
+                                                 v-model="editForm.city" :disabled="editForm.processing"/>
                                 </div>
                                 <div class="col-lg-4">
                                     <BreezeLabel for="ministry_province" value="Province"/>
                                     <BreezeSelect id="ministry_province" class="form-control"
-                                                  v-model="editForm.ministry_prov" :disabled="editForm.processing">
+                                                  v-model="editForm.prov" :disabled="editForm.processing">
                                         <option v-for="province in provinces" :value="province.province_code">
                                             {{ province.province_code }}
                                         </option>
@@ -51,32 +51,32 @@
                                 <div class="col-lg-4">
                                     <BreezeLabel for="ministry_postal" value="Postal Code"/>
                                     <BreezeInput id="ministry_postal" class="form-control" type="text"
-                                                 v-model="editForm.ministry_postal" :disabled="editForm.processing"/>
+                                                 v-model="editForm.location_postal" :disabled="editForm.processing"/>
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-lg-3">
                                     <BreezeLabel for="ministry_tele_victoria" value="Tel - Victoria"/>
                                     <BreezeInput id="ministry_tele_victoria" class="form-control" type="text"
-                                                 v-model="editForm.ministry_tele_victoria"
+                                                 v-model="editForm.tele_victoria"
                                                  :disabled="editForm.processing"/>
                                 </div>
                                 <div class="col-lg-3">
                                     <BreezeLabel for="ministry_tele_lower" value="Tele - Lower Mainland"/>
                                     <BreezeInput id="ministry_tele_lower" class="form-control" type="text"
-                                                 v-model="editForm.ministry_tele_lower"
+                                                 v-model="editForm.tele_lower"
                                                  :disabled="editForm.processing"/>
                                 </div>
                                 <div class="col-lg-3">
                                     <BreezeLabel for="ministry_tele_toll_free" value="Tele - Toll-Free"/>
                                     <BreezeInput id="ministry_tele_toll_free" class="form-control" type="text"
-                                                 v-model="editForm.ministry_tele_toll_free"
+                                                 v-model="editForm.tele_toll_free"
                                                  :disabled="editForm.processing"/>
                                 </div>
                                 <div class="col-lg-3">
                                     <BreezeLabel for="ministry_TTY_line" value="TTY Line"/>
                                     <BreezeInput id="ministry_TTY_line" class="form-control" type="text"
-                                                 v-model="editForm.ministry_TTY_line" :disabled="editForm.processing"/>
+                                                 v-model="editForm.TTY_line" :disabled="editForm.processing"/>
                                 </div>
                             </div>
                         </div>
@@ -97,20 +97,20 @@
                                 <div class="col-lg-12">
                                     <BreezeLabel for="ministry_location" value="Location Address"/>
                                     <BreezeInput id="ministry_location" class="form-control" type="text"
-                                                 v-model="editForm.ministry_location" :disabled="editForm.processing"/>
+                                                 v-model="editForm.location" :disabled="editForm.processing"/>
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-lg-4">
                                     <BreezeLabel for="ministry_location_city" value="City"/>
                                     <BreezeInput id="ministry_location_city" class="form-control" type="text"
-                                                 v-model="editForm.ministry_location_city"
+                                                 v-model="editForm.location_city"
                                                  :disabled="editForm.processing"/>
                                 </div>
                                 <div class="col-lg-4">
                                     <BreezeLabel for="ministry_location_prov" value="Province"/>
                                     <BreezeSelect id="ministry_location_prov" class="form-control"
-                                                  v-model="editForm.ministry_location_prov"
+                                                  v-model="editForm.location_prov"
                                                   :disabled="editForm.processing">
                                         <option v-for="province in provinces" :value="province.province_code">
                                             {{ province.province_code }}
@@ -121,7 +121,7 @@
                                 <div class="col-lg-4">
                                     <BreezeLabel for="ministry_location_postal" value="Postal Code"/>
                                     <BreezeInput id="ministry_location_postal" class="form-control" type="text"
-                                                 v-model="editForm.ministry_location_postal"
+                                                 v-model="editForm.location_postal"
                                                  :disabled="editForm.processing"/>
                                 </div>
                             </div>
@@ -129,13 +129,13 @@
                                 <div class="col-lg-6">
                                     <BreezeLabel for="ministry_location_fax" value="Fax"/>
                                     <BreezeInput id="ministry_location_fax" class="form-control" type="text"
-                                                 v-model="editForm.ministry_fax"
+                                                 v-model="editForm.fax"
                                                  :disabled="editForm.processing"/>
                                 </div>
                                 <div class="col-lg-6">
                                     <BreezeLabel for="ministry_location_tele_toll_free" value="Tele - Toll-Free"/>
                                     <BreezeInput id="ministry_location_tele_toll_free" class="form-control" type="text"
-                                                 v-model="editForm.ministry_location_tele_toll_free"
+                                                 v-model="editForm.location_tele_toll_free"
                                                  :disabled="editForm.processing"/>
                                 </div>
                             </div>
@@ -331,6 +331,7 @@ export default {
     },
     props: {
         results: Object,
+        ministry: Object,
         provinces: Object,
     },
     data() {
@@ -357,7 +358,7 @@ export default {
 
     },
     mounted() {
-        this.editForm = useForm(this.results);
+        this.editForm = useForm(this.ministry);
     }
 }
 

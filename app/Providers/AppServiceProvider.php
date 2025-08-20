@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Override;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -11,6 +12,7 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
+    #[Override]
     public function register()
     {
         if (config('app.env') === 'production' || config('app.env') === 'development') {

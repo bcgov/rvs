@@ -18,7 +18,8 @@
                         <div class="card-header">
                             Intake Applications
                             <div class="d-flex float-end">
-                                <Link href="/lfp/intakes/create" class="btn btn-success btn-sm">New App</Link>
+                                <Link href="/lfp/intakes/create" class="btn btn-success btn-sm me-2">New App</Link>
+                                <button @click="exportApplications" class="btn btn-primary btn-sm">Export</button>
                             </div>
                         </div>
                         <div class="card-body">
@@ -71,7 +72,16 @@ export default {
     data() {
         return {
             applications: [],
+            filterType: 'All'
         }
+    },
+    mounted() {
+        const url = new URL(document.location);
+        url.searchParams.forEach((value, key) => {
+            if(key === 'filter_status') {
+                this.filterType = value;
+            }
+        });
     },
     methods: {
         cleanDate: function(d)
@@ -86,7 +96,11 @@ export default {
             return name == null ? "BLANK" : name;
         },
 
-
+        exportApplications: function () {
+            // Logic to export applications
+            console.log("Exporting applications...");
+            window.location.href = '/lfp/intakes/export/' + this.filterType;
+        }
     },
 }
 

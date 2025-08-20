@@ -2,6 +2,7 @@
 
 namespace Modules\Twp\Http\Requests;
 
+use Override;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -13,18 +14,17 @@ class PaymentStoreRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
-    {
+    public function authorize(): bool {
         return true;
     }
 
     /**
      * Get the error messages for the defined validation rules.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function messages()
-    {
+    #[Override]
+    public function messages(): array {
         return [
             'student_id.*' => 'Student ID field is not valid.',
             'application_id.*' => 'Application ID field is not valid.',
@@ -38,10 +38,9 @@ class PaymentStoreRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function rules()
-    {
+    public function rules(): array {
         return [
             'student_id' => 'required',
             'application_id' => 'required|numeric',
@@ -60,8 +59,8 @@ class PaymentStoreRequest extends FormRequest
      *
      * @return void
      */
-    protected function prepareForValidation()
-    {
+    #[Override]
+    protected function prepareForValidation(): void {
         $this->merge([
             'created_by' => Str::upper(Auth::user()->user_id),
             'updated_by' => Str::upper(Auth::user()->user_id),

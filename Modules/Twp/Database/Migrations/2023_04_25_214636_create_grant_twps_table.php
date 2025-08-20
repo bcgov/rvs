@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         if (! Schema::connection(env('DB_DATABASE_TWP'))->hasTable('grants')) {
-            Schema::connection(env('DB_DATABASE_TWP'))->create('grants', function (Blueprint $table) {
+            Schema::connection(env('DB_DATABASE_TWP'))->create('grants', function (Blueprint $table): void {
                 $table->id();
 
                 $table->bigInteger('application_id')->default(5424);
@@ -26,7 +26,7 @@ return new class extends Migration
                 $table->date('received_date');
                 $table->string('grant_status')->nullable();
                 $table->text('grant_comments')->nullable();
-                $table->double('grant_amount', null, 2)->default(0)->nullable();
+                $table->double('grant_amount')->default(0)->nullable();
 
                 $table->string('created_by');
                 $table->string('updated_by');

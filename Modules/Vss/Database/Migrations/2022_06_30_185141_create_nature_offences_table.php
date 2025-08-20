@@ -13,7 +13,7 @@ class CreateNatureOffencesTable extends Migration
      */
     public function up()
     {
-        Schema::connection(env('DB_DATABASE_VSS'))->create('nature_offences', function (Blueprint $table) {
+        Schema::connection(env('DB_DATABASE_VSS'))->create('nature_offences', function (Blueprint $table): void {
             $table->id();
             $table->string('nature_code')->unique();
             $table->text('description');

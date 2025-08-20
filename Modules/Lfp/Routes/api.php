@@ -13,6 +13,4 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/lfp', function (Request $request) {
-    return $request->user();
-});
+Route::middleware('auth:api')->get('/lfp', fn(Request $request) => $request->user());
