@@ -5,7 +5,7 @@
 #################################
 FROM composer:2 AS composer_deps
 WORKDIR /app
-COPY composer.json composer.lock ./
+COPY composer.json ./
 # Cache Composer downloads between builds
 RUN --mount=type=cache,target=/tmp/composer-cache \
     COMPOSER_CACHE_DIR=/tmp/composer-cache \
