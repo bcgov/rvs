@@ -12,8 +12,8 @@
             margin: 130px 30px 30px 30px;
             font-family: 'BCSans', 'Noto Sans', Verdana, Arial, sans-serif;
         }
-        header { position: fixed; top: 0px; left: 0px; right: 0px; height: 120px; border-bottom: #0b2e13 1px solid;}
-        footer { font-family: sans-serif; position: fixed; bottom: 0px; left: 0px; right: 0px; height: 60px; font-size: 10px;
+        header { font-family: 'BCSans', 'Noto Sans', Verdana, Arial, sans-serif; position: fixed; top: 0px; left: 0px; right: 0px; height: 120px; border-bottom: #0b2e13 1px solid;}
+        footer { font-family: 'BCSans', 'Noto Sans', Verdana, Arial, sans-serif; position: fixed; bottom: 0px; left: 0px; right: 0px; height: 60px; font-size: 10px;
             border-top: #0b2e13 1px solid; line-height: 1rem;}
         td{
             vertical-align: top;
@@ -48,8 +48,13 @@
 <header>
     <table>
         <tr>
-            <td style="text-align: left; width: 25%;"><img src="{{ public_path('/images/bc_sq_logo.png') }}"></td>
-            <td style="text-align: right; width: 75%;"><br/><p style="font-family: Arial,sans-serif; font-size: 32px; font-weight: lighter;">Provincial Tuition Waiver Program </p></td>
+            @php
+            $p = public_path('images/bc_sq_logo.png');
+            $data = base64_encode(file_get_contents($p));
+            @endphp
+
+            <td style="text-align: left; width: 25%;"><img src="data:image/png;base64,{{ $data }}" style="width:120px;"></td>
+            <td style="text-align: right; width: 75%;"><br/><p style="font-size: 32px;">Provincial Tuition Waiver Program </p></td>
         </tr>
     </table>
 </header>
