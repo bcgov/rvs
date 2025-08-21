@@ -37,15 +37,16 @@ mix.js('resources/js/app.js', 'public/js')
     .alias({
         '@': 'resources/js',
     });
+const webpack = require('webpack');
 
 if (mix.inProduction()) {
     mix.version();
     mix.webpackConfig({
         plugins: [
             new webpack.DefinePlugin({
-            __VUE_OPTIONS_API__: true,
-            __VUE_PROD_DEVTOOLS__: false,
-            __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false, 
+            __VUE_OPTIONS_API__: JSON.stringify(true),
+            __VUE_PROD_DEVTOOLS__: JSON.stringify(false),
+            __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: JSON.stringify(false),
             }),
         ],
     });
@@ -54,9 +55,9 @@ if (mix.inProduction()) {
     mix.webpackConfig({
         plugins: [
             new webpack.DefinePlugin({
-            __VUE_OPTIONS_API__: true,
-            __VUE_PROD_DEVTOOLS__: true,
-            __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false, 
+            __VUE_OPTIONS_API__: JSON.stringify(true),
+            __VUE_PROD_DEVTOOLS__: JSON.stringify(true),
+            __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: JSON.stringify(false),
             }),
         ],
     });
