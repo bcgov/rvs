@@ -218,9 +218,15 @@ class IncidentController extends Controller
             $cases = $cases->where('sin', request()->filter_sin);
         }
 
+        // if (request()->filter_user !== null) {
+        //     $cases = $cases->where('auditor_user_id', request()->filter_user)
+        //         ->orWhere('investigator_user_id', request()->filter_user);
+        // }
         if (request()->filter_user !== null) {
-            $cases = $cases->where('auditor_user_id', request()->filter_user)
+            $cases = $cases->where(function($q) {
+                $q->where('auditor_user_id', request()->filter_user)
                 ->orWhere('investigator_user_id', request()->filter_user);
+            });
         }
 
         if (request()->filter_status !== null) {

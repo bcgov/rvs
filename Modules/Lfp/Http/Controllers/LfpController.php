@@ -84,19 +84,30 @@ class LfpController extends Controller
     private function paginateLfps(): LengthAwarePaginator
     {
         $lfps = Lfp::where('app_idx', '!=', null);
-        if (request()->filter_fname !== null) {
-            $lfps = $lfps->where('first_name', 'ILIKE', '%'.request()->filter_fname.'%')
-                ->orWhere('full_name_alias', 'ILIKE', '%'.request()->filter_fname.'%');
-        }
-        if (request()->filter_lname !== null) {
-            $lfps = $lfps->where('last_name', 'ILIKE', '%'.request()->filter_lname.'%')
-                ->orWhere('full_name_alias', 'ILIKE', '%'.request()->filter_lname.'%');
-        }
+        // if (request()->filter_fname !== null) {
+        //     $lfps = $lfps->where('first_name', 'ILIKE', '%'.request()->filter_fname.'%')
+        //         ->orWhere('full_name_alias', 'ILIKE', '%'.request()->filter_fname.'%');
+        // }
+        // if (request()->filter_lname !== null) {
+        //     $lfps = $lfps->where('last_name', 'ILIKE', '%'.request()->filter_lname.'%')
+        //         ->orWhere('full_name_alias', 'ILIKE', '%'.request()->filter_lname.'%');
+        // }
 
         if (request()->filter_sin !== null) {
             $lfps = $lfps->where('sin', request()->filter_sin);
         }
-
+        if (request()->filter_fname !== null) {
+            $lfps = $lfps->where(function($q) {
+                $q->where('first_name', 'ILIKE', '%'.request()->filter_fname.'%')
+                ->orWhere('full_name_alias', 'ILIKE', '%'.request()->filter_fname.'%');
+            });
+        }
+        if (request()->filter_lname !== null) {
+            $lfps = $lfps->where(function($q) {
+                $q->where('last_name', 'ILIKE', '%'.request()->filter_lname.'%')
+                ->orWhere('full_name_alias', 'ILIKE', '%'.request()->filter_lname.'%');
+            });
+        }
 
         // $lfps = $lfps->where('created_at', '>=', Carbon::now()->subMonths(12));
         if (request()->filter_period !== null) {
