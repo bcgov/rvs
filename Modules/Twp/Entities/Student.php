@@ -83,7 +83,7 @@ class Student extends ModuleModel
     /**
      * @return string
      */
-    public function getAppStatusAttribute(): string {
-        return is_null($this->application) ? '' : $this->application->application_status;
+    public function getAppStatusAttribute(): ?string {
+        return is_null($this->application) ? null : $this->application->application_status;
     }
 }

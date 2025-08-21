@@ -55,7 +55,7 @@ class Payment extends ModuleModel
     /**
      * @return string
      */
-    public function getPaymentTypeReadableAttribute(): string {
-        return is_null($this->paymentType) ? '' : $this->paymentType->title;
+    public function getPaymentTypeReadableAttribute(): ?string {
+        return is_null($this->paymentType) ? null : $this->paymentType->title;
     }
 }
