@@ -136,6 +136,10 @@ class LfpController extends Controller
                 default:
                     break;
             }
+        }elseif(request()->hasAny(['filter_fname', 'filter_lname', 'filter_sin'])){
+            // Filter for all time
+            $lfps = $lfps->where('created_at', '<', Carbon::now());
+            \Log::info('Filtering LFPs for all time');
         }else{
             // Filter for the last 12 months
             $lfps = $lfps->where('created_at', '>=', Carbon::now()->subMonths(12));
