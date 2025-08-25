@@ -3,6 +3,8 @@
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\VerifyCsrfToken as AppCsrf;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as FrameworkCsrf;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,10 +24,8 @@ Route::get('/login', [UserController::class, 'login'])->name('login');
 Route::get('/applogin', [UserController::class, 'appLogin'])->name('app-login');
 Route::middleware(['auth'])->get('/home', [UserController::class, 'home'])->name('home');
 Route::post('/pdex-login', [UserController::class, 'pdexLogin'])
-    ->withoutMiddleware([VerifyCsrfToken::class])
+    ->withoutMiddleware([AppCsrf::class, FrameworkCsrf::class])
     ->name('pdex-login');
-
-
 
 Route::prefix('admin')->group(function (): void {
     Route::group(
