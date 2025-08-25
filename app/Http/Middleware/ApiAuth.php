@@ -24,6 +24,7 @@ class ApiAuth
     public function handle(Request $request, Closure $next, ...$roles): Response|RedirectResponse|JsonResponse
     {
         $forwardedHost = $request->headers->get('X-Forwarded-Host');
+        \Log::info('Forwarded Host: ' . $forwardedHost);
 
         // Prevent access to the API except via the gateway
         if ($forwardedHost !== env('KEYCLOAK_APS_URL')) {
