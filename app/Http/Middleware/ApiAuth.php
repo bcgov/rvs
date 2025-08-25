@@ -27,12 +27,12 @@ class ApiAuth
 
         // Prevent access to the API except via the gateway
         if ($forwardedHost !== env('KEYCLOAK_APS_URL')) {
-            return Response::json(['error' => 'Unauthorized'], 403);
+            return response()->json(['error' => 'Unauthorized'], 403);
         }
 
         $token = request()->bearerToken();
         if(is_null($token)){
-            return Response::json(['status' => false, 'error' => 'Missing token.'], 401);
+            return response()->json(['status' => false, 'error' => 'Missing token.'], 401);
         }
         $jwksUri = env('KEYCLOAK_APS_ISS') . env('KEYCLOAK_APS_CERT_PATH');
         $jwksJson = file_get_contents($jwksUri);
@@ -51,9 +51,9 @@ class ApiAuth
         try {
             $decoded = JWT::decode($token, new Key($pk, 'RS256'));
         } catch (ExpiredException) {
-            return Response::json(['status' => false, 'error' => 'Token has expired.'], 401);
+            return response()->json(['status' => false, 'error' => 'Token has expired.'], 401);
         } catch (Exception $e) {
-            return Response::json(['status' => false, 'error' => "An error occurred: " . $e->getMessage()], 401);
+            return response()->json(['status' => false, 'error' => "An error occurred: " . $e->getMessage()], 401);
         }
             //only validate for accounts that we have registered
         if (isset($decoded->iss) && $decoded->iss === env('KEYCLOAK_APS_ISS')) {
@@ -64,6 +64,6 @@ class ApiAuth
 //                }
         }
 
-        return Response::json(['status' => false, 'error' => "Generic error."], 403);
+        return response()->json(['status' => false, 'error' => "Generic error."], 403);
     }
 }

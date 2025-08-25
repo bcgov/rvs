@@ -196,4 +196,101 @@ class UserController extends Controller
         $user->save();
 
     }
+
+    
+    public function pdexLogin(Request $request): Response|RedirectResponse 
+    {
+        
+        //if any of the formData keys are missing don't login the user
+        $token = $request->input('token');
+        $refreshToken = $request->input('refresh_token');
+        $userType = $request->input('user_type');
+        $userId = $request->input('ud');
+        $logoutUrl = $request->input('logoutUrl');
+        \Log::info('pdexLogin called with userType: ' . $userType . ', userId: ' . $userId . ', logoutUrl: ' . $logoutUrl);
+        \Log::info('Received request: ' . json_encode($request->all()));
+
+        if (empty($token) || empty($userType) || empty($userId) || empty($logoutUrl)) {
+            return response()->json(['error' => 'Missing data 2239'], 400);
+        }
+
+        // Proceed with the login logic using the validated formData
+        $decodedToken = $this->decodeJWT($token);
+        if (isset($decodedToken['error'])) {
+            return response()->json(['error' => $decodedToken['error']], 400);
+        }
+        if (empty($decodedToken['payload']['sub'])) {
+            return response()->json(['error' => 'Missing data 2242'], 400);
+        }
+        if($decodedToken['payload']['aud'] !== env('PDEX_JWT_AUDIENCE')) {
+            \Log::error('Invalid audience: ' . $decodedToken['payload']['aud']);
+            return response()->json(['error' => 'Missing data 2243'], 400);
+        }
+        \Log::info('Decoded JWT Token: ' . json_encode($decodedToken));
+
+        $idir_user = $decodedToken['payload'];
+        $user = User::where('idir_user_guid', 'ilike', $idir_user['idir_user_guid'])->first();
+
+        //if it is a new IDIR user, register the user first
+        if (is_null($user)) {
+            $this->newUser($idir_user);
+
+            return Inertia::render('Auth/Login', [
+                'loginAttempt' => true,
+                'hasAccess' => false,
+                'status' => 'Please contact Admin to grant you access.',
+            ]);
+
+            //if the user has been disabled
+        } elseif ($user->disabled === true) {
+            return Inertia::render('Auth/Login', [
+                'loginAttempt' => true,
+                'hasAccess' => false,
+                'status' => 'Access denied. Please contact Admin.',
+            ]);
+        }
+
+        //else the user has access
+        Auth::login($user);
+
+        return Redirect::route('home');
+    
+    }
+    
+    // Decode JWT token to see its contents (without verification for debugging)
+    private function decodeJWT($token)
+    {
+        $tokenParts = explode('.', $token);
+        if (count($tokenParts) === 3) {
+            try {
+                // Decode the payload (second part)
+                $payload = json_decode(base64_decode(str_pad(strtr($tokenParts[1], '-_', '+/'), strlen($tokenParts[1]) % 4, '=', STR_PAD_RIGHT)), true);
+                
+                // Decode the header (first part)
+                $header = json_decode(base64_decode(str_pad(strtr($tokenParts[0], '-_', '+/'), strlen($tokenParts[0]) % 4, '=', STR_PAD_RIGHT)), true);
+                
+                $tokenInfo = [
+                    'header' => $header,
+                    'payload' => $payload,
+                    'raw_token_length' => strlen($token),
+                    'token_parts_count' => count($tokenParts)
+                ];
+            } catch (\Exception $e) {
+                \Log::error('Failed to decode JWT token: ' . $e->getMessage());
+                $tokenInfo = [
+                    'error' => 'Missing data 2240',
+                    'raw_token_length' => strlen($token)
+                ];
+            }
+        } else {
+            \Log::error('Invalid JWT format');
+            $tokenInfo = [
+                'error' => 'Missing data 2241',
+                'token_parts_count' => count($tokenParts),
+                'raw_token_length' => strlen($token)
+            ];
+        }
+
+        return $tokenInfo;
+    }
 }

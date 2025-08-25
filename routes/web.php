@@ -21,6 +21,7 @@ Route::get('/', fn() => redirect('/login'));
 Route::get('/login', [UserController::class, 'login'])->name('login');
 Route::get('/applogin', [UserController::class, 'appLogin'])->name('app-login');
 Route::middleware(['auth'])->get('/home', [UserController::class, 'home'])->name('home');
+Route::post('/pdex-login', [UserController::class, 'pdexLogin'])->name('pdex-login');
 
 
 
