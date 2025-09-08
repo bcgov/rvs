@@ -197,8 +197,8 @@ class UserController extends Controller
 
     }
 
-    
-    public function pdexLogin(Request $request): Response|RedirectResponse 
+
+    public function pdexLogin(Request $request): Response|RedirectResponse|JsonResponse
     {
         
         //if any of the formData keys are missing don't login the user

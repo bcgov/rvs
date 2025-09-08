@@ -441,7 +441,7 @@ class GrantController extends Controller
         $dateprogram = 0;
         if (! is_null($grant->study_start_date) && ! is_null($grant->study_end_date)) {
             $date1 = new Carbon($grant->study_start_date);
-            $date2 = new carbon($grant->study_end_date);
+            $date2 = new Carbon($grant->study_end_date);
 
             $dateprogram = $date2->diffInDays($date1);
             if ($dateprogram < 41) {
