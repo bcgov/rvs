@@ -493,7 +493,8 @@ class NebController extends Controller
 
                 $startDateTime = Carbon::parse($rangeStartDate);
                 $endDateTime = Carbon::parse($rangeEndDate);
-                $numDays = $endDateTime->diffInDays($startDateTime);
+                //$numDays = $endDateTime->diffInDays($startDateTime);
+                $numDays = $startDateTime->diffInDays($endDateTime);
 
                 $potential->num_day_overlap = $numDays;
                 $potential->month_overlap = $numDays >= 30;
