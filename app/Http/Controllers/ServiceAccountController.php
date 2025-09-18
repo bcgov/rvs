@@ -81,7 +81,7 @@ class ServiceAccountController extends Controller
             return response()->json(['status' => false, 'body' => $exception->getMessage()]);
         }
 
-        return Response::json(['status' => true, 'body' => $tables], 200);
+        return response()->json(['status' => true, 'body' => $tables], 200);
     }
 
     public function fetchColumns(Request $request): JsonResponse {
@@ -94,6 +94,6 @@ class ServiceAccountController extends Controller
             return response()->json(['status' => false, 'body' => $exception->getMessage()]);
         }
 
-        return Response::json(['status' => true, 'body' => $columns], 200);
+        return response()->json(['status' => true, 'body' => $columns], 200);
     }
 }
