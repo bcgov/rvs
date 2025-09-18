@@ -28,7 +28,7 @@ class ReportController extends Controller
         // Store traffic light value in cache for 60 seconds
         Cache::put('traffic_light', $traffic_light, 60 * 60);
 
-        return Response::json([
+        return response()->json([
             'status' => 'success',
             'message' => 'Traffic light set to true',
         ]);
