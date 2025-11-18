@@ -143,25 +143,30 @@ class IntakeController extends Controller
             $file = fopen('php://output', 'w');
             // Add CSV header
             // All the columns from the intake model
-            $header = ['First Name', 'Last Name', 'Profession', 'Employer', 'Employment Status', 'Community', 'Repayment Status',
-                'In Good Standing', 'Repayment Start Date', 'Amount Owing', 'Intake Status', 'Receive Date', 'Comment',
+            $header = ['Last Name', 'First Name', 
+            'SIN', 'Receive Date', 'Repayment Date', 
+            'Profession', 'Employment Status', 'Employer', 
+            'Community', 'Repayment Status',
+                'In Good Standing', 'Amount Owing', 'Intake Status', 
+                'Comment',
                 'Proposed Registration Date', 'Denial Reason', 'App Index', 'Alias Name'];
             fputcsv($file, $header);
 
             foreach ($intakes as $intake) {
                 fputcsv($file, [
-                    $intake->first_name,
                     $intake->last_name,
+                    $intake->first_name,
+                    $intake->sin,
+                    $intake->receive_date,
+                    $intake->repayment_start_date,
                     $intake->profession,
-                    $intake->employer,
                     $intake->employment_status,
+                    $intake->employer,
                     $intake->community,
                     $intake->repayment_status,
                     $intake->in_good_standing,
-                    $intake->repayment_start_date,
                     $intake->amount_owing,
                     $intake->intake_status,
-                    $intake->receive_date,
                     $intake->comment,
                     $intake->proposed_registration_date,
                     $intake->denial_reason,

@@ -229,7 +229,6 @@ export default {
     data() {
         return {
             editPaymentForm: '',
-
         }
     },
     methods: {
@@ -242,6 +241,7 @@ export default {
         updatePayment: function(i)
         {
             this.editPaymentForm = useForm(this.payments[i]);
+            this.editPaymentForm.proposed_pay_amount = $formatAmount(this.editPaymentForm.proposed_pay_amount);
             $("#editPaymentModal").modal('show');
         },
         editPayment: function ()
@@ -278,7 +278,7 @@ export default {
             const result = parseFloat(this.app[0].pl_dire_forcalc_outstdg_amt) - this.principalPaid;
             return parseFloat(result.toFixed(3));
         },
-    },
+    }
 }
 
 </script>
