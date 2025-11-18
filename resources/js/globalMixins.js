@@ -35,6 +35,12 @@ export const globalMixins = {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
             }).format(Number(value));
+        },
+        $formatAmount(
+            value
+        ) {
+            if (value === null || value === undefined || isNaN(value)) return '';
+            return parseFloat(value).toFixed(2);
         }
     }
 };

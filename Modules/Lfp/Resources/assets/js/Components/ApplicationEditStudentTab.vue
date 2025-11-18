@@ -3,18 +3,15 @@ tr {
     padding-bottom: 7px;
     display: block;
 }
-[type='checkbox']:checked, [type='radio']:checked {
-    background-size: initial;
-}
 </style>
 <template>
     <div>
-        <table v-if="intake != null">
+        <!-- <table v-if="intake != null">
             <tr v-for="(v, k, i) in intake">
                 <th>{{k}}:</th>
                 <td>{{v}}</td>
             </tr>
-        </table>
+        </table> -->
     </div>
 
 </template>
