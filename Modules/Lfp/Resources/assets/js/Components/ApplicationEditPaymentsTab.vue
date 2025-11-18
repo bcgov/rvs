@@ -241,7 +241,7 @@ export default {
         updatePayment: function(i)
         {
             this.editPaymentForm = useForm(this.payments[i]);
-            this.editPaymentForm.proposed_pay_amount = $formatAmount(this.editPaymentForm.proposed_pay_amount);
+            this.editPaymentForm.proposed_pay_amount = this.$formatAmount(this.editPaymentForm.proposed_pay_amount);
             $("#editPaymentModal").modal('show');
         },
         editPayment: function ()
