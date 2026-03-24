@@ -54,10 +54,12 @@
                                         <td><span v-if="row.sfas_ind != null">{{ cleanDate(row.sfas_ind.birth_dte) }}</span></td>
                                         <td><span v-if="row.sfas_app != null">{{ cleanDate(row.sfas_app.pl_app_received_dte) }}</span></td>
                                         <td><span v-if="row.sfas_app != null">{{ row.sfas_app.pl_app_status_code }}</span></td>
-                                        <td v-if="row.sfas_app != null && row.sfas_app.pl_app_status_code == 'INTF'">
-                                            <span class="badge bg-danger" v-if="row.declined_removed_reason == '-'">{{ 'active' }}</span>
-                                            <span class="badge bg-danger" v-else-if="row.declined_removed_reason != null">{{ 'inactive' }}</span>
-                                            <span class="badge bg-success" v-else-if="row.declined_removed_reason == null">{{ 'active' }}</span>
+                                        <td>
+                                            <template v-if="row.sfas_app != null && row.sfas_app.pl_app_status_code == 'INTF'">
+                                                <span class="badge bg-danger" v-if="row.declined_removed_reason == '-'">{{ 'active' }}</span>
+                                                <span class="badge bg-danger" v-else-if="row.declined_removed_reason != null">{{ 'inactive' }}</span>
+                                                <span class="badge bg-success" v-else-if="row.declined_removed_reason == null">{{ 'active' }}</span>
+                                            </template>
                                         </td>
                                     </tr>
                                     </tbody>
