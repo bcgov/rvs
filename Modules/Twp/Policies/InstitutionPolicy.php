@@ -6,7 +6,6 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Modules\Twp\Entities\Institution;
-use Barryvdh\Debugbar\Facades\Debugbar;
 
 class InstitutionPolicy
 {
