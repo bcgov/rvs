@@ -133,7 +133,7 @@ RUN printf "instantclient,$ORACLE_HOME" \
   && a2enmod rewrite headers
 
 # ---- Node.js (optional, if you need it) --------------------------------------
-RUN curl -fsSL https://deb.nodesource.com/setup_21.x | bash - \
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
  && apt-get update && apt-get install -y nodejs \
  && rm -rf /var/lib/apt/lists/*
 
