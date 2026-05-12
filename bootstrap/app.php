@@ -38,7 +38,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // Package Service Providers
         Barryvdh\DomPDF\ServiceProvider::class,
-        Barryvdh\Debugbar\ServiceProvider::class,
+        Fruitcake\LaravelDebugbar\ServiceProvider::class,
     ])
     ->withRouting(
         web: __DIR__.'/../routes/web.php',

@@ -13,8 +13,7 @@ import {
     LineElement,
     LinearScale,
     PointElement,
-    CategoryScale,
-    Plugin
+    CategoryScale
 } from 'chart.js'
 
 ChartJS.register(
