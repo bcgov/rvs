@@ -37,7 +37,7 @@ return [
             'composer' => 'composer.json',
             'assets/js/app' => 'Resources/assets/js/app.js',
             'assets/sass/app' => 'Resources/assets/sass/app.scss',
-            'webpack' => 'webpack.mix.js',
+            'vite' => 'vite.config.js',
             'package' => 'package.json',
         ],
         'replacements' => [
@@ -93,6 +93,17 @@ return [
         */
 
         'migration' => base_path('database/migrations'),
+
+        /*
+        |--------------------------------------------------------------------------
+        | The app path
+        |--------------------------------------------------------------------------
+        |
+        | app folder name
+        | for example can change it to 'src' or 'App'
+        */
+        'app_folder' => 'app/',
+
         /*
         |--------------------------------------------------------------------------
         | Generator path
