@@ -41,12 +41,12 @@ return [
             'package' => 'package.json',
         ],
         'replacements' => [
-            'routes/web' => ['LOWER_NAME', 'STUDLY_NAME'],
-            'routes/api' => ['LOWER_NAME'],
-            'webpack' => ['LOWER_NAME'],
-            'json' => ['LOWER_NAME', 'STUDLY_NAME', 'MODULE_NAMESPACE', 'PROVIDER_NAMESPACE'],
+            'routes/web' => ['LOWER_NAME', 'STUDLY_NAME', 'PLURAL_LOWER_NAME', 'KEBAB_NAME', 'MODULE_NAMESPACE', 'CONTROLLER_NAMESPACE'],
+            'routes/api' => ['LOWER_NAME', 'STUDLY_NAME', 'PLURAL_LOWER_NAME', 'KEBAB_NAME', 'MODULE_NAMESPACE', 'CONTROLLER_NAMESPACE'],
+            'vite' => ['LOWER_NAME', 'STUDLY_NAME', 'KEBAB_NAME'],
+            'json' => ['LOWER_NAME', 'STUDLY_NAME', 'KEBAB_NAME', 'MODULE_NAMESPACE', 'PROVIDER_NAMESPACE'],
             'views/index' => ['LOWER_NAME'],
-            'views/master' => ['LOWER_NAME', 'STUDLY_NAME'],
+            'views/master' => ['LOWER_NAME', 'STUDLY_NAME', 'KEBAB_NAME'],
             'scaffold/config' => ['STUDLY_NAME'],
             'composer' => [
                 'LOWER_NAME',
@@ -102,7 +102,7 @@ return [
         | app folder name
         | for example can change it to 'src' or 'App'
         */
-        'app_folder' => 'app/',
+        'app_folder' => '',
 
         /*
         |--------------------------------------------------------------------------
