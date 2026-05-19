@@ -155,7 +155,7 @@
 
 </template>
 <script>
-import {Link, useForm} from '@inertiajs/vue3';
+import {Link, useForm, router} from '@inertiajs/vue3';
 import BreezeInput from '@/Components/Input.vue';
 import BreezeLabel from '@/Components/Label.vue';
 
@@ -234,7 +234,7 @@ export default {
 
                     $("#editSchoolModal").modal('hide');
 
-                    Inertia.reload();
+                    router.reload();
                 },
                 onFailure: () => {
                 },
