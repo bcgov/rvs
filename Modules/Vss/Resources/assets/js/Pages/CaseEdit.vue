@@ -787,6 +787,7 @@ export default {
                 incident_id: this.editForm.incident_id,
                 sin: this.editForm.sin,
                 institution_code: this.editForm.institution_code,
+                institution: this.editForm.institution,
                 last_name: this.editForm.last_name,
                 first_name: this.editForm.first_name,
                 year_of_audit: this.editForm.year_of_audit,
