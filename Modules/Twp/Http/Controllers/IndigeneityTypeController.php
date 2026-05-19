@@ -37,7 +37,7 @@ class IndigeneityTypeController extends Controller
      */
     public function update(Request $request, IndigeneityType $indigeneity): RedirectResponse
     {
-        $this->authorize('update', IndigeneityType::class);
+        $this->authorize('update', $indigeneity);
         $indigeneity->title = $request->title;
         $indigeneity->active_flag = $request->active_flag;
         $indigeneity->save();
