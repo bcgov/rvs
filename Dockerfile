@@ -200,7 +200,7 @@ RUN mkdir -p storage && mkdir -p bootstrap/cache && chmod -R ug+rwx storage boot
 USER ${USER_ID}
 
 #composer install
-RUN composer install && npm install --prefix /var/www/html/ \
+RUN composer install -vvv && npm install --prefix /var/www/html/ \
     && npm run --prefix /var/www/html/ ${DEVENV}
 
 ENTRYPOINT ["/sbin/entrypoint.sh"]
