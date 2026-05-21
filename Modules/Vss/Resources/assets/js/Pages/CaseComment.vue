@@ -198,7 +198,7 @@ export default {
             setTimeout(function (){
                 vm.showSuccessMsg = false;
                 vm.noChanges = true;
-                Inertia.get('/vss/case-comment/' + vm.result.id, {preserveState: true});
+                router.get('/vss/case-comment/' + vm.result.id, {preserveState: true});
 
             }, 4000);
         },

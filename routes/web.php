@@ -4,7 +4,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\VerifyCsrfToken as AppCsrf;
-use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as FrameworkCsrf;
+use Illuminate\Foundation\Http\Middleware\PreventRequestForgery as FrameworkCsrf;
 
 /*
 |--------------------------------------------------------------------------
