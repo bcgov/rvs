@@ -219,20 +219,20 @@ objects:
     kind: NetworkPolicy
     metadata:
       name: ${NAME}-allow-external
-      spec:
-        podSelector:
-          matchLabels:
-            deployment: ${NAME}
-        ingress:
-          - ports:
-            - protocol: TCP
-              port: 8080
-            - protocol: TCP
-              port: 80
-            - protocol: TCP
-              port: 443
-        policyTypes:
-          - Ingress
+    spec:
+      podSelector:
+        matchLabels:
+          deployment: ${NAME}
+      ingress:
+        - ports:
+          - protocol: TCP
+            port: 8080
+          - protocol: TCP
+            port: 80
+          - protocol: TCP
+            port: 443
+      policyTypes:
+        - Ingress
 parameters:
   - name: OC_USER_ID
     required: false
