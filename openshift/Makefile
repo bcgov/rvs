@@ -145,8 +145,14 @@ db-backup-deploy-postgresql:
 		-p DATABASE_SECRET_NAME=patroni-creds \
 		-p DATABASE_SECRET_USER_KEY_NAME=superuser-username \
 		-p DATABASE_SECRET_PASSWORD_KEY_NAME=superuser-password \
+		-p CPU_REQUEST=50m \
+		-p CPU_LIMIT=250m \
+		-p MEMORY_REQUEST=256Mi \
+		-p MEMORY_LIMIT=1Gi \
   	-p ENVIRONMENT_FRIENDLY_NAME='$(NAMESPACE) POSTGRESQL DB Backups' \
 		| oc -n $(NAMESPACE) apply -f -
+	@oc -n $(NAMESPACE) rollout restart deployment/$(BACKUP_POSTGRESQL_APP_NAME)
+	$(call rollout_and_wait,deployment/$(BACKUP_POSTGRESQL_APP_NAME))
 
 
 build-cronjob:
