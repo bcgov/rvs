@@ -1,4 +1,4 @@
-FROM php:8.3-apache
+FROM php:8.3.36-apache
 ARG DEBIAN_VERSION=20.04
 ARG APACHE_OPENIDC_VERSION=2.4.10
 ARG TZ=America/Vancouver
@@ -133,7 +133,7 @@ RUN printf "instantclient,$ORACLE_HOME" \
   && a2enmod rewrite headers
 
 # ---- Node.js (optional, if you need it) --------------------------------------
-RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
+RUN curl -fsSL https://deb.nodesource.com/setup_26.x | bash - \
  && apt-get update && apt-get install -y nodejs \
  && rm -rf /var/lib/apt/lists/*
 
