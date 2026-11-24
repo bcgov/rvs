@@ -11,11 +11,6 @@ class AdminPolicy
 {
     use HandlesAuthorization;
 
-    public function before(User $user): bool
-    {
-        return $user->hasRole(Role::SUPER_ADMIN);
-    }
-
     /**
      * Determine whether the user can view any models.
      */
