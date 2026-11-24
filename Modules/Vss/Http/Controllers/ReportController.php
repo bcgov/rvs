@@ -10,6 +10,7 @@ use Modules\Vss\Entities\CaseFunding;
 use Modules\Vss\Entities\FundingType;
 use Modules\Vss\Entities\Incident;
 use PDF;
+use Modules\Yeaf\Entities\Admin;
 
 /**
  *
@@ -28,9 +29,10 @@ class ReportController extends Controller
         $case = Incident::where('id', $case->id)->with(
             'primaryAudit', 'referral',
             'funds.fundingType', 'comments', 'institution', 'audits', 'offences.offence', 'sanctions')->first();
+        $admin = Admin::orderBy('id')->first();
         $now_d = date('Y-m-d');
         $now_t = date('H:m:i');
-        $pdf = PDF::loadView('vss::pdf', compact('case', 'now_d', 'now_t'));
+        $pdf = PDF::loadView('vss::pdf', compact('case', 'admin', 'now_d', 'now_t'));
 
         return $pdf->download(mt_rand().'-'.$case->incident_id.'-student_report.pdf');
     }
