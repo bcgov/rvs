@@ -29,7 +29,7 @@
         <table>
             <tr>
                 <td style="text-align: left; width: 25%;"><small>{{ $now_d }}<br/>{{ $now_t }}</small></td>
-                <td style="text-align: center; width: 50%;">Ministry of Post-Secondary Education<br/>Verification Statistics System<br/><strong>Verification Report</strong></td>
+                <td style="text-align: center; width: 50%;">{{ $admin->ministry }}<br/>Verification Statistics System<br/><strong>Verification Report</strong></td>
                 <td style="text-align: left; width: 25%;"></td>
             </tr>
             <tr>
