@@ -21,7 +21,7 @@ echo "ENV_ARG: ${ENV_ARG}"
 if [ "${RUN_MIGRATIONS}" = "true" ]; then
   echo "Running LFP migrations..."
   cd /var/www/html
-  php artisan module:migrate Lfp
+  php artisan module:migrate Lfp --force
   echo "Migrations completed."
 else
   echo "RUN_MIGRATIONS not set to true; skipping migrations."
