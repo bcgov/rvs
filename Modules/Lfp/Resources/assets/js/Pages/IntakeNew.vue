@@ -121,9 +121,9 @@
                                         </div>
                                         <div class="col-md-3">
                                             <BreezeLabel for="selectBothEligibility" class="form-label" value="Both Eligibility Status" />
-                                            <BreezeSelect class="form-select" id="selectBothEligibility" v-model.number="intakeForm.both_eligibility_status">
-                                                <option :value="0">No</option>
-                                                <option :value="1">Yes</option>
+                                            <BreezeSelect class="form-select" id="selectBothEligibility" v-model="intakeForm.both_eligibility_status">
+                                                <option :value="false">No</option>
+                                                <option :value="true">Yes</option>
                                             </BreezeSelect>
                                         </div>
 
@@ -197,7 +197,7 @@ export default {
                 proposed_registration_date: '',
                 comment: '',
                 intake_status: 'Pending',
-                both_eligibility_status: 0,
+                both_eligibility_status: false,
             }),
         }
     },
